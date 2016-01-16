@@ -1,0 +1,6 @@
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.Core\bin\Debug\GMap.NET.Core.dll
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.Core\bin\Debug\GMap.NET.Core.pdb
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.Core\obj\Debug\GMap.NET.Properties.Resources.resources
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.Core\obj\Debug\GMap.NET.Core.csproj.GenerateResource.Cache
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.Core\obj\Debug\GMap.NET.Core.dll
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.Core\obj\Debug\GMap.NET.Core.pdb

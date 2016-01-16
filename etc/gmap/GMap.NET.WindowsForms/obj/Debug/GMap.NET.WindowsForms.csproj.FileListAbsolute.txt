@@ -1,0 +1,10 @@
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsForms\bin\Debug\GMap.NET.WindowsForms.dll
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsForms\bin\Debug\GMap.NET.WindowsForms.pdb
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsForms\bin\Debug\GMap.NET.Core.dll
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsForms\bin\Debug\GMap.NET.Core.pdb
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsForms\obj\Debug\GMap.NET.WindowsForms.csprojResolveAssemblyReference.cache
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsForms\obj\Debug\GMap.NET.TilePrefetcher.resources
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsForms\obj\Debug\System.Windows.Forms.Properties.Resources.resources
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsForms\obj\Debug\GMap.NET.WindowsForms.csproj.GenerateResource.Cache
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsForms\obj\Debug\GMap.NET.WindowsForms.dll
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsForms\obj\Debug\GMap.NET.WindowsForms.pdb

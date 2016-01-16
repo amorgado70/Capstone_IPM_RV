@@ -1,0 +1,5 @@
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsPresentation\obj\Debug\GMap.NET.WindowsPresentation.csprojResolveAssemblyReference.cache
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsPresentation\obj\Debug\GMap.NET.WindowsPresentation\TilePrefetcher.baml
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsPresentation\obj\Debug\GMap.NET.WindowsPresentation\TilePrefetcher.g.cs
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsPresentation\obj\Debug\GMap.NET.WindowsPresentation_MarkupCompile.cache
+C:\capstone\greatmaps_0ab09a67a5fa\GMap.NET.WindowsPresentation\obj\Debug\GMap.NET.WindowsPresentation.g.resources
