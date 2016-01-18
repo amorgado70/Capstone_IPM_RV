@@ -8,17 +8,27 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="1024" Width="1600" ResizeMode="CanResize" >
     <Grid SizeChanged="Grid_SizeChanged">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <GroupBox Name="mapgroup"  Grid.Column ="0" Header="gmap" Margin="12,7,12,12" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+
+        <GroupBox Name="mapgroup"  Grid.Row ="0" Grid.RowSpan ="5" Grid.Column ="0" Margin="12,7,12,12" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
             <WindowsPresentation:GMapControl Name="gmap"  Zoom="18" Loaded="GMapControl_Loaded" MaxZoom="24" ScaleMode="ScaleUp" />
         </GroupBox>
-        
-        <Button Name="btn_MakePoint" Grid.Column="1" Content="Point" Margin="10" Click="btn_MakePoint_Click" />
-        
-        
+
+        <Button Name="btn_MakePoint" Grid.Row="0" Grid.Column="1" Content="MakePoint" Margin="10,70,10,70" Click="btn_MakePoint_Click" />
+        <Button Name="btn_ReportPoint" Grid.Row="1" Grid.Column="1" Content="ReportPoint" Margin="10,70,10,70" Click="btn_ReportPoint_Click" />
+        <Button Name="btn_RemovePoint" Grid.Row="2" Grid.Column="1" Content="RemovePoint" Margin="10,70,10,70" Click="btn_RemovePoint_Click" />
+
+
     </Grid>
 </Window>
