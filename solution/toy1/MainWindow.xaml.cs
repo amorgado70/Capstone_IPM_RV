@@ -6,6 +6,14 @@ using System.Windows.Input;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
+using GMap.NET.ObjectModel;
+
+using FileReadNWrite;
+using Microsoft.Win32;
+using System.Xml;
+using System.Xml.Linq;
+using System.Collections.Generic;
+
 
 namespace toy1
 {
@@ -15,6 +23,10 @@ namespace toy1
     public partial class MainWindow : Window
     {
         GMapMarker currentMarker;
+        // polygons
+        GMapPolygon polygon;
+
+       internal readonly GMapOverlay polygons = new GMapOverlay("polygons");
 
         public MainWindow()
         {
@@ -127,5 +139,124 @@ namespace toy1
         {
             removeMarker();
         }
+
+
+        private void readXML2()
+        {
+            string FileName = KMLIO.ShowFileDialog();
+            if (FileName != "")
+            {
+                KMLIO io = new KMLIO(FileName);
+
+                XmlDocument xml = io.Read();
+
+
+                //Create an XmlNamespaceManager for resolving namespaces.
+                XmlNamespaceManager nsmgr = new XmlNamespaceManager(xml.NameTable);
+                nsmgr.AddNamespace("id", "Layers");
+
+                //Select and display the value of id values.
+                XmlNodeList nodeList;
+                XmlElement root = xml.DocumentElement;
+                //nodeList = root.SelectNodes("/kml/Document/Folder/Placemark/@id", nsmgr);
+                nodeList = root.SelectNodes("/kml");
+
+
+                foreach (XmlNode Node in nodeList)
+                {
+                    Console.WriteLine(Node.Value);
+
+
+                    //RetailItem item = new RetailItem();
+                    //item.Description = Node.SelectSingleNode(ItemField.Description.ToString()).InnerText;
+                    //item.UnitsOnHand = int.Parse(Node.SelectSingleNode(ItemField.UnitsOnHand.ToString()).InnerText);
+                    //item.Price = float.Parse(Node.SelectSingleNode(ItemField.Price.ToString()).InnerText);
+                    //Items.Add(item);
+                }
+            }
+        }
+
+        private void readXML()
+        {
+            string FileName = KMLIO.ShowFileDialog();
+            if (FileName != "")
+            {
+                XDocument xDoc = System.Xml.Linq.XDocument.Load(FileName);
+                string xNs = "{" + xDoc.Root.Name.Namespace.ToString() + "}";
+
+                var coordsStr = from f in xDoc.Descendants(xNs + "Placemark")
+                                    // where elementToFind.Contains(f.Parent.Element(xNs + "name").Value + f.Element(xNs + "name").Value)
+                                    //select f.Element(xNs + "LineString").Element(xNs + "coordinates");
+                                select f;
+
+                int seq = 0;
+                //Console.WriteLine(coordsStr);
+                foreach( var i in coordsStr)
+                {
+                    var y = i.Element(xNs + "MultiGeometry").Descendants(xNs + "Polygon").Descendants(xNs + "outerBoundaryIs").Descendants(xNs + "LinearRing").Descendants(xNs + "coordinates");
+                    char[] delemeters = { ',', ' ' };
+                    List<string> points = y.ElementAt(0).Value.ToString().TrimStart().Split(delemeters).ToList();
+                    while(points.Remove("0"))
+                        ;
+
+                    Console.WriteLine("({0}/{1}) : {2} : {3} : {4}", ++seq, points.Count, i.Attribute("id").Value, i.Element(xNs + "name").Value, i.Element(xNs + "styleUrl").Value);
+                }
+
+                Console.WriteLine(coordsStr.Count());
+            }
+        }
+/*
+        -81.31210058949804,43.66881697093099,0 
+        -81.31201943741262,43.66878181360178,0 
+        -81.31194193728339,43.66887607310042,0 
+        -81.31202308945122,43.66891123048376,0 
+        -81.31210058949804,43.66881697093099,0
+        */
+
+        private void btn_LoadKML_Click(object sender, RoutedEventArgs e)
+        {
+            readXML();
+        }
+
+        void RegeneratePolygon()
+        {
+            List<PointLatLng> polygonPoints = new List<PointLatLng>();
+
+            foreach (GMapMarker m in gmap.Markers)
+            {
+                if (m is GMapMarkerRect)
+                {
+                    m.Tag = polygonPoints.Count;
+                    polygonPoints.Add(m.Position);
+                }
+            }
+
+            if (polygon == null)
+            {
+                polygon = new GMapPolygon(polygonPoints  /*, "polygon test" */);
+                polygon.IsHitTestVisible = true;
+                polygons.Polygons.Add(polygon);
+            }
+            else
+            {
+                polygon.Points.Clear();
+                polygon.Points.AddRange(polygonPoints);
+
+                if (polygons.Polygons.Count == 0)
+                {
+                    polygons.Polygons.Add(polygon);
+                }
+                else
+                {
+                    gmap.UpdatePolygonLocalPosition(polygon);
+                }
+            }
+        }
+
+        private void btn_DrawPolygon_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
+

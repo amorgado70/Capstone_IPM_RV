@@ -28,6 +28,8 @@
         <Button Name="btn_MakePoint" Grid.Row="0" Grid.Column="1" Content="MakePoint" Margin="10,70,10,70" Click="btn_MakePoint_Click" />
         <Button Name="btn_ReportPoint" Grid.Row="1" Grid.Column="1" Content="ReportPoint" Margin="10,70,10,70" Click="btn_ReportPoint_Click" />
         <Button Name="btn_RemovePoint" Grid.Row="2" Grid.Column="1" Content="RemovePoint" Margin="10,70,10,70" Click="btn_RemovePoint_Click" />
+        <Button Name="btn_DrawPolygon" Grid.Row="3" Grid.Column="1" Content="DrawPolygon" Margin="10,70,10,70" Click="btn_DrawPolygon_Click" />
+        <Button Name="btn_LoadKML" Grid.Row="4" Grid.Column="1" Content="LoadKML" Margin="10,70,10,70" Click="btn_LoadKML_Click" />
 
 
     </Grid>
