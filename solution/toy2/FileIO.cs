@@ -59,7 +59,6 @@ namespace FileReadNWrite
             dlg.CheckFileExists = false;
 
             // Display OpenFileDialog by calling ShowDialog method 
-            //Nullable<bool> result = dlg.ShowDialog();
             DialogResult result = dlg.ShowDialog();
 
             // Get the selected file name

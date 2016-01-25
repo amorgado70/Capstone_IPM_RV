@@ -33,7 +33,8 @@
             // 
             // gmap
             // 
-            this.gmap.Bearing = 0F;
+            this.gmap.Bearing = -59.5F;
+            this.gmap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.gmap.CanDragMap = true;
             this.gmap.EmptyTileColor = System.Drawing.Color.Navy;
             this.gmap.GrayScaleMode = false;
