@@ -21,7 +21,7 @@ using System.Globalization;
 
 namespace toy2
 {
-    public partial class Form1 : Form
+    public partial class IPM_Toy_Project : Form
     {
         //readonly GMapOverlay top = new GMapOverlay();
         //internal readonly GMapOverlay objects = new GMapOverlay("objects");
@@ -30,7 +30,7 @@ namespace toy2
         List<site> sites = new List<site>();
         List<style> styles = new List<style>();
 
-        public Form1()
+        public IPM_Toy_Project()
         {
             InitializeComponent();
 
@@ -75,6 +75,7 @@ namespace toy2
             gmap.Overlays.Add(polygonOverlay);
 
             gmap.Bearing = 0;
+            vScrollBar1.Value = (Int32)gmap.Zoom * 10;
         }
 
         private void readXML( )
@@ -90,7 +91,7 @@ namespace toy2
             var styleList = from s in xDoc.Descendants(xNs + "Style")
                             select s;
 
-            foreach (var i in styleList)
+            foreach (var i in styleList)//v
             {
                 style newStyle = new style();
                 newStyle.id = "#" + i.Attribute("id").Value;
@@ -147,6 +148,21 @@ namespace toy2
                     break;
                 }
             }
+        }
+
+        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+            gmap.Zoom = e.NewValue/10.0f;
+        }
+
+        private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+            gmap.Bearing = e.NewValue;
+        }
+
+        private void gmap_OnMapZoomChanged()
+        {
+            vScrollBar1.Value = (Int32)gmap.Zoom * 10;
         }
     }
 

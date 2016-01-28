@@ -1,6 +1,6 @@
 ﻿namespace toy2
 {
-    partial class Form1
+    partial class IPM_Toy_Project
     {
         /// <summary>
         /// Required designer variable.
@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.gmap = new GMap.NET.WindowsForms.GMapControl();
+            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
+            this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
             this.SuspendLayout();
             // 
             // gmap
@@ -53,19 +55,42 @@
             this.gmap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.gmap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gmap.ShowTileGridLines = false;
-            this.gmap.Size = new System.Drawing.Size(1425, 1018);
+            this.gmap.Size = new System.Drawing.Size(1366, 903);
             this.gmap.TabIndex = 0;
             this.gmap.Zoom = 0D;
+            this.gmap.OnMapZoomChanged += new GMap.NET.MapZoomChanged(this.gmap_OnMapZoomChanged);
             this.gmap.Load += new System.EventHandler(this.gmap_Load);
             // 
-            // Form1
+            // vScrollBar1
+            // 
+            this.vScrollBar1.Location = new System.Drawing.Point(1368, 1);
+            this.vScrollBar1.Maximum = 240;
+            this.vScrollBar1.Minimum = 1;
+            this.vScrollBar1.Name = "vScrollBar1";
+            this.vScrollBar1.Size = new System.Drawing.Size(12, 903);
+            this.vScrollBar1.TabIndex = 1;
+            this.vScrollBar1.Value = 20;
+            this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
+            // 
+            // hScrollBar1
+            // 
+            this.hScrollBar1.Location = new System.Drawing.Point(9, 907);
+            this.hScrollBar1.Minimum = -100;
+            this.hScrollBar1.Name = "hScrollBar1";
+            this.hScrollBar1.Size = new System.Drawing.Size(1337, 15);
+            this.hScrollBar1.TabIndex = 2;
+            this.hScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScrollBar1_Scroll);
+            // 
+            // IPM_Toy_Project
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1592, 1016);
+            this.ClientSize = new System.Drawing.Size(1512, 932);
+            this.Controls.Add(this.hScrollBar1);
+            this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.gmap);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "IPM_Toy_Project";
+            this.Text = "IPM_Toy_Project";
             this.ResumeLayout(false);
 
         }
@@ -73,6 +98,8 @@
         #endregion
 
         private GMap.NET.WindowsForms.GMapControl gmap;
+        private System.Windows.Forms.VScrollBar vScrollBar1;
+        private System.Windows.Forms.HScrollBar hScrollBar1;
     }
 }
 
