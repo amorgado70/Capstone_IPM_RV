@@ -48,10 +48,28 @@ namespace toy2
             gmap.Position = new GMap.NET.PointLatLng(43.66881697093099, -81.31210058949804);
             gmap.Zoom = 16;
 
+            TextIO txt = new TextIO("site.sql");
 
             readXML();
 
-            foreach( var siteItem in sites )
+            txt.WriteLine("## this is only for RVSite DML(Database Modification Language) file.");
+            txt.WriteLine("## Another site type has more than 4 points, that's why I omit those data.");
+            txt.WriteLine("");
+
+            foreach (var style in styles)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Insert Into 'StyleUrl' Values( ");
+                string str = string.Format("'{0}', '{1}' );", style.id, style.poly_color);
+                sb.Append(str);
+
+                txt.WriteLine(sb.ToString());
+            }
+            txt.WriteLine("");
+            txt.WriteLine("");
+            txt.WriteLine("");
+
+            foreach ( var siteItem in sites )
             {
                 List<PointLatLng> points = new List<PointLatLng>();
 
@@ -70,8 +88,22 @@ namespace toy2
 
                 polygon.Stroke = new Pen(Color.FromArgb(Int32.Parse(siteItem.styleRef.line_color, NumberStyles.HexNumber)), 1);
                 polygonOverlay.Polygons.Add(polygon);
-                
+
+                if (siteItem.styleRef.id == "#PolyStyle00")
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("Insert Into 'RVSite' Values( ");
+                    string str = string.Format("'{0}', '{1}', '{2}', '{3}','{4}', '{5}', '{6}', '{7}', '{8}','{9}', '{10}' );", siteItem.id, siteItem.name, siteItem.styleId, 
+                        siteItem.points[1], siteItem.points[0], siteItem.points[3], siteItem.points[2],
+                        siteItem.points[5], siteItem.points[4], siteItem.points[7], siteItem.points[6]);
+                    sb.Append(str);
+
+                    txt.WriteLine(sb.ToString());
+                }
             }
+           
+
+
             gmap.Overlays.Add(polygonOverlay);
 
             gmap.Bearing = 0;
@@ -116,6 +148,7 @@ namespace toy2
                 var y = i.Element(xNs + "MultiGeometry").Descendants(xNs + "Polygon").Descendants(xNs + "outerBoundaryIs").Descendants(xNs + "LinearRing").Descendants(xNs + "coordinates");
                 char[] delemeters = { ',', ' ' };
                 site newSite = new site();
+                newSite.id = i.Attribute("id").Value;
                 newSite.styleId = i.Element(xNs + "styleUrl").Value;
                 newSite.name = i.Element(xNs + "name").Value;
                 newSite.points = y.ElementAt(0).Value.ToString().TrimStart().Split(delemeters).ToList();
@@ -168,6 +201,7 @@ namespace toy2
 
     public class site
     {
+        public string id;
         public string styleId;
         public string name;
         public List<string> points;
