@@ -89,7 +89,8 @@ namespace toy2
                 polygon.Stroke = new Pen(Color.FromArgb(Int32.Parse(siteItem.styleRef.line_color, NumberStyles.HexNumber)), 1);
                 polygonOverlay.Polygons.Add(polygon);
 
-                if (siteItem.styleRef.id == "#PolyStyle00")
+                //if (siteItem.styleRef.id == "#PolyStyle00")
+                if (siteItem.points.Count == 10 )
                 {
                     StringBuilder sb = new StringBuilder();
                     sb.Append("Insert Into 'RVSite' Values( ");
