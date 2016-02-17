@@ -1,0 +1,58 @@
+﻿@model IPMRVPark.WebUI.Controllers.rvsite_coord_view
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>rvsite_coord_view</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.idRVSite)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.idRVSite)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.backgroundColor)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.backgroundColor)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.seqCoordinate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.seqCoordinate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.longitude)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.longitude)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.latitude)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.latitude)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
