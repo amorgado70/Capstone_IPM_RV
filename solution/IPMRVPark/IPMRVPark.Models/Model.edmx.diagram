@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9255fa8c848745a383dd8e1e4f990621" Name="Diagram1">
+        <EntityTypeShape EntityType="ipmrvparkEntities.address" Width="1.5" PointX="15.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.checkinout" Width="1.5" PointX="7.5" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.coordinate" Width="1.5" PointX="5.25" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.countrycode" Width="1.5" PointX="10.75" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.customer" Width="1.5" PointX="6" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.member" Width="1.5" PointX="10.5" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.outofservice" Width="1.5" PointX="7.5" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.party" Width="1.5" PointX="8.25" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.payment" Width="1.5" PointX="6" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.paymentmode" Width="1.5" PointX="3.75" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.person" Width="1.5" PointX="3.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.placemarkpolygon" Width="1.5" PointX="3" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.powersupply" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.provincecode" Width="1.5" PointX="13" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.reservationeach" Width="1.5" PointX="10.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.reservationgroup" Width="1.5" PointX="8.25" PointY="20.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.rvsite" Width="1.5" PointX="5.25" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.siterate" Width="1.5" PointX="2.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.sitesize" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.sitetype" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.staff" Width="1.5" PointX="6" PointY="24.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.styleurl" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.tempcountry" Width="1.5" PointX="4.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.tempperson" Width="1.5" PointX="6.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.temppersonorig" Width="1.5" PointX="0.75" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.tempprovince" Width="1.5" PointX="8.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.temprvsite" Width="1.5" PointX="12.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.tempstyleurl" Width="1.5" PointX="12.75" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.customer_view" Width="1.5" PointX="12.75" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ipmrvparkEntities.rvsite_coord_view" Width="1.5" PointX="2.75" PointY="14.125" IsExpanded="true" />
+        <AssociationConnector Association="ipmrvparkEntities.Address_countryCode_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.Address_provinceCode_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.CheckInOut_Reservation_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.CheckInOut_RVSite_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.Coordinates_PlacemarkPolygon_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.provinceCode_countryCode_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.Customer_Person_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.ReservationGroup_Customer_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.Member_Party_PK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.Member_Person_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.OutOfservice_RVSite_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.ReservationEach_Party_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.Payment_PaymentMode_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.ReservationGroup_Payment_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.Person_Staff_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.PlacemarkPolygon_RVSite_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.PlacemarkPolygon_StyleUrl_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.SiteType_PowerSupply_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.Reservation_RVSite_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.ReservationEach_ReservationGroup_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.ReservationGroup_Staff_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.SiteType_SiteSize_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="ipmrvparkEntities.SiteType_StyleUrl_FK" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

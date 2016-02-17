@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "IPM RV Park Reservation System";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <p></p>
+                <h2>Click on Customers to continue...</h2>
+                <h2>and on Home to return.</h2>
+            </hgroup>
+        </div>
+        <ul>
+            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+            <li>@Html.ActionLink("Customers View Only", "Index", "Customers")</li>
+            <li>@Html.ActionLink("RV Sites View Only", "Index", "RVSites")</li>
+            <li>@Html.ActionLink("Country Codes", "Index", "Country")</li>
+        </ul>
+    </section>
+}

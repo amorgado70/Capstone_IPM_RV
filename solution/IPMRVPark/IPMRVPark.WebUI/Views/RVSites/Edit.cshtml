@@ -1,0 +1,77 @@
+﻿@model IPMRVPark.WebUI.Controllers.rvsite_coord_view
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>rvsite_coord_view</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idRVSite)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.idRVSite)
+            @Html.ValidationMessageFor(model => model.idRVSite)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.name)
+            @Html.ValidationMessageFor(model => model.name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.backgroundColor)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.backgroundColor)
+            @Html.ValidationMessageFor(model => model.backgroundColor)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.seqCoordinate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.seqCoordinate)
+            @Html.ValidationMessageFor(model => model.seqCoordinate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.longitude)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.longitude)
+            @Html.ValidationMessageFor(model => model.longitude)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.latitude)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.latitude)
+            @Html.ValidationMessageFor(model => model.latitude)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
