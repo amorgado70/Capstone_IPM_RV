@@ -14,7 +14,7 @@ namespace IPMRVPark.Models
     
     public partial class rvsite_coord_view
     {
-        public string idRVSite { get; set; }
+        public string idPlacemarkPolygon { get; set; }
         public string name { get; set; }
         public string backgroundColor { get; set; }
         public string seqCoordinate { get; set; }

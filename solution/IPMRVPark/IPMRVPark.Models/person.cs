@@ -23,7 +23,7 @@ namespace IPMRVPark.Models
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
         public virtual customer customer { get; set; }
-        public virtual member member { get; set; }
+        public virtual partymember partymember { get; set; }
         public virtual staff staff { get; set; }
     }
 }

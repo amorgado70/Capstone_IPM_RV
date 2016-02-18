@@ -16,7 +16,7 @@ namespace IPMRVPark.Models
     {
         public payment()
         {
-            this.reservationgroups = new HashSet<reservationgroup>();
+            this.reservationorders = new HashSet<reservationorder>();
         }
     
         public int idPayment { get; set; }
@@ -26,6 +26,6 @@ namespace IPMRVPark.Models
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
         public virtual paymentmode paymentmode { get; set; }
-        public virtual ICollection<reservationgroup> reservationgroups { get; set; }
+        public virtual ICollection<reservationorder> reservationorders { get; set; }
     }
 }

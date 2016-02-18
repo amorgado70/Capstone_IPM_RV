@@ -47,9 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="address.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="checkinout.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -65,7 +62,7 @@
     <Compile Include="customer_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="member.cs">
+    <Compile Include="ipmevent.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Model.Context.cs">
@@ -89,6 +86,9 @@
     <Compile Include="party.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="partymember.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="payment.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -108,16 +108,16 @@
     <Compile Include="provincecode.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="reservationeach.cs">
+    <Compile Include="reservationitem.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="reservationgroup.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="rvsite.cs">
+    <Compile Include="reservationorder.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="rvsite_coord_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="rvsite_status_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="siterate.cs">
@@ -135,37 +135,20 @@
     <Compile Include="styleurl.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="tempcountry.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tempperson.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="temppersonorig.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tempprovince.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="temprvsite.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tempstyleurl.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <EntityDeploy Include="Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
     <None Include="Model.edmx.diagram">
       <DependentUpon>Model.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Model.Context.tt">
@@ -178,9 +161,6 @@
       <DependentUpon>Model.edmx</DependentUpon>
       <LastGenOutput>Model.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

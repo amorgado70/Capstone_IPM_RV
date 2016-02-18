@@ -16,8 +16,8 @@ namespace IPMRVPark.Models
     {
         public party()
         {
-            this.members = new HashSet<member>();
-            this.reservationeaches = new HashSet<reservationeach>();
+            this.partymembers = new HashSet<partymember>();
+            this.reservationitems = new HashSet<reservationitem>();
         }
     
         public int idParty { get; set; }
@@ -25,7 +25,7 @@ namespace IPMRVPark.Models
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
-        public virtual ICollection<member> members { get; set; }
-        public virtual ICollection<reservationeach> reservationeaches { get; set; }
+        public virtual ICollection<partymember> partymembers { get; set; }
+        public virtual ICollection<reservationitem> reservationitems { get; set; }
     }
 }

@@ -12,19 +12,26 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class staff
+    public partial class reservationorder
     {
-        public staff()
+        public reservationorder()
         {
-            this.reservationorders = new HashSet<reservationorder>();
+            this.reservationitems = new HashSet<reservationitem>();
         }
     
+        public int idReservationOrder { get; set; }
+        public int idCustomer { get; set; }
         public int idStaff { get; set; }
-        public string role { get; set; }
+        public Nullable<decimal> totalAmount { get; set; }
+        public Nullable<int> idPayment { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
+        public Nullable<bool> inShoppingCart { get; set; }
+        public Nullable<bool> paymentReceived { get; set; }
     
-        public virtual person person { get; set; }
-        public virtual ICollection<reservationorder> reservationorders { get; set; }
+        public virtual customer customer { get; set; }
+        public virtual payment payment { get; set; }
+        public virtual ICollection<reservationitem> reservationitems { get; set; }
+        public virtual staff staff { get; set; }
     }
 }

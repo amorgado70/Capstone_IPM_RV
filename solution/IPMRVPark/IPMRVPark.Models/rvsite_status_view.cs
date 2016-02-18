@@ -12,9 +12,15 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tempcountry
+    public partial class rvsite_status_view
     {
-        public string code { get; set; }
-        public string name { get; set; }
+        public string idPlacemarkPolygon { get; set; }
+        public string customerName { get; set; }
+        public Nullable<int> idReservationOrder { get; set; }
+        public Nullable<int> idReservationItem { get; set; }
+        public Nullable<bool> inShoppingCart { get; set; }
+        public Nullable<bool> paymentReceived { get; set; }
+        public Nullable<System.DateTime> checkInDate { get; set; }
+        public Nullable<System.DateTime> outOfServiceUntil { get; set; }
     }
 }

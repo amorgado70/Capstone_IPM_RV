@@ -14,12 +14,15 @@ namespace IPMRVPark.Models
     
     public partial class siterate
     {
+        public int idIPMEvent { get; set; }
         public int idSiteRate { get; set; }
         public string idSiteType { get; set; }
-        public string eventYear { get; set; }
         public string period { get; set; }
         public decimal rate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
+    
+        public virtual ipmevent ipmevent { get; set; }
+        public virtual sitetype sitetype { get; set; }
     }
 }

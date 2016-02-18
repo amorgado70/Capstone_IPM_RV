@@ -14,11 +14,10 @@ namespace IPMRVPark.Models
     
     public partial class coordinate
     {
+        public int idIPMEvent { get; set; }
         public string idPlacemarkPolygon { get; set; }
         public string seqCoordinate { get; set; }
         public Nullable<decimal> longitude { get; set; }
         public Nullable<decimal> latitude { get; set; }
-    
-        public virtual placemarkpolygon placemarkpolygon { get; set; }
     }
 }

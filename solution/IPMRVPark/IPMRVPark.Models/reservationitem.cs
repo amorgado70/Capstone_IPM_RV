@@ -12,24 +12,22 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class reservationgroup
+    public partial class reservationitem
     {
-        public reservationgroup()
-        {
-            this.reservationeaches = new HashSet<reservationeach>();
-        }
-    
-        public int idReservationGroup { get; set; }
-        public int idCustomer { get; set; }
-        public int idStaff { get; set; }
+        public int idReservationOrder { get; set; }
+        public int idReservationItem { get; set; }
+        public int idIPMEvent { get; set; }
+        public string idPlacemarkPolygon { get; set; }
+        public int idParty { get; set; }
+        public System.DateTime arrivalDate { get; set; }
+        public System.DateTime departureDate { get; set; }
         public Nullable<decimal> totalAmount { get; set; }
-        public Nullable<int> idPayment { get; set; }
+        public bool isCancelled { get; set; }
+        public string comments { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
-        public virtual customer customer { get; set; }
-        public virtual payment payment { get; set; }
-        public virtual ICollection<reservationeach> reservationeaches { get; set; }
-        public virtual staff staff { get; set; }
+        public virtual party party { get; set; }
+        public virtual reservationorder reservationorder { get; set; }
     }
 }

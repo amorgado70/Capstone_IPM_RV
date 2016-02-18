@@ -12,23 +12,23 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class sitetype
+    public partial class ipmevent
     {
-        public sitetype()
+        public ipmevent()
         {
+            this.placemarkpolygons = new HashSet<placemarkpolygon>();
             this.siterates = new HashSet<siterate>();
+            this.styleurls = new HashSet<styleurl>();
         }
     
-        public string idSiteType { get; set; }
-        public int idSiteSize { get; set; }
-        public int idPowerSupply { get; set; }
-        public Nullable<bool> isUnserviced { get; set; }
-        public Nullable<bool> isForHandicapped { get; set; }
-        public Nullable<System.DateTime> createDate { get; set; }
-        public Nullable<System.DateTime> lastUpdate { get; set; }
+        public int idIPMEvent { get; set; }
+        public Nullable<int> year { get; set; }
+        public string local { get; set; }
+        public string description { get; set; }
+        public string mapFileUrl { get; set; }
     
-        public virtual powersupply powersupply { get; set; }
+        public virtual ICollection<placemarkpolygon> placemarkpolygons { get; set; }
         public virtual ICollection<siterate> siterates { get; set; }
-        public virtual sitesize sitesize { get; set; }
+        public virtual ICollection<styleurl> styleurls { get; set; }
     }
 }

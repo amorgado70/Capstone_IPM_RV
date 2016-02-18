@@ -14,19 +14,14 @@ namespace IPMRVPark.Models
     
     public partial class placemarkpolygon
     {
-        public placemarkpolygon()
-        {
-            this.coordinates = new HashSet<coordinate>();
-        }
-    
+        public int idIPMEvent { get; set; }
         public string idPlacemarkPolygon { get; set; }
         public string name { get; set; }
         public string idStyleUrl { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
+        public Nullable<bool> isRVSite { get; set; }
     
-        public virtual ICollection<coordinate> coordinates { get; set; }
-        public virtual rvsite rvsite { get; set; }
-        public virtual styleurl styleurl { get; set; }
+        public virtual ipmevent ipmevent { get; set; }
     }
 }

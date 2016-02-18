@@ -16,14 +16,14 @@ namespace IPMRVPark.Models
     {
         public countrycode()
         {
-            this.addresses = new HashSet<address>();
+            this.customers = new HashSet<customer>();
             this.provincecodes = new HashSet<provincecode>();
         }
     
         public string code { get; set; }
         public string name { get; set; }
     
-        public virtual ICollection<address> addresses { get; set; }
+        public virtual ICollection<customer> customers { get; set; }
         public virtual ICollection<provincecode> provincecodes { get; set; }
     }
 }

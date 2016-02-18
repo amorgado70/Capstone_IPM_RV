@@ -16,7 +16,7 @@ namespace IPMRVPark.Models
     {
         public provincecode()
         {
-            this.addresses = new HashSet<address>();
+            this.customers = new HashSet<customer>();
         }
     
         public string code { get; set; }
@@ -25,7 +25,7 @@ namespace IPMRVPark.Models
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
-        public virtual ICollection<address> addresses { get; set; }
         public virtual countrycode countrycode1 { get; set; }
+        public virtual ICollection<customer> customers { get; set; }
     }
 }

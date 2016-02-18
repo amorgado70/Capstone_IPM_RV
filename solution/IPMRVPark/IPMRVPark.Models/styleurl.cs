@@ -14,17 +14,12 @@ namespace IPMRVPark.Models
     
     public partial class styleurl
     {
-        public styleurl()
-        {
-            this.placemarkpolygons = new HashSet<placemarkpolygon>();
-        }
-    
         public string idStyleUrl { get; set; }
         public string backgroundColor { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
+        public int idIPMEvent { get; set; }
     
-        public virtual ICollection<placemarkpolygon> placemarkpolygons { get; set; }
-        public virtual sitetype sitetype { get; set; }
+        public virtual ipmevent ipmevent { get; set; }
     }
 }

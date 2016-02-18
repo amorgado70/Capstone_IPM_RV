@@ -15,12 +15,11 @@ namespace IPMRVPark.Models
     public partial class outofservice
     {
         public int idOutOfService { get; set; }
-        public string idRVSite { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
-    
-        public virtual rvsite rvsite { get; set; }
+        public int idIPMEvent { get; set; }
+        public string idPlacemarkPolygon { get; set; }
     }
 }

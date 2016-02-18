@@ -15,13 +15,11 @@ namespace IPMRVPark.Models
     public partial class checkinout
     {
         public int idCheckInOut { get; set; }
-        public int idReservationGroup { get; set; }
-        public int idReservationEach { get; set; }
-        public string idRVSite { get; set; }
+        public int idReservationOrder { get; set; }
+        public int idReservationItem { get; set; }
+        public int idIPMEvent { get; set; }
+        public string idPlacemarkPolygon { get; set; }
         public Nullable<System.DateTime> arrivalDate { get; set; }
         public Nullable<System.DateTime> departureDate { get; set; }
-    
-        public virtual reservationeach reservationeach { get; set; }
-        public virtual rvsite rvsite { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace IPMRVPark.Models
         public int id { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
+        public string fullName { get; set; }
         public string mainPhone { get; set; }
         public string email { get; set; }
         public string cellPhone { get; set; }
@@ -27,6 +28,6 @@ namespace IPMRVPark.Models
         public string city { get; set; }
         public string postalCode { get; set; }
         public string Province { get; set; }
-        public string Coountry { get; set; }
+        public string Country { get; set; }
     }
 }

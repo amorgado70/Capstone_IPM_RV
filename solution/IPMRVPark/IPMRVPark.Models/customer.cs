@@ -16,19 +16,25 @@ namespace IPMRVPark.Models
     {
         public customer()
         {
-            this.reservationgroups = new HashSet<reservationgroup>();
+            this.reservationorders = new HashSet<reservationorder>();
         }
     
         public int idCustomer { get; set; }
         public string cellPhone { get; set; }
         public string homePhone { get; set; }
         public string faxNumber { get; set; }
-        public Nullable<int> idAddress { get; set; }
+        public string street { get; set; }
+        public string city { get; set; }
+        public string provinceCode { get; set; }
+        public string postalCode { get; set; }
+        public string countryCode { get; set; }
         public string comments { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
+        public virtual countrycode countrycode1 { get; set; }
         public virtual person person { get; set; }
-        public virtual ICollection<reservationgroup> reservationgroups { get; set; }
+        public virtual provincecode provincecode1 { get; set; }
+        public virtual ICollection<reservationorder> reservationorders { get; set; }
     }
 }
