@@ -17,18 +17,16 @@ namespace IPMRVPark.Models
         public ipmevent()
         {
             this.placemarkpolygons = new HashSet<placemarkpolygon>();
-            this.siterates = new HashSet<siterate>();
-            this.styleurls = new HashSet<styleurl>();
+            this.sitetypes = new HashSet<sitetype>();
         }
     
-        public int idIPMEvent { get; set; }
-        public Nullable<int> year { get; set; }
+        public long ID { get; set; }
+        public long year { get; set; }
         public string local { get; set; }
         public string description { get; set; }
         public string mapFileUrl { get; set; }
     
         public virtual ICollection<placemarkpolygon> placemarkpolygons { get; set; }
-        public virtual ICollection<siterate> siterates { get; set; }
-        public virtual ICollection<styleurl> styleurls { get; set; }
+        public virtual ICollection<sitetype> sitetypes { get; set; }
     }
 }

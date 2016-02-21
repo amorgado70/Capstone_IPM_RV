@@ -19,7 +19,7 @@ namespace IPMRVPark.Models
             this.payments = new HashSet<payment>();
         }
     
-        public int idPaymentMode { get; set; }
+        public long ID { get; set; }
         public string description { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }

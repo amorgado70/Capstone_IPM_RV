@@ -59,9 +59,6 @@
     <Compile Include="customer.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="customer_view.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="ipmevent.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -81,9 +78,6 @@
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="outofservice.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="party.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="partymember.cs">
@@ -111,13 +105,10 @@
     <Compile Include="reservationitem.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="reservationitem_partymember.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="reservationorder.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="rvsite_coord_view.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="rvsite_status_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="siterate.cs">
@@ -130,9 +121,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="staff.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="styleurl.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
   </ItemGroup>

@@ -16,21 +16,21 @@ namespace IPMRVPark.Models
     {
         public reservationorder()
         {
+            this.payments = new HashSet<payment>();
             this.reservationitems = new HashSet<reservationitem>();
         }
     
-        public int idReservationOrder { get; set; }
-        public int idCustomer { get; set; }
-        public int idStaff { get; set; }
+        public long ID { get; set; }
+        public long idCustomer { get; set; }
+        public long idStaff { get; set; }
         public Nullable<decimal> totalAmount { get; set; }
-        public Nullable<int> idPayment { get; set; }
-        public Nullable<System.DateTime> createDate { get; set; }
-        public Nullable<System.DateTime> lastUpdate { get; set; }
         public Nullable<bool> inShoppingCart { get; set; }
         public Nullable<bool> paymentReceived { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> lastUpdate { get; set; }
     
         public virtual customer customer { get; set; }
-        public virtual payment payment { get; set; }
+        public virtual ICollection<payment> payments { get; set; }
         public virtual ICollection<reservationitem> reservationitems { get; set; }
         public virtual staff staff { get; set; }
     }

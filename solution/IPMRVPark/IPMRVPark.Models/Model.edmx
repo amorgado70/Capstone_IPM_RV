@@ -7,31 +7,25 @@
       <Schema Namespace="ipmrvparkModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="checkinout">
           <Key>
-            <PropertyRef Name="idCheckInOut" />
-            <PropertyRef Name="idReservationOrder" />
-            <PropertyRef Name="idReservationItem" />
-            <PropertyRef Name="idIPMEvent" />
-            <PropertyRef Name="idPlacemarkPolygon" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idCheckInOut" Type="int" Nullable="false" />
-          <Property Name="idReservationOrder" Type="int" Nullable="false" />
-          <Property Name="idReservationItem" Type="int" Nullable="false" />
-          <Property Name="idIPMEvent" Type="int" Nullable="false" />
-          <Property Name="idPlacemarkPolygon" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idReservationItem" Type="bigint" Nullable="false" />
+          <Property Name="idRVSite" Type="bigint" Nullable="false" />
           <Property Name="arrivalDate" Type="date" />
           <Property Name="departureDate" Type="date" />
         </EntityType>
         <EntityType Name="coordinates">
           <Key>
-            <PropertyRef Name="idIPMEvent" />
-            <PropertyRef Name="idPlacemarkPolygon" />
-            <PropertyRef Name="seqCoordinate" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idIPMEvent" Type="int" Nullable="false" />
-          <Property Name="idPlacemarkPolygon" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idPlacemarkPolygon" Type="bigint" Nullable="false" />
           <Property Name="seqCoordinate" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="longitude" Type="decimal" Precision="16" Scale="14" />
           <Property Name="latitude" Type="decimal" Precision="16" Scale="14" />
+          <Property Name="createDate" Type="date" />
+          <Property Name="lastUpdate" Type="date" />
         </EntityType>
         <EntityType Name="countrycode">
           <Key>
@@ -39,12 +33,14 @@
           </Key>
           <Property Name="code" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="createDate" Type="date" />
+          <Property Name="lastUpdate" Type="date" />
         </EntityType>
         <EntityType Name="customer">
           <Key>
-            <PropertyRef Name="idCustomer" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idCustomer" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" Nullable="false" />
           <Property Name="cellPhone" Type="varchar" MaxLength="30" />
           <Property Name="homePhone" Type="varchar" MaxLength="30" />
           <Property Name="faxNumber" Type="varchar" MaxLength="30" />
@@ -59,43 +55,30 @@
         </EntityType>
         <EntityType Name="ipmevent">
           <Key>
-            <PropertyRef Name="idIPMEvent" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idIPMEvent" Type="int" Nullable="false" />
-          <Property Name="year" Type="int" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="year" Type="bigint" Nullable="false" />
           <Property Name="local" Type="varchar" MaxLength="45" />
           <Property Name="description" Type="varchar" MaxLength="45" />
           <Property Name="mapFileUrl" Type="text" />
         </EntityType>
         <EntityType Name="outofservice">
           <Key>
-            <PropertyRef Name="idOutOfService" />
-            <PropertyRef Name="idIPMEvent" />
-            <PropertyRef Name="idPlacemarkPolygon" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idOutOfService" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idRVSite" Type="bigint" Nullable="false" />
           <Property Name="startDate" Type="date" />
           <Property Name="endDate" Type="date" />
-          <Property Name="createDate" Type="date" />
-          <Property Name="lastUpdate" Type="date" />
-          <Property Name="idIPMEvent" Type="int" Nullable="false" />
-          <Property Name="idPlacemarkPolygon" Type="char" MaxLength="8" Nullable="false" />
-        </EntityType>
-        <EntityType Name="party">
-          <Key>
-            <PropertyRef Name="idParty" />
-          </Key>
-          <Property Name="idParty" Type="int" Nullable="false" />
-          <Property Name="numberOfMembers" Type="int" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
         <EntityType Name="partymember">
           <Key>
-            <PropertyRef Name="idMember" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idMember" Type="int" Nullable="false" />
-          <Property Name="idParty" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" Nullable="false" />
           <Property Name="cellPhone" Type="varchar" MaxLength="30" />
           <Property Name="petDescription" Type="varchar" MaxLength="50" />
           <Property Name="comments" Type="varchar" MaxLength="120" />
@@ -104,28 +87,31 @@
         </EntityType>
         <EntityType Name="payment">
           <Key>
-            <PropertyRef Name="idPayment" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idPayment" Type="int" Nullable="false" />
-          <Property Name="idPaymentMode" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idPaymentMode" Type="bigint" Nullable="false" />
+          <Property Name="idCustomer" Type="bigint" Nullable="false" />
+          <Property Name="idReservationOrder" Type="bigint" />
+          <Property Name="reasonForPayment" Type="varchar" MaxLength="90" />
           <Property Name="amount" Type="decimal" Precision="2" Scale="0" Nullable="false" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
         <EntityType Name="paymentmode">
           <Key>
-            <PropertyRef Name="idPaymentMode" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idPaymentMode" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="12" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
         <EntityType Name="person">
           <Key>
-            <PropertyRef Name="idPerson" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idPerson" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="firstName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="lastName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="mainPhone" Type="varchar" MaxLength="30" />
@@ -135,21 +121,22 @@
         </EntityType>
         <EntityType Name="placemarkpolygon">
           <Key>
-            <PropertyRef Name="idPlacemarkPolygon" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idIPMEvent" Type="int" Nullable="false" />
-          <Property Name="idPlacemarkPolygon" Type="char" MaxLength="8" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="idStyleUrl" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idIPMEvent" Type="bigint" Nullable="false" />
+          <Property Name="tag" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="site" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="idSiteType" Type="bigint" Nullable="false" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
           <Property Name="isRVSite" Type="bit" />
         </EntityType>
         <EntityType Name="powersupply">
           <Key>
-            <PropertyRef Name="idPowerSupply" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idPowerSupply" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
@@ -166,46 +153,51 @@
         </EntityType>
         <EntityType Name="reservationitem">
           <Key>
-            <PropertyRef Name="idReservationOrder" />
-            <PropertyRef Name="idReservationItem" />
-            <PropertyRef Name="idIPMEvent" />
-            <PropertyRef Name="idPlacemarkPolygon" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idReservationOrder" Type="int" Nullable="false" />
-          <Property Name="idReservationItem" Type="int" Nullable="false" />
-          <Property Name="idIPMEvent" Type="int" Nullable="false" />
-          <Property Name="idPlacemarkPolygon" Type="char" MaxLength="8" Nullable="false" />
-          <Property Name="idParty" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="idReservationOrder" Type="bigint" Nullable="false" />
+          <Property Name="seqReservationItem" Type="bigint" Nullable="false" />
+          <Property Name="idRVSite" Type="bigint" Nullable="false" />
           <Property Name="arrivalDate" Type="date" Nullable="false" />
           <Property Name="departureDate" Type="date" Nullable="false" />
           <Property Name="totalAmount" Type="decimal" Precision="2" Scale="0" />
-          <Property Name="isCancelled" Type="bool" Nullable="false" />
+          <Property Name="numberMemberInParty" Type="int" Nullable="false" />
+          <Property Name="isCancelled" Type="bit" />
+          <Property Name="comments" Type="varchar" MaxLength="120" />
+          <Property Name="createDate" Type="date" />
+          <Property Name="lastUpdate" Type="date" />
+        </EntityType>
+        <EntityType Name="reservationitem_partymember">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="idReservationItem" Type="bigint" Nullable="false" />
+          <Property Name="idPartyMember" Type="bigint" Nullable="false" />
           <Property Name="comments" Type="varchar" MaxLength="120" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
         <EntityType Name="reservationorder">
           <Key>
-            <PropertyRef Name="idReservationOrder" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idReservationOrder" Type="int" Nullable="false" />
-          <Property Name="idCustomer" Type="int" Nullable="false" />
-          <Property Name="idStaff" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idCustomer" Type="bigint" Nullable="false" />
+          <Property Name="idStaff" Type="bigint" Nullable="false" />
           <Property Name="totalAmount" Type="decimal" Precision="2" Scale="0" />
-          <Property Name="idPayment" Type="int" />
-          <Property Name="createDate" Type="date" />
-          <Property Name="lastUpdate" Type="date" />
           <Property Name="inShoppingCart" Type="bit" />
           <Property Name="paymentReceived" Type="bit" />
+          <Property Name="createDate" Type="date" />
+          <Property Name="lastUpdate" Type="date" />
         </EntityType>
         <EntityType Name="siterate">
           <Key>
-            <PropertyRef Name="idIPMEvent" />
-            <PropertyRef Name="idSiteRate" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idIPMEvent" Type="int" Nullable="false" />
-          <Property Name="idSiteRate" Type="int" Nullable="false" />
-          <Property Name="idSiteType" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idSiteType" Type="bigint" Nullable="false" />
           <Property Name="period" Type="varchar" MaxLength="12" Nullable="false" />
           <Property Name="rate" Type="decimal" Precision="2" Scale="0" Nullable="false" />
           <Property Name="createDate" Type="date" />
@@ -213,104 +205,73 @@
         </EntityType>
         <EntityType Name="sitesize">
           <Key>
-            <PropertyRef Name="idSiteSize" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idSiteSize" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
         <EntityType Name="sitetype">
           <Key>
-            <PropertyRef Name="idSiteType" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idSiteType" Type="varchar" MaxLength="16" Nullable="false" />
-          <Property Name="idSiteSize" Type="int" Nullable="false" />
-          <Property Name="idPowerSupply" Type="int" Nullable="false" />
-          <Property Name="isUnserviced" Type="bool" />
-          <Property Name="isForHandicapped" Type="bool" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idIPMEvent" Type="bigint" Nullable="false" />
+          <Property Name="StyleUrl" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="backgroundColor" Type="char" MaxLength="8" />
+          <Property Name="idSiteSize" Type="bigint" Nullable="false" />
+          <Property Name="idPowerSupply" Type="bigint" Nullable="false" />
+          <Property Name="isUnserviced" Type="bit" />
+          <Property Name="isForHandicapped" Type="bit" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
         <EntityType Name="staff">
           <Key>
-            <PropertyRef Name="idStaff" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idStaff" Type="int" Nullable="false" />
+          <Property Name="ID" Type="bigint" Nullable="false" />
           <Property Name="role" Type="varchar" MaxLength="30" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
-        <EntityType Name="styleurl">
-          <Key>
-            <PropertyRef Name="idStyleUrl" />
-            <PropertyRef Name="idIPMEvent" />
-          </Key>
-          <Property Name="idStyleUrl" Type="varchar" MaxLength="16" Nullable="false" />
-          <Property Name="backgroundColor" Type="char" MaxLength="8" />
-          <Property Name="createDate" Type="date" />
-          <Property Name="lastUpdate" Type="date" />
-          <Property Name="idIPMEvent" Type="int" Nullable="false" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.ipmrvpark.customer_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="customer_view">
-          <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="firstName" />
-            <PropertyRef Name="lastName" />
-            <PropertyRef Name="Province" />
-            <PropertyRef Name="Country" />
-          </Key>
-          <Property Name="id" Type="int" Nullable="false" />
-          <Property Name="firstName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="lastName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="fullName" Type="varchar" MaxLength="101" />
-          <Property Name="mainPhone" Type="varchar" MaxLength="30" />
-          <Property Name="email" Type="varchar" MaxLength="30" />
-          <Property Name="cellPhone" Type="varchar" MaxLength="30" />
-          <Property Name="homePhone" Type="varchar" MaxLength="30" />
-          <Property Name="faxNumber" Type="varchar" MaxLength="30" />
-          <Property Name="comments" Type="varchar" MaxLength="120" />
-          <Property Name="street" Type="varchar" MaxLength="80" />
-          <Property Name="city" Type="varchar" MaxLength="50" />
-          <Property Name="postalCode" Type="char" MaxLength="10" />
-          <Property Name="Province" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Country" Type="varchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.ipmrvpark.rvsite_coord_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="rvsite_coord_view">
-          <Key>
-            <PropertyRef Name="idPlacemarkPolygon" />
-            <PropertyRef Name="name" />
-            <PropertyRef Name="seqCoordinate" />
-          </Key>
-          <Property Name="idPlacemarkPolygon" Type="char" MaxLength="8" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="backgroundColor" Type="char" MaxLength="8" />
-          <Property Name="seqCoordinate" Type="char" MaxLength="3" Nullable="false" />
-          <Property Name="longitude" Type="decimal" Precision="16" Scale="14" />
-          <Property Name="latitude" Type="decimal" Precision="16" Scale="14" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.ipmrvpark.rvsite_status_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="rvsite_status_view">
-          <Key>
-            <PropertyRef Name="idPlacemarkPolygon" />
-          </Key>
-          <Property Name="idPlacemarkPolygon" Type="char" MaxLength="8" Nullable="false" />
-          <Property Name="customerName" Type="varchar" MaxLength="101" />
-          <Property Name="idReservationOrder" Type="int" />
-          <Property Name="idReservationItem" Type="int" />
-          <Property Name="inShoppingCart" Type="bit" />
-          <Property Name="paymentReceived" Type="bit" />
-          <Property Name="checkInDate" Type="date" />
-          <Property Name="outOfServiceUntil" Type="date" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6035: The relationship 'CheckInOut_Reservation_FK' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-        <Association Name="CheckInOut_Reservation_FK" />-->
+        <Association Name="CheckInOut_PlacemarkPolygon_FK">
+          <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="1" />
+          <End Role="checkinout" Type="Self.checkinout" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="placemarkpolygon">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="checkinout">
+              <PropertyRef Name="idRVSite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CheckInOut_ReservationItem_FK">
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="1" />
+          <End Role="checkinout" Type="Self.checkinout" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reservationitem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="checkinout">
+              <PropertyRef Name="idReservationItem" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Coordinates_PlacemarkPolygon_FK">
+          <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="1" />
+          <End Role="coordinates" Type="Self.coordinates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="placemarkpolygon">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="coordinates">
+              <PropertyRef Name="idPlacemarkPolygon" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Customer_countryCode_FK">
           <End Role="countrycode" Type="Self.countrycode" Multiplicity="0..1" />
           <End Role="customer" Type="Self.customer" Multiplicity="*" />
@@ -328,10 +289,10 @@ warning 6035: The relationship 'CheckInOut_Reservation_FK' has columns that are 
           <End Role="customer" Type="Self.customer" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="person">
-              <PropertyRef Name="idPerson" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="customer">
-              <PropertyRef Name="idCustomer" />
+              <PropertyRef Name="ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -347,27 +308,63 @@ warning 6035: The relationship 'CheckInOut_Reservation_FK' has columns that are 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Member_Party_PK">
-          <End Role="party" Type="Self.party" Multiplicity="1" />
-          <End Role="partymember" Type="Self.partymember" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="party">
-              <PropertyRef Name="idParty" />
-            </Principal>
-            <Dependent Role="partymember">
-              <PropertyRef Name="idParty" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="Member_Person_FK">
           <End Role="person" Type="Self.person" Multiplicity="1" />
           <End Role="partymember" Type="Self.partymember" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="person">
-              <PropertyRef Name="idPerson" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="partymember">
-              <PropertyRef Name="idMember" />
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OutOfService_PlacemarkPolygon_FK">
+          <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="1" />
+          <End Role="outofservice" Type="Self.outofservice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="placemarkpolygon">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="outofservice">
+              <PropertyRef Name="idRVSite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Party2_PartyMember_FK">
+          <End Role="partymember" Type="Self.partymember" Multiplicity="1" />
+          <End Role="reservationitem_partymember" Type="Self.reservationitem_partymember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="partymember">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reservationitem_partymember">
+              <PropertyRef Name="idPartyMember" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Party2_ReservationItem_FK">
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="1" />
+          <End Role="reservationitem_partymember" Type="Self.reservationitem_partymember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reservationitem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reservationitem_partymember">
+              <PropertyRef Name="idReservationItem" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Payment_Customer">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="payment" Type="Self.payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="payment">
+              <PropertyRef Name="idCustomer" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -376,10 +373,22 @@ warning 6035: The relationship 'CheckInOut_Reservation_FK' has columns that are 
           <End Role="payment" Type="Self.payment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="paymentmode">
-              <PropertyRef Name="idPaymentMode" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="payment">
               <PropertyRef Name="idPaymentMode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Payment_ReservationOrder_FK">
+          <End Role="reservationorder" Type="Self.reservationorder" Multiplicity="0..1" />
+          <End Role="payment" Type="Self.payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reservationorder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="payment">
+              <PropertyRef Name="idReservationOrder" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -388,10 +397,10 @@ warning 6035: The relationship 'CheckInOut_Reservation_FK' has columns that are 
           <End Role="staff" Type="Self.staff" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="person">
-              <PropertyRef Name="idPerson" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="staff">
-              <PropertyRef Name="idStaff" />
+              <PropertyRef Name="ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -400,16 +409,25 @@ warning 6035: The relationship 'CheckInOut_Reservation_FK' has columns that are 
           <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ipmevent">
-              <PropertyRef Name="idIPMEvent" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="placemarkpolygon">
               <PropertyRef Name="idIPMEvent" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <!--Errors Found During Generation:
-warning 6035: The relationship 'PlacemarkPolygon_StyleUrl_FK' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-        <Association Name="PlacemarkPolygon_StyleUrl_FK" />-->
+        <Association Name="PlacemarkPolygon_SiteStyle_FK">
+          <End Role="sitetype" Type="Self.sitetype" Multiplicity="1" />
+          <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sitetype">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="placemarkpolygon">
+              <PropertyRef Name="idSiteType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="provinceCode_countryCode_FK">
           <End Role="countrycode" Type="Self.countrycode" Multiplicity="1" />
           <End Role="provincecode" Type="Self.provincecode" Multiplicity="*" />
@@ -422,15 +440,15 @@ warning 6035: The relationship 'PlacemarkPolygon_StyleUrl_FK' has columns that a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ReservationItem_Party_FK">
-          <End Role="party" Type="Self.party" Multiplicity="1" />
+        <Association Name="ReservationItem_PlacemarkPolygon_FK">
+          <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="1" />
           <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="party">
-              <PropertyRef Name="idParty" />
+            <Principal Role="placemarkpolygon">
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="reservationitem">
-              <PropertyRef Name="idParty" />
+              <PropertyRef Name="idRVSite" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -439,7 +457,7 @@ warning 6035: The relationship 'PlacemarkPolygon_StyleUrl_FK' has columns that a
           <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="reservationorder">
-              <PropertyRef Name="idReservationOrder" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="reservationitem">
               <PropertyRef Name="idReservationOrder" />
@@ -451,22 +469,10 @@ warning 6035: The relationship 'PlacemarkPolygon_StyleUrl_FK' has columns that a
           <End Role="reservationorder" Type="Self.reservationorder" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="customer">
-              <PropertyRef Name="idCustomer" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="reservationorder">
               <PropertyRef Name="idCustomer" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ReservationOrder_Payment_FK">
-          <End Role="payment" Type="Self.payment" Multiplicity="0..1" />
-          <End Role="reservationorder" Type="Self.reservationorder" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="payment">
-              <PropertyRef Name="idPayment" />
-            </Principal>
-            <Dependent Role="reservationorder">
-              <PropertyRef Name="idPayment" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -475,34 +481,34 @@ warning 6035: The relationship 'PlacemarkPolygon_StyleUrl_FK' has columns that a
           <End Role="reservationorder" Type="Self.reservationorder" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="staff">
-              <PropertyRef Name="idStaff" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="reservationorder">
               <PropertyRef Name="idStaff" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="SiteRate_IPMEvent_FK">
-          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
-          <End Role="siterate" Type="Self.siterate" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ipmevent">
-              <PropertyRef Name="idIPMEvent" />
-            </Principal>
-            <Dependent Role="siterate">
-              <PropertyRef Name="idIPMEvent" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="SiteRate_SiteType_FK">
+        <Association Name="SiteRate_SiteStyle_FK">
           <End Role="sitetype" Type="Self.sitetype" Multiplicity="1" />
           <End Role="siterate" Type="Self.siterate" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="sitetype">
-              <PropertyRef Name="idSiteType" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="siterate">
               <PropertyRef Name="idSiteType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SiteType_IPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
+          <End Role="sitetype" Type="Self.sitetype" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ipmevent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sitetype">
+              <PropertyRef Name="idIPMEvent" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -511,7 +517,7 @@ warning 6035: The relationship 'PlacemarkPolygon_StyleUrl_FK' has columns that a
           <End Role="sitetype" Type="Self.sitetype" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="powersupply">
-              <PropertyRef Name="idPowerSupply" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="sitetype">
               <PropertyRef Name="idPowerSupply" />
@@ -523,25 +529,10 @@ warning 6035: The relationship 'PlacemarkPolygon_StyleUrl_FK' has columns that a
           <End Role="sitetype" Type="Self.sitetype" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="sitesize">
-              <PropertyRef Name="idSiteSize" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="sitetype">
               <PropertyRef Name="idSiteSize" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <!--Errors Found During Generation:
-warning 6035: The relationship 'SiteType_StyleUrl_FK' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-        <Association Name="SiteType_StyleUrl_FK" />-->
-        <Association Name="StyleUrl_IPMEvent_FK">
-          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
-          <End Role="styleurl" Type="Self.styleurl" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ipmevent">
-              <PropertyRef Name="idIPMEvent" />
-            </Principal>
-            <Dependent Role="styleurl">
-              <PropertyRef Name="idIPMEvent" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -552,7 +543,6 @@ warning 6035: The relationship 'SiteType_StyleUrl_FK' has columns that are not p
           <EntitySet Name="customer" EntityType="Self.customer" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="ipmevent" EntityType="Self.ipmevent" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="outofservice" EntityType="Self.outofservice" Schema="ipmrvpark" store:Type="Tables" />
-          <EntitySet Name="party" EntityType="Self.party" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="partymember" EntityType="Self.partymember" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="payment" EntityType="Self.payment" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="paymentmode" EntityType="Self.paymentmode" Schema="ipmrvpark" store:Type="Tables" />
@@ -561,53 +551,24 @@ warning 6035: The relationship 'SiteType_StyleUrl_FK' has columns that are not p
           <EntitySet Name="powersupply" EntityType="Self.powersupply" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="provincecode" EntityType="Self.provincecode" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="reservationitem" EntityType="Self.reservationitem" Schema="ipmrvpark" store:Type="Tables" />
+          <EntitySet Name="reservationitem_partymember" EntityType="Self.reservationitem_partymember" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="reservationorder" EntityType="Self.reservationorder" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="siterate" EntityType="Self.siterate" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="sitesize" EntityType="Self.sitesize" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="sitetype" EntityType="Self.sitetype" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="staff" EntityType="Self.staff" Schema="ipmrvpark" store:Type="Tables" />
-          <EntitySet Name="styleurl" EntityType="Self.styleurl" Schema="ipmrvpark" store:Type="Tables" />
-          <EntitySet Name="customer_view" EntityType="Self.customer_view" store:Type="Views" store:Schema="ipmrvpark">
-            <DefiningQuery>SELECT
-`customer_view`.`id`, 
-`customer_view`.`firstName`, 
-`customer_view`.`lastName`, 
-`customer_view`.`fullName`, 
-`customer_view`.`mainPhone`, 
-`customer_view`.`email`, 
-`customer_view`.`cellPhone`, 
-`customer_view`.`homePhone`, 
-`customer_view`.`faxNumber`, 
-`customer_view`.`comments`, 
-`customer_view`.`street`, 
-`customer_view`.`city`, 
-`customer_view`.`postalCode`, 
-`customer_view`.`Province`, 
-`customer_view`.`Country`
-FROM `customer_view` AS `customer_view`</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="rvsite_coord_view" EntityType="Self.rvsite_coord_view" store:Type="Views" store:Schema="ipmrvpark">
-            <DefiningQuery>SELECT
-`rvsite_coord_view`.`idPlacemarkPolygon`, 
-`rvsite_coord_view`.`name`, 
-`rvsite_coord_view`.`backgroundColor`, 
-`rvsite_coord_view`.`seqCoordinate`, 
-`rvsite_coord_view`.`longitude`, 
-`rvsite_coord_view`.`latitude`
-FROM `rvsite_coord_view` AS `rvsite_coord_view`</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="rvsite_status_view" EntityType="Self.rvsite_status_view" store:Type="Views" store:Schema="ipmrvpark">
-            <DefiningQuery>SELECT
-`rvsite_status_view`.`idPlacemarkPolygon`, 
-`rvsite_status_view`.`customerName`, 
-`rvsite_status_view`.`idReservationOrder`, 
-`rvsite_status_view`.`idReservationItem`, 
-`rvsite_status_view`.`inShoppingCart`, 
-`rvsite_status_view`.`paymentReceived`, 
-`rvsite_status_view`.`checkInDate`, 
-`rvsite_status_view`.`outOfServiceUntil`
-FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
-          </EntitySet>
+          <AssociationSet Name="CheckInOut_PlacemarkPolygon_FK" Association="Self.CheckInOut_PlacemarkPolygon_FK">
+            <End Role="placemarkpolygon" EntitySet="placemarkpolygon" />
+            <End Role="checkinout" EntitySet="checkinout" />
+          </AssociationSet>
+          <AssociationSet Name="CheckInOut_ReservationItem_FK" Association="Self.CheckInOut_ReservationItem_FK">
+            <End Role="reservationitem" EntitySet="reservationitem" />
+            <End Role="checkinout" EntitySet="checkinout" />
+          </AssociationSet>
+          <AssociationSet Name="Coordinates_PlacemarkPolygon_FK" Association="Self.Coordinates_PlacemarkPolygon_FK">
+            <End Role="placemarkpolygon" EntitySet="placemarkpolygon" />
+            <End Role="coordinates" EntitySet="coordinates" />
+          </AssociationSet>
           <AssociationSet Name="Customer_countryCode_FK" Association="Self.Customer_countryCode_FK">
             <End Role="countrycode" EntitySet="countrycode" />
             <End Role="customer" EntitySet="customer" />
@@ -620,16 +581,32 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="provincecode" EntitySet="provincecode" />
             <End Role="customer" EntitySet="customer" />
           </AssociationSet>
-          <AssociationSet Name="Member_Party_PK" Association="Self.Member_Party_PK">
-            <End Role="party" EntitySet="party" />
-            <End Role="partymember" EntitySet="partymember" />
-          </AssociationSet>
           <AssociationSet Name="Member_Person_FK" Association="Self.Member_Person_FK">
             <End Role="person" EntitySet="person" />
             <End Role="partymember" EntitySet="partymember" />
           </AssociationSet>
+          <AssociationSet Name="OutOfService_PlacemarkPolygon_FK" Association="Self.OutOfService_PlacemarkPolygon_FK">
+            <End Role="placemarkpolygon" EntitySet="placemarkpolygon" />
+            <End Role="outofservice" EntitySet="outofservice" />
+          </AssociationSet>
+          <AssociationSet Name="Party2_PartyMember_FK" Association="Self.Party2_PartyMember_FK">
+            <End Role="partymember" EntitySet="partymember" />
+            <End Role="reservationitem_partymember" EntitySet="reservationitem_partymember" />
+          </AssociationSet>
+          <AssociationSet Name="Party2_ReservationItem_FK" Association="Self.Party2_ReservationItem_FK">
+            <End Role="reservationitem" EntitySet="reservationitem" />
+            <End Role="reservationitem_partymember" EntitySet="reservationitem_partymember" />
+          </AssociationSet>
+          <AssociationSet Name="Payment_Customer" Association="Self.Payment_Customer">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="payment" EntitySet="payment" />
+          </AssociationSet>
           <AssociationSet Name="Payment_PaymentMode_FK" Association="Self.Payment_PaymentMode_FK">
             <End Role="paymentmode" EntitySet="paymentmode" />
+            <End Role="payment" EntitySet="payment" />
+          </AssociationSet>
+          <AssociationSet Name="Payment_ReservationOrder_FK" Association="Self.Payment_ReservationOrder_FK">
+            <End Role="reservationorder" EntitySet="reservationorder" />
             <End Role="payment" EntitySet="payment" />
           </AssociationSet>
           <AssociationSet Name="Person_Staff_FK" Association="Self.Person_Staff_FK">
@@ -640,12 +617,16 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="ipmevent" EntitySet="ipmevent" />
             <End Role="placemarkpolygon" EntitySet="placemarkpolygon" />
           </AssociationSet>
+          <AssociationSet Name="PlacemarkPolygon_SiteStyle_FK" Association="Self.PlacemarkPolygon_SiteStyle_FK">
+            <End Role="sitetype" EntitySet="sitetype" />
+            <End Role="placemarkpolygon" EntitySet="placemarkpolygon" />
+          </AssociationSet>
           <AssociationSet Name="provinceCode_countryCode_FK" Association="Self.provinceCode_countryCode_FK">
             <End Role="countrycode" EntitySet="countrycode" />
             <End Role="provincecode" EntitySet="provincecode" />
           </AssociationSet>
-          <AssociationSet Name="ReservationItem_Party_FK" Association="Self.ReservationItem_Party_FK">
-            <End Role="party" EntitySet="party" />
+          <AssociationSet Name="ReservationItem_PlacemarkPolygon_FK" Association="Self.ReservationItem_PlacemarkPolygon_FK">
+            <End Role="placemarkpolygon" EntitySet="placemarkpolygon" />
             <End Role="reservationitem" EntitySet="reservationitem" />
           </AssociationSet>
           <AssociationSet Name="ReservationItem_ReservationOrder_FK" Association="Self.ReservationItem_ReservationOrder_FK">
@@ -656,21 +637,17 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="customer" EntitySet="customer" />
             <End Role="reservationorder" EntitySet="reservationorder" />
           </AssociationSet>
-          <AssociationSet Name="ReservationOrder_Payment_FK" Association="Self.ReservationOrder_Payment_FK">
-            <End Role="payment" EntitySet="payment" />
-            <End Role="reservationorder" EntitySet="reservationorder" />
-          </AssociationSet>
           <AssociationSet Name="ReservationOrder_Staff_FK" Association="Self.ReservationOrder_Staff_FK">
             <End Role="staff" EntitySet="staff" />
             <End Role="reservationorder" EntitySet="reservationorder" />
           </AssociationSet>
-          <AssociationSet Name="SiteRate_IPMEvent_FK" Association="Self.SiteRate_IPMEvent_FK">
-            <End Role="ipmevent" EntitySet="ipmevent" />
-            <End Role="siterate" EntitySet="siterate" />
-          </AssociationSet>
-          <AssociationSet Name="SiteRate_SiteType_FK" Association="Self.SiteRate_SiteType_FK">
+          <AssociationSet Name="SiteRate_SiteStyle_FK" Association="Self.SiteRate_SiteStyle_FK">
             <End Role="sitetype" EntitySet="sitetype" />
             <End Role="siterate" EntitySet="siterate" />
+          </AssociationSet>
+          <AssociationSet Name="SiteType_IPMEvent_FK" Association="Self.SiteType_IPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevent" />
+            <End Role="sitetype" EntitySet="sitetype" />
           </AssociationSet>
           <AssociationSet Name="SiteType_PowerSupply_FK" Association="Self.SiteType_PowerSupply_FK">
             <End Role="powersupply" EntitySet="powersupply" />
@@ -680,10 +657,6 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="sitesize" EntitySet="sitesize" />
             <End Role="sitetype" EntitySet="sitetype" />
           </AssociationSet>
-          <AssociationSet Name="StyleUrl_IPMEvent_FK" Association="Self.StyleUrl_IPMEvent_FK">
-            <End Role="ipmevent" EntitySet="ipmevent" />
-            <End Role="styleurl" EntitySet="styleurl" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -692,31 +665,28 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
       <Schema Namespace="ipmrvparkModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityType Name="checkinout">
           <Key>
-            <PropertyRef Name="idCheckInOut" />
-            <PropertyRef Name="idReservationOrder" />
-            <PropertyRef Name="idReservationItem" />
-            <PropertyRef Name="idIPMEvent" />
-            <PropertyRef Name="idPlacemarkPolygon" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idCheckInOut" Type="Int32" Nullable="false" />
-          <Property Name="idReservationOrder" Type="Int32" Nullable="false" />
-          <Property Name="idReservationItem" Type="Int32" Nullable="false" />
-          <Property Name="idIPMEvent" Type="Int32" Nullable="false" />
-          <Property Name="idPlacemarkPolygon" Type="String" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idReservationItem" Type="Int64" Nullable="false" />
+          <Property Name="idRVSite" Type="Int64" Nullable="false" />
           <Property Name="arrivalDate" Type="DateTime" />
           <Property Name="departureDate" Type="DateTime" />
+          <NavigationProperty Name="placemarkpolygon" Relationship="Self.CheckInOut_PlacemarkPolygon_FK" FromRole="checkinout" ToRole="placemarkpolygon" />
+          <NavigationProperty Name="reservationitem" Relationship="Self.CheckInOut_ReservationItem_FK" FromRole="checkinout" ToRole="reservationitem" />
         </EntityType>
         <EntityType Name="coordinate">
           <Key>
-            <PropertyRef Name="idIPMEvent" />
-            <PropertyRef Name="idPlacemarkPolygon" />
-            <PropertyRef Name="seqCoordinate" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idIPMEvent" Type="Int32" Nullable="false" />
-          <Property Name="idPlacemarkPolygon" Type="String" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idPlacemarkPolygon" Type="Int64" Nullable="false" />
           <Property Name="seqCoordinate" Type="String" Nullable="false" />
           <Property Name="longitude" Type="Decimal" />
           <Property Name="latitude" Type="Decimal" />
+          <Property Name="createDate" Type="DateTime" />
+          <Property Name="lastUpdate" Type="DateTime" />
+          <NavigationProperty Name="placemarkpolygon" Relationship="Self.Coordinates_PlacemarkPolygon_FK" FromRole="coordinates" ToRole="placemarkpolygon" />
         </EntityType>
         <EntityType Name="countrycode">
           <Key>
@@ -724,14 +694,16 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           </Key>
           <Property Name="code" Type="String" Nullable="false" />
           <Property Name="name" Type="String" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" />
+          <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="customers" Relationship="Self.Customer_countryCode_FK" FromRole="countrycode" ToRole="customer" />
           <NavigationProperty Name="provincecodes" Relationship="Self.provinceCode_countryCode_FK" FromRole="countrycode" ToRole="provincecode" />
         </EntityType>
         <EntityType Name="customer">
           <Key>
-            <PropertyRef Name="idCustomer" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idCustomer" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="cellPhone" Type="String" />
           <Property Name="homePhone" Type="String" />
           <Property Name="faxNumber" Type="String" />
@@ -746,77 +718,67 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <NavigationProperty Name="countrycode1" Relationship="Self.Customer_countryCode_FK" FromRole="customer" ToRole="countrycode" />
           <NavigationProperty Name="person" Relationship="Self.Customer_Person_FK" FromRole="customer" ToRole="person" />
           <NavigationProperty Name="provincecode1" Relationship="Self.Customer_provinceCode_FK" FromRole="customer" ToRole="provincecode" />
+          <NavigationProperty Name="payments" Relationship="Self.Payment_Customer" FromRole="customer" ToRole="payment" />
           <NavigationProperty Name="reservationorders" Relationship="Self.ReservationOrder_Customer_FK" FromRole="customer" ToRole="reservationorder" />
         </EntityType>
         <EntityType Name="ipmevent">
           <Key>
-            <PropertyRef Name="idIPMEvent" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idIPMEvent" Type="Int32" Nullable="false" />
-          <Property Name="year" Type="Int32" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="year" Type="Int64" Nullable="false" />
           <Property Name="local" Type="String" />
           <Property Name="description" Type="String" />
           <Property Name="mapFileUrl" Type="String" />
           <NavigationProperty Name="placemarkpolygons" Relationship="Self.PlacemarkPolygon_IPMEvent_FK" FromRole="ipmevent" ToRole="placemarkpolygon" />
-          <NavigationProperty Name="siterates" Relationship="Self.SiteRate_IPMEvent_FK" FromRole="ipmevent" ToRole="siterate" />
-          <NavigationProperty Name="styleurls" Relationship="Self.StyleUrl_IPMEvent_FK" FromRole="ipmevent" ToRole="styleurl" />
+          <NavigationProperty Name="sitetypes" Relationship="Self.SiteType_IPMEvent_FK" FromRole="ipmevent" ToRole="sitetype" />
         </EntityType>
         <EntityType Name="outofservice">
           <Key>
-            <PropertyRef Name="idOutOfService" />
-            <PropertyRef Name="idIPMEvent" />
-            <PropertyRef Name="idPlacemarkPolygon" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idOutOfService" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idRVSite" Type="Int64" Nullable="false" />
           <Property Name="startDate" Type="DateTime" />
           <Property Name="endDate" Type="DateTime" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
-          <Property Name="idIPMEvent" Type="Int32" Nullable="false" />
-          <Property Name="idPlacemarkPolygon" Type="String" Nullable="false" />
-        </EntityType>
-        <EntityType Name="party">
-          <Key>
-            <PropertyRef Name="idParty" />
-          </Key>
-          <Property Name="idParty" Type="Int32" Nullable="false" />
-          <Property Name="numberOfMembers" Type="Int32" />
-          <Property Name="createDate" Type="DateTime" />
-          <Property Name="lastUpdate" Type="DateTime" />
-          <NavigationProperty Name="partymembers" Relationship="Self.Member_Party_PK" FromRole="party" ToRole="partymember" />
-          <NavigationProperty Name="reservationitems" Relationship="Self.ReservationItem_Party_FK" FromRole="party" ToRole="reservationitem" />
+          <NavigationProperty Name="placemarkpolygon" Relationship="Self.OutOfService_PlacemarkPolygon_FK" FromRole="outofservice" ToRole="placemarkpolygon" />
         </EntityType>
         <EntityType Name="partymember">
           <Key>
-            <PropertyRef Name="idMember" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idMember" Type="Int32" Nullable="false" />
-          <Property Name="idParty" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="cellPhone" Type="String" />
           <Property Name="petDescription" Type="String" />
           <Property Name="comments" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
-          <NavigationProperty Name="party" Relationship="Self.Member_Party_PK" FromRole="partymember" ToRole="party" />
           <NavigationProperty Name="person" Relationship="Self.Member_Person_FK" FromRole="partymember" ToRole="person" />
+          <NavigationProperty Name="reservationitem_partymember" Relationship="Self.Party2_PartyMember_FK" FromRole="partymember" ToRole="reservationitem_partymember" />
         </EntityType>
         <EntityType Name="payment">
           <Key>
-            <PropertyRef Name="idPayment" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idPayment" Type="Int32" Nullable="false" />
-          <Property Name="idPaymentMode" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idPaymentMode" Type="Int64" Nullable="false" />
+          <Property Name="idCustomer" Type="Int64" Nullable="false" />
+          <Property Name="idReservationOrder" Type="Int64" />
+          <Property Name="reasonForPayment" Type="String" />
           <Property Name="amount" Type="Decimal" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
+          <NavigationProperty Name="customer" Relationship="Self.Payment_Customer" FromRole="payment" ToRole="customer" />
           <NavigationProperty Name="paymentmode" Relationship="Self.Payment_PaymentMode_FK" FromRole="payment" ToRole="paymentmode" />
-          <NavigationProperty Name="reservationorders" Relationship="Self.ReservationOrder_Payment_FK" FromRole="payment" ToRole="reservationorder" />
+          <NavigationProperty Name="reservationorder" Relationship="Self.Payment_ReservationOrder_FK" FromRole="payment" ToRole="reservationorder" />
         </EntityType>
         <EntityType Name="paymentmode">
           <Key>
-            <PropertyRef Name="idPaymentMode" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idPaymentMode" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="description" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
@@ -824,9 +786,9 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
         </EntityType>
         <EntityType Name="person">
           <Key>
-            <PropertyRef Name="idPerson" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idPerson" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="firstName" Type="String" Nullable="false" />
           <Property Name="lastName" Type="String" Nullable="false" />
           <Property Name="mainPhone" Type="String" />
@@ -839,22 +801,28 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
         </EntityType>
         <EntityType Name="placemarkpolygon">
           <Key>
-            <PropertyRef Name="idPlacemarkPolygon" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idIPMEvent" Type="Int32" Nullable="false" />
-          <Property Name="idPlacemarkPolygon" Type="String" Nullable="false" />
-          <Property Name="name" Type="String" Nullable="false" />
-          <Property Name="idStyleUrl" Type="String" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
+          <Property Name="tag" Type="String" Nullable="false" />
+          <Property Name="site" Type="String" Nullable="false" />
+          <Property Name="idSiteType" Type="Int64" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <Property Name="isRVSite" Type="Boolean" />
+          <NavigationProperty Name="checkinouts" Relationship="Self.CheckInOut_PlacemarkPolygon_FK" FromRole="placemarkpolygon" ToRole="checkinout" />
+          <NavigationProperty Name="coordinates" Relationship="Self.Coordinates_PlacemarkPolygon_FK" FromRole="placemarkpolygon" ToRole="coordinates" />
           <NavigationProperty Name="ipmevent" Relationship="Self.PlacemarkPolygon_IPMEvent_FK" FromRole="placemarkpolygon" ToRole="ipmevent" />
+          <NavigationProperty Name="outofservices" Relationship="Self.OutOfService_PlacemarkPolygon_FK" FromRole="placemarkpolygon" ToRole="outofservice" />
+          <NavigationProperty Name="sitetype" Relationship="Self.PlacemarkPolygon_SiteStyle_FK" FromRole="placemarkpolygon" ToRole="sitetype" />
+          <NavigationProperty Name="reservationitems" Relationship="Self.ReservationItem_PlacemarkPolygon_FK" FromRole="placemarkpolygon" ToRole="reservationitem" />
         </EntityType>
         <EntityType Name="powersupply">
           <Key>
-            <PropertyRef Name="idPowerSupply" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idPowerSupply" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="description" Type="String" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
@@ -874,64 +842,72 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
         </EntityType>
         <EntityType Name="reservationitem">
           <Key>
-            <PropertyRef Name="idReservationOrder" />
-            <PropertyRef Name="idReservationItem" />
-            <PropertyRef Name="idIPMEvent" />
-            <PropertyRef Name="idPlacemarkPolygon" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idReservationOrder" Type="Int32" Nullable="false" />
-          <Property Name="idReservationItem" Type="Int32" Nullable="false" />
-          <Property Name="idIPMEvent" Type="Int32" Nullable="false" />
-          <Property Name="idPlacemarkPolygon" Type="String" Nullable="false" />
-          <Property Name="idParty" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="idReservationOrder" Type="Int64" Nullable="false" />
+          <Property Name="seqReservationItem" Type="Int64" Nullable="false" />
+          <Property Name="idRVSite" Type="Int64" Nullable="false" />
           <Property Name="arrivalDate" Type="DateTime" Nullable="false" />
           <Property Name="departureDate" Type="DateTime" Nullable="false" />
           <Property Name="totalAmount" Type="Decimal" />
-          <Property Name="isCancelled" Type="Boolean" Nullable="false" />
+          <Property Name="numberMemberInParty" Type="Int32" Nullable="false" />
+          <Property Name="isCancelled" Type="Boolean" />
           <Property Name="comments" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
-          <NavigationProperty Name="party" Relationship="Self.ReservationItem_Party_FK" FromRole="reservationitem" ToRole="party" />
+          <NavigationProperty Name="checkinouts" Relationship="Self.CheckInOut_ReservationItem_FK" FromRole="reservationitem" ToRole="checkinout" />
+          <NavigationProperty Name="placemarkpolygon" Relationship="Self.ReservationItem_PlacemarkPolygon_FK" FromRole="reservationitem" ToRole="placemarkpolygon" />
+          <NavigationProperty Name="reservationitem_partymember" Relationship="Self.Party2_ReservationItem_FK" FromRole="reservationitem" ToRole="reservationitem_partymember" />
           <NavigationProperty Name="reservationorder" Relationship="Self.ReservationItem_ReservationOrder_FK" FromRole="reservationitem" ToRole="reservationorder" />
+        </EntityType>
+        <EntityType Name="reservationitem_partymember">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="idReservationItem" Type="Int64" Nullable="false" />
+          <Property Name="idPartyMember" Type="Int64" Nullable="false" />
+          <Property Name="comments" Type="String" />
+          <Property Name="createDate" Type="DateTime" />
+          <Property Name="lastUpdate" Type="DateTime" />
+          <NavigationProperty Name="partymember" Relationship="Self.Party2_PartyMember_FK" FromRole="reservationitem_partymember" ToRole="partymember" />
+          <NavigationProperty Name="reservationitem" Relationship="Self.Party2_ReservationItem_FK" FromRole="reservationitem_partymember" ToRole="reservationitem" />
         </EntityType>
         <EntityType Name="reservationorder">
           <Key>
-            <PropertyRef Name="idReservationOrder" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idReservationOrder" Type="Int32" Nullable="false" />
-          <Property Name="idCustomer" Type="Int32" Nullable="false" />
-          <Property Name="idStaff" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idCustomer" Type="Int64" Nullable="false" />
+          <Property Name="idStaff" Type="Int64" Nullable="false" />
           <Property Name="totalAmount" Type="Decimal" />
-          <Property Name="idPayment" Type="Int32" />
-          <Property Name="createDate" Type="DateTime" />
-          <Property Name="lastUpdate" Type="DateTime" />
           <Property Name="inShoppingCart" Type="Boolean" />
           <Property Name="paymentReceived" Type="Boolean" />
+          <Property Name="createDate" Type="DateTime" />
+          <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="customer" Relationship="Self.ReservationOrder_Customer_FK" FromRole="reservationorder" ToRole="customer" />
-          <NavigationProperty Name="payment" Relationship="Self.ReservationOrder_Payment_FK" FromRole="reservationorder" ToRole="payment" />
+          <NavigationProperty Name="payments" Relationship="Self.Payment_ReservationOrder_FK" FromRole="reservationorder" ToRole="payment" />
           <NavigationProperty Name="reservationitems" Relationship="Self.ReservationItem_ReservationOrder_FK" FromRole="reservationorder" ToRole="reservationitem" />
           <NavigationProperty Name="staff" Relationship="Self.ReservationOrder_Staff_FK" FromRole="reservationorder" ToRole="staff" />
         </EntityType>
         <EntityType Name="siterate">
           <Key>
-            <PropertyRef Name="idIPMEvent" />
-            <PropertyRef Name="idSiteRate" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idIPMEvent" Type="Int32" Nullable="false" />
-          <Property Name="idSiteRate" Type="Int32" Nullable="false" />
-          <Property Name="idSiteType" Type="String" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idSiteType" Type="Int64" Nullable="false" />
           <Property Name="period" Type="String" Nullable="false" />
           <Property Name="rate" Type="Decimal" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
-          <NavigationProperty Name="ipmevent" Relationship="Self.SiteRate_IPMEvent_FK" FromRole="siterate" ToRole="ipmevent" />
-          <NavigationProperty Name="sitetype" Relationship="Self.SiteRate_SiteType_FK" FromRole="siterate" ToRole="sitetype" />
+          <NavigationProperty Name="sitetype" Relationship="Self.SiteRate_SiteStyle_FK" FromRole="siterate" ToRole="sitetype" />
         </EntityType>
         <EntityType Name="sitesize">
           <Key>
-            <PropertyRef Name="idSiteSize" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idSiteSize" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="description" Type="String" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
@@ -939,92 +915,71 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
         </EntityType>
         <EntityType Name="sitetype">
           <Key>
-            <PropertyRef Name="idSiteType" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idSiteType" Type="String" Nullable="false" />
-          <Property Name="idSiteSize" Type="Int32" Nullable="false" />
-          <Property Name="idPowerSupply" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
+          <Property Name="StyleUrl" Type="String" Nullable="false" />
+          <Property Name="backgroundColor" Type="String" />
+          <Property Name="idSiteSize" Type="Int64" Nullable="false" />
+          <Property Name="idPowerSupply" Type="Int64" Nullable="false" />
           <Property Name="isUnserviced" Type="Boolean" />
           <Property Name="isForHandicapped" Type="Boolean" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
+          <NavigationProperty Name="ipmevent" Relationship="Self.SiteType_IPMEvent_FK" FromRole="sitetype" ToRole="ipmevent" />
+          <NavigationProperty Name="placemarkpolygons" Relationship="Self.PlacemarkPolygon_SiteStyle_FK" FromRole="sitetype" ToRole="placemarkpolygon" />
           <NavigationProperty Name="powersupply" Relationship="Self.SiteType_PowerSupply_FK" FromRole="sitetype" ToRole="powersupply" />
-          <NavigationProperty Name="siterates" Relationship="Self.SiteRate_SiteType_FK" FromRole="sitetype" ToRole="siterate" />
+          <NavigationProperty Name="siterates" Relationship="Self.SiteRate_SiteStyle_FK" FromRole="sitetype" ToRole="siterate" />
           <NavigationProperty Name="sitesize" Relationship="Self.SiteType_SiteSize_FK" FromRole="sitetype" ToRole="sitesize" />
         </EntityType>
         <EntityType Name="staff">
           <Key>
-            <PropertyRef Name="idStaff" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="idStaff" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="role" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="person" Relationship="Self.Person_Staff_FK" FromRole="staff" ToRole="person" />
           <NavigationProperty Name="reservationorders" Relationship="Self.ReservationOrder_Staff_FK" FromRole="staff" ToRole="reservationorder" />
         </EntityType>
-        <EntityType Name="styleurl">
-          <Key>
-            <PropertyRef Name="idStyleUrl" />
-            <PropertyRef Name="idIPMEvent" />
-          </Key>
-          <Property Name="idStyleUrl" Type="String" Nullable="false" />
-          <Property Name="backgroundColor" Type="String" />
-          <Property Name="createDate" Type="DateTime" />
-          <Property Name="lastUpdate" Type="DateTime" />
-          <Property Name="idIPMEvent" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ipmevent" Relationship="Self.StyleUrl_IPMEvent_FK" FromRole="styleurl" ToRole="ipmevent" />
-        </EntityType>
-        <EntityType Name="customer_view">
-          <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="firstName" />
-            <PropertyRef Name="lastName" />
-            <PropertyRef Name="Province" />
-            <PropertyRef Name="Country" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="firstName" Type="String" Nullable="false" />
-          <Property Name="lastName" Type="String" Nullable="false" />
-          <Property Name="fullName" Type="String" />
-          <Property Name="mainPhone" Type="String" />
-          <Property Name="email" Type="String" />
-          <Property Name="cellPhone" Type="String" />
-          <Property Name="homePhone" Type="String" />
-          <Property Name="faxNumber" Type="String" />
-          <Property Name="comments" Type="String" />
-          <Property Name="street" Type="String" />
-          <Property Name="city" Type="String" />
-          <Property Name="postalCode" Type="String" />
-          <Property Name="Province" Type="String" Nullable="false" />
-          <Property Name="Country" Type="String" Nullable="false" />
-        </EntityType>
-        <EntityType Name="rvsite_coord_view">
-          <Key>
-            <PropertyRef Name="idPlacemarkPolygon" />
-            <PropertyRef Name="name" />
-            <PropertyRef Name="seqCoordinate" />
-          </Key>
-          <Property Name="idPlacemarkPolygon" Type="String" Nullable="false" />
-          <Property Name="name" Type="String" Nullable="false" />
-          <Property Name="backgroundColor" Type="String" />
-          <Property Name="seqCoordinate" Type="String" Nullable="false" />
-          <Property Name="longitude" Type="Decimal" />
-          <Property Name="latitude" Type="Decimal" />
-        </EntityType>
-        <EntityType Name="rvsite_status_view">
-          <Key>
-            <PropertyRef Name="idPlacemarkPolygon" />
-          </Key>
-          <Property Name="idPlacemarkPolygon" Type="String" Nullable="false" />
-          <Property Name="customerName" Type="String" />
-          <Property Name="idReservationOrder" Type="Int32" />
-          <Property Name="idReservationItem" Type="Int32" />
-          <Property Name="inShoppingCart" Type="Boolean" />
-          <Property Name="paymentReceived" Type="Boolean" />
-          <Property Name="checkInDate" Type="DateTime" />
-          <Property Name="outOfServiceUntil" Type="DateTime" />
-        </EntityType>
+        <Association Name="CheckInOut_PlacemarkPolygon_FK">
+          <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="1" />
+          <End Role="checkinout" Type="Self.checkinout" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="placemarkpolygon">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="checkinout">
+              <PropertyRef Name="idRVSite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CheckInOut_ReservationItem_FK">
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="1" />
+          <End Role="checkinout" Type="Self.checkinout" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reservationitem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="checkinout">
+              <PropertyRef Name="idReservationItem" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Coordinates_PlacemarkPolygon_FK">
+          <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="1" />
+          <End Role="coordinates" Type="Self.coordinate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="placemarkpolygon">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="coordinates">
+              <PropertyRef Name="idPlacemarkPolygon" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Customer_countryCode_FK">
           <End Role="countrycode" Type="Self.countrycode" Multiplicity="0..1" />
           <End Role="customer" Type="Self.customer" Multiplicity="*" />
@@ -1054,10 +1009,10 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <End Role="customer" Type="Self.customer" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="person">
-              <PropertyRef Name="idPerson" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="customer">
-              <PropertyRef Name="idCustomer" />
+              <PropertyRef Name="ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1073,12 +1028,24 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Payment_Customer">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="payment" Type="Self.payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="payment">
+              <PropertyRef Name="idCustomer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="ReservationOrder_Customer_FK">
           <End Role="customer" Type="Self.customer" Multiplicity="1" />
           <End Role="reservationorder" Type="Self.reservationorder" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="customer">
-              <PropertyRef Name="idCustomer" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="reservationorder">
               <PropertyRef Name="idCustomer" />
@@ -1090,58 +1057,34 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ipmevent">
-              <PropertyRef Name="idIPMEvent" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="placemarkpolygon">
               <PropertyRef Name="idIPMEvent" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="SiteRate_IPMEvent_FK">
+        <Association Name="SiteType_IPMEvent_FK">
           <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
-          <End Role="siterate" Type="Self.siterate" Multiplicity="*" />
+          <End Role="sitetype" Type="Self.sitetype" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ipmevent">
-              <PropertyRef Name="idIPMEvent" />
+              <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="siterate">
-              <PropertyRef Name="idIPMEvent" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="StyleUrl_IPMEvent_FK">
-          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
-          <End Role="styleurl" Type="Self.styleurl" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ipmevent">
-              <PropertyRef Name="idIPMEvent" />
-            </Principal>
-            <Dependent Role="styleurl">
+            <Dependent Role="sitetype">
               <PropertyRef Name="idIPMEvent" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Member_Party_PK">
-          <End Role="party" Type="Self.party" Multiplicity="1" />
-          <End Role="partymember" Type="Self.partymember" Multiplicity="*" />
+        <Association Name="OutOfService_PlacemarkPolygon_FK">
+          <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="1" />
+          <End Role="outofservice" Type="Self.outofservice" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="party">
-              <PropertyRef Name="idParty" />
+            <Principal Role="placemarkpolygon">
+              <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="partymember">
-              <PropertyRef Name="idParty" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ReservationItem_Party_FK">
-          <End Role="party" Type="Self.party" Multiplicity="1" />
-          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="party">
-              <PropertyRef Name="idParty" />
-            </Principal>
-            <Dependent Role="reservationitem">
-              <PropertyRef Name="idParty" />
+            <Dependent Role="outofservice">
+              <PropertyRef Name="idRVSite" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1150,10 +1093,22 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <End Role="partymember" Type="Self.partymember" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="person">
-              <PropertyRef Name="idPerson" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="partymember">
-              <PropertyRef Name="idMember" />
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Party2_PartyMember_FK">
+          <End Role="partymember" Type="Self.partymember" Multiplicity="1" />
+          <End Role="reservationitem_partymember" Type="Self.reservationitem_partymember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="partymember">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reservationitem_partymember">
+              <PropertyRef Name="idPartyMember" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1162,22 +1117,22 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <End Role="payment" Type="Self.payment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="paymentmode">
-              <PropertyRef Name="idPaymentMode" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="payment">
               <PropertyRef Name="idPaymentMode" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ReservationOrder_Payment_FK">
-          <End Role="payment" Type="Self.payment" Multiplicity="0..1" />
-          <End Role="reservationorder" Type="Self.reservationorder" Multiplicity="*" />
+        <Association Name="Payment_ReservationOrder_FK">
+          <End Role="reservationorder" Type="Self.reservationorder" Multiplicity="0..1" />
+          <End Role="payment" Type="Self.payment" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="payment">
-              <PropertyRef Name="idPayment" />
+            <Principal Role="reservationorder">
+              <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="reservationorder">
-              <PropertyRef Name="idPayment" />
+            <Dependent Role="payment">
+              <PropertyRef Name="idReservationOrder" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1186,10 +1141,34 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <End Role="staff" Type="Self.staff" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="person">
-              <PropertyRef Name="idPerson" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="staff">
-              <PropertyRef Name="idStaff" />
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PlacemarkPolygon_SiteStyle_FK">
+          <End Role="sitetype" Type="Self.sitetype" Multiplicity="1" />
+          <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sitetype">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="placemarkpolygon">
+              <PropertyRef Name="idSiteType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReservationItem_PlacemarkPolygon_FK">
+          <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="1" />
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="placemarkpolygon">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reservationitem">
+              <PropertyRef Name="idRVSite" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1198,10 +1177,22 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <End Role="sitetype" Type="Self.sitetype" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="powersupply">
-              <PropertyRef Name="idPowerSupply" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="sitetype">
               <PropertyRef Name="idPowerSupply" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Party2_ReservationItem_FK">
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="1" />
+          <End Role="reservationitem_partymember" Type="Self.reservationitem_partymember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reservationitem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reservationitem_partymember">
+              <PropertyRef Name="idReservationItem" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1210,7 +1201,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="reservationorder">
-              <PropertyRef Name="idReservationOrder" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="reservationitem">
               <PropertyRef Name="idReservationOrder" />
@@ -1222,19 +1213,19 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <End Role="reservationorder" Type="Self.reservationorder" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="staff">
-              <PropertyRef Name="idStaff" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="reservationorder">
               <PropertyRef Name="idStaff" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="SiteRate_SiteType_FK">
+        <Association Name="SiteRate_SiteStyle_FK">
           <End Role="sitetype" Type="Self.sitetype" Multiplicity="1" />
           <End Role="siterate" Type="Self.siterate" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="sitetype">
-              <PropertyRef Name="idSiteType" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="siterate">
               <PropertyRef Name="idSiteType" />
@@ -1246,7 +1237,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <End Role="sitetype" Type="Self.sitetype" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="sitesize">
-              <PropertyRef Name="idSiteSize" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="sitetype">
               <PropertyRef Name="idSiteSize" />
@@ -1260,7 +1251,6 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySet Name="customers" EntityType="Self.customer" />
           <EntitySet Name="ipmevents" EntityType="Self.ipmevent" />
           <EntitySet Name="outofservices" EntityType="Self.outofservice" />
-          <EntitySet Name="parties" EntityType="Self.party" />
           <EntitySet Name="partymembers" EntityType="Self.partymember" />
           <EntitySet Name="payments" EntityType="Self.payment" />
           <EntitySet Name="paymentmodes" EntityType="Self.paymentmode" />
@@ -1269,15 +1259,24 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySet Name="powersupplies" EntityType="Self.powersupply" />
           <EntitySet Name="provincecodes" EntityType="Self.provincecode" />
           <EntitySet Name="reservationitems" EntityType="Self.reservationitem" />
+          <EntitySet Name="reservationitem_partymember" EntityType="Self.reservationitem_partymember" />
           <EntitySet Name="reservationorders" EntityType="Self.reservationorder" />
           <EntitySet Name="siterates" EntityType="Self.siterate" />
           <EntitySet Name="sitesizes" EntityType="Self.sitesize" />
           <EntitySet Name="sitetypes" EntityType="Self.sitetype" />
           <EntitySet Name="staffs" EntityType="Self.staff" />
-          <EntitySet Name="styleurls" EntityType="Self.styleurl" />
-          <EntitySet Name="customer_view" EntityType="Self.customer_view" />
-          <EntitySet Name="rvsite_coord_view" EntityType="Self.rvsite_coord_view" />
-          <EntitySet Name="rvsite_status_view" EntityType="Self.rvsite_status_view" />
+          <AssociationSet Name="CheckInOut_PlacemarkPolygon_FK" Association="Self.CheckInOut_PlacemarkPolygon_FK">
+            <End Role="placemarkpolygon" EntitySet="placemarkpolygons" />
+            <End Role="checkinout" EntitySet="checkinouts" />
+          </AssociationSet>
+          <AssociationSet Name="CheckInOut_ReservationItem_FK" Association="Self.CheckInOut_ReservationItem_FK">
+            <End Role="reservationitem" EntitySet="reservationitems" />
+            <End Role="checkinout" EntitySet="checkinouts" />
+          </AssociationSet>
+          <AssociationSet Name="Coordinates_PlacemarkPolygon_FK" Association="Self.Coordinates_PlacemarkPolygon_FK">
+            <End Role="placemarkpolygon" EntitySet="placemarkpolygons" />
+            <End Role="coordinates" EntitySet="coordinates" />
+          </AssociationSet>
           <AssociationSet Name="Customer_countryCode_FK" Association="Self.Customer_countryCode_FK">
             <End Role="countrycode" EntitySet="countrycodes" />
             <End Role="customer" EntitySet="customers" />
@@ -1294,6 +1293,10 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="provincecode" EntitySet="provincecodes" />
             <End Role="customer" EntitySet="customers" />
           </AssociationSet>
+          <AssociationSet Name="Payment_Customer" Association="Self.Payment_Customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="payment" EntitySet="payments" />
+          </AssociationSet>
           <AssociationSet Name="ReservationOrder_Customer_FK" Association="Self.ReservationOrder_Customer_FK">
             <End Role="customer" EntitySet="customers" />
             <End Role="reservationorder" EntitySet="reservationorders" />
@@ -1302,41 +1305,49 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="ipmevent" EntitySet="ipmevents" />
             <End Role="placemarkpolygon" EntitySet="placemarkpolygons" />
           </AssociationSet>
-          <AssociationSet Name="SiteRate_IPMEvent_FK" Association="Self.SiteRate_IPMEvent_FK">
+          <AssociationSet Name="SiteType_IPMEvent_FK" Association="Self.SiteType_IPMEvent_FK">
             <End Role="ipmevent" EntitySet="ipmevents" />
-            <End Role="siterate" EntitySet="siterates" />
+            <End Role="sitetype" EntitySet="sitetypes" />
           </AssociationSet>
-          <AssociationSet Name="StyleUrl_IPMEvent_FK" Association="Self.StyleUrl_IPMEvent_FK">
-            <End Role="ipmevent" EntitySet="ipmevents" />
-            <End Role="styleurl" EntitySet="styleurls" />
-          </AssociationSet>
-          <AssociationSet Name="Member_Party_PK" Association="Self.Member_Party_PK">
-            <End Role="party" EntitySet="parties" />
-            <End Role="partymember" EntitySet="partymembers" />
-          </AssociationSet>
-          <AssociationSet Name="ReservationItem_Party_FK" Association="Self.ReservationItem_Party_FK">
-            <End Role="party" EntitySet="parties" />
-            <End Role="reservationitem" EntitySet="reservationitems" />
+          <AssociationSet Name="OutOfService_PlacemarkPolygon_FK" Association="Self.OutOfService_PlacemarkPolygon_FK">
+            <End Role="placemarkpolygon" EntitySet="placemarkpolygons" />
+            <End Role="outofservice" EntitySet="outofservices" />
           </AssociationSet>
           <AssociationSet Name="Member_Person_FK" Association="Self.Member_Person_FK">
             <End Role="person" EntitySet="people" />
             <End Role="partymember" EntitySet="partymembers" />
           </AssociationSet>
+          <AssociationSet Name="Party2_PartyMember_FK" Association="Self.Party2_PartyMember_FK">
+            <End Role="partymember" EntitySet="partymembers" />
+            <End Role="reservationitem_partymember" EntitySet="reservationitem_partymember" />
+          </AssociationSet>
           <AssociationSet Name="Payment_PaymentMode_FK" Association="Self.Payment_PaymentMode_FK">
             <End Role="paymentmode" EntitySet="paymentmodes" />
             <End Role="payment" EntitySet="payments" />
           </AssociationSet>
-          <AssociationSet Name="ReservationOrder_Payment_FK" Association="Self.ReservationOrder_Payment_FK">
-            <End Role="payment" EntitySet="payments" />
+          <AssociationSet Name="Payment_ReservationOrder_FK" Association="Self.Payment_ReservationOrder_FK">
             <End Role="reservationorder" EntitySet="reservationorders" />
+            <End Role="payment" EntitySet="payments" />
           </AssociationSet>
           <AssociationSet Name="Person_Staff_FK" Association="Self.Person_Staff_FK">
             <End Role="person" EntitySet="people" />
             <End Role="staff" EntitySet="staffs" />
           </AssociationSet>
+          <AssociationSet Name="PlacemarkPolygon_SiteStyle_FK" Association="Self.PlacemarkPolygon_SiteStyle_FK">
+            <End Role="sitetype" EntitySet="sitetypes" />
+            <End Role="placemarkpolygon" EntitySet="placemarkpolygons" />
+          </AssociationSet>
+          <AssociationSet Name="ReservationItem_PlacemarkPolygon_FK" Association="Self.ReservationItem_PlacemarkPolygon_FK">
+            <End Role="placemarkpolygon" EntitySet="placemarkpolygons" />
+            <End Role="reservationitem" EntitySet="reservationitems" />
+          </AssociationSet>
           <AssociationSet Name="SiteType_PowerSupply_FK" Association="Self.SiteType_PowerSupply_FK">
             <End Role="powersupply" EntitySet="powersupplies" />
             <End Role="sitetype" EntitySet="sitetypes" />
+          </AssociationSet>
+          <AssociationSet Name="Party2_ReservationItem_FK" Association="Self.Party2_ReservationItem_FK">
+            <End Role="reservationitem" EntitySet="reservationitems" />
+            <End Role="reservationitem_partymember" EntitySet="reservationitem_partymember" />
           </AssociationSet>
           <AssociationSet Name="ReservationItem_ReservationOrder_FK" Association="Self.ReservationItem_ReservationOrder_FK">
             <End Role="reservationorder" EntitySet="reservationorders" />
@@ -1346,7 +1357,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="staff" EntitySet="staffs" />
             <End Role="reservationorder" EntitySet="reservationorders" />
           </AssociationSet>
-          <AssociationSet Name="SiteRate_SiteType_FK" Association="Self.SiteRate_SiteType_FK">
+          <AssociationSet Name="SiteRate_SiteStyle_FK" Association="Self.SiteRate_SiteStyle_FK">
             <End Role="sitetype" EntitySet="sitetypes" />
             <End Role="siterate" EntitySet="siterates" />
           </AssociationSet>
@@ -1364,11 +1375,9 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="checkinouts">
             <EntityTypeMapping TypeName="ipmrvparkModel.checkinout">
               <MappingFragment StoreEntitySet="checkinout">
-                <ScalarProperty Name="idCheckInOut" ColumnName="idCheckInOut" />
-                <ScalarProperty Name="idReservationOrder" ColumnName="idReservationOrder" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idReservationItem" ColumnName="idReservationItem" />
-                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
-                <ScalarProperty Name="idPlacemarkPolygon" ColumnName="idPlacemarkPolygon" />
+                <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
                 <ScalarProperty Name="arrivalDate" ColumnName="arrivalDate" />
                 <ScalarProperty Name="departureDate" ColumnName="departureDate" />
               </MappingFragment>
@@ -1377,11 +1386,13 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="coordinates">
             <EntityTypeMapping TypeName="ipmrvparkModel.coordinate">
               <MappingFragment StoreEntitySet="coordinates">
-                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idPlacemarkPolygon" ColumnName="idPlacemarkPolygon" />
                 <ScalarProperty Name="seqCoordinate" ColumnName="seqCoordinate" />
                 <ScalarProperty Name="longitude" ColumnName="longitude" />
                 <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1390,13 +1401,15 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
               <MappingFragment StoreEntitySet="countrycode">
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="customers">
             <EntityTypeMapping TypeName="ipmrvparkModel.customer">
               <MappingFragment StoreEntitySet="customer">
-                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="cellPhone" ColumnName="cellPhone" />
                 <ScalarProperty Name="homePhone" ColumnName="homePhone" />
                 <ScalarProperty Name="faxNumber" ColumnName="faxNumber" />
@@ -1414,7 +1427,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="ipmevents">
             <EntityTypeMapping TypeName="ipmrvparkModel.ipmevent">
               <MappingFragment StoreEntitySet="ipmevent">
-                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="year" ColumnName="year" />
                 <ScalarProperty Name="local" ColumnName="local" />
                 <ScalarProperty Name="description" ColumnName="description" />
@@ -1425,21 +1438,10 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="outofservices">
             <EntityTypeMapping TypeName="ipmrvparkModel.outofservice">
               <MappingFragment StoreEntitySet="outofservice">
-                <ScalarProperty Name="idOutOfService" ColumnName="idOutOfService" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
                 <ScalarProperty Name="startDate" ColumnName="startDate" />
                 <ScalarProperty Name="endDate" ColumnName="endDate" />
-                <ScalarProperty Name="createDate" ColumnName="createDate" />
-                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
-                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
-                <ScalarProperty Name="idPlacemarkPolygon" ColumnName="idPlacemarkPolygon" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="parties">
-            <EntityTypeMapping TypeName="ipmrvparkModel.party">
-              <MappingFragment StoreEntitySet="party">
-                <ScalarProperty Name="idParty" ColumnName="idParty" />
-                <ScalarProperty Name="numberOfMembers" ColumnName="numberOfMembers" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
               </MappingFragment>
@@ -1448,8 +1450,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="partymembers">
             <EntityTypeMapping TypeName="ipmrvparkModel.partymember">
               <MappingFragment StoreEntitySet="partymember">
-                <ScalarProperty Name="idMember" ColumnName="idMember" />
-                <ScalarProperty Name="idParty" ColumnName="idParty" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="cellPhone" ColumnName="cellPhone" />
                 <ScalarProperty Name="petDescription" ColumnName="petDescription" />
                 <ScalarProperty Name="comments" ColumnName="comments" />
@@ -1461,8 +1462,11 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="payments">
             <EntityTypeMapping TypeName="ipmrvparkModel.payment">
               <MappingFragment StoreEntitySet="payment">
-                <ScalarProperty Name="idPayment" ColumnName="idPayment" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idPaymentMode" ColumnName="idPaymentMode" />
+                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="idReservationOrder" ColumnName="idReservationOrder" />
+                <ScalarProperty Name="reasonForPayment" ColumnName="reasonForPayment" />
                 <ScalarProperty Name="amount" ColumnName="amount" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
@@ -1472,7 +1476,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="paymentmodes">
             <EntityTypeMapping TypeName="ipmrvparkModel.paymentmode">
               <MappingFragment StoreEntitySet="paymentmode">
-                <ScalarProperty Name="idPaymentMode" ColumnName="idPaymentMode" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
@@ -1482,7 +1486,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="people">
             <EntityTypeMapping TypeName="ipmrvparkModel.person">
               <MappingFragment StoreEntitySet="person">
-                <ScalarProperty Name="idPerson" ColumnName="idPerson" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="firstName" ColumnName="firstName" />
                 <ScalarProperty Name="lastName" ColumnName="lastName" />
                 <ScalarProperty Name="mainPhone" ColumnName="mainPhone" />
@@ -1495,10 +1499,11 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="placemarkpolygons">
             <EntityTypeMapping TypeName="ipmrvparkModel.placemarkpolygon">
               <MappingFragment StoreEntitySet="placemarkpolygon">
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
-                <ScalarProperty Name="idPlacemarkPolygon" ColumnName="idPlacemarkPolygon" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="idStyleUrl" ColumnName="idStyleUrl" />
+                <ScalarProperty Name="tag" ColumnName="tag" />
+                <ScalarProperty Name="site" ColumnName="site" />
+                <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
                 <ScalarProperty Name="isRVSite" ColumnName="isRVSite" />
@@ -1508,7 +1513,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="powersupplies">
             <EntityTypeMapping TypeName="ipmrvparkModel.powersupply">
               <MappingFragment StoreEntitySet="powersupply">
-                <ScalarProperty Name="idPowerSupply" ColumnName="idPowerSupply" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
@@ -1529,15 +1534,27 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="reservationitems">
             <EntityTypeMapping TypeName="ipmrvparkModel.reservationitem">
               <MappingFragment StoreEntitySet="reservationitem">
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idReservationOrder" ColumnName="idReservationOrder" />
-                <ScalarProperty Name="idReservationItem" ColumnName="idReservationItem" />
-                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
-                <ScalarProperty Name="idPlacemarkPolygon" ColumnName="idPlacemarkPolygon" />
-                <ScalarProperty Name="idParty" ColumnName="idParty" />
+                <ScalarProperty Name="seqReservationItem" ColumnName="seqReservationItem" />
+                <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
                 <ScalarProperty Name="arrivalDate" ColumnName="arrivalDate" />
                 <ScalarProperty Name="departureDate" ColumnName="departureDate" />
                 <ScalarProperty Name="totalAmount" ColumnName="totalAmount" />
+                <ScalarProperty Name="numberMemberInParty" ColumnName="numberMemberInParty" />
                 <ScalarProperty Name="isCancelled" ColumnName="isCancelled" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reservationitem_partymember">
+            <EntityTypeMapping TypeName="ipmrvparkModel.reservationitem_partymember">
+              <MappingFragment StoreEntitySet="reservationitem_partymember">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="idReservationItem" ColumnName="idReservationItem" />
+                <ScalarProperty Name="idPartyMember" ColumnName="idPartyMember" />
                 <ScalarProperty Name="comments" ColumnName="comments" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
@@ -1547,23 +1564,21 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="reservationorders">
             <EntityTypeMapping TypeName="ipmrvparkModel.reservationorder">
               <MappingFragment StoreEntitySet="reservationorder">
-                <ScalarProperty Name="idReservationOrder" ColumnName="idReservationOrder" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
                 <ScalarProperty Name="idStaff" ColumnName="idStaff" />
                 <ScalarProperty Name="totalAmount" ColumnName="totalAmount" />
-                <ScalarProperty Name="idPayment" ColumnName="idPayment" />
-                <ScalarProperty Name="createDate" ColumnName="createDate" />
-                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
                 <ScalarProperty Name="inShoppingCart" ColumnName="inShoppingCart" />
                 <ScalarProperty Name="paymentReceived" ColumnName="paymentReceived" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="siterates">
             <EntityTypeMapping TypeName="ipmrvparkModel.siterate">
               <MappingFragment StoreEntitySet="siterate">
-                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
-                <ScalarProperty Name="idSiteRate" ColumnName="idSiteRate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
                 <ScalarProperty Name="period" ColumnName="period" />
                 <ScalarProperty Name="rate" ColumnName="rate" />
@@ -1575,7 +1590,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="sitesizes">
             <EntityTypeMapping TypeName="ipmrvparkModel.sitesize">
               <MappingFragment StoreEntitySet="sitesize">
-                <ScalarProperty Name="idSiteSize" ColumnName="idSiteSize" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
@@ -1585,7 +1600,10 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="sitetypes">
             <EntityTypeMapping TypeName="ipmrvparkModel.sitetype">
               <MappingFragment StoreEntitySet="sitetype">
-                <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
+                <ScalarProperty Name="StyleUrl" ColumnName="StyleUrl" />
+                <ScalarProperty Name="backgroundColor" ColumnName="backgroundColor" />
                 <ScalarProperty Name="idSiteSize" ColumnName="idSiteSize" />
                 <ScalarProperty Name="idPowerSupply" ColumnName="idPowerSupply" />
                 <ScalarProperty Name="isUnserviced" ColumnName="isUnserviced" />
@@ -1598,68 +1616,10 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySetMapping Name="staffs">
             <EntityTypeMapping TypeName="ipmrvparkModel.staff">
               <MappingFragment StoreEntitySet="staff">
-                <ScalarProperty Name="idStaff" ColumnName="idStaff" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="role" ColumnName="role" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="styleurls">
-            <EntityTypeMapping TypeName="ipmrvparkModel.styleurl">
-              <MappingFragment StoreEntitySet="styleurl">
-                <ScalarProperty Name="idStyleUrl" ColumnName="idStyleUrl" />
-                <ScalarProperty Name="backgroundColor" ColumnName="backgroundColor" />
-                <ScalarProperty Name="createDate" ColumnName="createDate" />
-                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
-                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="customer_view">
-            <EntityTypeMapping TypeName="ipmrvparkModel.customer_view">
-              <MappingFragment StoreEntitySet="customer_view">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="firstName" ColumnName="firstName" />
-                <ScalarProperty Name="lastName" ColumnName="lastName" />
-                <ScalarProperty Name="fullName" ColumnName="fullName" />
-                <ScalarProperty Name="mainPhone" ColumnName="mainPhone" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="cellPhone" ColumnName="cellPhone" />
-                <ScalarProperty Name="homePhone" ColumnName="homePhone" />
-                <ScalarProperty Name="faxNumber" ColumnName="faxNumber" />
-                <ScalarProperty Name="comments" ColumnName="comments" />
-                <ScalarProperty Name="street" ColumnName="street" />
-                <ScalarProperty Name="city" ColumnName="city" />
-                <ScalarProperty Name="postalCode" ColumnName="postalCode" />
-                <ScalarProperty Name="Province" ColumnName="Province" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="rvsite_coord_view">
-            <EntityTypeMapping TypeName="ipmrvparkModel.rvsite_coord_view">
-              <MappingFragment StoreEntitySet="rvsite_coord_view">
-                <ScalarProperty Name="idPlacemarkPolygon" ColumnName="idPlacemarkPolygon" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="backgroundColor" ColumnName="backgroundColor" />
-                <ScalarProperty Name="seqCoordinate" ColumnName="seqCoordinate" />
-                <ScalarProperty Name="longitude" ColumnName="longitude" />
-                <ScalarProperty Name="latitude" ColumnName="latitude" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="rvsite_status_view">
-            <EntityTypeMapping TypeName="ipmrvparkModel.rvsite_status_view">
-              <MappingFragment StoreEntitySet="rvsite_status_view">
-                <ScalarProperty Name="idPlacemarkPolygon" ColumnName="idPlacemarkPolygon" />
-                <ScalarProperty Name="customerName" ColumnName="customerName" />
-                <ScalarProperty Name="idReservationOrder" ColumnName="idReservationOrder" />
-                <ScalarProperty Name="idReservationItem" ColumnName="idReservationItem" />
-                <ScalarProperty Name="inShoppingCart" ColumnName="inShoppingCart" />
-                <ScalarProperty Name="paymentReceived" ColumnName="paymentReceived" />
-                <ScalarProperty Name="checkInDate" ColumnName="checkInDate" />
-                <ScalarProperty Name="outOfServiceUntil" ColumnName="outOfServiceUntil" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -14,20 +14,28 @@ namespace IPMRVPark.Models
     
     public partial class reservationitem
     {
-        public int idReservationOrder { get; set; }
-        public int idReservationItem { get; set; }
-        public int idIPMEvent { get; set; }
-        public string idPlacemarkPolygon { get; set; }
-        public int idParty { get; set; }
+        public reservationitem()
+        {
+            this.checkinouts = new HashSet<checkinout>();
+            this.reservationitem_partymember = new HashSet<reservationitem_partymember>();
+        }
+    
+        public long ID { get; set; }
+        public long idReservationOrder { get; set; }
+        public long seqReservationItem { get; set; }
+        public long idRVSite { get; set; }
         public System.DateTime arrivalDate { get; set; }
         public System.DateTime departureDate { get; set; }
         public Nullable<decimal> totalAmount { get; set; }
-        public bool isCancelled { get; set; }
+        public int numberMemberInParty { get; set; }
+        public Nullable<bool> isCancelled { get; set; }
         public string comments { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
-        public virtual party party { get; set; }
+        public virtual ICollection<checkinout> checkinouts { get; set; }
+        public virtual placemarkpolygon placemarkpolygon { get; set; }
+        public virtual ICollection<reservationitem_partymember> reservationitem_partymember { get; set; }
         public virtual reservationorder reservationorder { get; set; }
     }
 }

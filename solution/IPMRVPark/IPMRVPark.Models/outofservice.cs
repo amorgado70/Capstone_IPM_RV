@@ -14,12 +14,13 @@ namespace IPMRVPark.Models
     
     public partial class outofservice
     {
-        public int idOutOfService { get; set; }
+        public long ID { get; set; }
+        public long idRVSite { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
-        public int idIPMEvent { get; set; }
-        public string idPlacemarkPolygon { get; set; }
+    
+        public virtual placemarkpolygon placemarkpolygon { get; set; }
     }
 }

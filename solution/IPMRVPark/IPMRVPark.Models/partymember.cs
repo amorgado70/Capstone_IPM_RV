@@ -14,15 +14,19 @@ namespace IPMRVPark.Models
     
     public partial class partymember
     {
-        public int idMember { get; set; }
-        public int idParty { get; set; }
+        public partymember()
+        {
+            this.reservationitem_partymember = new HashSet<reservationitem_partymember>();
+        }
+    
+        public long ID { get; set; }
         public string cellPhone { get; set; }
         public string petDescription { get; set; }
         public string comments { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
-        public virtual party party { get; set; }
         public virtual person person { get; set; }
+        public virtual ICollection<reservationitem_partymember> reservationitem_partymember { get; set; }
     }
 }

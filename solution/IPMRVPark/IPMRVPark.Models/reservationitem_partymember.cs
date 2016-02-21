@@ -12,14 +12,16 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class styleurl
+    public partial class reservationitem_partymember
     {
-        public string idStyleUrl { get; set; }
-        public string backgroundColor { get; set; }
+        public long ID { get; set; }
+        public long idReservationItem { get; set; }
+        public long idPartyMember { get; set; }
+        public string comments { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
-        public int idIPMEvent { get; set; }
     
-        public virtual ipmevent ipmevent { get; set; }
+        public virtual partymember partymember { get; set; }
+        public virtual reservationitem reservationitem { get; set; }
     }
 }

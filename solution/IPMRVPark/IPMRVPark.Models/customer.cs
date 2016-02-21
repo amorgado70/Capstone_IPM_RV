@@ -16,10 +16,11 @@ namespace IPMRVPark.Models
     {
         public customer()
         {
+            this.payments = new HashSet<payment>();
             this.reservationorders = new HashSet<reservationorder>();
         }
     
-        public int idCustomer { get; set; }
+        public long ID { get; set; }
         public string cellPhone { get; set; }
         public string homePhone { get; set; }
         public string faxNumber { get; set; }
@@ -35,6 +36,7 @@ namespace IPMRVPark.Models
         public virtual countrycode countrycode1 { get; set; }
         public virtual person person { get; set; }
         public virtual provincecode provincecode1 { get; set; }
+        public virtual ICollection<payment> payments { get; set; }
         public virtual ICollection<reservationorder> reservationorders { get; set; }
     }
 }

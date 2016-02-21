@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IPMRVPark.Models.customer_view>
+﻿@model IEnumerable<IPMRVPark.Models.customer>
 
 @{
     ViewBag.Title = "Index";
@@ -12,17 +12,17 @@
 </p>
 <table>
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.firstName)
+        @*<th>
+            @Html.DisplayNameFor(model => model.person.firstName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.lastName)
+            @Html.DisplayNameFor(model => model.person.lastName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.mainPhone)
+            @Html.DisplayNameFor(model => model.person.mainPhone)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.email)
+            @Html.DisplayNameFor(model => model.person.email)*@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.cellPhone)
@@ -46,28 +46,28 @@
             @Html.DisplayNameFor(model => model.postalCode)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Province)
+            @Html.DisplayNameFor(model => model.provinceCode)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Country)
+            @Html.DisplayNameFor(model => model.countryCode)
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.firstName)
+        @*<td>
+            @Html.DisplayFor(modelItem => item.person.firstName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.lastName)
+            @Html.DisplayFor(modelItem => item.person.lastName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.mainPhone)
+            @Html.DisplayFor(modelItem => item.person.mainPhone)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.email)
-        </td>
+            @Html.DisplayFor(modelItem => item.person.email)
+        </td>*@
         <td>
             @Html.DisplayFor(modelItem => item.cellPhone)
         </td>
@@ -90,15 +90,15 @@
             @Html.DisplayFor(modelItem => item.postalCode)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Province)
+            @Html.DisplayFor(modelItem => item.provinceCode)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Country)
+            @Html.DisplayFor(modelItem => item.countryCode)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
         </td>
     </tr>
 }

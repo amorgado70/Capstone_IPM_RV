@@ -25,6 +25,7 @@ namespace IPMRVPark.WebUI
             // e.g. container.RegisterType<ITestService, TestService>();            
 
             container.RegisterType<IRepositoryBase<countrycode>, CountryRepository>();
+            container.RegisterType<IRepositoryBase<customer>, CustomerRepository>();
 
             return container;
         }

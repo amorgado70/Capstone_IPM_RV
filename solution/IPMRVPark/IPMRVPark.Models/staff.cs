@@ -19,7 +19,7 @@ namespace IPMRVPark.Models
             this.reservationorders = new HashSet<reservationorder>();
         }
     
-        public int idStaff { get; set; }
+        public long ID { get; set; }
         public string role { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }

@@ -14,7 +14,7 @@ namespace IPMRVPark.Models
     
     public partial class person
     {
-        public int idPerson { get; set; }
+        public long ID { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string mainPhone { get; set; }

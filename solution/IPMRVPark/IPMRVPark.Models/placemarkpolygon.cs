@@ -14,14 +14,28 @@ namespace IPMRVPark.Models
     
     public partial class placemarkpolygon
     {
-        public int idIPMEvent { get; set; }
-        public string idPlacemarkPolygon { get; set; }
-        public string name { get; set; }
-        public string idStyleUrl { get; set; }
+        public placemarkpolygon()
+        {
+            this.checkinouts = new HashSet<checkinout>();
+            this.coordinates = new HashSet<coordinate>();
+            this.outofservices = new HashSet<outofservice>();
+            this.reservationitems = new HashSet<reservationitem>();
+        }
+    
+        public long ID { get; set; }
+        public long idIPMEvent { get; set; }
+        public string tag { get; set; }
+        public string site { get; set; }
+        public long idSiteType { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
         public Nullable<bool> isRVSite { get; set; }
     
+        public virtual ICollection<checkinout> checkinouts { get; set; }
+        public virtual ICollection<coordinate> coordinates { get; set; }
         public virtual ipmevent ipmevent { get; set; }
+        public virtual ICollection<outofservice> outofservices { get; set; }
+        public virtual sitetype sitetype { get; set; }
+        public virtual ICollection<reservationitem> reservationitems { get; set; }
     }
 }

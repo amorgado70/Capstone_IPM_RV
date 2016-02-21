@@ -1,124 +1,102 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using IPMRVPark.Models;
 using IPMRVPark.Contracts.Data;
+using IPMRVPark.Contracts.Repositories;
 
 namespace IPMRVPark.Controllers
 {
     public class CustomersController : Controller
     {
-        private DataContext db = new DataContext();
 
-        //
-        // GET: /Customers/
+        IRepositoryBase<customer> customers;
 
-        public ActionResult Index()
+        public CustomersController(IRepositoryBase<customer> customers)
         {
-            return View(db.customer_view.ToList());
+            this.customers = customers;
+        }//end Constructor
+
+        // GET: list with filter
+        public ActionResult Index(string searchString)
+        {
+            var customer = customers.GetAll();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                customer = customer.Where(s => s.person.firstName.Contains(searchString) ||
+                s.person.lastName.Contains(searchString) );
+            }
+
+            return View(customer);
         }
 
-        //
-        // GET: /Customers/Details/5
-
-        public ActionResult Details(int id = 0)
+        // GET: /Details/5
+        public ActionResult Details(int? id)
         {
-            customer_view customer_view = db.customer_view.Find(id);
-            if (customer_view == null)
+            var customer = customers.GetById(id);
+            if (customer == null)
             {
                 return HttpNotFound();
             }
-            return View(customer_view);
+            return View(customer);
         }
 
-        //
-        // GET: /Customers/Create
-
+        // GET: /Create
         public ActionResult Create()
         {
-            return View();
+            var customer = new customer();
+            return View(customer);
         }
-
-        //
-        // POST: /Customers/Create
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(customer_view customer_view)
+        public ActionResult Create(customer customer)
         {
-            if (ModelState.IsValid)
-            {
-                db.customer_view.Add(customer_view);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            customers.Insert(customer);
+            customers.Commit();
 
-            return View(customer_view);
-        }
-
-        //
-        // GET: /Customers/Edit/5
-
-        public ActionResult Edit(int id = 0)
-        {
-            customer_view customer_view = db.customer_view.Find(id);
-            if (customer_view == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customer_view);
-        }
-
-        //
-        // POST: /Customers/Edit/5
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(customer_view customer_view)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(customer_view).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(customer_view);
-        }
-
-        //
-        // GET: /Customers/Delete/5
-
-        public ActionResult Delete(int id = 0)
-        {
-            customer_view customer_view = db.customer_view.Find(id);
-            if (customer_view == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customer_view);
-        }
-
-        //
-        // POST: /Customers/Delete/5
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            customer_view customer_view = db.customer_view.Find(id);
-            db.customer_view.Remove(customer_view);
-            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        // GET: /Edit/5
+        public ActionResult Edit(int id)
         {
-            db.Dispose();
-            base.Dispose(disposing);
+            customer customer = customers.GetById(id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+            return View(customer);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(customer customer)
+        {
+            customers.Update(customer);
+            customers.Commit();
+
+            return RedirectToAction("Index");
+        }
+
+        // GET: /Delete/5
+        public ActionResult Delete(int id)
+        {
+            customer customer = customers.GetById(id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+            return View(customer);
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirm(int id)
+        {
+            customers.Delete(customers.GetById(id));
+            customers.Commit();
+            return RedirectToAction("Index");
         }
     }
 }

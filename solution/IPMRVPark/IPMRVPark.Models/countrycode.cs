@@ -22,6 +22,8 @@ namespace IPMRVPark.Models
     
         public string code { get; set; }
         public string name { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> lastUpdate { get; set; }
     
         public virtual ICollection<customer> customers { get; set; }
         public virtual ICollection<provincecode> provincecodes { get; set; }
