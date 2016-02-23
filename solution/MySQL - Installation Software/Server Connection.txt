@@ -1,0 +1,19 @@
+- URL : http://www.alvm.com.br/ipmrvpark/
+
+- Application FTP :
+
+Host : ftp.alvm.com.br
+
+User : alvm
+
+Password : apto91
+
+- Database :
+
+Host : ipmrvpark.mysql.uhserver.com
+
+User : Capstone
+
+Password : MySQL-16
+
+Default schema : ipmrvpark
