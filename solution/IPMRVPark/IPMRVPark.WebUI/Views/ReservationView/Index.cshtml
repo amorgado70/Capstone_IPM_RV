@@ -1,0 +1,93 @@
+﻿@model IEnumerable<IPMRVPark.Models.reservation_view>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.idReservationOrder)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idReservationItem)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idRVSite)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idCustomer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RVSite)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.arrivalDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.departureDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.totalAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.numberMemberInParty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isCancelled)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.idReservationOrder)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.idReservationItem)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.idRVSite)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.idCustomer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RVSite)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.arrivalDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.departureDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.totalAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.numberMemberInParty)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.isCancelled)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

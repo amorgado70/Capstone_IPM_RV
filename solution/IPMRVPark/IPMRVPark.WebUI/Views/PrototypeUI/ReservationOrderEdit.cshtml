@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "ReservationOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-3">
+        <label>Reservation Order</label>
+        <input class="form-control" type="text" style="max-width:80px;" placeholder="828282" disabled>
+    </div>
+    <div class="col-sm-3">
+        <label>Staff - Logged In</label>
+        <input class="form-control" type="text" style="max-width:120px;" placeholder="John Mitsu" disabled>
+    </div>
+    <div class="form-group col-sm-2">
+        <label>Order total:</label>
+        <input type="text" class="form-control" placeholder="$ 0.00" disabled>
+    </div>
+    <div class="col-sm-2" style="margin-top:18px;">
+        <button type="button" class="btn btn-block">Pay Order</button>
+    </div>
+    <div class="col-sm-2" style="margin-top:18px;">
+        <button type="button" class="btn btn-block">Add/Update Order</button>
+    </div>
+</div>
+<div class="row">
+    <div class="form-group col-sm-3">
+        <label>Filter customer:</label>
+        <input type="text" class="form-control" placeholder="Customer Name">
+    </div>
+    <div class="form-group col-sm-3">
+        <label>Select customer:</label>
+        <select class="form-control">
+            @for (int i = 0; i < 8; i++)
+            {
+                <option>Mary Denver Holtz @i</option>
+            }
+        </select>
+    </div>
+    <div class="form-group col-sm-2">
+        <label>Customer balance:</label>
+        <input type="text" class="form-control" placeholder="$ 0.00" disabled>
+    </div>
+    <div class="col-sm-2" style="margin-top:18px;">
+        <button type="button" class="btn btn-block" style="margin-top:1px;">New Customer</button>
+    </div>
+    <div class="col-sm-2" style="margin-top:18px;">
+        <button type="button" class="btn btn-block" style="margin-top:1px;">Customer Details</button>
+    </div>
+</div>
+
+<div class="row" style="background-color:#CCCCCC;">
+    <div class="form-group col-sm-2">
+        <label>Filter RV site:</label>
+        <input type="text" class="form-control" placeholder="A-21">
+    </div>
+    <div class="form-group col-sm-2">
+        <label>Select RV site:</label>
+        <select class="form-control">
+            @for (int i = 20; i < 36; i++)
+            {
+                <option>A - @i</option>
+            }
+        </select>
+    </div>
+</div>
+<div class="row" style="background-color:#CCCCCC;">
+    <div class="form-group col-sm-3">
+        <label>Start Date</label>
+        <input type="date" class="form-control">
+    </div>
+    <div class="form-group col-sm-3">
+        <label>End Date</label>
+        <input type="date" class="form-control">
+    </div>
+    <div class="form-group col-sm-2">
+        <label>Item total:</label>
+        <input type="text" class="form-control" placeholder="$ 0.00" disabled>
+    </div>
+    <div class="col-sm-2" style="margin-top:18px;">
+        <button type="button" class="btn btn-block" style="margin-top:2px;">Add Item/Site</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-1">
+        Reservation Item #
+    </div>
+    <div class="col-sm-1">
+        RV Site
+    </div>
+    <div class="col-sm-2">
+        Start Date
+    </div>
+    <div class="col-sm-2">
+        End Date
+    </div>
+    <div class="col-sm-1">
+        Item Total
+    </div>
+</div>
+@for (int i = 2; i < 8; i++)
+            {
+    <div class="row" style="padding:5px;">
+        <div class="col-sm-1" style="margin-top:12px;">
+            @i
+        </div>
+        <div class="col-sm-1" style="margin-top:12px;">
+            E - @i @i
+        </div>
+        <div class="col-sm-2" style="margin-top:12px;">
+            @i @i / @i @i / @i @i
+        </div>
+        <div class="col-sm-2" style="margin-top:12px;">
+            @i @i / @i @i / @i @i
+        </div>
+        <div class="col-sm-2 text-center" style="margin-top:12px;">
+            $ @i , @i @i @i . @i @i
+        </div>
+        <div class="col-sm-2" style="margin-top:12px;">
+            <button type="button" class="btn btn-block" style="margin-top:-12px;">Edit Item/Site</button>
+        </div>
+        <div class="col-sm-2" style="margin-top:12px;">
+            <button type="button" class="btn btn-block" style="margin-top:-12px;">Cancel Item/Site</button>
+        </div>
+    </div>
+}
+

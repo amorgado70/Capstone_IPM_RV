@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "ReservationOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="row">
+        <form class="form-inline col-sm-8">
+            <div class="form-group">
+                <input type="text" class="form-control" style="max-width:80px;" placeholder="Order">
+                <button type="button" class="btn btn-sm"><span class="glyphicon glyphicon-search"></span></button>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" style="max-width:80px;" placeholder="RV Site">
+                <button type="button" class="btn btn-sm"><span class="glyphicon glyphicon-search"></span></button>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Customer Name">
+                <button type="button" class="btn btn-sm"><span class="glyphicon glyphicon-search"></span></button>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" style="max-width:90px;" placeholder="Start Date">
+                <button type="button" class="btn btn-sm"><span class="glyphicon glyphicon-search"></span></button>
+            </div>
+        </form>
+        <div class="col-sm-2" style="margin-top:18px;">
+            <button type="button" class="btn btn-block" style="margin-top:-12px;">Add Order</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            Reservation Order #
+        </div>
+        <div class="col-sm-1">
+            RV Site
+        </div>
+        <div class="col-sm-2">
+            Customer Name
+        </div>
+        <div class="col-sm-1">
+            Start Date
+        </div>
+        <div class="col-sm-1">
+            End Date
+        </div>
+        <div class="col-sm-1">
+            Total
+        </div>
+    </div>
+    @for (int i = 2; i < 9; i++)
+            {
+        <div class="row" style="padding:5px;">
+            <div class="col-sm-1" style="margin-top:12px;">
+                @i
+            </div>
+            <div class="col-sm-1" style="margin-top:12px;">
+                E - @i @i
+            </div>
+            <div class="col-sm-2" style="margin-top:12px;">
+                Peter @i
+            </div>
+            <div class="col-sm-1" style="margin-top:12px;">
+                @i @i / @i @i / @i @i
+            </div>
+            <div class="col-sm-1" style="margin-top:12px;">
+                @i @i / @i @i / @i @i
+            </div>
+            <div class="col-sm-2" style="margin-top:12px;">
+                $ @i , @i @i @i . @i @i
+            </div>
+            <div class="col-sm-2" style="margin-top:12px;">
+                <button type="button" class="btn btn-block" style="margin-top:-12px;">Edit Order</button>
+            </div>
+            <div class="col-sm-2" style="margin-top:12px;">
+                <button type="button" class="btn btn-block" style="margin-top:-12px;">Cancel Order</button>
+            </div>
+        </div>
+    }
+

@@ -59,6 +59,9 @@
     <Compile Include="customer.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="customer_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="ipmevent.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -109,6 +112,15 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="reservationorder.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="reservation_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="rvsite_coord_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="rvsite_status_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="siterate.cs">

@@ -236,6 +236,96 @@
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.customer_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="customer_view">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="firstName" />
+            <PropertyRef Name="lastName" />
+            <PropertyRef Name="Province" />
+            <PropertyRef Name="Country" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="firstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="lastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fullName" Type="varchar" MaxLength="101" />
+          <Property Name="mainPhone" Type="varchar" MaxLength="30" />
+          <Property Name="email" Type="varchar" MaxLength="30" />
+          <Property Name="cellPhone" Type="varchar" MaxLength="30" />
+          <Property Name="homePhone" Type="varchar" MaxLength="30" />
+          <Property Name="faxNumber" Type="varchar" MaxLength="30" />
+          <Property Name="comments" Type="varchar" MaxLength="120" />
+          <Property Name="street" Type="varchar" MaxLength="80" />
+          <Property Name="city" Type="varchar" MaxLength="50" />
+          <Property Name="postalCode" Type="char" MaxLength="10" />
+          <Property Name="Province" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Country" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.reservation_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="reservation_view">
+          <Key>
+            <PropertyRef Name="idReservationOrder" />
+            <PropertyRef Name="idReservationItem" />
+            <PropertyRef Name="idRVSite" />
+            <PropertyRef Name="idCustomer" />
+            <PropertyRef Name="RVSite" />
+            <PropertyRef Name="arrivalDate" />
+            <PropertyRef Name="departureDate" />
+            <PropertyRef Name="numberMemberInParty" />
+          </Key>
+          <Property Name="idReservationOrder" Type="bigint" Nullable="false" />
+          <Property Name="idReservationItem" Type="bigint" Nullable="false" />
+          <Property Name="idRVSite" Type="bigint" Nullable="false" />
+          <Property Name="idCustomer" Type="bigint" Nullable="false" />
+          <Property Name="RVSite" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="fullName" Type="varchar" MaxLength="101" />
+          <Property Name="arrivalDate" Type="date" Nullable="false" />
+          <Property Name="departureDate" Type="date" Nullable="false" />
+          <Property Name="totalAmount" Type="decimal" Precision="2" Scale="0" />
+          <Property Name="numberMemberInParty" Type="int" Nullable="false" />
+          <Property Name="isCancelled" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.rvsite_coord_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="rvsite_coord_view">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="seq" />
+            <PropertyRef Name="Year" />
+            <PropertyRef Name="RVSite" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="seq" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="Year" Type="bigint" Nullable="false" />
+          <Property Name="RVSite" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="longitude" Type="decimal" Precision="16" Scale="14" />
+          <Property Name="latitude" Type="decimal" Precision="16" Scale="14" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.rvsite_status_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="rvsite_status_view">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="Year" />
+            <PropertyRef Name="RVSite" />
+            <PropertyRef Name="SiteSize" />
+            <PropertyRef Name="PowerSupply" />
+            <PropertyRef Name="isAvaialable" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="Year" Type="bigint" Nullable="false" />
+          <Property Name="RVSite" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="SiteSize" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="PowerSupply" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="backgroundColor" Type="char" MaxLength="8" />
+          <Property Name="isAvaialable" Type="int" Nullable="false" />
+          <Property Name="ReservedFrom" Type="date" />
+          <Property Name="ReservedUntil" Type="date" />
+          <Property Name="OutOfServiceFrom" Type="date" />
+          <Property Name="OutOfServiceUntil" Type="date" />
+        </EntityType>
         <Association Name="CheckInOut_PlacemarkPolygon_FK">
           <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="1" />
           <End Role="checkinout" Type="Self.checkinout" Multiplicity="*" />
@@ -557,6 +647,65 @@
           <EntitySet Name="sitesize" EntityType="Self.sitesize" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="sitetype" EntityType="Self.sitetype" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="staff" EntityType="Self.staff" Schema="ipmrvpark" store:Type="Tables" />
+          <EntitySet Name="customer_view" EntityType="Self.customer_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`customer_view`.`id`, 
+`customer_view`.`firstName`, 
+`customer_view`.`lastName`, 
+`customer_view`.`fullName`, 
+`customer_view`.`mainPhone`, 
+`customer_view`.`email`, 
+`customer_view`.`cellPhone`, 
+`customer_view`.`homePhone`, 
+`customer_view`.`faxNumber`, 
+`customer_view`.`comments`, 
+`customer_view`.`street`, 
+`customer_view`.`city`, 
+`customer_view`.`postalCode`, 
+`customer_view`.`Province`, 
+`customer_view`.`Country`
+FROM `customer_view` AS `customer_view`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="reservation_view" EntityType="Self.reservation_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`reservation_view`.`idReservationOrder`, 
+`reservation_view`.`idReservationItem`, 
+`reservation_view`.`idRVSite`, 
+`reservation_view`.`idCustomer`, 
+`reservation_view`.`RVSite`, 
+`reservation_view`.`fullName`, 
+`reservation_view`.`arrivalDate`, 
+`reservation_view`.`departureDate`, 
+`reservation_view`.`totalAmount`, 
+`reservation_view`.`numberMemberInParty`, 
+`reservation_view`.`isCancelled`
+FROM `reservation_view` AS `reservation_view`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="rvsite_coord_view" EntityType="Self.rvsite_coord_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`rvsite_coord_view`.`id`, 
+`rvsite_coord_view`.`seq`, 
+`rvsite_coord_view`.`Year`, 
+`rvsite_coord_view`.`RVSite`, 
+`rvsite_coord_view`.`longitude`, 
+`rvsite_coord_view`.`latitude`
+FROM `rvsite_coord_view` AS `rvsite_coord_view`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="rvsite_status_view" EntityType="Self.rvsite_status_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`rvsite_status_view`.`id`, 
+`rvsite_status_view`.`Year`, 
+`rvsite_status_view`.`RVSite`, 
+`rvsite_status_view`.`SiteSize`, 
+`rvsite_status_view`.`PowerSupply`, 
+`rvsite_status_view`.`backgroundColor`, 
+`rvsite_status_view`.`isAvaialable`, 
+`rvsite_status_view`.`ReservedFrom`, 
+`rvsite_status_view`.`ReservedUntil`, 
+`rvsite_status_view`.`OutOfServiceFrom`, 
+`rvsite_status_view`.`OutOfServiceUntil`
+FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="CheckInOut_PlacemarkPolygon_FK" Association="Self.CheckInOut_PlacemarkPolygon_FK">
             <End Role="placemarkpolygon" EntitySet="placemarkpolygon" />
             <End Role="checkinout" EntitySet="checkinout" />
@@ -944,6 +1093,88 @@
           <NavigationProperty Name="person" Relationship="Self.Person_Staff_FK" FromRole="staff" ToRole="person" />
           <NavigationProperty Name="reservationorders" Relationship="Self.ReservationOrder_Staff_FK" FromRole="staff" ToRole="reservationorder" />
         </EntityType>
+        <EntityType Name="customer_view">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="firstName" />
+            <PropertyRef Name="lastName" />
+            <PropertyRef Name="Province" />
+            <PropertyRef Name="Country" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="firstName" Type="String" Nullable="false" />
+          <Property Name="lastName" Type="String" Nullable="false" />
+          <Property Name="fullName" Type="String" />
+          <Property Name="mainPhone" Type="String" />
+          <Property Name="email" Type="String" />
+          <Property Name="cellPhone" Type="String" />
+          <Property Name="homePhone" Type="String" />
+          <Property Name="faxNumber" Type="String" />
+          <Property Name="comments" Type="String" />
+          <Property Name="street" Type="String" />
+          <Property Name="city" Type="String" />
+          <Property Name="postalCode" Type="String" />
+          <Property Name="Province" Type="String" Nullable="false" />
+          <Property Name="Country" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reservation_view">
+          <Key>
+            <PropertyRef Name="idReservationOrder" />
+            <PropertyRef Name="idReservationItem" />
+            <PropertyRef Name="idRVSite" />
+            <PropertyRef Name="idCustomer" />
+            <PropertyRef Name="RVSite" />
+            <PropertyRef Name="arrivalDate" />
+            <PropertyRef Name="departureDate" />
+            <PropertyRef Name="numberMemberInParty" />
+          </Key>
+          <Property Name="idReservationOrder" Type="Int64" Nullable="false" />
+          <Property Name="idReservationItem" Type="Int64" Nullable="false" />
+          <Property Name="idRVSite" Type="Int64" Nullable="false" />
+          <Property Name="idCustomer" Type="Int64" Nullable="false" />
+          <Property Name="RVSite" Type="String" Nullable="false" />
+          <Property Name="fullName" Type="String" />
+          <Property Name="arrivalDate" Type="DateTime" Nullable="false" />
+          <Property Name="departureDate" Type="DateTime" Nullable="false" />
+          <Property Name="totalAmount" Type="Decimal" />
+          <Property Name="numberMemberInParty" Type="Int32" Nullable="false" />
+          <Property Name="isCancelled" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="rvsite_coord_view">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="seq" />
+            <PropertyRef Name="Year" />
+            <PropertyRef Name="RVSite" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="seq" Type="String" Nullable="false" />
+          <Property Name="Year" Type="Int64" Nullable="false" />
+          <Property Name="RVSite" Type="String" Nullable="false" />
+          <Property Name="longitude" Type="Decimal" />
+          <Property Name="latitude" Type="Decimal" />
+        </EntityType>
+        <EntityType Name="rvsite_status_view">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="Year" />
+            <PropertyRef Name="RVSite" />
+            <PropertyRef Name="SiteSize" />
+            <PropertyRef Name="PowerSupply" />
+            <PropertyRef Name="isAvaialable" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="Year" Type="Int64" Nullable="false" />
+          <Property Name="RVSite" Type="String" Nullable="false" />
+          <Property Name="SiteSize" Type="String" Nullable="false" />
+          <Property Name="PowerSupply" Type="String" Nullable="false" />
+          <Property Name="backgroundColor" Type="String" />
+          <Property Name="isAvaialable" Type="Int32" Nullable="false" />
+          <Property Name="ReservedFrom" Type="DateTime" />
+          <Property Name="ReservedUntil" Type="DateTime" />
+          <Property Name="OutOfServiceFrom" Type="DateTime" />
+          <Property Name="OutOfServiceUntil" Type="DateTime" />
+        </EntityType>
         <Association Name="CheckInOut_PlacemarkPolygon_FK">
           <End Role="placemarkpolygon" Type="Self.placemarkpolygon" Multiplicity="1" />
           <End Role="checkinout" Type="Self.checkinout" Multiplicity="*" />
@@ -1265,6 +1496,10 @@
           <EntitySet Name="sitesizes" EntityType="Self.sitesize" />
           <EntitySet Name="sitetypes" EntityType="Self.sitetype" />
           <EntitySet Name="staffs" EntityType="Self.staff" />
+          <EntitySet Name="customer_view" EntityType="Self.customer_view" />
+          <EntitySet Name="reservation_view" EntityType="Self.reservation_view" />
+          <EntitySet Name="rvsite_coord_view" EntityType="Self.rvsite_coord_view" />
+          <EntitySet Name="rvsite_status_view" EntityType="Self.rvsite_status_view" />
           <AssociationSet Name="CheckInOut_PlacemarkPolygon_FK" Association="Self.CheckInOut_PlacemarkPolygon_FK">
             <End Role="placemarkpolygon" EntitySet="placemarkpolygons" />
             <End Role="checkinout" EntitySet="checkinouts" />
@@ -1620,6 +1855,73 @@
                 <ScalarProperty Name="role" ColumnName="role" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="customer_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.customer_view">
+              <MappingFragment StoreEntitySet="customer_view">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="fullName" ColumnName="fullName" />
+                <ScalarProperty Name="mainPhone" ColumnName="mainPhone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="cellPhone" ColumnName="cellPhone" />
+                <ScalarProperty Name="homePhone" ColumnName="homePhone" />
+                <ScalarProperty Name="faxNumber" ColumnName="faxNumber" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="postalCode" ColumnName="postalCode" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reservation_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.reservation_view">
+              <MappingFragment StoreEntitySet="reservation_view">
+                <ScalarProperty Name="idReservationOrder" ColumnName="idReservationOrder" />
+                <ScalarProperty Name="idReservationItem" ColumnName="idReservationItem" />
+                <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
+                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="RVSite" ColumnName="RVSite" />
+                <ScalarProperty Name="fullName" ColumnName="fullName" />
+                <ScalarProperty Name="arrivalDate" ColumnName="arrivalDate" />
+                <ScalarProperty Name="departureDate" ColumnName="departureDate" />
+                <ScalarProperty Name="totalAmount" ColumnName="totalAmount" />
+                <ScalarProperty Name="numberMemberInParty" ColumnName="numberMemberInParty" />
+                <ScalarProperty Name="isCancelled" ColumnName="isCancelled" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rvsite_coord_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.rvsite_coord_view">
+              <MappingFragment StoreEntitySet="rvsite_coord_view">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="seq" ColumnName="seq" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="RVSite" ColumnName="RVSite" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rvsite_status_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.rvsite_status_view">
+              <MappingFragment StoreEntitySet="rvsite_status_view">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="RVSite" ColumnName="RVSite" />
+                <ScalarProperty Name="SiteSize" ColumnName="SiteSize" />
+                <ScalarProperty Name="PowerSupply" ColumnName="PowerSupply" />
+                <ScalarProperty Name="backgroundColor" ColumnName="backgroundColor" />
+                <ScalarProperty Name="isAvaialable" ColumnName="isAvaialable" />
+                <ScalarProperty Name="ReservedFrom" ColumnName="ReservedFrom" />
+                <ScalarProperty Name="ReservedUntil" ColumnName="ReservedUntil" />
+                <ScalarProperty Name="OutOfServiceFrom" ColumnName="OutOfServiceFrom" />
+                <ScalarProperty Name="OutOfServiceUntil" ColumnName="OutOfServiceUntil" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

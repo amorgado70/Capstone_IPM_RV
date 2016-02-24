@@ -45,5 +45,9 @@ namespace IPMRVPark.Models
         public DbSet<sitesize> sitesizes { get; set; }
         public DbSet<sitetype> sitetypes { get; set; }
         public DbSet<staff> staffs { get; set; }
+        public DbSet<customer_view> customer_view { get; set; }
+        public DbSet<reservation_view> reservation_view { get; set; }
+        public DbSet<rvsite_coord_view> rvsite_coord_view { get; set; }
+        public DbSet<rvsite_status_view> rvsite_status_view { get; set; }
     }
 }
