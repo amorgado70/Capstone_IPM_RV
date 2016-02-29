@@ -1,0 +1,170 @@
+﻿@{
+    ViewBag.Title = "Payments & Refunds";
+}
+
+@Html.ActionLink("Home", "Home", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Payments & Refunds", "Payment", "PrototypeUI")
+
+<!-- New Payment -->
+<div class="container-fluid">
+    <!-- Not Logged In Message -->
+    <div class="row top-margin">
+        <div class="h4 text-center col-xs-12">
+            Must Be Logged In The System To Register a Payment
+        </div>
+    </div>
+    <!-- Customer -->
+    <div class="row top-margin">
+        <div class="col-sm-2 col-xs-12 form-top-margin">
+            <label>Customer</label>
+        </div>
+        <div class="col-sm-10 col-xs-12 form-top-margin">
+            <select class="form-control">
+                @for (int i = 0; i < 8; i++)
+                {
+                    <option>Mary Denver Holtz @i</option>
+                }
+            </select>
+        </div>
+    </div>
+    <!-- List of all transactions for this customer -->
+    <div class="row top-margin">
+        <div class="col-xs-12">
+            <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#accountCustomer" ">
+                <div class="col-xs-10">All Transactions For This Customer</div>
+                <div class="col-xs-1">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </div>
+            </button>
+        </div>
+    </div>
+    <div id="accountCustomer" class="col-xs-12 collapse">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Site</th>
+                    <th>Reason For Payment</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A-21</td>
+                    <td>New reservation</td>
+                    <td>02/05/2016</td>
+                    <td>$ 2,500.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Account Balance for this customer -->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <label>Account Balance For This Customer</label>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 3,045.51" style="text-align:right" disabled>
+            </div>
+        </div>
+    </div>
+    <!-- Payment-->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <label>Transaction Amount</label>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 3,045.51" style="text-align:right">
+            </div>
+        </div>
+        <!-- Select Payment Or Refund-->
+        <div class="form-group">
+            <div class="col-xs-6 form-top-margin">
+                <div class="btn btn-block btn-success">
+                    Payment
+                </div>
+            </div>
+            <div class="col-xs-6 form-top-margin">
+                <div class="btn btn-block btn-default">
+                    Refund
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <label>Reason For Transaction</label>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <input type="text" class="form-control" placeholder="New Site Reservation / Cancel Site Reservation" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <label>Received by (Staff Logged In)</label>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <input type="text" class="form-control" placeholder="Tim Burton" disabled />
+            </div>
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Payment Method</label>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <select class="form-control">
+                    <option>Credit Card</option>
+                    <option>Cash</option>
+                    <option>Check</option>
+                </select>
+            </div>
+            <div class="col-sm-1 col-xs-12 form-top-margin">
+                <label>Date</label>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                @{DateTime MyDate = DateTime.Now;}
+                <input type="text" class="form-control" placeholder="@MyDate" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Transaction Number</label>
+            </div>
+            <div class="col-sm-9 col-xs-12 form-top-margin">
+                <input type="text" class="form-control" placeholder="Check Number - Credit Card Receipt Number - Cash Deposit Number" />
+            </div>
+        </div>
+    </div>
+    <!-- Account Balance for this customer -->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <label>Customer's Account Balance After Payment</label>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 0.00" style="text-align:right" disabled>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>Comments</label>
+            </div>
+            <div class="col-sm-10 col-xs-12 form-top-margin">
+                <textarea class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-xs-12 form-top-margin">
+                <button class="btn btn-block btn-default">
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                    <span class="col-xs-9">Confirm Payment (Or Refund)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

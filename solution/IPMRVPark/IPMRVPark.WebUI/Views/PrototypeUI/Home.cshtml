@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<div class="container-fluid">
+    <div class="row top-margin">
+        <div class="col-xs-10 col-xs-push-1">
+            <button class="btn btn-block btn-default">
+                <span class="col-xs-2 glyphicon glyphicon-map-marker"></span>
+                @Html.ActionLink("IPM Event Map Display", "EventMap", "PrototypeUI", null, new { @class = "col-xs-8" })
+                <span class="col-xs-2 glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="col-xs-10 col-xs-push-1">
+            <button class="btn btn-block btn-default">
+                <span class="col-xs-2 glyphicon glyphicon-tag"></span>
+                @Html.ActionLink("New Reservation", "Reservation", "PrototypeUI", null, new { @class = "col-xs-8" })
+                <span class="col-xs-2 glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="col-xs-10 col-xs-push-1">
+            <button class="btn btn-block btn-default" disabled>
+                <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                @Html.ActionLink("Search a Reservation", "Home", "PrototypeUI", null, new { @class = "col-xs-8" })
+                <span class="col-xs-2 glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="col-xs-10 col-xs-push-1">
+            <button class="btn btn-block btn-default">
+                <span class="col-xs-2 glyphicon glyphicon-user"></span>
+                @Html.ActionLink("New Customer", "Customer", "PrototypeUI", null, new { @class = "col-xs-8" })
+                <span class="col-xs-2 glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="col-xs-10 col-xs-push-1">
+            <button class="btn btn-block btn-default" disabled>
+                <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                @Html.ActionLink("Search a Customer", "Home", "PrototypeUI", null, new { @class = "col-xs-8" })
+                <span class="col-xs-2 glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="row top-margin">
+        <div class="col-xs-10 col-xs-push-1">
+            <button class="btn btn-block btn-default">
+                <span class="col-xs-2 glyphicon glyphicon-usd"></span>
+                @Html.ActionLink("Payments & Refunds","Payment", "PrototypeUI", null, new { @class = "col-xs-8" })
+                <span class="col-xs-2 glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="col-xs-10 col-xs-push-1">
+            <button class="btn btn-block btn-default" disabled>
+                <span class="col-xs-2 glyphicon glyphicon-wrench"></span>
+                @Html.ActionLink("System Maintenance", "Home", "PrototypeUI", null, new { @class = "col-xs-8" })
+                <span class="col-xs-2 glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="col-xs-6 col-xs-push-3" style="margin-top:6em; background-color:aquamarine;">
+    <h4>Old Links</h4>
+    <p>@Html.ActionLink("Customers", "Index", "Customers", null, new { @style = "background-color:aquamarine;" })</p>
+    <p>@Html.ActionLink("Customer View", "Index", "CustomerView", null, new { @style = "background-color:aquamarine;" })</p>
+    <p>@Html.ActionLink("Country", "Index", "Country", null, new { @style = "background-color:aquamarine;" })</p>
+</div>

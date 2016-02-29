@@ -303,6 +303,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Images\IPMEventMap.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
@@ -379,6 +380,12 @@
     <Content Include="Views\ReservationView\Index.cshtml" />
     <Content Include="Views\PrototypeUI\ReservationOrderIndex.cshtml" />
     <Content Include="Views\PrototypeUI\ReservationOrderEdit.cshtml" />
+    <Content Include="Views\PrototypeUI\Home.cshtml" />
+    <Content Include="Views\PrototypeUI\EventMap.cshtml" />
+    <Content Include="Views\PrototypeUI\Reservation.cshtml" />
+    <Content Include="Views\PrototypeUI\Customer.cshtml" />
+    <Content Include="Views\PrototypeUI\Payment.cshtml" />
+    <Content Include="Views\PrototypeUI\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
