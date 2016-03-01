@@ -4,7 +4,9 @@
 
 @Html.ActionLink("Home", "Home", "PrototypeUI")
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("New Site Reservation", "Reservation", "PrototypeUI")
+Site Reservation
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("New Reservation", "Reservation", "PrototypeUI")
 
 <!-- New Reservation-->
 <div class="container-fluid">
@@ -127,11 +129,10 @@
     <!-- List of other sites reserved for this same customer -->
     <div class="row top-margin">
         <div class="col-xs-12">
-            <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#sitesCustomer" ">
-                <div class="col-xs-9">List All Sites - This Customer</div>
-                <div class="col-xs-1">
-                    <span class="glyphicon glyphicon-chevron-down"></span>
-                    <span class="glyphicon glyphicon-chevron-up"></span>
+            <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#sitesCustomer">
+                <div class="pagination-centered">
+                    List All Sites - This Customer
+                    <span class="caret"></span>
                 </div>
             </button>
         </div>

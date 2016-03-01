@@ -13,7 +13,7 @@
         <nav class="navbar navbar-default" role="navigation">
             <div class="navbar-header btn btn-default" style="margin:0.8em 1em 1em 1em;">
                 <a href="@Url.Action("Home", "PrototypeUI")" class="glyphicon glyphicon-home"></a>
-                <a href="@Url.Action("Home", "PrototypeUI")" style="height:2em;">Home</a>                
+                <a href="@Url.Action("Home", "PrototypeUI")" style="height:2em;">Home</a>
             </div>
             <div class="navbar-right btn btn-default" style="margin:0.8em 1em 1em 1em;">
                 <a href="@Url.Action("Login", "PrototypeUI")">Login</a>
@@ -57,9 +57,16 @@
         @RenderBody()
     </section>
 
-    <footer class="footer">
+    <footer class="footer" style="text-align:center; margin-top:2em; margin-bottom:2em;">
         <p>&copy; @DateTime.Now.Year - IPM RV Park Reservation System</p>
     </footer>
+
+    <div style="background-color:aquamarine;">
+        <h4>Developers Links</h4>
+        <p>@Html.ActionLink("Customers", "Index", "Customers", null, new { @style = "background-color:aquamarine;" })</p>
+        <p>@Html.ActionLink("Customer View", "Index", "CustomerView", null, new { @style = "background-color:aquamarine;" })</p>
+        <p>@Html.ActionLink("Country", "Index", "Country", null, new { @style = "background-color:aquamarine;" })</p>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

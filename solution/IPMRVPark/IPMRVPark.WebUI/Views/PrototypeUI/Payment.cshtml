@@ -4,7 +4,9 @@
 
 @Html.ActionLink("Home", "Home", "PrototypeUI")
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("Payments & Refunds", "Payment", "PrototypeUI")
+Payments & Refunds
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("New Payment", "Payment", "PrototypeUI")
 
 <!-- New Payment -->
 <div class="container-fluid">
@@ -31,15 +33,15 @@
     <!-- List of all transactions for this customer -->
     <div class="row top-margin">
         <div class="col-xs-12">
-            <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#accountCustomer" ">
-                <div class="col-xs-10">All Transactions For This Customer</div>
-                <div class="col-xs-1">
-                    <span class="glyphicon glyphicon-chevron-down"></span>
-                    <span class="glyphicon glyphicon-chevron-up"></span>
+            <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#accountCustomer">
+                <div class="pagination-centered">
+                    List All Transactions For This Customer
+                    <span class="caret"></span>
                 </div>
             </button>
         </div>
     </div>
+
     <div id="accountCustomer" class="col-xs-12 collapse">
         <table class="table">
             <thead>
