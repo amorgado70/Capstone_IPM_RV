@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Site Reservation";
+    ViewBag.PageTitle = "New Reservation";
 }
 
 @Html.ActionLink("Home", "Home", "PrototypeUI")
@@ -50,7 +51,7 @@ Site Reservation
             </div>
             <div class="col-sm-3 col-xs-12 form-top-margin">
                 <select class="form-control">
-                    <option>Type</option>
+                    <option>All Types</option>
                     <option>25x40 30 amps lots</option>
                     <option>25x40 15 amps lots</option>
                     <option>30x45 15 amps lots</option>
@@ -84,7 +85,9 @@ Site Reservation
             </div>
             <div class="col-sm-4 col-xs-12 form-top-margin">
                 <select class="form-control">
-                    <option>Select By Name</option>
+                    <option>
+                        Select By Name
+                    </option>
                     @for (int i = 0; i < 8; i++)
                     {
                         <option>Mary Denver Holtz @i</option>
@@ -130,10 +133,8 @@ Site Reservation
     <div class="row top-margin">
         <div class="col-xs-12">
             <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#sitesCustomer">
-                <div class="pagination-centered">
-                    List All Sites - This Customer
-                    <span class="caret"></span>
-                </div>
+                <span class="col-xs-1 glyphicon glyphicon-list"></span>
+                <span class="col-xs-9">List All Sites For This Customer &nbsp;<span class="caret"></span></span>
             </button>
         </div>
     </div>

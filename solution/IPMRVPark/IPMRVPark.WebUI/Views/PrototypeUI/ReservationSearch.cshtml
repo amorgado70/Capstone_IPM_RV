@@ -1,0 +1,133 @@
+﻿@{
+    ViewBag.Title = "Site Reservation";
+    ViewBag.PageTitle = "Reservation Search";
+}
+
+@Html.ActionLink("Home", "Home", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Site Reservation
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Search Reservation", "ReservationSearch", "PrototypeUI")
+
+<!-- Search Reservation-->
+<div class="container-fluid">
+    <!-- RV Site Tag-->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>
+                    <span class="col-xs-3 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-3">Site</span>
+                </label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <select class="form-control">
+                    <option>Name</option>
+                    @for (int i = 20; i < 36; i++)
+                    {
+                        <option>A - @i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <select class="form-control">
+                    <option>Type</option>
+                    <option>25x40 30 amps lots</option>
+                    <option>25x40 15 amps lots</option>
+                    <option>30x45 15 amps lots</option>
+                </select>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <select class="form-control">
+                    <option>Available</option>
+                    <option>Paid</option>
+                    <option>UnPaid</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!-- Customer -->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>
+                    <span class="col-xs-3 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-3">Customer</span>
+                </label>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <select class="form-control">
+                    <option>
+                        Select By Name
+                    </option>
+                    @for (int i = 0; i < 8; i++)
+                    {
+                        <option>Mary Denver Holtz @i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Arrive On<label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input type="date" class="form-control">
+            </div>
+        </div>
+    </div>
+    <!-- List of other sites reserved for this same customer -->
+    <div class="row top-margin">
+        <div class="col-xs-12">
+            <span class="col-xs-1 glyphicon glyphicon-list"></span>
+            List Of Sites That Match The Search Criteria
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Site</th>
+                    <th>Arrival</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A-21</td>
+                    <td>160221</td>
+                    <td>Mary Lenox</td>
+                    <td>Paid</td>
+                    <td class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                            Action
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Reservation Details</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit Reservation</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel Reservation</a></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>A-23</td>
+                    <td>160221</td>
+                    <td>Mary Jane</td>
+                    <td>Unpaid</td>
+                    <td class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                            Action
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Reservation Details</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit Reservation</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel Reservation</a></li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+

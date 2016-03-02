@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using IPMRVPark.Models;
+using IPMRVPark.Contracts.Repositories;
 
 namespace IPMRVPark.WebUI.Controllers
 {
@@ -24,11 +24,23 @@ namespace IPMRVPark.WebUI.Controllers
         {
             return View();
         }
+        public ActionResult ReservationSearch()
+        {
+            return View();
+        }
         public ActionResult Customer()
         {
             return View();
         }
+        public ActionResult CustomerSearch()
+        {
+            return View();
+        }
         public ActionResult Payment()
+        {
+            return View();
+        }
+        public ActionResult PaymentSearch()
         {
             return View();
         }
@@ -40,6 +52,5 @@ namespace IPMRVPark.WebUI.Controllers
         {
             return View();
         }
-
     }
 }

@@ -10,52 +10,37 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="navbar-header btn btn-default" style="margin:0.8em 1em 1em 1em;">
-                <a href="@Url.Action("Home", "PrototypeUI")" class="glyphicon glyphicon-home"></a>
-                <a href="@Url.Action("Home", "PrototypeUI")" style="height:2em;">Home</a>
+        <div class="container-fluid" style="background-color: #f8f8f8; border-color: #e7e7e7; border-radius: 0 0 5px 5px;">
+            <div class="row">
+                <div class="btn btn-default col-xs-4 col-sm-2 col-sm-push-1" style="margin-top:0.5em;margin-bottom:0.5em;">
+                    <a href="@Url.Action("Home", "PrototypeUI")" class="glyphicon glyphicon-home"></a>
+                    <a href="@Url.Action("Home", "PrototypeUI")" style="height:2em;">Home</a>
+                </div>
+                <div class="col-xs-4 col-sm-7">
+                    <div class="text-center " style="margin-top:0.8em; margin-bottom:0.5em; font-size:1.2em; font-weight: bold; color: #337ab7;">
+                        @ViewBag.PageTitle
+                    </div>
+                </div>
+                <div class="btn btn-default col-xs-4 col-sm-2" style="margin-top:0.5em;margin-bottom:0.5em;">
+                    <a href="@Url.Action("Login", "PrototypeUI")">Login</a>
+                    <a href="@Url.Action("Login", "PrototypeUI")" class="glyphicon glyphicon-log-in"></a>
+                </div>
             </div>
-            <div class="navbar-right btn btn-default" style="margin:0.8em 1em 1em 1em;">
-                <a href="@Url.Action("Login", "PrototypeUI")">Login</a>
-                <a href="@Url.Action("Login", "PrototypeUI")" class="glyphicon glyphicon-log-in"></a>
-            </div>
-            @*<ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">PrototypeUI<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Reservation Index", "ReservationOrderIndex", "PrototypeUI")</li>
-                            <li>@Html.ActionLink("Reservation Edit", "ReservationOrderEdit", "PrototypeUI")</li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Customer<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Customers View", "Index", "CustomerView")</li>
-                            <li>@Html.ActionLink("Customers List", "Index", "Customers")</li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reservation<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Reservations View", "Index", "ReservationView")</li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Country<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                @Html.ActionLink("Country Codes", "Index", "Country")
-                            </li>
-                        </ul>
-                    </li>
-                </ul>*@
-        </nav>
+        </div>
     </header>
 
     <section>
         @RenderBody()
     </section>
+    <div class="container-fluid">
+        <div class="row top-margin">
+            <div class="col-xs-4 col-xs-push-6">
+                <div class="btn btn-default" style="margin-top:0.5em;">
+                    <a href="#">Back To Top <span class="glyphicon glyphicon-chevron-up"></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer class="footer" style="text-align:center; margin-top:2em; margin-bottom:2em;">
         <p>&copy; @DateTime.Now.Year - IPM RV Park Reservation System</p>

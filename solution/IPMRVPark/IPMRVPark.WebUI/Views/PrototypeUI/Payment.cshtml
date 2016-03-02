@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Payments & Refunds";
+    ViewBag.PageTitle = "New Payment";
 }
 
 @Html.ActionLink("Home", "Home", "PrototypeUI")
@@ -34,10 +35,8 @@ Payments & Refunds
     <div class="row top-margin">
         <div class="col-xs-12">
             <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#accountCustomer">
-                <div class="pagination-centered">
-                    List All Transactions For This Customer
-                    <span class="caret"></span>
-                </div>
+                <span class="col-xs-1 glyphicon glyphicon-list"></span>
+                <span class="col-xs-9">List All Transactions For This Customer &nbsp;<span class="caret"></span></span>
             </button>
         </div>
     </div>
@@ -83,19 +82,29 @@ Payments & Refunds
                 <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 3,045.51" style="text-align:right">
             </div>
         </div>
-        <!-- Select Payment Or Refund-->
+
         <div class="form-group">
-            <div class="col-xs-6 form-top-margin">
-                <div class="btn btn-block btn-success">
-                    Payment
-                </div>
-            </div>
-            <div class="col-xs-6 form-top-margin">
-                <div class="btn btn-block btn-default">
-                    Refund
-                </div>
+            <div class="radio-inline col-xs-12">
+                <label class="radio-inline"><input type="radio" name="optradio" checked onClick="setPayment()">Amount To Receive</label>
+                <label class="radio-inline"><input type="radio" name="optradio" onClick="setRefund()">Amount To Refund</label>
             </div>
         </div>
+        <div id="text"></div>
+        <script type="text/javascript">
+            function setPayment() {
+                document.getElementById("textMethod").innerHTML = 'Payment';
+                document.getElementById("textStaff").innerHTML = 'Received';
+                document.getElementById("textBalance").innerHTML = 'Payment';
+                document.getElementById("textConfirm").innerHTML = 'Payment';
+            }
+            function setRefund() {
+                document.getElementById("textMethod").innerHTML = 'Refund';
+                document.getElementById("textStaff").innerHTML = 'Paid';
+                document.getElementById("textBalance").innerHTML = 'Refund';
+                document.getElementById("textConfirm").innerHTML = 'Refund';
+            }
+        </script>
+
         <div class="form-group">
             <div class="col-sm-6 col-xs-12 form-top-margin">
                 <label>Reason For Transaction</label>
@@ -106,7 +115,7 @@ Payments & Refunds
         </div>
         <div class="form-group">
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>Received by (Staff Logged In)</label>
+                <label><span id="textStaff">Received</span> by (Staff Logged In)</label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
                 <input type="text" class="form-control" placeholder="Tim Burton" disabled />
@@ -116,7 +125,7 @@ Payments & Refunds
     <div class="row top-margin">
         <div class="form-group">
             <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Payment Method</label>
+                <label><span id="textMethod" >Payment</span> Method</label>
             </div>
             <div class="col-sm-4 col-xs-12 form-top-margin">
                 <select class="form-control">
@@ -146,7 +155,7 @@ Payments & Refunds
     <div class="row top-margin">
         <div class="form-group">
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>Customer's Account Balance After Payment</label>
+                <label>Customer's Account Balance After <span id="textBalance">Payment</span></label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
                 <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 0.00" style="text-align:right" disabled>
@@ -164,7 +173,7 @@ Payments & Refunds
             <div class="col-xs-12 form-top-margin">
                 <button class="btn btn-block btn-default">
                     <span class="col-xs-1 glyphicon glyphicon-ok"></span>
-                    <span class="col-xs-9">Confirm Payment (Or Refund)</span>
+                    <span class="col-xs-9">Confirm <span id="textConfirm">Payment</span></span>
                 </button>
             </div>
         </div>
