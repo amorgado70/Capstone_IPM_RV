@@ -3,7 +3,7 @@
     ViewBag.PageTitle = "New Reservation";
 }
 
-@Html.ActionLink("Home", "Home", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Site Reservation
 <span class="glyphicon glyphicon-chevron-right"></span>
@@ -11,12 +11,6 @@ Site Reservation
 
 <!-- New Reservation-->
 <div class="container-fluid">
-    <!-- Not Logged In Message -->
-    <div class="row top-margin">
-        <div class="h4 text-center col-xs-12">
-            Must Be Logged In The System To Reserve a Site
-        </div>
-    </div>
     <!-- RV Site Dates-->
     <div class="row top-margin">
         <div class="form-group">
@@ -40,39 +34,51 @@ Site Reservation
             <div class="col-sm-1 col-xs-12 form-top-margin">
                 <label>Site</label>
             </div>
-            <div class="col-sm-2 col-xs-12 form-top-margin">
-                <select class="form-control">
-                    <option>Name</option>
-                    @for (int i = 20; i < 36; i++)
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Letter</option>
+                    <option>All letters - No Filter</option>
+                    @for (char i = 'A'; i < 'W'; i++)
                     {
-                        <option>A - @i</option>
+                        <option>@i</option>
                     }
                 </select>
             </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <select class="form-control">
-                    <option>All Types</option>
+            <div class="col-sm-3 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Number</option>
+                    <option>All numbers - No Filter</option>
+                    @for (int i = 20; i < 36; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Type</option>
+                    <option>All types - No Filter</option>
                     <option>25x40 30 amps lots</option>
                     <option>25x40 15 amps lots</option>
                     <option>30x45 15 amps lots</option>
                 </select>
             </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <button class="btn btn-block btn-default">
-                    <span class="col-xs-2 glyphicon glyphicon-map-marker"></span>
-                    @Html.ActionLink("IPM Event Map Display", "EventMap", "PrototypeUI", null, new { @class = "col-xs-8" })
-                    <span class="col-xs-2 glyphicon glyphicon-chevron-right"></span>
-                </button>
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                <a href="@Url.Action("EventMap", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-map-marker"></span>
+                    <span>Large Screen Display</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
             </div>
         </div>
     </div>
     <!-- Total amount for this site reservation -->
     <div class="row top-margin">
         <div class="form-group">
-            <div class="col-sm-6 col-xs-12 form-top-margin">
+            <div class="col-sm-8 col-xs-12 form-top-margin">
                 <label>Total Amount For This Site Reservation</label>
             </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin">
+            <div class="col-sm-4 col-xs-12 form-top-margin">
                 <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 1,345.51" style="text-align:right" disabled>
             </div>
         </div>
@@ -83,23 +89,21 @@ Site Reservation
             <div class="col-sm-2 col-xs-12 form-top-margin">
                 <label>Customer</label>
             </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin">
+            <div class="col-sm-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Filter, search and select">
                 <select class="form-control">
-                    <option>
-                        Select By Name
-                    </option>
+                    <option>Full Name</option>
                     @for (int i = 0; i < 8; i++)
                     {
                         <option>Mary Denver Holtz @i</option>
                     }
                 </select>
             </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <button class="btn btn-block btn-default">
-                    <span class="col-xs-2 glyphicon glyphicon-plus-sign"></span>
-                    @Html.ActionLink("Register New Customer", "Customer", "PrototypeUI", null, new { @class = "col-xs-8" })
-                    <span class="col-xs-2 glyphicon glyphicon-chevron-right"></span>
-                </button>
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                <a href="@Url.Action("Customer", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    <span>New Customer</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
             </div>
         </div>
     </div>
@@ -112,7 +116,7 @@ Site Reservation
             <div class="col-sm-9 col-xs-12 form-top-margin">
                 <textarea class="form-control" rows="2" disabled>Site X-88, Mary Denver, Jun-21/Jun-25, CAD$ 2,850.00</textarea>
             </div>
-            <div class="col-xs-12 form-top-margin">
+            <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
                 <button class="btn btn-block btn-default">
                     <span class="col-xs-1 glyphicon glyphicon-ok"></span>
                     <span class="col-xs-9">Confirm Site Reservation</span>
@@ -122,7 +126,7 @@ Site Reservation
     </div>
     <!-- Repeat Reservation -->
     <div class="row top-margin">
-        <div class="col-xs-12">
+        <div class="col-sm-6 col-sm-push-6 col-xs-12">
             <button class="btn btn-block btn-default">
                 <span class="col-xs-1 glyphicon glyphicon-plus-sign"></span>
                 <span class="col-xs-9">Add More Site(s) For This Customer</span>
@@ -131,7 +135,7 @@ Site Reservation
     </div>
     <!-- List of other sites reserved for this same customer -->
     <div class="row top-margin">
-        <div class="col-xs-12">
+        <div class="col-sm-6 col-sm-push-6 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
             <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#sitesCustomer">
                 <span class="col-xs-1 glyphicon glyphicon-list"></span>
                 <span class="col-xs-9">List All Sites For This Customer &nbsp;<span class="caret"></span></span>
@@ -151,17 +155,25 @@ Site Reservation
             <tbody>
                 <tr>
                     <td>A-21</td>
-                    <td>160221</td>
+                    <td>160205</td>
                     <td>$ 2,400.00</td>
-                    <td>Paid</td>
+                    <td>Reserved</td>
                 </tr>
             </tbody>
             <tbody>
                 <tr>
                     <td>A-23</td>
                     <td>160221</td>
-                    <td>$ 2,400.00</td>
-                    <td>Unpaid</td>
+                    <td>$ 1,400.00</td>
+                    <td>Selected</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>A-27</td>
+                    <td>160221</td>
+                    <td>$ 1,400.00</td>
+                    <td>Selected</td>
                 </tr>
             </tbody>
         </table>
@@ -179,11 +191,12 @@ Site Reservation
     </div>
     <!-- Payment-->
     <div class="row top-margin">
-        <div class="col-xs-12">
-            <button class="btn btn-block btn-default">
-                <span class="col-xs-1 glyphicon glyphicon-usd"></span>
-                @Html.ActionLink("Proceed To Payment", "Payment", "PrototypeUI", null, new { @class = "col-xs-9" })
-            </button>
+        <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+            <a href="@Url.Action("Payment", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-plus-usd"></span>
+                <span>Proceed To Payment</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
         </div>
     </div>
 </div>

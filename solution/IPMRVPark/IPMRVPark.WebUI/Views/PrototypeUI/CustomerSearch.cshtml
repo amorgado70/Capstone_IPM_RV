@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "Customer Registration";
-    ViewBag.PageTitle = "Customer Search";
+    ViewBag.PageTitle = "Search Customer ";
 }
 
 @Html.ActionLink("Home", "Home", "PrototypeUI")
@@ -14,57 +14,90 @@ Customer Registration
     <!-- Customer -->
     <div class="row top-margin">
         <div class="form-group">
-            <div class="col-sm-2 col-xs-12 form-top-margin">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>
-                    <span class="col-xs-3 glyphicon glyphicon-search"></span>
-                    <span class="col-xs-3">Customer</span>
+                    <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-9">By Name</span>
                 </label>
             </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <input type="text" class="form-control" placeholder="Full Name" />
+            <div class="col-sm-5 col-xs-12 form-top-margin" data-toggle="tooltip" title="Filter, search and select">
+                <select class="form-control">
+                    <option>Customer Full Name</option>
+                    <option>All Names - No Filter</option>
+                    @for (int i = 0; i < 8; i++)
+                    {
+                        <option>Mary Denver Holtz @i</option>
+                    }
+                </select>
             </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin">
-                <input type="text" class="form-control" placeholder="Phone Number" />
+            <div class="col-sm-1 col-xs-12 form-top-margin">
+                <label>Phone</label>
             </div>
-            <div class="col-sm-12 col-xs-12 form-top-margin">
-                <input type="text" class="form-control" placeholder="e-mail" />
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input type="text" class="form-control" placeholder="(519) 888-3333">
             </div>
         </div>
     </div>
     <!-- RV Site Tag-->
     <div class="row top-margin">
         <div class="form-group">
-            <div class="col-sm-2 col-xs-12 form-top-margin">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>
-                    <span class="col-xs-3 glyphicon glyphicon-search"></span>
-                    <span class="col-xs-3">Site</span>
+                    <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-9">By Site</span>
                 </label>
             </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <input type="text" class="form-control" placeholder="Name" />
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Letter</option>
+                    <option>All letters - No Filter</option>
+                    @for (char i = 'A'; i < 'W'; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
             </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <select class="form-control">
-                    <option>All Types</option>
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Number</option>
+                    <option>All numbers - No Filter</option>
+                    @for (int i = 20; i < 36; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Type</option>
+                    <option>All types - No Filter</option>
                     <option>25x40 30 amps lots</option>
                     <option>25x40 15 amps lots</option>
                     <option>30x45 15 amps lots</option>
                 </select>
             </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin">
+            <div class="col-sm-3 col-xs-12 form-top-margin" data-toggle="tooltip" title="Filter, search and select">
                 <select class="form-control">
-                    <option>All Status</option>
-                    <option>UnPaid</option>
-                    <option>Paid</option>
+                    <option>Status</option>
+                    <option>All status - No Filter</option>
+                    <option>Available</option>
+                    <option>Selected</option>
+                    <option>Reserved</option>
                 </select>
             </div>
         </div>
     </div>
-    <!-- List of other sites reserved for this same customer -->
-    <div class="row top-margin">
-        <div class="col-xs-12">
+    <!-- List of customers -->
+    <div class="row top-margin" data-toggle="tooltip" title="List Of Customers That Match The Search Criteria Above">
+        <div class="col-sm-8 col-xs-12 form-top-margin">
             <span class="col-xs-1 glyphicon glyphicon-list"></span>
-            List Of Customers That Match The Search Criteria
+            Customers Search Result List
+        </div>
+        <div class="col-sm-4 col-xs-12 form-top-margin">
+            <button class="btn btn-block btn-default">
+                <span class="col-xs-1 glyphicon glyphicon-refresh"></span>
+                <span class="col-xs-9">Refresh List</span>
+            </button>
         </div>
     </div>
     <div class="col-xs-12">
@@ -74,7 +107,7 @@ Customer Registration
                     <th>Full Name</th>
                     <th>Sites</th>
                     <th>Total<br />Paid</th>
-                    <th>Current<br/>Balance</th>
+                    <th>Current<br />Balance</th>
                 </tr>
             </thead>
             <tbody>

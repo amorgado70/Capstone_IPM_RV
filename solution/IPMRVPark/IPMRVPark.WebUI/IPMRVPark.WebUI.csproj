@@ -388,6 +388,9 @@
     <Content Include="Views\PrototypeUI\CustomerSearch.cshtml" />
     <Content Include="Views\PrototypeUI\PaymentSearch.cshtml" />
     <Content Include="Views\PrototypeUI\SiteType.cshtml" />
+    <Content Include="Views\PrototypeUI\Menu.cshtml" />
+    <Content Include="Views\PrototypeUI\Payment - Copy.cshtml" />
+    <Content Include="Views\PrototypeUI\Refund.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

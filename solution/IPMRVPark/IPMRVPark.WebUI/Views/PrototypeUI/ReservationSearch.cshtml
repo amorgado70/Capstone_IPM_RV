@@ -1,9 +1,9 @@
 ﻿@{
     ViewBag.Title = "Site Reservation";
-    ViewBag.PageTitle = "Reservation Search";
+    ViewBag.PageTitle = "Search Reservation";
 }
 
-@Html.ActionLink("Home", "Home", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Site Reservation
 <span class="glyphicon glyphicon-chevron-right"></span>
@@ -14,34 +14,48 @@ Site Reservation
     <!-- RV Site Tag-->
     <div class="row top-margin">
         <div class="form-group">
-            <div class="col-sm-2 col-xs-12 form-top-margin">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>
-                    <span class="col-xs-3 glyphicon glyphicon-search"></span>
-                    <span class="col-xs-3">Site</span>
+                    <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-9">By Site</span>
                 </label>
             </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <select class="form-control">
-                    <option>Name</option>
-                    @for (int i = 20; i < 36; i++)
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Letter</option>
+                    <option>All letters - No Filter</option>
+                    @for (char i = 'A'; i < 'W'; i++)
                     {
-                        <option>A - @i</option>
+                        <option>@i</option>
                     }
                 </select>
             </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <select class="form-control">
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Number</option>
+                    <option>All numbers - No Filter</option>
+                    @for (int i = 20; i < 36; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
                     <option>Type</option>
+                    <option>All types - No Filter</option>
                     <option>25x40 30 amps lots</option>
                     <option>25x40 15 amps lots</option>
                     <option>30x45 15 amps lots</option>
                 </select>
             </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin">
+            <div class="col-sm-3 col-xs-12 form-top-margin" data-toggle="tooltip" title="Filter, search and select">
                 <select class="form-control">
+                    <option>Status</option>
+                    <option>All status - No Filter</option>
                     <option>Available</option>
-                    <option>Paid</option>
-                    <option>UnPaid</option>
+                    <option>Selected</option>
+                    <option>Reserved</option>
                 </select>
             </div>
         </div>
@@ -49,36 +63,41 @@ Site Reservation
     <!-- Customer -->
     <div class="row top-margin">
         <div class="form-group">
-            <div class="col-sm-2 col-xs-12 form-top-margin">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>
-                    <span class="col-xs-3 glyphicon glyphicon-search"></span>
-                    <span class="col-xs-3">Customer</span>
+                    <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-9">By Customer</span>
                 </label>
             </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin">
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Filter, search and select">
                 <select class="form-control">
-                    <option>
-                        Select By Name
-                    </option>
+                    <option>Full Name</option>
+                    <option>All Names - No Filter</option>
                     @for (int i = 0; i < 8; i++)
                     {
                         <option>Mary Denver Holtz @i</option>
                     }
                 </select>
             </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Arrive On<label>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>Arrive On</label>
             </div>
             <div class="col-sm-3 col-xs-12 form-top-margin">
                 <input type="date" class="form-control">
             </div>
         </div>
     </div>
-    <!-- List of other sites reserved for this same customer -->
-    <div class="row top-margin">
-        <div class="col-xs-12">
+    <!-- List of sites -->
+    <div class="row top-margin" data-toggle="tooltip" title="List Of Sites That Match The Search Criteria Above">
+        <div class="col-sm-8 col-xs-12 form-top-margin">
             <span class="col-xs-1 glyphicon glyphicon-list"></span>
-            List Of Sites That Match The Search Criteria
+            Sites Search Result List
+        </div>
+        <div class="col-sm-4 col-xs-12 form-top-margin">
+            <button class="btn btn-block btn-default">
+                <span class="col-xs-1 glyphicon glyphicon-refresh"></span>
+                <span class="col-xs-9">Refresh List</span>
+            </button>
         </div>
     </div>
     <div class="col-xs-12">
@@ -96,7 +115,7 @@ Site Reservation
                     <td>A-21</td>
                     <td>160221</td>
                     <td>Mary Lenox</td>
-                    <td>Paid</td>
+                    <td>Reserved</td>
                     <td class="dropdown">
                         <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
                             Action
@@ -113,7 +132,7 @@ Site Reservation
                     <td>A-23</td>
                     <td>160221</td>
                     <td>Mary Jane</td>
-                    <td>Unpaid</td>
+                    <td>Selected</td>
                     <td class="dropdown">
                         <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
                             Action
@@ -125,6 +144,20 @@ Site Reservation
                             <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel Reservation</a></li>
                         </ul>
                     </td>
+                </tr>
+                <tr>
+                    <td>Z-23</td>
+                    <td></td>
+                    <td></td>
+                    <td>Available</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Z-25</td>
+                    <td></td>
+                    <td></td>
+                    <td>Available</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>

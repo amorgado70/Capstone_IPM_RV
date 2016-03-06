@@ -12,18 +12,15 @@
     <header>
         <div class="container-fluid" style="background-color: #f8f8f8; border-color: #e7e7e7; border-radius: 0 0 5px 5px;">
             <div class="row">
-                <div class="btn btn-default col-xs-4 col-sm-2 col-sm-push-1" style="margin-top:0.5em;margin-bottom:0.5em;">
-                    <a href="@Url.Action("Home", "PrototypeUI")" class="glyphicon glyphicon-home"></a>
-                    <a href="@Url.Action("Home", "PrototypeUI")" style="height:2em;">Home</a>
+                <div class="col-xs-6 col-sm-3" style="display:block; margin-top:0.5em;margin-bottom:0.5em;" pagination-centered" data-toggle="tooltip" title="Go Back To Main Menu">
+                    <a href="@Url.Action("Menu", "PrototypeUI")" class="btn btn-default btn-mylink col-xs-10">
+                        <span class="glyphicon glyphicon-home"></span>
+                        <span style="height:2em;">Home</span>
+                    </a>
                 </div>
-                <div class="col-xs-4 col-sm-7">
-                    <div class="text-center " style="margin-top:0.8em; margin-bottom:0.5em; font-size:1.2em; font-weight: bold; color: #337ab7;">
-                        @ViewBag.PageTitle
-                    </div>
-                </div>
-                <div class="btn btn-default col-xs-4 col-sm-2" style="margin-top:0.5em;margin-bottom:0.5em;">
-                    <a href="@Url.Action("Login", "PrototypeUI")">Login</a>
-                    <a href="@Url.Action("Login", "PrototypeUI")" class="glyphicon glyphicon-log-in"></a>
+                <div class="col-xs-1"></div>
+                <div class="col-xs-7 col-sm-8" style="margin-top:0.8em; margin-bottom:0.5em; margin-left:0; font-size:1.2em; font-weight: bold; color: #337ab7;">
+                    @ViewBag.PageTitle
                 </div>
             </div>
         </div>
@@ -34,8 +31,8 @@
     </section>
     <div class="container-fluid">
         <div class="row top-margin">
-            <div class="col-xs-4 col-xs-push-6">
-                <div class="btn btn-default" style="margin-top:0.5em;">
+            <div class="col-xs-4">
+                <div class="btn btn-default" style="margin-top:0.5em;" pagination-centered" data-toggle="tooltip" title="Go To Top Of This Page">
                     <a href="#">Back To Top <span class="glyphicon glyphicon-chevron-up"></span></a>
                 </div>
             </div>

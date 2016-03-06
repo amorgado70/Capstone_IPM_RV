@@ -6,140 +6,23 @@
 <div class="container-fluid">
 
     <div class="row top-margin">
-        <div class="col-xs-10 col-xs-push-1">
-            <button class="btn btn-default btn-block " data-toggle="collapse" data-target="#menuIPMEvent">
-                <span class="glyphicon glyphicon-map-marker"></span>
-                IPM Event Map
-                <span class="caret"></span>
-            </button>
-        </div>
-        <div id="menuIPMEvent" class="col-xs-12 collapse">
-            <div class="col-xs-10 col-xs-push-1">
-                <button class="btn btn-block btn-default form-top-margin pagination-centered">
-                    <span class="glyphicon glyphicon-picture"></span>
-                    @Html.ActionLink("Large Screen Display", "EventMap", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-                <button class="btn btn-block btn-default pagination-centered">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                    @Html.ActionLink("Edit IPM Event Info", "Home", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
+        <!-- Not Logged In Message -->
+        <div class="row top-margin">
+            <div class="h4 text-center col-xs-12">
+                Access To System Is Given Only After
+            </div>
+            <div class="h4 text-center col-xs-12">
+                A Staff Member Is Logged In
             </div>
         </div>
-    </div>
-
-    <div class="row top-margin">
-        <div class="col-xs-10 col-xs-push-1">
-            <button class="btn btn-default btn-block " data-toggle="collapse" data-target="#menuSiteReservation">
-                <span class="glyphicon glyphicon-tag"></span>
-                Site Reservation
-                <span class="caret"></span>
-            </button>
-        </div>
-        <div id="menuSiteReservation" class="col-xs-12 collapse">
-            <div class="col-xs-10 col-xs-push-1">
-                <button class="btn btn-block btn-default form-top-margin pagination-centered">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
-                    @Html.ActionLink("New Reservation", "Reservation", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-                <button class="btn btn-block btn-default pagination-centered">
-                    <span class="glyphicon glyphicon-search"></span>
-                    @Html.ActionLink("Search Reservation", "ReservationSearch", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-            </div>
+        <div class="row">
+            <a href="@Url.Action("Login", "PrototypeUI")" class="btn btn-default btn-mylink col-xs-push-3 col-sm-2 col-sm-push-5" 
+               data-toggle="tooltip" title="Go To" 
+               style="margin-top:0.5em;margin-bottom:0.5em;">
+                <span >Login</span>
+                <span class="glyphicon glyphicon-log-in"></span>
+            </a>
         </div>
     </div>
-
-    <div class="row top-margin">
-        <div class="col-xs-10 col-xs-push-1">
-            <button class="btn btn-default btn-block " data-toggle="collapse" data-target="#menuCustomerRegistration">
-                <span class="glyphicon glyphicon-user"></span>
-                Customer Registration
-                <span class="caret"></span>
-            </button>
-        </div>
-        <div id="menuCustomerRegistration" class="col-xs-12 collapse">
-            <div class="col-xs-10 col-xs-push-1">
-                <button class="btn btn-block btn-default form-top-margin pagination-centered">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
-                    @Html.ActionLink("New Customer", "Customer", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-                <button class="btn btn-block btn-default pagination-centered">
-                    <span class="glyphicon glyphicon-search"></span>
-                    @Html.ActionLink("Search Customer", "CustomerSearch", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="row top-margin">
-        <div class="col-xs-10 col-xs-push-1">
-            <button class="btn btn-default btn-block " data-toggle="collapse" data-target="#menuPaymentRefund">
-                <span class="glyphicon glyphicon-usd"></span>
-                Payments & Refunds
-                <span class="caret"></span>
-            </button>
-        </div>
-        <div id="menuPaymentRefund" class="col-xs-12 collapse">
-            <div class="col-xs-10 col-xs-push-1">
-                <button class="btn btn-block btn-default form-top-margin pagination-centered">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
-                    @Html.ActionLink("New Payment", "Payment", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-                <button class="btn btn-block btn-default pagination-centered">
-                    <span class="glyphicon glyphicon-search"></span>
-                    @Html.ActionLink("Search Payment", "PaymentSearch", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="row top-margin">
-        <div class="col-xs-10 col-xs-push-1">
-            <button class="btn btn-default btn-block " data-toggle="collapse" data-target="#menuSystemMaintenance">
-                <span class="glyphicon glyphicon-wrench"></span>
-                System Maintenance
-                <span class="caret"></span>
-            </button>
-        </div>
-        <div id="menuSystemMaintenance" class="col-xs-12 collapse">
-            <div class="col-xs-10 col-xs-push-1">
-                <button class="btn btn-block btn-default form-top-margin pagination-centered">
-                    @Html.ActionLink("Site Size", "Home", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-                <button class="btn btn-block btn-default form-top-margin pagination-centered">
-                    @Html.ActionLink("Site Power Supply", "Home", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-                <button class="btn btn-block btn-default form-top-margin pagination-centered">
-                    @Html.ActionLink("New Staff Member", "Home", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-                <button class="btn btn-block btn-default form-top-margin pagination-centered">
-                    @Html.ActionLink("Edit Staff Member", "Home", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-                <button class="btn btn-block btn-default form-top-margin pagination-centered">
-                    @Html.ActionLink("Province", "Home", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-                <button class="btn btn-block btn-default pagination-centered">
-                    @Html.ActionLink("Country", "Home", "PrototypeUI")
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-
 </div>
 

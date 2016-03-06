@@ -38,12 +38,71 @@ Payments & Refunds
             </div>
         </div>
     </div>
-    <!-- List of previous payments from this customer -->
+    <!-- List of sites -->
     <div class="row top-margin">
-        <div class="col-sm-12 col-sm-push-0 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
+        <div class="col-sm-8 col-sm-push-4 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
+            <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#sitesCustomer">
+                <span class="col-xs-1 glyphicon glyphicon-list"></span>
+                <span class="col-xs-9">List All Sites For This Customer &nbsp;<span class="caret"></span></span>
+            </button>
+        </div>
+    </div>
+    <div id="sitesCustomer" class="col-xs-12">
+        <div class="col-xs-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Site</th>
+                        <th>Arrival</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A-21</td>
+                        <td>160221</td>
+                        <td style="color:gray">Reserved/Already Paid</td>
+                        <td style="color:gray">5,420.00</td>
+                        <td class="dropdown">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                                Action
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Reservation Details</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit Reservation</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel Reservation</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>A-23</td>
+                        <td>160221</td>
+                        <td style="font-weight:bold">Selected/Not Paid Yet</td>
+                        <td style="font-weight:bold">3,045.51</td>
+                        <td class="dropdown">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                                Action
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Reservation Details</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit Reservation</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel Reservation</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- List of all payments from this customer -->
+    <div class="row top-margin">
+        <div class="col-sm-8 col-sm-push-4 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
             <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#accountCustomer">
                 <span class="col-xs-1 glyphicon glyphicon-list"></span>
-                <span class="col-xs-9">List Previous Payments &nbsp;<span class="caret"></span></span>
+                <span class="col-xs-9">List Previous Payments From This Customer &nbsp;<span class="caret"></span></span>
             </button>
         </div>
     </div>
@@ -62,142 +121,66 @@ Payments & Refunds
                     <td>A-21</td>
                     <td>New reservation</td>
                     <td>02/05/2016</td>
-                    <td>$ 5,420.00</td>
+                    <td>$ 2,500.00</td>
                 </tr>
             </tbody>
         </table>
-    </div>
-    <!-- List of sites -->
-    <div class="row top-margin" data-toggle="tooltip" title="List Of Sites Reserved or Selected For This Customer">
-        <div class="col-sm-8 col-xs-12 form-top-margin">
-            <span class="col-xs-1 glyphicon glyphicon-list"></span>
-            All Sites For This Customer
-        </div>
-        <div class="col-sm-4 col-xs-12 form-top-margin">
-            <button class="btn btn-block btn-default">
-                <span class="col-xs-1 glyphicon glyphicon-refresh"></span>
-                <span class="col-xs-9">Refresh List</span>
-            </button>
-        </div>
-    </div>
-    <div class="col-xs-12">
-        <div class="col-xs-12">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Sel</th>
-                        <th>Site</th>
-                        <th>Arrival</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr style="color:lightgray">
-                        <td class="glyphicon glyphicon-tag"></td>
-                        <td>A-21</td>
-                        <td>160101</td>
-                        <td>
-                            5,420.00<br />
-                            already<br />
-                            reserved
-                        </td>
-                        <td class="dropdown">
-                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
-                                Action
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Reservation Details</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit Reservation</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel Reservation</a></li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" checked></td>
-                        <td>A-22</td>
-                        <td>160221</td>
-                        <td style="font-weight:bold">3,045.01</td>
-                        <td class="dropdown">
-                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
-                                Action
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Reservation Details</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit Reservation</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel Reservation</a></li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" checked></td>
-                        <td>A-23</td>
-                        <td>160221</td>
-                        <td style="font-weight:bold">3,045.01</td>
-                        <td class="dropdown">
-                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
-                                Action
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Reservation Details</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit Reservation</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel Reservation</a></li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
     <!-- Account Balance for this customer -->
     <div class="row top-margin">
         <div class="form-group">
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>(a) Total For Sel (Selected) Sites</label>
+                <label>Account Balance For This Customer</label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 6,090.02" style="text-align:right;" disabled>
+                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 3,045.51" style="text-align:right" disabled>
+            </div>
+        </div>
+    </div>
+    <!-- Payment-->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <label>Payment Amount</label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>(b) This Payment Amount</label>
+                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 3,045.51" style="text-align:right">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="radio-inline col-xs-12">
+                <label class="radio-inline"><input type="radio" name="optradio" checked onClick="setPayment()">Amount To Receive</label>
+                <label class="radio-inline"><input type="radio" name="optradio" onClick="setRefund()">Amount To Refund</label>
+            </div>
+        </div>
+        <div id="text"></div>
+        <script type="text/javascript">
+            function setPayment() {
+                document.getElementById("textMethod").innerHTML = 'Payment';
+                document.getElementById("textStaff").innerHTML = 'Received';
+                document.getElementById("textBalance").innerHTML = 'Payment';
+                document.getElementById("textConfirm").innerHTML = 'Payment';
+            }
+            function setRefund() {
+                document.getElementById("textMethod").innerHTML = 'Refund';
+                document.getElementById("textStaff").innerHTML = 'Paid';
+                document.getElementById("textBalance").innerHTML = 'Refund';
+                document.getElementById("textConfirm").innerHTML = 'Refund';
+            }
+        </script>
+
+        <div class="form-group">
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <label>Reason For Transaction</label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 6,090.02" style="text-align:right; border: 2px solid black;">
-            </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>(c) Previous Customer's Account Balance</label>
-            </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 0.00" style="text-align:right;" disabled>
+                <input type="text" class="form-control" placeholder="New Site Reservation / Cancel Site Reservation" />
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>(c)+(b)-(a) Account Balance After Payment</label>
-            </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 0.00" style="text-align:right;" disabled>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>Reason For Payment</label>
-            </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <select class="form-control" data-toggle="tooltip" title="Select one">
-                    <option>New Reservation</option>
-                    <option>Confirm Reservation</option>
-                    <option>Check In</option>
-                    <option>Extend Reservation</option>
-                    <option>Other Services - Specify As Comment</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>Received by (Staff Logged In)</label>
+                <label><span id="textStaff">Received</span> by (Staff Logged In)</label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
                 <input type="text" class="form-control" placeholder="Tim Burton" disabled />
@@ -207,7 +190,7 @@ Payments & Refunds
     <div class="row top-margin">
         <div class="form-group">
             <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Payment Method</label>
+                <label><span id="textMethod">Payment</span> Method</label>
             </div>
             <div class="col-sm-4 col-xs-12 form-top-margin">
                 <select class="form-control">
@@ -220,22 +203,27 @@ Payments & Refunds
                 <label>Date</label>
             </div>
             <div class="col-sm-4 col-xs-12 form-top-margin">
-                @{  var dateAndTime = DateTime.Now;}
-                <input type="text" class="form-control" placeholder="@dateAndTime.ToString("MMM/dd/yyyy")" disabled/>
+                @{DateTime MyDate = DateTime.Now;}
+                <input type="text" class="form-control" placeholder="@MyDate" />
             </div>
         </div>
         <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Transaction Number</label>
+            </div>
+            <div class="col-sm-9 col-xs-12 form-top-margin">
+                <input type="text" class="form-control" placeholder="Check Number - Credit Card Receipt Number - Cash Deposit Number" />
+            </div>
+        </div>
+    </div>
+    <!-- Account Balance for this customer -->
+    <div class="row top-margin">
+        <div class="form-group">
             <div class="col-sm-6 col-xs-12 form-top-margin">
-
-                <select class="form-control">
-                    <option>Credit Card Receipt Number:</option>
-                    <option>Cash Deposit Receipt Number:</option>
-                    <option>Check Bank and Number:</option>
-                </select>
-
+                <label>Customer's Account Balance After <span id="textBalance">Payment</span></label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <input type="text" class="form-control" placeholder="Type reference # used to track the payment" />
+                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 0.00" style="text-align:right" disabled>
             </div>
         </div>
     </div>
@@ -247,11 +235,10 @@ Payments & Refunds
             <div class="col-sm-10 col-xs-12 form-top-margin">
                 <textarea class="form-control" rows="2"></textarea>
             </div>
-            <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
+            <div class="col-xs-12 form-top-margin">
                 <button class="btn btn-block btn-default">
                     <span class="col-xs-1 glyphicon glyphicon-ok"></span>
-                    <span class="col-xs-1 glyphicon glyphicon-print"></span>
-                    <span class="col-xs-9">Confirm Payment</span>
+                    <span class="col-xs-9">Confirm <span id="textConfirm">Payment</span></span>
                 </button>
             </div>
         </div>

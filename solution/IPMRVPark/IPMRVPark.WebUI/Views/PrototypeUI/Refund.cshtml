@@ -1,16 +1,16 @@
 ﻿@{
     ViewBag.Title = "Payments & Refunds";
-    ViewBag.PageTitle = "New Payment";
+    ViewBag.PageTitle = "New Refund";
 }
 
 @Html.ActionLink("Home", "Menu", "PrototypeUI")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Payments & Refunds
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("New Payment", "Payment", "PrototypeUI")
+@Html.ActionLink("New Refund", "Refund", "PrototypeUI")
 
-<!-- New Payment -->
-<div class="container-fluid">
+<!-- New Refund -->
+<div class="container-fluid" style="background-color:#FFFFDD;">
     <!-- Customer -->
     <div class="row top-margin">
         <div class="form-group">
@@ -43,7 +43,7 @@ Payments & Refunds
         <div class="col-sm-12 col-sm-push-0 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
             <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#accountCustomer">
                 <span class="col-xs-1 glyphicon glyphicon-list"></span>
-                <span class="col-xs-9">List Previous Payments &nbsp;<span class="caret"></span></span>
+                <span class="col-xs-9">List All Payments &nbsp;<span class="caret"></span></span>
             </button>
         </div>
     </div>
@@ -85,21 +85,19 @@ Payments & Refunds
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Sel</th>
+                        <th>Cancel</th>
                         <th>Site</th>
                         <th>Arrival</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr style="color:lightgray">
-                        <td class="glyphicon glyphicon-tag"></td>
+                    <tr>
+                        <td><input type="checkbox" unchecked></td>
                         <td>A-21</td>
                         <td>160101</td>
                         <td>
-                            5,420.00<br />
-                            already<br />
-                            reserved
+                            5,420.00
                         </td>
                         <td class="dropdown">
                             <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
@@ -155,13 +153,13 @@ Payments & Refunds
     <div class="row top-margin">
         <div class="form-group">
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>(a) Total For Sel (Selected) Sites</label>
+                <label>(a) Total For Cancel (Cancelled) Sites</label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
                 <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 6,090.02" style="text-align:right;" disabled>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>(b) This Payment Amount</label>
+                <label>(b) This Refund Amount</label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
                 <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 6,090.02" style="text-align:right; border: 2px solid black;">
@@ -175,23 +173,21 @@ Payments & Refunds
         </div>
         <div class="form-group">
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>(c)+(b)-(a) Account Balance After Payment</label>
+                <label>(a)-(b)+(c) Account Balance After Payment</label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 0.00" style="text-align:right;" disabled>
+                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 0.00" style="text-align:right;">
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>Reason For Payment</label>
+                <label>Reason For Refund</label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin">
                 <select class="form-control" data-toggle="tooltip" title="Select one">
-                    <option>New Reservation</option>
-                    <option>Confirm Reservation</option>
-                    <option>Check In</option>
-                    <option>Extend Reservation</option>
-                    <option>Other Services - Specify As Comment</option>
+                    <option>Cancel Reservation</option>
+                    <option>Shorten Reservation</option>
+                    <option>Cancel Other Services - Specify As Comment</option>
                 </select>
             </div>
         </div>
@@ -207,7 +203,7 @@ Payments & Refunds
     <div class="row top-margin">
         <div class="form-group">
             <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Payment Method</label>
+                <label>Refund Method</label>
             </div>
             <div class="col-sm-4 col-xs-12 form-top-margin">
                 <select class="form-control">
@@ -251,7 +247,7 @@ Payments & Refunds
                 <button class="btn btn-block btn-default">
                     <span class="col-xs-1 glyphicon glyphicon-ok"></span>
                     <span class="col-xs-1 glyphicon glyphicon-print"></span>
-                    <span class="col-xs-9">Confirm Payment</span>
+                    <span class="col-xs-9">Confirm Refund</span>
                 </button>
             </div>
         </div>

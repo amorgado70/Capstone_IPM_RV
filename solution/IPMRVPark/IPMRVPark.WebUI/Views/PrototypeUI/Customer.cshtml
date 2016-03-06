@@ -3,7 +3,7 @@
     ViewBag.PageTitle = "New Customer";
 }
 
-@Html.ActionLink("Home", "Home", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Customer Registration
 <span class="glyphicon glyphicon-chevron-right"></span>
@@ -11,12 +11,6 @@ Customer Registration
 
 <!-- New Customer-->
 <div class="container-fluid">
-    <!-- Not Logged In Message -->
-    <div class="row top-margin">
-        <div class="h4 text-center col-xs-12">
-            Must Be Logged In The System To Register a Customer
-        </div>
-    </div>
     <!-- New Customer-->
     <div class="row top-margin">
         <div class="form-group">
@@ -118,18 +112,21 @@ Customer Registration
             <div class="col-sm-10 col-xs-12 form-top-margin">
                 <textarea class="form-control" rows="2"></textarea>
             </div>
-            <div class="col-xs-12 form-top-margin">
+            <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
                 <button class="btn btn-block btn-default">
                     <span class="col-xs-1 glyphicon glyphicon-ok"></span>
                     <span class="col-xs-9">Confirm Customer Registration</span>
                 </button>
             </div>
-            <div class="col-xs-12 form-top-margin">
-                <button class="btn btn-block btn-default">
-                    <span class="col-xs-1 glyphicon glyphicon-chevron-left"></span>
-                    <span class="col-xs-9">Go To New Reservation</span>
-                </button>
-            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+            <a href="@Url.Action("Reservation", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-map-marker"></span>
+                <span>New Reservation</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
         </div>
     </div>
 </div>
