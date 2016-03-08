@@ -1,0 +1,23 @@
+'domain level sequence diagram - upload and parse KML File
+@startuml  
+autonumber  
+
+actor Staff
+actor IPMSystem
+
+
+title Upload and Parse KML File
+
+Staff -> IPMSystem : OpenEventUpdatePage(EventId)
+IPMSystem -> IPMSystem : RetreiveEventInformation(EventId)
+IPMSystem -> Staff : DisplayEventInformation()
+Staff -> IPMSystem : RequestKMLUploadPage()
+IPMSystem -> Staff : DisplayKMLUploadPage()
+Staff -> IPMSystem : UploadKMLFile()
+IPMSystem -> IPMSystem : GenerateStyleURL()
+IPMSystem -> IPMSystem : GenerateRVSite()
+IPMSystem -> IPMSystem : VeryfyStyleURL&RVSite()
+IPMSystem -> Staff : DisplayConfirmPage()
+Staff -> IPMSystem : ConfirmStyleURL&RVSite()
+IPMSystem -> IPMSystem : SaveStyleURL&RVSite()
+@enduml

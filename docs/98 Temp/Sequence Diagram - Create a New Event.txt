@@ -1,0 +1,20 @@
+'domain level sequence diagram - create a new event
+@startuml  
+autonumber  
+
+actor Staff
+actor IPMSystem
+
+
+title Create a New Event for IPM
+
+Staff -> IPMSystem : OpenNewEventPage()
+IPMSystem -> IPMSystem : RetreiveNewEventInformation()
+IPMSystem -> Staff : DisplayNewEventForm()
+Staff -> IPMSystem : InputNewEventInformation()
+IPMSystem -> IPMSystem : ValidateEventInformation()
+IPMSystem -> Staff : DisplayConfirmationPage()
+Staff -> IPMSystem : ConfirmNewEvent()
+
+
+@enduml
