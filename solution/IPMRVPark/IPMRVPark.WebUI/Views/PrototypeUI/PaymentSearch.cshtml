@@ -32,7 +32,7 @@ Payments & Refunds
                         <option>Cancel Reservation</option>
                         <option>Shorten Reservation</option>
                         <option>Cancel Other Services - Specify As Comment</option>
-                    </select>                    
+                    </select>
                 </div>
             </div>
             <div class="col-sm-2 col-xs-12 form-top-margin">
@@ -59,7 +59,7 @@ Payments & Refunds
                 <select class="form-control">
                     @for (int i = 16; i > 1; i--)
                     {
-                        <option>@((i*2000).ToString("N0"))</option>
+                        <option>@((i * 2000).ToString("N0"))</option>
                     }
                 </select>
             </div>
@@ -151,7 +151,7 @@ Payments & Refunds
     <div class="row top-margin" data-toggle="tooltip" title="List Of Customers That Match The Search Criteria Above">
         <div class="col-sm-8 col-xs-12 form-top-margin">
             <span class="col-xs-1 glyphicon glyphicon-list"></span>
-            Payments Search Result List
+            <b>Payments Search Result List</b>
         </div>
         <div class="col-sm-4 col-xs-12 form-top-margin">
             <button class="btn btn-block btn-default">
@@ -175,7 +175,7 @@ Payments & Refunds
                 <tr>
                     <td>Homer Watson</td>
                     <td>A-32, A-31, W-02</td>
-                    <td style="text-align:left;">875.00</td>
+                    <td style="text-align:right;">875.00</td>
                     <td>02/05/2016</td>
                     <td class="dropdown">
                         <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
@@ -193,7 +193,7 @@ Payments & Refunds
                 <tr>
                     <td>John Macintosh</td>
                     <td>E-52, E-53, F-52</td>
-                    <td style="text-align:left;">2875.00</td>
+                    <td style="text-align:right;">2875.00</td>
                     <td>02/05/2016</td>
                     <td class="dropdown">
                         <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
@@ -212,4 +212,3 @@ Payments & Refunds
         </table>
     </div>
 </div>
-

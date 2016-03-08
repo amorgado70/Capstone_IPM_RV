@@ -20,10 +20,18 @@ namespace IPMRVPark.WebUI.Controllers
         {
             return View();
         }
-        public ActionResult EventMap()
+        public ActionResult IPMEventMap()
         {
             return View();
         }        
+        public ActionResult IPMEventInfo()
+        {
+            return View();
+        }
+        public ActionResult DigitizeMap()
+        {
+            return View();
+        }
         public ActionResult Reservation()
         {
             return View();

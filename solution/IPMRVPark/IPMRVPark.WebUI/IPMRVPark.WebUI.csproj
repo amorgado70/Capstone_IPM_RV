@@ -379,7 +379,7 @@
     <Content Include="Views\ReservationView\Edit.cshtml" />
     <Content Include="Views\ReservationView\Index.cshtml" />
     <Content Include="Views\PrototypeUI\Home.cshtml" />
-    <Content Include="Views\PrototypeUI\EventMap.cshtml" />
+    <Content Include="Views\PrototypeUI\IPMEventMap.cshtml" />
     <Content Include="Views\PrototypeUI\Reservation.cshtml" />
     <Content Include="Views\PrototypeUI\Customer.cshtml" />
     <Content Include="Views\PrototypeUI\Payment.cshtml" />
@@ -391,6 +391,8 @@
     <Content Include="Views\PrototypeUI\Menu.cshtml" />
     <Content Include="Views\PrototypeUI\Payment - Copy.cshtml" />
     <Content Include="Views\PrototypeUI\Refund.cshtml" />
+    <Content Include="Views\PrototypeUI\IPMEventInfo.cshtml" />
+    <Content Include="Views\PrototypeUI\DigitizeMap.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

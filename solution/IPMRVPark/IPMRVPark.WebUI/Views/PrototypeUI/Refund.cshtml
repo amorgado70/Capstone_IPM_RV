@@ -40,7 +40,7 @@ Payments & Refunds
     </div>
     <!-- List of previous payments from this customer -->
     <div class="row top-margin">
-        <div class="col-sm-12 col-sm-push-0 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
+        <div class="col-sm-6 col-sm-push-6 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
             <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#accountCustomer">
                 <span class="col-xs-1 glyphicon glyphicon-list"></span>
                 <span class="col-xs-9">List All Payments &nbsp;<span class="caret"></span></span>
@@ -71,7 +71,7 @@ Payments & Refunds
     <div class="row top-margin" data-toggle="tooltip" title="List Of Sites Reserved or Selected For This Customer">
         <div class="col-sm-8 col-xs-12 form-top-margin">
             <span class="col-xs-1 glyphicon glyphicon-list"></span>
-            All Sites For This Customer
+            <b>All Sites For This Customer</b>
         </div>
         <div class="col-sm-4 col-xs-12 form-top-margin">
             <button class="btn btn-block btn-default">
@@ -217,7 +217,7 @@ Payments & Refunds
             </div>
             <div class="col-sm-4 col-xs-12 form-top-margin">
                 @{  var dateAndTime = DateTime.Now;}
-                <input type="text" class="form-control" placeholder="@dateAndTime.ToString("MMM/dd/yyyy")" disabled/>
+                <input type="text" class="form-control" placeholder="@dateAndTime.ToString("MMM/dd/yyyy")" disabled />
             </div>
         </div>
         <div class="form-group">
