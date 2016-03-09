@@ -1,0 +1,49 @@
+﻿ html { 
+     background-image: url('http://www.alvm.com.br/ipmrvpark/Images/background.jpg');
+     /*background-image: url('http://www.plowingmatch.org/images/template-images/opa/bg3.jpg');*/
+     background-color: #453425;
+     background-size: auto;
+     background-repeat:no-repeat; 
+ }
+ body {
+     background-color:rgba(255,255,255,0.9);
+     border-radius: 5px; 
+ }
+ td, input:disabled, ..glyphicon{
+     background-color:rgba(255,255,255,0.5);
+ }
+ 
+a, .btn, .btn-mylink, label, b, .glyphicon, th {
+     color: #453425;
+ }
+
+.btn-info {
+    background-color:#AEA093;
+}
+.btn-info:hover {
+    color:#AEA093;
+    background-color:#453425;
+}
+/* Limit the width of the page*/
+@media only screen and (min-width: 360px) {
+    body {
+        min-width: 360px;
+        max-width: 760px;
+        margin: 0 auto !important;
+        position: relative !important;
+
+    }
+}
+
+/* Top margin to separate rows*/
+.top-margin{
+    margin-top: 2em;
+}
+.form-top-margin{
+   margin-top: 0.8em;
+}
+/* */
+
+/*.btn-mylink{
+    color: #337ab7;
+}*/
