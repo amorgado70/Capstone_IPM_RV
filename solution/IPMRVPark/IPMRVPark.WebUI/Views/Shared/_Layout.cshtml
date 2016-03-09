@@ -10,7 +10,7 @@
 </head>
 <body>
     <header>
-        <div class="container-fluid" style="background-color: #f8f8f8; border-color: #e7e7e7; border-radius: 0 0 5px 5px;">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-xs-6 col-sm-3" style="display:block; margin-top:0.5em;margin-bottom:0.5em;" pagination-centered" data-toggle="tooltip" title="Go Back To Main Menu">
                     <a href="@Url.Action("Menu", "PrototypeUI")" class="btn btn-default btn-block btn-mylink col-xs-10">
@@ -31,13 +31,13 @@
     </section>
     <div class="container-fluid">
         <div class="row top-margin">
-            <div class="col-xs-3">
+            <div class="col-sm-3 col-xs-6">
                 <a  href="#" class="btn btn-default btn-block btn-mylink" data-toggle="tooltip" title="Go To Top Of This Page">
                     <span class="glyphicon glyphicon-chevron-up"></span>
                     <span style="height:2em;">Back To Top</span>
                 </a>
             </div>
-            <div class="col-xs-3 col-xs-push-6">
+            <div class="col-sm-3 col-sm-push-6 col-xs-5 col-xs-push-1">
                 <a href="@Url.Action("Home", "PrototypeUI")" class="btn btn-default btn-block btn-mylink">
                     <span class="glyphicon glyphicon-log-out"></span>
                     <span style="height:2em;">Log Out</span>

@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Home";
+    ViewBag.PageTitle = "IPM RV Park System";
+}
+
+<div class="container-fluid">
+    <!-- Not Logged In Message -->
+    <div class="row top-margin">
+        <div class="h4 text-center col-xs-12">
+            Access To System Is Given Only After
+        </div>
+        <div class="h4 text-center col-xs-12">
+            A Staff Member Is Logged In
+        </div>
+    </div>
+    <div class="row">
+        <a href="@Url.Action("Login", "PrototypeUI")" class="btn btn-default btn-mylink col-xs-push-5 col-sm-2 col-sm-push-5"
+           data-toggle="tooltip" title="Go To"
+           style="margin-top:0.5em;margin-bottom:0.5em;">
+            <span>Login</span>
+            <span class="glyphicon glyphicon-log-in"></span>
+        </a>
+    </div>
+</div>
+
+

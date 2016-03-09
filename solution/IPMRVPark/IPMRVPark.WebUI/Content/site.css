@@ -1,15 +1,20 @@
 ﻿ html { 
+     /*background-image: url('/Images/background.jpg');*/
      background-image: url('http://www.alvm.com.br/ipmrvpark/Images/background.jpg');
      /*background-image: url('http://www.plowingmatch.org/images/template-images/opa/bg3.jpg');*/
      background-color: #453425;
      background-size: auto;
      background-repeat:no-repeat; 
  }
+ header{
+     color: #f8f8f8;     
+     background-color: #453425;
+ }
  body {
      background-color:rgba(255,255,255,0.9);
      border-radius: 5px; 
  }
- td, input:disabled, ..glyphicon{
+ tr, td, input:disabled, .glyphicon{
      background-color:rgba(255,255,255,0.5);
  }
  
@@ -17,13 +22,46 @@ a, .btn, .btn-mylink, label, b, .glyphicon, th {
      color: #453425;
  }
 
+.btn:focus,.btn:active,
+.btn-info:focus,.btn-info:active,
+.open > .dropdown-toggle.btn-info:hover,
+.open > .dropdown-toggle.btn-info:focus {
+   outline: none !important;
+}
+
+.btn-info,
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active:hover,
+.btn-info:active:focus,
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active:hover,
+.btn-default:active:focus{
+    border-color: #453425;
+}
+
 .btn-info {
     background-color:#AEA093;
 }
-.btn-info:hover {
+.btn-info:hover,
+.btn-info:active:hover,
+.btn-info:focus,
+.btn-info:active:focus,
+.btn-ipmrvpark:hover,
+.btn-ipmrvpark:focus {
     color:#AEA093;
     background-color:#453425;
 }
+
+.open > .dropdown-toggle.btn-info:hover,
+.open > .dropdown-toggle.btn-info:focus{
+    color:#AEA093;
+    background-color:#453425;
+}
+
+
+
 /* Limit the width of the page*/
 @media only screen and (min-width: 360px) {
     body {
