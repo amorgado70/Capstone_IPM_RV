@@ -15,9 +15,7 @@ using GMap.NET.WindowsForms;
 using FileReadNWrite;
 using System.Xml.Linq;
 using System.Globalization;
-
-
-
+using System.Diagnostics;
 
 namespace toy2
 {
@@ -30,6 +28,11 @@ namespace toy2
         List<site> sites = new List<site>();
         List<style> styles = new List<style>();
 
+        coord _leftTop;         // Left Top point from Input
+        coord _rightBottom;     // Right Bottom point from Input
+        coord leftTop;          // New Left Top point 
+        coord rightBottom;      // New Right Bottom point 
+
         public IPM_Toy_Project()
         {
             InitializeComponent();
@@ -41,41 +44,57 @@ namespace toy2
 
         private void gmap_Load(object sender, EventArgs e)
         {
-            gmap.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
-            GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
+
             //gmap.SetPositionByKeywords("Maputo, Mozambique");
 
-            gmap.Position = new GMap.NET.PointLatLng(43.66881697093099, -81.31210058949804);
+            
+
+
+            //TextIO txt = new TextIO("site.sql");
+            gmap.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
+            GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
+
+
+            gmap.Position = new GMap.NET.PointLatLng(43.6633780521837, -81.3024251317227);
             gmap.Zoom = 16;
 
-            TextIO txt = new TextIO("site.sql");
-
             readXML();
+           
+            // gmap.Position = new GMap.NET.PointLatLng((_leftTop._y + _rightBottom._y) / 2, (_leftTop._x + _rightBottom._x) / 2);
 
-            txt.WriteLine("## this is only for RVSite DML(Database Modification Language) file.");
-            txt.WriteLine("## Another site type has more than 4 points, that's why I omit those data.");
-            txt.WriteLine("");
 
-            foreach (var style in styles)
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("Insert Into 'StyleUrl' Values( ");
-                string str = string.Format("'{0}', '{1}' );", style.id, style.poly_color);
-                sb.Append(str);
 
-                txt.WriteLine(sb.ToString());
-            }
-            txt.WriteLine("");
-            txt.WriteLine("");
-            txt.WriteLine("");
+
+            //txt.WriteLine("## this is only for RVSite DML(Database Modification Language) file.");
+            //txt.WriteLine("## Another site type has more than 4 points, that's why I omit those data.");
+            //txt.WriteLine("");
+
+            //foreach (var style in styles)
+            //{
+            //    StringBuilder sb = new StringBuilder();
+            //    sb.Append("Insert Into 'StyleUrl' Values( ");
+            //    string str = string.Format("'{0}', '{1}' );", style.id, style.poly_color);
+            //    sb.Append(str);
+
+            //    txt.WriteLine(sb.ToString());
+            //}
+            //txt.WriteLine("");
+            //txt.WriteLine("");
+            //txt.WriteLine("");
 
             foreach ( var siteItem in sites )
             {
                 List<PointLatLng> points = new List<PointLatLng>();
 
-                for( int i=0; i< siteItem.points.Count-2; i=i+2 )
+                //for (int i = 0; i < siteItem.points.Count - 2; i = i + 2)
+                //{
+                //    points.Add(new PointLatLng(double.Parse(siteItem.points[i + 1]), double.Parse(siteItem.points[i])));
+                //}
+
+                for (int i = 0; i < siteItem.coords.Count - 1; i++)
                 {
-                    points.Add(new PointLatLng(double.Parse(siteItem.points[i+1]), double.Parse(siteItem.points[i])));
+                    //points.Add(new PointLatLng(siteItem.coords[i]._y, siteItem.coords[i]._x));
+                    points.Add(new PointLatLng(siteItem.coords[i].y, siteItem.coords[i].x));
                 }
 
 
@@ -90,20 +109,20 @@ namespace toy2
                 polygonOverlay.Polygons.Add(polygon);
 
                 //if (siteItem.styleRef.id == "#PolyStyle00")
-                if (siteItem.points.Count == 10 )
-                {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("Insert Into 'RVSite' Values( ");
-                    string str = string.Format("'{0}', '{1}', '{2}', '{3}','{4}', '{5}', '{6}', '{7}', '{8}','{9}', '{10}' );", siteItem.id, siteItem.name, siteItem.styleId, 
-                        siteItem.points[1], siteItem.points[0], siteItem.points[3], siteItem.points[2],
-                        siteItem.points[5], siteItem.points[4], siteItem.points[7], siteItem.points[6]);
-                    sb.Append(str);
+                //if (siteItem.points.Count == 10 )
+                //{
+                //    StringBuilder sb = new StringBuilder();
+                //    sb.Append("Insert Into 'RVSite' Values( ");
+                //    string str = string.Format("'{0}', '{1}', '{2}', '{3}','{4}', '{5}', '{6}', '{7}', '{8}','{9}', '{10}' );", siteItem.id, siteItem.name, siteItem.styleId, 
+                //        siteItem.points[1], siteItem.points[0], siteItem.points[3], siteItem.points[2],
+                //        siteItem.points[5], siteItem.points[4], siteItem.points[7], siteItem.points[6]);
+                //    sb.Append(str);
 
-                    txt.WriteLine(sb.ToString());
-                }
+                //    //txt.WriteLine(sb.ToString());
+                //}
             }
-           
 
+           
 
             gmap.Overlays.Add(polygonOverlay);
 
@@ -142,7 +161,7 @@ namespace toy2
                                 //select f.Element(xNs + "LineString").Element(xNs + "coordinates");
                             select f;
 
-            int seq = 0;
+            //int seq = 0;
             //Console.WriteLine(coordsStr);
             foreach (var i in coordsStr)
             {
@@ -158,6 +177,19 @@ namespace toy2
 
                 newSite.styleRef = (from style in styles where style.id == newSite.styleId
                                    select style).ElementAt(0);
+                // assert even 
+                Debug.Assert( (newSite.points.Count % 2) == 0 );
+
+                for (int j = 0; j < newSite.points.Count; j += 2 )
+                {
+                    coord c = new coord();
+                    c._x = double.Parse(newSite.points[j]);
+                    c._y = double.Parse(newSite.points[j+1]);
+                    checkBoundary(c);
+                    newSite.coords.Add(c);
+                }
+                    
+               
 
 
                 //Console.WriteLine("({0}/{1}) : {2} : {3} : {4}", ++seq, points.Count, i.Attribute("id").Value, i.Element(xNs + "name").Value, i.Element(xNs + "styleUrl").Value);
@@ -165,6 +197,93 @@ namespace toy2
                 sites.Add(newSite);
             }
             Console.WriteLine(coordsStr.Count());
+
+            Console.WriteLine("{0}:{1}", (_leftTop._y + _rightBottom._y) / 2, (_leftTop._x + _rightBottom._x) / 2);
+
+            foreach( var s in sites )
+            {
+                foreach( var i in s.coords )
+                {
+                    GPoint org = gmap.FromLatLngToLocal(gmap.Position);
+                    GPoint p = gmap.FromLatLngToLocal(new GMap.NET.PointLatLng(i._y, i._x) );
+                    GPoint rp = rotatePosition( p, 0, org );
+
+                    PointLatLng f = gmap.FromLocalToLatLng((int)rp.X, (int)rp.Y);
+                    i.x = f.Lng;
+                    i.y = f.Lat;
+                }
+            }
+        }
+
+        GPoint rotatePosition( GPoint p, double bearing, GPoint org )
+        {
+            const double halfC = Math.PI / 180.0;
+            double r = bearing * halfC;
+
+            double sin = Math.Sin(r);
+            double cos = Math.Cos(r);
+            
+            // translate point back to origin:
+            p.X -= org.X;
+            p.Y -= org.Y;
+
+
+            double nx = (p.X * cos - p.Y * sin);
+            double ny = (p.X * sin + p.Y * cos);
+
+            // translate point back:
+           return new GPoint( (long)Math.Round(nx)+ org.X, (long)Math.Round(ny) + org.Y );
+
+        }
+
+        //GPoint rotateCoord( double x, double y, double bearing, double pivot_x, double pivot_y )
+        //{
+        //    const double halfC = Math.PI / 180.0;
+        //    double r = bearing * halfC;
+
+        //    double sin = Math.Sin(r);
+        //    double cos = Math.Cos(r);
+        //    //double sin = Math.Sin(bearing);
+        //    //double cos = Math.Cos(bearing);
+
+        //    // translate point back to origin:
+        //    c._x -= pivot_x;
+        //    c._y -= pivot_y;
+
+        //    // rotate point
+        //    //double nx = bearing > 0 ? (c._x * cos + c._y * sin) : (c._x * cos - c._y * sin);
+        //    //double ny = bearing > 0 ? (-1* c._x * sin + c._y * cos) : (c._x * sin + c._y * cos);
+        //    //double nx = bearing > 0 ?  (c._x * cos - c._y * sin) :(c._x * cos + c._y * sin);
+        //    //double ny = bearing > 0 ?  (c._x * sin + c._y * cos) : (-1 * c._x * sin + c._y * cos);
+        //    double nx = (c._x * cos - c._y * sin);
+        //    double ny = (c._x * sin + c._y * cos);
+        //    // translate point back:
+        //    c.x = nx*2 + pivot_x;
+        //    c.y = ny + pivot_y;
+
+        //}
+
+        void checkBoundary( coord c )
+        {
+            if( _leftTop == null )
+            {
+                _leftTop = new coord();
+                _rightBottom = new coord();
+
+                _leftTop._x = c._x;
+                _leftTop._y = c._y;
+
+                _rightBottom._x = c._x;
+                _rightBottom._y = c._y;
+            }
+            else
+            {
+                _leftTop._x = c._x < _leftTop._x ? c._x : _leftTop._x;
+                _leftTop._y = c._y < _leftTop._y ? c._y : _leftTop._y;
+                _rightBottom._x = c._x > _rightBottom._x ? c._x : _rightBottom._x;
+                _rightBottom._y = c._y > _rightBottom._y ? c._y : _rightBottom._y;
+            }
+
         }
 
         void gmap_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -192,6 +311,7 @@ namespace toy2
         private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
             gmap.Bearing = e.NewValue;
+            Console.WriteLine("Bearing : {0}", gmap.Bearing);
         }
 
         private void gmap_OnMapZoomChanged()
@@ -200,12 +320,21 @@ namespace toy2
         }
     }
 
+    public class coord
+    {
+        public double x;
+        public double y;
+        public double _x;
+        public double _y;
+    }
+
     public class site
     {
         public string id;
         public string styleId;
         public string name;
         public List<string> points;
+        public List<coord> coords = new List<coord>();
         public string color;
         public style styleRef; 
     }
