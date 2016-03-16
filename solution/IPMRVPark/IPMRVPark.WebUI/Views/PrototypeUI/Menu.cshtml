@@ -13,7 +13,7 @@
             </button>
         </div>
         <div id="menuIPMEvent" class="col-xs-12 collapse">
-            <div class="col-xs-8 col-xs-push-2 col-sm-6 col-sm-push-4">
+            <div class="col-xs-10 col-xs-push-2 col-sm-6 col-sm-push-4">
                 <a href="@Url.Action("IPMEventMap", "PrototypeUI")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-picture"></span>
                     <span>Large Screen Display</span>
@@ -21,7 +21,7 @@
                 </a>
                 <a href="@Url.Action("IPMEventInfo", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-blackboard"></span>
-                    <span>IPM Event Info</span>
+                    <span>IPM Event Info & Rates</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
                 <a href="@Url.Action("DigitizeMap", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
@@ -42,7 +42,7 @@
             </button>
         </div>
         <div id="menuSiteReservation" class="col-xs-12 collapse">
-            <div class="col-xs-8 col-xs-push-2 col-sm-6 col-sm-push-4">
+            <div class="col-xs-10 col-xs-push-2 col-sm-6 col-sm-push-4">
                 <a href="@Url.Action("Reservation", "PrototypeUI")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-plus-sign"></span>
                     <span>New Reservation</span>
@@ -66,7 +66,7 @@
             </button>
         </div>
         <div id="menuCustomerRegistration" class="col-xs-12 collapse">
-            <div class="col-xs-8 col-xs-push-2 col-sm-6 col-sm-push-4">
+            <div class="col-xs-10 col-xs-push-2 col-sm-6 col-sm-push-4">
                 <a href="@Url.Action("Customer", "PrototypeUI")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-plus-sign"></span>
                     <span>New Customer</span>
@@ -91,7 +91,7 @@
             </button>
         </div>
         <div id="menuPaymentRefund" class="col-xs-12 collapse">
-            <div class="col-xs-8 col-xs-push-2 col-sm-6 col-sm-push-4">
+            <div class="col-xs-10 col-xs-push-2 col-sm-6 col-sm-push-4">
                 <a href="@Url.Action("Payment", "PrototypeUI")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-plus-sign"></span>
                     <span>New Payment</span>
@@ -121,7 +121,7 @@
             </button>
         </div>
         <div id="menuSystemMaintenance" class="col-xs-12 collapse">
-            <div class="col-xs-8 col-xs-push-2 col-sm-6 col-sm-push-4">
+            <div class="col-xs-10 col-xs-push-2 col-sm-6 col-sm-push-4">
                 <a href="@Url.Action("Menu", "PrototypeUI")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
                     <span>Site Size</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
@@ -146,9 +146,16 @@
                     <span>Country</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
+                <div style="background-color:aquamarine;">
+                    <h4>Developers Links</h4>
+                    <p>@Html.ActionLink("Customers", "Index", "Customers", null, new { @style = "background-color:aquamarine;" })</p>
+                    <p>@Html.ActionLink("Customer View", "Index", "CustomerView", null, new { @style = "background-color:aquamarine;" })</p>
+                    <p>@Html.ActionLink("Country", "Index", "Country", null, new { @style = "background-color:aquamarine;" })</p>
+                </div>
             </div>
         </div>
     </div>
-
 </div>
+
+
 

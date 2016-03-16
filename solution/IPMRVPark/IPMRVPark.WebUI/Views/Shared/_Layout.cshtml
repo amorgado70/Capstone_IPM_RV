@@ -10,7 +10,7 @@
 </head>
 <body>
     <header>
-        <div class="container-fluid" style="background-color: #f8f8f8; border-color: #e7e7e7; border-radius: 0 0 5px 5px;">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-xs-6 col-sm-3" style="display:block; margin-top:0.5em;margin-bottom:0.5em;" pagination-centered" data-toggle="tooltip" title="Go Back To Main Menu">
                     <a href="@Url.Action("Menu", "PrototypeUI")" class="btn btn-default btn-block btn-mylink col-xs-10">
@@ -19,7 +19,7 @@
                     </a>
                 </div>
                 <div class="col-xs-1"></div>
-                <div class="col-xs-7 col-sm-8" style="margin-top:0.8em; margin-bottom:0.5em; margin-left:0; font-size:1.2em; font-weight: bold; color: #337ab7;">
+                <div class="col-xs-7 col-sm-8" style="margin-top:0.8em; margin-bottom:0.5em; margin-left:0; font-size:1.2em; font-weight: bold;">
                     @ViewBag.PageTitle
                 </div>
             </div>
@@ -31,15 +31,17 @@
     </section>
     <div class="container-fluid">
         <div class="row top-margin">
-            <div class="col-xs-3">
-                <div class="btn btn-default btn-block" style="margin-top:0.5em;" data-toggle="tooltip" title="Go To Top Of This Page">
-                    <a href="#">Back To Top <span class="glyphicon glyphicon-chevron-up"></span></a>
-                </div>
+            <div class="col-sm-3 col-xs-6">
+                <a  href="#" class="btn btn-default btn-block btn-mylink" data-toggle="tooltip" title="Go To Top Of This Page">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                    <span style="height:2em;">Back To Top</span>
+                </a>
             </div>
-            <div class="col-xs-3 col-xs-push-6">
-                <div class="btn btn-default btn-block" style="margin-top:0.5em;">
-                    <a href="@Url.Action("Home", "PrototypeUI")">Log Out &nbsp; &nbsp;<span class="glyphicon glyphicon-log-out"></span></a>
-                </div>
+            <div class="col-sm-3 col-sm-push-6 col-xs-5 col-xs-push-1">
+                <a href="@Url.Action("Home", "PrototypeUI")" class="btn btn-default btn-block btn-mylink">
+                    <span class="glyphicon glyphicon-log-out"></span>
+                    <span style="height:2em;">Log Out</span>
+                </a>
             </div>
         </div>
     </div>
@@ -47,13 +49,6 @@
     <footer class="footer" style="text-align:center; margin-top:2em; margin-bottom:2em;">
         <p>&copy; @DateTime.Now.Year - IPM RV Park Reservation System</p>
     </footer>
-
-    <div style="background-color:aquamarine;">
-        <h4>Developers Links</h4>
-        <p>@Html.ActionLink("Customers", "Index", "Customers", null, new { @style = "background-color:aquamarine;" })</p>
-        <p>@Html.ActionLink("Customer View", "Index", "CustomerView", null, new { @style = "background-color:aquamarine;" })</p>
-        <p>@Html.ActionLink("Country", "Index", "Country", null, new { @style = "background-color:aquamarine;" })</p>
-    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

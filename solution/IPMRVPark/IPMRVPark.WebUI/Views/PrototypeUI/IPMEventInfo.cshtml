@@ -1,13 +1,13 @@
 ﻿@{
-    ViewBag.Title = "IPM Event Info";
-    ViewBag.PageTitle = "IPM Event Info";
+    ViewBag.Title = "IPM Event Info & Rates";
+    ViewBag.PageTitle = "IPM Event Info & Rates";
 }
 
 @Html.ActionLink("Home", "Menu", "PrototypeUI")
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("IPM Event Info", "IPMEventInfo", "PrototypeUI")
+@Html.ActionLink("IPM Event Info & Rates", "IPMEventInfo", "PrototypeUI")
 
-<!-- IPM Event Info-->
+<!--IPM Event Info & Rates-->
 <div class="container-fluid">
     <div class="row top-margin">
         <div class="form-group">
@@ -61,40 +61,85 @@
     </div>
     <!-- List of site types and rates -->
     <div class="row top-margin">
-        <div class="col-sm-6 col-sm-push-6 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
-            <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#typerateList">
-                <span class="col-xs-1 glyphicon glyphicon-list"></span>
-                <span class="col-xs-9">List Site Types & Rates &nbsp;<span class="caret"></span></span>
-            </button>
+        <div class="col-sm-8 col-xs-12 form-top-margin">
+            <span class="col-xs-1 glyphicon glyphicon-list"></span>
+            <b>List of Site Types & Rates</b>
         </div>
     </div>
     <div class="row top-margin">
-        <div id="typerateList" class="col-xs-12 collapse">
+        <div id="typerateList" class="col-xs-12">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Size</th>
+                        <th>
+                            Site Type <br />
+                            Size
+                        </th>
                         <th>Service</th>
-                        <th style="text-align:right;">Weekly Rate</th>
-                        <th style="text-align:right;">Daily Rate</th>
-                        <th></th>
+                        <th style="text-align:right;">
+                            Site Rate<br />
+                            Weekly
+                        </th>
+                        <th style="text-align:right;">Daily</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td colspan="4">
+                            <div class="pull-right" data-toggle="tooltip" title="Click To Expand/Collapse">
+                                <button class="btn btn-info" data-toggle="collapse" data-target="#newTypeRate">
+                                    Add &nbsp; &nbsp;
+                                    <span class="caret"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="newTypeRate" class="collapse">
+                        <td>
+                            <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                                <option>Size</option>
+                                <option>25x40</option>
+                                <option>30x45 Oversize</option>
+                                <option>Handicapped</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                                <option>Service</option>
+                                <option>30 amps lots</option>
+                                <option>15 amps lots</option>
+                                <option>Unserviced</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 530." style="text-align:right">
+                        </td>
+                        <td>
+                            <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 140." style="text-align:right">
+                            <button class="btn btn-default btn-block form-top-margin">
+                                <span class="glyphicon glyphicon-ok"></span>
+                                <span>&nbsp; Add</span>
+                            </button>
+                        </td>
+                    </tr>
                     <tr>
                         <td>25x40</td>
                         <td>Unserviced</td>
                         <td style="text-align:right;">320.</td>
                         <td style="text-align:right;">90.</td>
-                        <td class="dropdown">
-                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
-                                Action
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Delete</a></li>
-                            </ul>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="border-top:none">
+                            <div class="dropdown pull-right">
+                                <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Action
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Delete</a></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -102,15 +147,19 @@
                         <td>15 amps lots</td>
                         <td style="text-align:right;">430.</td>
                         <td style="text-align:right;">120.</td>
-                        <td class="dropdown">
-                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
-                                Action
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Delete</a></li>
-                            </ul>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="border-top:none">
+                            <div class="dropdown pull-right">
+                                <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Action
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Delete</a></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -118,69 +167,26 @@
                         <td>30 amps lots</td>
                         <td style="text-align:right;">530.</td>
                         <td style="text-align:right;"></td>
-                        <td class="dropdown">
-                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
-                                Action
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit</a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Delete</a></li>
-                            </ul>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="border-top:none">
+                            <div class="dropdown pull-right">
+                                <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Action
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit</a></li>
+                                    <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Delete</a></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <!--New site types and rates -->
-    <div class="row top-margin">
-        <div class="col-sm-6 col-sm-push-6 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
-            <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#newTypeRate">
-                <span class="col-xs-1 glyphicon glyphicon-plus-sign"></span>
-                <span class="col-xs-9">New Site Type & Rate &nbsp;<span class="caret"></span></span>
-            </button>
-        </div>
-    </div>
-    <div class="row top-margin">
-        <div id="newTypeRate" class="col-xs-12 collapse">
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
-                    <option>Usage & Size</option>
-                    <option>Handicapped</option>
-                    <option>25x40</option>
-                    <option>30x45 Oversize</option>
-                </select>
-            </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Weekly Rate</label>
-            </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 530." style="text-align:right">
-            </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
-                    <option>Service</option>
-                    <option>30 amps lots</option>
-                    <option>15 amps lots</option>
-                    <option>Unserviced</option>
-                </select>
-            </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Daily Rate</label>
-            </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 140." style="text-align:right">
-            </div>
-            <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
-                <button class="btn btn-block btn-default">
-                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
-                    <span class="col-xs-9">Confirm New Type & Rate</span>
-                </button>
-            </div>
-        </div>
-    </div>
-    <!--New site types and rates -->
+    <!--Link to Digitize IPM Event Map-->
     <div class="row">
         <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
             <a href="@Url.Action("DigitizeMap", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">

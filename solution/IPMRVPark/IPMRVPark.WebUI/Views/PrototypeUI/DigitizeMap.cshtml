@@ -26,7 +26,7 @@
             <div class="col-sm-5 col-sm-push-2 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
                 <a href="@Url.Action("IPMEventInfo", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
                     <span class="glyphicon glyphicon-map-marker"></span>
-                    <span>IPM Event Info</span>
+                    <span>IPM Event Info & Rates</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
             </div>
@@ -42,14 +42,6 @@
         </div>
         <div class="col-xs-6 top-margin">
             <input type="text" class="form-control" placeholder="F:\MapRev2.KML (Selected File)" disable />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6 col-sm-push-6 col-xs-12 top-margin">
-            <button class="btn btn-block btn-default">
-                <span class="col-xs-1 glyphicon glyphicon-upload"></span>
-                <span class="col-xs-9">Upload KML File</span>
-            </button>
         </div>
     </div>
     <div class="row">
@@ -83,15 +75,19 @@
                         <td><div style="background-color: #7af5f5; margin:1px; padding: 5px; border-radius:5px; height:2.5em; width:10em;">#PolyStyle0992</div></td>
                         <td style="text-align:center;">420</td>
                     </tr>
+                    <tr>
+                        <td><div style="color:white;background-color: purple; margin:1px; padding: 5px; border-radius:5px; height:2.5em; width:10em;">#PolyStyle0080</div></td>
+                        <td style="text-align:center;">20</td>
+                    </tr>   
                 </tbody>
             </table>
         </div>
     </div>
-    <!-- Associate site types with KML styles -->
+    <!-- Match site types with KML styles -->
     <div class="row top-margin">
         <div class="col-sm-8 col-xs-12 form-top-margin">
             <span class="col-xs-1 glyphicon glyphicon-link"></span>
-            <b>Associate IPM Event Site Types with KML Style Url</b>
+            <b>Match KML Style Url and IPM Event Site Types</b>
         </div>
     </div>
     <div class="row form-top-margin">
@@ -99,31 +95,63 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Size</th>
-                        <th>Service</th>
-                        <th>KML Style</th>
+                        <th>KML Style Url</th>
+                        <th>IPM Event Site Type</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>25x40</td>
-                        <td>Unserviced</td>
-                        <td><div style="background-color: #00ff55; margin:1px; padding: 5px; border-radius:5px; height:2.5em; width:10em;">#PolyStyle01024 &nbsp;<span class="caret"></span></div></td>
+                        <td><div style="background-color: #00ff55; margin:1px; padding: 5px; border-radius:5px; height:2.5em; width:10em;">#PolyStyle01024</div></td>
+                        <td>
+                            <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                                <option>25x40 unserviced</option>
+                                <option>25x40 30 amps lots</option>
+                                <option>25x40 15 amps lots</option>
+                                <option>30x45 15 amps lots</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
-                        <td>25x40</td>
-                        <td>15 amps lots</td>
-                        <td><div style="background-color: #7af5f5; margin:1px; padding: 5px; border-radius:5px; height:2.5em; width:10em;">#PolyStyle0992 &nbsp;<span class="caret"></span></div></td>
+                        <td><div style="background-color: #7af5f5; margin:1px; padding: 5px; border-radius:5px; height:2.5em; width:10em;">#PolyStyle0992</div></td>
+                        <td>
+                            <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                                <option>25x40 unserviced</option>
+                                <option>30x45 15 amps lots</option>
+                                <option>25x40 30 amps lots</option>
+                                <option>25x40 15 amps lots</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div style="color:white;background-color: purple; margin:1px; padding: 5px; border-radius:5px; height:2.5em; width:10em;">#PolyStyle0080</div></td>
+                        <td>
+                            <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                                <option></option>
+                                <option>30x45 15 amps lots</option>
+                                <option>25x40 unserviced</option>
+                                <option>25x40 30 amps lots</option>
+                                <option>25x40 15 amps lots</option>
+                            </select>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="color:red; font-weight:bold;">
+        <div class="col-sm-6 col-sm-push-6 col-xs-12">
+            Matching Errors: <br />
+            <ul>
+                <li>At least one Style Url left undefined</li>
+                <li>Two Style Url linked to same Site Type</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row top-margin">
         <div class="col-sm-6 col-sm-push-6 col-xs-12">
             <button class="btn btn-block btn-default">
                 <span class="col-xs-1 glyphicon glyphicon-ok"></span>
-                <span class="col-xs-9">Confirm Association</span>
+                <span class="col-xs-9">Confirm Match</span>
             </button>
         </div>
     </div>
