@@ -1,0 +1,163 @@
+﻿@{
+    ViewBag.Title = "Customer Registration";
+    ViewBag.PageTitle = "Search Customer ";
+}
+
+@Html.ActionLink("Home", "Home", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Customer Registration
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Search Customer", "CustomerSearch", "PrototypeUI")
+
+<!-- Search Customer-->
+<div class="container-fluid">
+    <!-- Customer -->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>
+                    <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-9">By Name</span>
+                </label>
+            </div>
+            <div class="col-sm-5 col-xs-12 form-top-margin" data-toggle="tooltip" title="Filter, search and select">
+                <select class="form-control">
+                    <option>Customer Full Name</option>
+                    <option>All Names - No Filter</option>
+                    @for (int i = 0; i < 8; i++)
+                    {
+                        <option>Mary Denver Holtz @i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-1 col-xs-12 form-top-margin">
+                <label>Phone</label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input type="text" class="form-control" placeholder="(519) 888-3333">
+            </div>
+        </div>
+    </div>
+    <!-- RV Site Tag-->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>
+                    <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-9">By Site</span>
+                </label>
+            </div>
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Letter</option>
+                    <option>All letters - No Filter</option>
+                    @for (char i = 'A'; i < 'W'; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Number</option>
+                    <option>All numbers - No Filter</option>
+                    @for (int i = 20; i < 36; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Type</option>
+                    <option>All types - No Filter</option>
+                    <option>25x40 30 amps lots</option>
+                    <option>25x40 15 amps lots</option>
+                    <option>30x45 15 amps lots</option>
+                </select>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin" data-toggle="tooltip" title="Filter, search and select">
+                <select class="form-control">
+                    <option>Status</option>
+                    <option>All status - No Filter</option>
+                    <option>Available</option>
+                    <option>Selected</option>
+                    <option>Reserved</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!-- List of customers -->
+    <div class="row top-margin" data-toggle="tooltip" title="List Of Customers That Match The Search Criteria Above">
+        <div class="col-sm-8 col-xs-12 form-top-margin">
+            <span class="col-xs-1 glyphicon glyphicon-list"></span>
+            <b>Customers Search Result List</b>
+        </div>
+        <div class="col-sm-4 col-xs-12 form-top-margin">
+            <button class="btn btn-block btn-default">
+                <span class="col-xs-1 glyphicon glyphicon-refresh"></span>
+                <span class="col-xs-9">Refresh List</span>
+            </button>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Sites</th>
+                    <th style="text-align:right;">Total<br />Paid</th>
+                    <th style="text-align:right;">Current<br />Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Homer Watson</td>
+                    <td>A-32, A-31, W-02</td>
+                    <td style="text-align:right;">875.</td>
+                    <td style="text-align:right;">0.</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border-top:none">
+                        <div class="dropdown pull-right">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                                Action
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="#"><span class="glyphicon glyphicon-chevron-left"></span>&nbsp; Select Customer & Go To Reservation</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Customer Details</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit Customer</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel Customer</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>John Macintosh</td>
+                    <td>E-52, E-53, F-52</td>
+                    <td style="text-align:right;">2875.</td>
+                    <td style="text-align:right;">0.</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border-top:none">
+                        <div class="dropdown pull-right">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                                Action
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="#"><span class="glyphicon glyphicon-chevron-left"></span>&nbsp; Select Customer & Go To Reservation</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Customer Details</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit Customer</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel Customer</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

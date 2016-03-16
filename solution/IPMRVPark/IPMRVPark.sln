@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPMRVPark.Contracts", "IPMRVPark.Contracts\IPMRVPark.Contracts.csproj", "{D91C80E6-AA6A-4597-BA4C-7C9D60598CCB}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPMRVPark.Models", "IPMRVPark.Models\IPMRVPark.Models.csproj", "{FAB812D6-8FB6-4527-B4B0-7C7748446A65}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPMRVPark.WebUI", "IPMRVPark.WebUI\IPMRVPark.WebUI.csproj", "{66280040-94E7-4495-A480-300B59B5D935}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPMRVPark.Services", "IPMRVPark.Services\IPMRVPark.Services.csproj", "{BB73F225-F2B7-4385-9D24-32368AB65721}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{66280040-94E7-4495-A480-300B59B5D935}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66280040-94E7-4495-A480-300B59B5D935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66280040-94E7-4495-A480-300B59B5D935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB73F225-F2B7-4385-9D24-32368AB65721}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB73F225-F2B7-4385-9D24-32368AB65721}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB73F225-F2B7-4385-9D24-32368AB65721}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB73F225-F2B7-4385-9D24-32368AB65721}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

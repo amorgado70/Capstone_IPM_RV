@@ -3,11 +3,22 @@ using System.Linq;
 using System.Web.Mvc;
 using IPMRVPark.Models;
 using IPMRVPark.Contracts.Repositories;
+using System.IO;
+using System.Web;
+using IPMRVPark.Services;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace IPMRVPark.WebUI.Controllers
 {
     public class PrototypeUIController : Controller
     {
+        public KMLParser kmlParser;
+
+        public PrototypeUIController()
+        {
+            kmlParser = new KMLParser();
+        }
         public ActionResult Home()
         {
             return View();
@@ -30,6 +41,35 @@ namespace IPMRVPark.WebUI.Controllers
         }
         public ActionResult DigitizeMap()
         {
+            return View();
+        }
+        public ActionResult DigitizeMap_parse()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult DigitizeMap_parse(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0)
+            {
+                try
+                {
+                    XmlReader reader = XmlReader.Create(file.InputStream);
+                    XDocument xDoc = System.Xml.Linq.XDocument.Load(reader);
+                    kmlParser.Parse(xDoc);
+                    ViewBag.Message = "File is uploaded and parsed successfully";
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = "ERROR:" + ex.Message.ToString();
+                }
+            }
+            else
+            {
+                ViewBag.Message = "You have not specified a file.";
+            }
+
             return View();
         }
         public ActionResult Reservation()

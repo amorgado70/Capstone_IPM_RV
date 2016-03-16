@@ -1,0 +1,133 @@
+﻿@model IPMRVPark.WebUI.Controllers.customer_view
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>customer_view</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.firstName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.firstName)
+            @Html.ValidationMessageFor(model => model.firstName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.lastName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.lastName)
+            @Html.ValidationMessageFor(model => model.lastName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.mainPhone)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.mainPhone)
+            @Html.ValidationMessageFor(model => model.mainPhone)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.email)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.email)
+            @Html.ValidationMessageFor(model => model.email)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.cellPhone)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.cellPhone)
+            @Html.ValidationMessageFor(model => model.cellPhone)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.homePhone)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.homePhone)
+            @Html.ValidationMessageFor(model => model.homePhone)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.faxNumber)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.faxNumber)
+            @Html.ValidationMessageFor(model => model.faxNumber)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.comments)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.comments)
+            @Html.ValidationMessageFor(model => model.comments)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.street)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.street)
+            @Html.ValidationMessageFor(model => model.street)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.city)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.city)
+            @Html.ValidationMessageFor(model => model.city)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.postalCode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.postalCode)
+            @Html.ValidationMessageFor(model => model.postalCode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Province)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Province)
+            @Html.ValidationMessageFor(model => model.Province)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Coountry)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Coountry)
+            @Html.ValidationMessageFor(model => model.Coountry)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

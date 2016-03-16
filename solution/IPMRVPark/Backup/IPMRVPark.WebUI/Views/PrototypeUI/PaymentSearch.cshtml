@@ -1,0 +1,222 @@
+﻿@{
+    ViewBag.Title = "Payments & Refunds";
+    ViewBag.PageTitle = "Search Payment";
+}
+
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Payments & Refunds
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Search Payment", "PaymentSearch", "PrototypeUI")
+
+<!-- Search Payment -->
+<div class="container-fluid">
+    <!-- Payment & Refund -->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="form-group">
+                <div class="radio-inline col-sm-6 col-xs-12 form-top-margin">
+                    <label class="radio-inline"><input type="radio" name="optradio" checked onClick="setAll()">All</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" onClick="setRefund()">Payments Only</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" onClick="setRefund()">Refunds Only</label>
+                </div>
+                <div class="col-sm-6 col-xs-12 form-top-margin">
+
+                    <select class="form-control" data-toggle="tooltip" title="Select one">
+                        <option>All Reasons - No Filter</option>
+                        <option>New Reservation</option>
+                        <option>Confirm Reservation</option>
+                        <option>Check In</option>
+                        <option>Extend Reservation</option>
+                        <option>Other Services - Specify As Comment</option>
+                        <option>Cancel Reservation</option>
+                        <option>Shorten Reservation</option>
+                        <option>Cancel Other Services - Specify As Comment</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>
+                    <span class="col-xs-3 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-3">Amount</span>
+                </label>
+            </div>
+            <div class="col-sm-1 col-xs-4 form-top-margin">
+                From
+            </div>
+            <div class="col-sm-2 col-xs-8 form-top-margin">
+                <select class="form-control">
+                    @for (int i = 1; i < 16; i++)
+                    {
+                        <option>@((i * 2000).ToString("N0"))</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-1 col-xs-4 form-top-margin">
+                Till
+            </div>
+            <div class="col-sm-2 col-xs-8 form-top-margin">
+                <select class="form-control">
+                    @for (int i = 16; i > 1; i--)
+                    {
+                        <option>@((i * 2000).ToString("N0"))</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-1 col-xs-4 form-top-margin">
+                Date
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input type="date" class="form-control" placeholder="05/05/20" />
+            </div>
+        </div>
+    </div>
+    <!-- Customer -->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>
+                    <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-9">By Name</span>
+                </label>
+            </div>
+            <div class="col-sm-5 col-xs-12 form-top-margin" data-toggle="tooltip" title="Filter, search and select">
+                <select class="form-control">
+                    <option>Customer Full Name</option>
+                    <option>All Names - No Filter</option>
+                    @for (int i = 0; i < 8; i++)
+                    {
+                        <option>Mary Denver Holtz @i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-1 col-xs-12 form-top-margin">
+                <label>Phone</label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input type="text" class="form-control" placeholder="(519) 888-3333">
+            </div>
+        </div>
+    </div>
+    <!-- RV Site Tag-->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>
+                    <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-9">By Site</span>
+                </label>
+            </div>
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Letter</option>
+                    <option>All letters - No Filter</option>
+                    @for (char i = 'A'; i < 'W'; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Number</option>
+                    <option>All numbers - No Filter</option>
+                    @for (int i = 20; i < 36; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Type</option>
+                    <option>All types - No Filter</option>
+                    <option>25x40 30 amps lots</option>
+                    <option>25x40 15 amps lots</option>
+                    <option>30x45 15 amps lots</option>
+                </select>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin" data-toggle="tooltip" title="Filter, search and select">
+                <select class="form-control">
+                    <option>Status</option>
+                    <option>All status - No Filter</option>
+                    <option>Available</option>
+                    <option>Selected</option>
+                    <option>Reserved</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!-- List of customers -->
+    <div class="row top-margin" data-toggle="tooltip" title="List Of Customers That Match The Search Criteria Above">
+        <div class="col-sm-8 col-xs-12 form-top-margin">
+            <span class="col-xs-1 glyphicon glyphicon-list"></span>
+            <b>Payments Search Result List</b>
+        </div>
+        <div class="col-sm-4 col-xs-12 form-top-margin">
+            <button class="btn btn-block btn-default">
+                <span class="col-xs-1 glyphicon glyphicon-refresh"></span>
+                <span class="col-xs-9">Refresh List</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Sites</th>
+                    <th>Date</th>
+                    <th style="text-align:right;">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Homer Watson</td>
+                    <td>A-32, A-31, W-02</td>
+                    <td>02/05/2016</td>
+                    <td style="text-align:right;">875.</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border-top:none">
+                        <div class="dropdown pull-right">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                                Action
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Customer Details</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Payment Details</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp; Add a Payment</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp; Add a Refund</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>John Macintosh</td>
+                    <td>E-52, E-53, F-52</td>
+                    <td>02/05/2016</td>
+                    <td style="text-align:right;">2875.</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border-top:none">
+                        <div class="dropdown pull-right">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                                Action
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Customer Details</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; See Payment Details</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp; Add a Payment</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp; Add a Refund</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
