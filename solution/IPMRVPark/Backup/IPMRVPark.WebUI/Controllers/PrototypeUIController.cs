@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using IPMRVPark.Models;
@@ -23,7 +23,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult IPMEventMap()
         {
             return View();
-        }        
+        }
         public ActionResult IPMEventInfo()
         {
             return View();

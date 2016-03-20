@@ -1,0 +1,205 @@
+@{
+    ViewBag.Title = "Site Reservation";
+    ViewBag.PageTitle = "New Reservation";
+}
+
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Site Reservation
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("New Reservation", "Reservation", "PrototypeUI")
+
+<!-- New Reservation-->
+<div class="container-fluid">
+    <!-- RV Site Dates-->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Check In Date</label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input type="date" class="form-control">
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Check Out Date</label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input type="date" class="form-control">
+            </div>
+        </div>
+    </div>
+    <!-- RV Site Tag-->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-1 col-xs-12 form-top-margin">
+                <label>Site</label>
+            </div>
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Letter</option>
+                    <option>All letters - No Filter</option>
+                    @for (char i = 'A'; i < 'W'; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-3 col-xs-6 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Number</option>
+                    <option>All numbers - No Filter</option>
+                    @for (int i = 20; i < 36; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                    <option>Type</option>
+                    <option>All types - No Filter</option>
+                    <option>25x40 30 amps lots</option>
+                    <option>25x40 15 amps lots</option>
+                    <option>30x45 15 amps lots</option>
+                </select>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                <button class="btn btn-block btn-default">
+                    <span class="col-xs-1 glyphicon glyphicon-plus-sign"></span>
+                    <span class="col-xs-9">Select Site</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Total amount for this site reservation -->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-8 col-xs-12 form-top-margin">
+                <label>Total Amount For Selected Site</label>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 1,345." style="text-align:right" disabled>
+            </div>
+        </div>
+    </div>
+    <!-- List of selected sites -->
+    <div class="row top-margin" data-toggle="tooltip" title="List Of Sites That Match The Search Criteria Above">
+        <div class="col-sm-8 col-xs-12 form-top-margin">
+            <span class="col-xs-1 glyphicon glyphicon-list"></span>
+            <b>Selected Sites</b>
+        </div>
+        <div class="col-sm-4 col-xs-12 form-top-margin">
+            <button class="btn btn-block btn-default">
+                <span class="col-xs-1 glyphicon glyphicon-refresh"></span>
+                <span class="col-xs-9">Refresh List</span>
+            </button>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Site</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th style="text-align:right;">Total</th>
+                    <th style="text-align:right;">Selected</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A-23</td>
+                    <td>160221</td>
+                    <td>160228</td>
+                    <td style="text-align:right;">$ 1,400.</td>
+                    <td style="text-align:right;"><input type="checkbox" checked></td>
+                </tr>
+                <tr>
+                    <td>A-27</td>
+                    <td>160221</td>
+                    <td>160228</td>
+                    <td style="text-align:right;">$ 1,400.</td>
+                    <td style="text-align:right;"><input type="checkbox" checked></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Customer Selection -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#customerName").autocomplete({
+                source: function (request, response) {
+                    // define a function to call your Action (assuming UserController)
+                    $.ajax({
+                        url: '/Reservation/SearchByNameOrPhoneResult',
+                        type: "POST",
+                        dataType: "json",
+                        // query will be the param used by your action method
+                        data: { query: request.term },
+                        success: response
+                    });
+                },
+                minLength: 1, // require at least one character from the user
+                select: function (event, ui) {
+                    alert(ui.item.ID);
+                    //window.location.href = ui.item.value;
+                }
+            });
+        });
+    </script>
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>Customer</label>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
+                <input type="text" class="form-control" id="customerName" placeholder="Type name or phone and then select from the list" />
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                <a href="@Url.Action("Customer", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    <span>New Customer</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Confirmation -->
+    <div class="row">
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Reservation Summary</label>
+            </div>
+            <div class="col-sm-9 col-xs-12 form-top-margin">
+                <textarea class="form-control" rows="2" disabled>Site X-88, Mary Denver, Jun-21/Jun-25, CAD$ 2,850.</textarea>
+            </div>
+            <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
+                <button class="btn btn-block btn-default">
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                    <span class="col-xs-9">Confirm Site Reservation</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Account Balance for this customer -->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <label>Account Balance For This Customer</label>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-top-margin">
+                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 3,045." style="text-align:right" disabled>
+            </div>
+        </div>
+    </div>
+    <!-- Payment-->
+    <div class="row top-margin">
+        <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+            <a href="@Url.Action("Payment", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-plus-usd"></span>
+                <span>Proceed To Payment</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </div>
+</div>

@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery-ui")
 </head>
 <body>
     <header>
@@ -46,11 +48,15 @@
         </div>
     </div>
 
+    <h1>
+        @Html.ActionLink("3 Examples", "ProvinceIndex", "Maintenance")
+    </h1>
     <footer class="footer" style="text-align:center; margin-top:2em; margin-bottom:2em;">
         <p>&copy; @DateTime.Now.Year - IPM RV Park Reservation System</p>
     </footer>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery-ui")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

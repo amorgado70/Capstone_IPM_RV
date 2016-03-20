@@ -23,11 +23,12 @@ namespace IPMRVPark.WebUI
             // it is NOT necessary to register your controllers
             
             // e.g. container.RegisterType<ITestService, TestService>();            
-
-            container.RegisterType<IRepositoryBase<countrycode>, CountryRepository>();
+           
             container.RegisterType<IRepositoryBase<customer>, CustomerRepository>();
             container.RegisterType<IRepositoryBase<customer_view>, CustomerViewRepository>();
             container.RegisterType<IRepositoryBase<reservation_view>, ReservationViewRepository>();
+            container.RegisterType<IRepositoryBase<provincecode>, ProvinceRepository>();
+            container.RegisterType<IRepositoryBase<countrycode>, CountryRepository>();
 
             return container;
         }

@@ -135,6 +135,7 @@
     <Compile Include="staff.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="View\SelectionOption.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />

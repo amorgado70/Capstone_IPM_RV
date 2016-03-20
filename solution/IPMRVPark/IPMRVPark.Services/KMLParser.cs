@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -88,7 +88,7 @@ namespace IPMRVPark.Services
                 newSite.styleRef = (from style in Styles
                                     where style.id == newSite.styleId
                                     select style).ElementAt(0);
-                // assert even 
+                // assert even
                 Debug.Assert((newSite.points.Count % 2) == 0);
 
                 for (int j = 0; j < newSite.points.Count; j += 2)

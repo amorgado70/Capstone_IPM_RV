@@ -229,8 +229,9 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\CustomerViewController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\PrototypeUIController.cs" />
-    <Compile Include="Controllers\ReservationViewController.cs" />
+    <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -243,6 +244,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -381,11 +383,11 @@
     <Content Include="Views\Customers\Delete.cshtml" />
     <Content Include="Views\Country\Index.cshtml" />
     <Content Include="Views\CustomerView\Index.cshtml" />
-    <Content Include="Views\ReservationView\Create.cshtml" />
-    <Content Include="Views\ReservationView\Delete.cshtml" />
-    <Content Include="Views\ReservationView\Details.cshtml" />
-    <Content Include="Views\ReservationView\Edit.cshtml" />
-    <Content Include="Views\ReservationView\Index.cshtml" />
+    <Content Include="Views\Reservation\Create.cshtml" />
+    <Content Include="Views\Reservation\Delete.cshtml" />
+    <Content Include="Views\Reservation\Details.cshtml" />
+    <Content Include="Views\Reservation\Edit.cshtml" />
+    <Content Include="Views\Reservation\Index.cshtml" />
     <Content Include="Views\PrototypeUI\Home.cshtml" />
     <Content Include="Views\PrototypeUI\IPMEventMap.cshtml" />
     <Content Include="Views\PrototypeUI\Reservation.cshtml" />
@@ -402,9 +404,15 @@
     <Content Include="Views\PrototypeUI\IPMEventInfo.cshtml" />
     <Content Include="Views\PrototypeUI\DigitizeMap.cshtml" />
     <Content Include="Views\PrototypeUI\DigitizeMap_parse.cshtml" />
+    <Content Include="Views\Reservation\Reservation.cshtml" />
+    <Content Include="Views\Maintenance\ProvinceIndex.cshtml" />
+    <Content Include="Views\Maintenance\Province1Create.cshtml" />
+    <Content Include="Views\Maintenance\Province2Create.cshtml" />
+    <Content Include="Views\Maintenance\Province3Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Search\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

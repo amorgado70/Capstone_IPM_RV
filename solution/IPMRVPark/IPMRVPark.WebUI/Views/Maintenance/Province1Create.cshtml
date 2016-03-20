@@ -1,0 +1,71 @@
+﻿@model IPMRVPark.Models.provincecode
+
+@{
+    ViewBag.Title = "ProvinceCreate";
+}
+
+<h2>MVC STANDARD EXAMPLE</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>provincecode</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.code)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.code)
+            @Html.ValidationMessageFor(model => model.code)
+        </div>
+
+        <h4 style="color: coral;">In the standard example, user must enter the Country Code in the input box</h4>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.countryCode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.countryCode)
+            @Html.ValidationMessageFor(model => model.countryCode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.name)
+            @Html.ValidationMessageFor(model => model.name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.createDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.createDate)
+            @Html.ValidationMessageFor(model => model.createDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.lastUpdate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.lastUpdate)
+            @Html.ValidationMessageFor(model => model.lastUpdate)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "ProvinceIndex")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -44,6 +44,12 @@
     <Compile Include="KMLParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IPMRVPark.Models\IPMRVPark.Models.csproj">
+      <Project>{fab812d6-8fb6-4527-b4b0-7c7748446a65}</Project>
+      <Name>IPMRVPark.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
