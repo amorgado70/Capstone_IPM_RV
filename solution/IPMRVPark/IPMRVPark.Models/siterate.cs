@@ -20,7 +20,9 @@ namespace IPMRVPark.Models
         public decimal rate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
+        public Nullable<long> idIPMEvent { get; set; }
     
+        public virtual ipmevent ipmevent { get; set; }
         public virtual sitetype sitetype { get; set; }
     }
 }

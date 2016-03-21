@@ -12,15 +12,17 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class outofservice
+    public partial class selected
     {
         public long ID { get; set; }
-        public long idRVSite { get; set; }
-        public Nullable<System.DateTime> startDate { get; set; }
-        public Nullable<System.DateTime> endDate { get; set; }
+        public Nullable<long> idSession { get; set; }
+        public Nullable<long> idRVSite { get; set; }
+        public bool isSiteChecked { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
         public virtual placeinmap placeinmap { get; set; }
+        public virtual reservationitem reservationitem { get; set; }
+        public virtual session session { get; set; }
     }
 }

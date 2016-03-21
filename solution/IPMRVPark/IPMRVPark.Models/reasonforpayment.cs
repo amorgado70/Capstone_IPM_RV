@@ -12,9 +12,9 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class paymentmode
+    public partial class reasonforpayment
     {
-        public paymentmode()
+        public reasonforpayment()
         {
             this.payments = new HashSet<payment>();
         }

@@ -12,26 +12,18 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class reservationorder
+    public partial class paymentmethod
     {
-        public reservationorder()
+        public paymentmethod()
         {
             this.payments = new HashSet<payment>();
-            this.reservationitems = new HashSet<reservationitem>();
         }
     
         public long ID { get; set; }
-        public long idCustomer { get; set; }
-        public long idStaff { get; set; }
-        public Nullable<decimal> totalAmount { get; set; }
-        public Nullable<bool> inShoppingCart { get; set; }
-        public Nullable<bool> paymentReceived { get; set; }
+        public string description { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
-        public virtual customer customer { get; set; }
         public virtual ICollection<payment> payments { get; set; }
-        public virtual ICollection<reservationitem> reservationitems { get; set; }
-        public virtual staff staff { get; set; }
     }
 }

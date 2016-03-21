@@ -16,8 +16,9 @@ namespace IPMRVPark.Models
     {
         public customer()
         {
+            this.reservationitems = new HashSet<reservationitem>();
+            this.customeraccounts = new HashSet<customeraccount>();
             this.payments = new HashSet<payment>();
-            this.reservationorders = new HashSet<reservationorder>();
         }
     
         public long ID { get; set; }
@@ -36,7 +37,8 @@ namespace IPMRVPark.Models
         public virtual countrycode countrycode1 { get; set; }
         public virtual person person { get; set; }
         public virtual provincecode provincecode1 { get; set; }
+        public virtual ICollection<reservationitem> reservationitems { get; set; }
+        public virtual ICollection<customeraccount> customeraccounts { get; set; }
         public virtual ICollection<payment> payments { get; set; }
-        public virtual ICollection<reservationorder> reservationorders { get; set; }
     }
 }

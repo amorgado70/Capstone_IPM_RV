@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using IPMRVPark.Models;
 using IPMRVPark.Models.View;
 using IPMRVPark.Contracts.Repositories;
+using IPMRVPark.Services;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -15,13 +16,26 @@ namespace IPMRVPark.WebUI.Controllers
     {
         IRepositoryBase<reservation_view> reservations_view;
         IRepositoryBase<customer_view> customers;
+        IRepositoryBase<session> sessions;
+        SessionService sessionService;
 
         public ReservationController(IRepositoryBase<reservation_view> reservations_view,
-            IRepositoryBase<customer_view> customers)
+            IRepositoryBase<customer_view> customers,
+            IRepositoryBase<session> sessions)
         {
             this.reservations_view = reservations_view;
             this.customers = customers;
+            this.sessions = sessions;
+            sessionService = new SessionService(this.sessions);
         }//end Constructor
+
+        public ActionResult GetSessionGUID()
+        {
+            var result = sessionService.GetSession(this.HttpContext);
+            string sessionSummary = "sessionID:" + result.ID +
+                " sessionGUID:" + result.sessionGUID;
+            return Json(sessionSummary);
+        }
 
         // Search results for autocomplete dropdown list
         public ActionResult SearchByNameOrPhoneResult(string query)

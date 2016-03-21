@@ -12,18 +12,11 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class powersupply
+    public partial class rvsite_available
     {
-        public powersupply()
-        {
-            this.sitetypes = new HashSet<sitetype>();
-        }
-    
-        public long ID { get; set; }
-        public string description { get; set; }
-        public Nullable<System.DateTime> createDate { get; set; }
-        public Nullable<System.DateTime> lastUpdate { get; set; }
-    
-        public virtual ICollection<sitetype> sitetypes { get; set; }
+        public long id { get; set; }
+        public string site { get; set; }
+        public string sitesize { get; set; }
+        public string service { get; set; }
     }
 }

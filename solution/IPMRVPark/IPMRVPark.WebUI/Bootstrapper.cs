@@ -29,6 +29,7 @@ namespace IPMRVPark.WebUI
             container.RegisterType<IRepositoryBase<reservation_view>, ReservationViewRepository>();
             container.RegisterType<IRepositoryBase<provincecode>, ProvinceRepository>();
             container.RegisterType<IRepositoryBase<countrycode>, CountryRepository>();
+            container.RegisterType<IRepositoryBase<session>, SessionRepository>();
 
             return container;
         }

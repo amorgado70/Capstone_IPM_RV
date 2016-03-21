@@ -12,14 +12,16 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class placemarkpolygon
+    public partial class placeinmap
     {
-        public placemarkpolygon()
+        public placeinmap()
         {
             this.checkinouts = new HashSet<checkinout>();
             this.coordinates = new HashSet<coordinate>();
             this.outofservices = new HashSet<outofservice>();
             this.reservationitems = new HashSet<reservationitem>();
+            this.reserveds = new HashSet<reserved>();
+            this.selecteds = new HashSet<selected>();
         }
     
         public long ID { get; set; }
@@ -37,5 +39,7 @@ namespace IPMRVPark.Models
         public virtual ICollection<outofservice> outofservices { get; set; }
         public virtual sitetype sitetype { get; set; }
         public virtual ICollection<reservationitem> reservationitems { get; set; }
+        public virtual ICollection<reserved> reserveds { get; set; }
+        public virtual ICollection<selected> selecteds { get; set; }
     }
 }

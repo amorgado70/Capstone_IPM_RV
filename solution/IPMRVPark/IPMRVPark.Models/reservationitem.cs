@@ -17,15 +17,20 @@ namespace IPMRVPark.Models
         public reservationitem()
         {
             this.checkinouts = new HashSet<checkinout>();
+            this.customeraccounts = new HashSet<customeraccount>();
+            this.payments = new HashSet<payment>();
+            this.paymentreservationitems = new HashSet<paymentreservationitem>();
             this.reservationitem_partymember = new HashSet<reservationitem_partymember>();
+            this.reserveds = new HashSet<reserved>();
+            this.selecteds = new HashSet<selected>();
         }
     
         public long ID { get; set; }
-        public long idReservationOrder { get; set; }
-        public long seqReservationItem { get; set; }
         public long idRVSite { get; set; }
-        public System.DateTime arrivalDate { get; set; }
-        public System.DateTime departureDate { get; set; }
+        public long idCustomer { get; set; }
+        public long idStaff { get; set; }
+        public System.DateTime checkInDate { get; set; }
+        public System.DateTime checkOutDate { get; set; }
         public Nullable<decimal> totalAmount { get; set; }
         public int numberMemberInParty { get; set; }
         public Nullable<bool> isCancelled { get; set; }
@@ -34,8 +39,14 @@ namespace IPMRVPark.Models
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
         public virtual ICollection<checkinout> checkinouts { get; set; }
-        public virtual placemarkpolygon placemarkpolygon { get; set; }
+        public virtual customer customer { get; set; }
+        public virtual ICollection<customeraccount> customeraccounts { get; set; }
+        public virtual ICollection<payment> payments { get; set; }
+        public virtual ICollection<paymentreservationitem> paymentreservationitems { get; set; }
+        public virtual placeinmap placeinmap { get; set; }
+        public virtual staff staff { get; set; }
         public virtual ICollection<reservationitem_partymember> reservationitem_partymember { get; set; }
-        public virtual reservationorder reservationorder { get; set; }
+        public virtual ICollection<reserved> reserveds { get; set; }
+        public virtual ICollection<selected> selecteds { get; set; }
     }
 }

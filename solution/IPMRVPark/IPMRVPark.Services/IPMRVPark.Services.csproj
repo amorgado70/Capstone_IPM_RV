@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,10 +42,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SessionService.cs" />
     <Compile Include="KMLParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IPMRVPark.Contracts\IPMRVPark.Contracts.csproj">
+      <Project>{d91c80e6-aa6a-4597-ba4c-7c9d60598ccb}</Project>
+      <Name>IPMRVPark.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IPMRVPark.Models\IPMRVPark.Models.csproj">
       <Project>{fab812d6-8fb6-4527-b4b0-7c7748446a65}</Project>
       <Name>IPMRVPark.Models</Name>

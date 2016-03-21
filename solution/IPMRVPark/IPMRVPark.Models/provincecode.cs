@@ -11,16 +11,15 @@ namespace IPMRVPark.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+    
     public partial class provincecode
     {
         public provincecode()
         {
             this.customers = new HashSet<customer>();
         }
-
-        [MaxLength(2)]
-        public string code { get; set; }        
+    
+        public string code { get; set; }
         public string countryCode { get; set; }
         public string name { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }

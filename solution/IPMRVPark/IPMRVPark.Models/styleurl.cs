@@ -12,27 +12,21 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class sitetype
+    public partial class styleurl
     {
-        public sitetype()
+        public styleurl()
         {
-            this.placeinmaps = new HashSet<placeinmap>();
-            this.siterates = new HashSet<siterate>();
+            this.sitetypes = new HashSet<sitetype>();
         }
     
         public long ID { get; set; }
-        public long idIPMEvent { get; set; }
-        public long idSiteSize { get; set; }
-        public long idService { get; set; }
+        public string styleUrl1 { get; set; }
+        public string backgroundColor { get; set; }
+        public Nullable<long> idIPMEvent { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
-        public Nullable<long> idStyleUrl { get; set; }
     
         public virtual ipmevent ipmevent { get; set; }
-        public virtual ICollection<placeinmap> placeinmaps { get; set; }
-        public virtual service service { get; set; }
-        public virtual ICollection<siterate> siterates { get; set; }
-        public virtual sitesize sitesize { get; set; }
-        public virtual styleurl styleurl { get; set; }
+        public virtual ICollection<sitetype> sitetypes { get; set; }
     }
 }

@@ -14,6 +14,11 @@ namespace IPMRVPark.Models
     
     public partial class person
     {
+        public person()
+        {
+            this.sessions = new HashSet<session>();
+        }
+    
         public long ID { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
@@ -25,5 +30,6 @@ namespace IPMRVPark.Models
         public virtual customer customer { get; set; }
         public virtual partymember partymember { get; set; }
         public virtual staff staff { get; set; }
+        public virtual ICollection<session> sessions { get; set; }
     }
 }

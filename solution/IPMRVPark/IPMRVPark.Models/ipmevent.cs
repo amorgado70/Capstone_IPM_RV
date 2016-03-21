@@ -16,8 +16,11 @@ namespace IPMRVPark.Models
     {
         public ipmevent()
         {
-            this.placemarkpolygons = new HashSet<placemarkpolygon>();
+            this.fees = new HashSet<fee>();
+            this.placeinmaps = new HashSet<placeinmap>();
+            this.siterates = new HashSet<siterate>();
             this.sitetypes = new HashSet<sitetype>();
+            this.styleurls = new HashSet<styleurl>();
         }
     
         public long ID { get; set; }
@@ -25,8 +28,19 @@ namespace IPMRVPark.Models
         public string local { get; set; }
         public string description { get; set; }
         public string mapFileUrl { get; set; }
+        public string street { get; set; }
+        public string city { get; set; }
+        public string provinceCode { get; set; }
+        public Nullable<System.DateTime> startDate { get; set; }
+        public Nullable<System.DateTime> endDate { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> lastUpdate { get; set; }
+        public Nullable<System.DateTime> lastDateRefund { get; set; }
     
-        public virtual ICollection<placemarkpolygon> placemarkpolygons { get; set; }
+        public virtual ICollection<fee> fees { get; set; }
+        public virtual ICollection<placeinmap> placeinmaps { get; set; }
+        public virtual ICollection<siterate> siterates { get; set; }
         public virtual ICollection<sitetype> sitetypes { get; set; }
+        public virtual ICollection<styleurl> styleurls { get; set; }
     }
 }

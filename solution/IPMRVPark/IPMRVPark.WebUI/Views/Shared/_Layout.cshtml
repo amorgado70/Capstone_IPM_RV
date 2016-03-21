@@ -17,7 +17,7 @@
                 <div class="col-xs-6 col-sm-3" style="display:block; margin-top:0.5em;margin-bottom:0.5em;" pagination-centered" data-toggle="tooltip" title="Go Back To Main Menu">
                     <a href="@Url.Action("Menu", "PrototypeUI")" class="btn btn-default btn-block btn-mylink col-xs-10">
                         <span class="glyphicon glyphicon-home"></span>
-                        <span style="height:2em;">Home</span>
+                        <span style="height:2em;">Home</span>                        
                     </a>
                 </div>
                 <div class="col-xs-1"></div>
@@ -26,6 +26,22 @@
                 </div>
             </div>
         </div>
+        <p>
+            <script type="text/javascript">
+                            $(document).ready(function () {
+                                $.ajax({
+                                    url: '/Reservation/GetSessionGUID',
+                                    type: "POST",
+                                    dataType: "json",
+                                    success: function (data) {
+                                        $("#sessionGUID").text(data);},
+                                    error: function () {
+                                        alert("Some error occured.");}
+                                });
+                            });
+            </script>
+            <span sytle="color: white;" id="sessionGUID"></span>
+        </p>
     </header>
 
     <section>
@@ -34,7 +50,7 @@
     <div class="container-fluid">
         <div class="row top-margin">
             <div class="col-sm-3 col-xs-6">
-                <a  href="#" class="btn btn-default btn-block btn-mylink" data-toggle="tooltip" title="Go To Top Of This Page">
+                <a href="#" class="btn btn-default btn-block btn-mylink" data-toggle="tooltip" title="Go To Top Of This Page">
                     <span class="glyphicon glyphicon-chevron-up"></span>
                     <span style="height:2em;">Back To Top</span>
                 </a>

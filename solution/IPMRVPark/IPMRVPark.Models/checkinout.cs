@@ -17,10 +17,12 @@ namespace IPMRVPark.Models
         public long ID { get; set; }
         public long idReservationItem { get; set; }
         public long idRVSite { get; set; }
-        public Nullable<System.DateTime> arrivalDate { get; set; }
-        public Nullable<System.DateTime> departureDate { get; set; }
+        public Nullable<System.DateTime> checkInDate { get; set; }
+        public Nullable<System.DateTime> checkOutDate { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> lastUpdate { get; set; }
     
-        public virtual placemarkpolygon placemarkpolygon { get; set; }
+        public virtual placeinmap placeinmap { get; set; }
         public virtual reservationitem reservationitem { get; set; }
     }
 }

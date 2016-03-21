@@ -59,7 +59,13 @@
     <Compile Include="customer.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="customeraccount.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="customer_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="fee.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="ipmevent.cs">
@@ -86,23 +92,29 @@
     <Compile Include="partymember.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="paydoctype.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="payment.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="paymentmode.cs">
+    <Compile Include="paymentmethod.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="paymentreservationitem.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="person.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="placemarkpolygon.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="powersupply.cs">
+    <Compile Include="placeinmap.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="provincecode.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="reasonforpayment.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="reservationitem.cs">
@@ -111,16 +123,28 @@
     <Compile Include="reservationitem_partymember.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="reservationorder.cs">
+    <Compile Include="reservation_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="reservation_view.cs">
+    <Compile Include="reserved.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="rvsite_available.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="rvsite_coord_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="rvsite_status_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="selected.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="service.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="session.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="siterate.cs">
@@ -133,6 +157,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="staff.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="styleurl.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="View\SelectionOption.cs" />

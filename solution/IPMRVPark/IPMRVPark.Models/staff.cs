@@ -16,7 +16,7 @@ namespace IPMRVPark.Models
     {
         public staff()
         {
-            this.reservationorders = new HashSet<reservationorder>();
+            this.reservationitems = new HashSet<reservationitem>();
         }
     
         public long ID { get; set; }
@@ -25,6 +25,6 @@ namespace IPMRVPark.Models
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
         public virtual person person { get; set; }
-        public virtual ICollection<reservationorder> reservationorders { get; set; }
+        public virtual ICollection<reservationitem> reservationitems { get; set; }
     }
 }
