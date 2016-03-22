@@ -157,13 +157,30 @@ namespace IPMRVPark.WebUI.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        //public ActionResult Reservation(long idRVSite)
+        public ActionResult Reservation(long idRVSite)
+        {
+            var _selected = new selected();
+            //_selected.checkInDate = checkInDate;
+            //_selected.checkOutDate = checkOutDate;
+            _selected.idRVSite = idRVSite;
+            var _session = sessionService.GetSession(this.HttpContext);
+            _selected.idSession = _session.ID;
+            _selected.idStaff = _session.idStaff;
+            _selected.idCustomer = _session.idCustomer;
+            _selected.isSiteChecked = true;
+            _selected.createDate = DateTime.Now;
+            _selected.lastUpdate = DateTime.Now;
+
+            selecteds.Insert(_selected);
+            selecteds.Commit();
+
+            return Json(idRVSite);
+        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Reservation(selected _selected)
         //{
-        //    var _selected = new selected();
-        //    //_selected.checkInDate = checkInDate;
-        //    //_selected.checkOutDate = checkOutDate;
-        //    _selected.idRVSite = idRVSite;
         //    var _session = sessionService.GetSession(this.HttpContext);
         //    _selected.idSession = _session.ID;
         //    _selected.idStaff = _session.idStaff;
@@ -177,21 +194,6 @@ namespace IPMRVPark.WebUI.Controllers
 
         //    return View(_selected);
         //}
-        public ActionResult Reservation(selected _selected)
-        {
-            var _session = sessionService.GetSession(this.HttpContext);
-            _selected.idSession = _session.ID;
-            _selected.idStaff = _session.idStaff;
-            _selected.idCustomer = _session.idCustomer;
-            _selected.isSiteChecked = true;
-            _selected.createDate = DateTime.Now;
-            _selected.lastUpdate = DateTime.Now;
-
-            selecteds.Insert(_selected);
-            selecteds.Commit();
-
-            return View(_selected);
-        }
 
         // GET: list with filter
         public ActionResult Index(string searchString)

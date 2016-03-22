@@ -15,31 +15,30 @@ Site Reservation
 <div class="container-fluid">
 
 
-    @using (Html.BeginForm())
+    @*@using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
+        @Html.ValidationSummary(true)*@
 
 
     <!-- RV Site Dates-->
-        @*<script type="text/javascript">
+        <script type="text/javascript">
                     $(document).ready(function () {
                         //function will be called on button click having id btnsave
                         $("#btnSave").click(function () {
                             $.ajax(
                             {
                                 type: "POST", //HTTP POST Method
-                                url: "Reservation/Reservation", // Controller/View
+                                url: "Reservation", // Controller/View
                                 dataType: "json",
                                 data: { //Passing data
-                                    //checkInDate: $("#checkInDate").val(), //Reading text box values using Jquery
+                                    //checkInDate: $("#idRVSite").val(), //Reading text box values using jQuery
                                     //checkOutDate: $("#checkOutDate").val(),
                                     idRVSite: $("#idRVSite").val()
                                 },
-
-                                success: function (result) {
-                                    alert("Success.");
-                                },
+                                //success: function (result) {
+                                //    alert("Success.");
+                                //},
                                 error: function (result) {
                                     alert("Some error occured." +
                                         result +
@@ -47,26 +46,26 @@ Site Reservation
                                         $("#checkOutDate").val() +
                                         $("#idRVSite").val());
                                 }
-
                             });
 
                         });
                     });
-        </script>*@
+        </script>
         <div class="row top-margin">
             <div class="form-group">
                 <div class="col-sm-3 col-xs-12 form-top-margin">
                     <label>Check In Date</label>
                 </div>
                 <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <input type="date" id="checkInDate" class="form-control" min="@ViewBag.minDate" max="@ViewBag.maxDate" />
+                    <input type="date" id="checkInDate" class="form-control" value="2016-03-21" />
                 </div>
                 <div class="col-sm-3 col-xs-12 form-top-margin">
                     <label>Check Out Date</label>
                 </div>
                 <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <input type="date" id="checkOutDate" class="form-control dateselector" min="@ViewBag.minDate" max="@ViewBag.maxDate">
+                    <input type="date" id="checkOutDate" class="form-control dateselector" value="2016-03-25">
                 </div>
+                <button id="btnSave">Save</button>
             </div>
         </div>
     <!-- RV Site Selection -->
@@ -108,7 +107,7 @@ Site Reservation
                 </div>
             </div>
         </div>
-    }
+    @*}*@
     <!-- Total amount for this site reservation -->
     <div class="row top-margin">
         <div class="form-group">
