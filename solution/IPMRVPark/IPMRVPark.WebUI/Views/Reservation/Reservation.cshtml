@@ -1,3 +1,5 @@
+@model IPMRVPark.Models.selected
+
 @{
     ViewBag.Title = "Site Reservation";
     ViewBag.PageTitle = "New Reservation";
@@ -11,66 +13,102 @@ Site Reservation
 
 <!-- New Reservation-->
 <div class="container-fluid">
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+
     <!-- RV Site Dates-->
-    <div class="row top-margin">
-        <div class="form-group">
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Check In Date</label>
-            </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <input type="date" class="form-control">
-            </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Check Out Date</label>
-            </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <input type="date" class="form-control">
-            </div>
-        </div>
-    </div>
-    <!-- RV Site Tag-->
-    <div class="row top-margin">
-        <div class="form-group">
-            <div class="col-sm-1 col-xs-12 form-top-margin">
-                <label>Site</label>
-            </div>
-            <div class="col-sm-2 col-xs-6 form-top-margin">
-                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
-                    <option>Letter</option>
-                    <option>All letters - No Filter</option>
-                    @for (char i = 'A'; i < 'W'; i++)
-                    {
-                        <option>@i</option>
-                    }
-                </select>
-            </div>
-            <div class="col-sm-3 col-xs-6 form-top-margin">
-                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
-                    <option>Number</option>
-                    <option>All numbers - No Filter</option>
-                    @for (int i = 20; i < 36; i++)
-                    {
-                        <option>@i</option>
-                    }
-                </select>
-            </div>
-            <div class="col-sm-2 col-xs-12 form-top-margin">
-                <select class="form-control" data-toggle="tooltip" title="Filter, search and select">
-                    <option>Type</option>
-                    <option>All types - No Filter</option>
-                    <option>25x40 30 amps lots</option>
-                    <option>25x40 15 amps lots</option>
-                    <option>30x45 15 amps lots</option>
-                </select>
-            </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
-                <button class="btn btn-block btn-default">
-                    <span class="col-xs-1 glyphicon glyphicon-plus-sign"></span>
-                    <span class="col-xs-9">Select Site</span>
-                </button>
+        @*<script type="text/javascript">
+                    $(document).ready(function () {
+                        //function will be called on button click having id btnsave
+                        $("#btnSave").click(function () {
+                            $.ajax(
+                            {
+                                type: "POST", //HTTP POST Method
+                                url: "Reservation/Reservation", // Controller/View
+                                dataType: "json",
+                                data: { //Passing data
+                                    //checkInDate: $("#checkInDate").val(), //Reading text box values using Jquery
+                                    //checkOutDate: $("#checkOutDate").val(),
+                                    idRVSite: $("#idRVSite").val()
+                                },
+
+                                success: function (result) {
+                                    alert("Success.");
+                                },
+                                error: function (result) {
+                                    alert("Some error occured." +
+                                        result +
+                                        $("#checkInDate").val() +
+                                        $("#checkOutDate").val() +
+                                        $("#idRVSite").val());
+                                }
+
+                            });
+
+                        });
+                    });
+        </script>*@
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <label>Check In Date</label>
+                </div>
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <input type="date" id="checkInDate" class="form-control" min="@ViewBag.minDate" max="@ViewBag.maxDate" />
+                </div>
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <label>Check Out Date</label>
+                </div>
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <input type="date" id="checkOutDate" class="form-control dateselector" min="@ViewBag.minDate" max="@ViewBag.maxDate">
+                </div>
             </div>
         </div>
-    </div>
+    <!-- RV Site Selection -->
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#siteName").autocomplete({
+                    source: function (request, response) {
+                        // define a function to call the action (assuming UserController)
+                        $.ajax({
+                            url: '/Reservation/SearchSiteByNameResult',
+                            type: "POST",
+                            dataType: "json",
+                            // query will be the param used by the action method
+                            data: { query: request.term },
+                            success: response
+                        });
+                    },
+                    minLength: 1, // require at least one character from the user
+                    select: function (event, ui) {
+                        $('#idRVSite').val(ui.item.ID); // name of form input field: CustomerID, ProductID
+                    }
+                });
+            });
+        </script>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>RV Site</label>
+                </div>
+                <div class="col-sm-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
+                    <input type="text" class="form-control" id="siteName" placeholder="Type letter and number then select from the list" />
+                    <input class="text-box single-line" id="idRVSite" name="idRVSite" type="hidden" value="" />
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Select / Add Site">
+                    <button type="submit" value="Create" @*id="btnSave"*@ class="btn btn-block btn-default">
+                        <span class="col-xs-1 glyphicon glyphicon-plus-sign"></span>
+                        <span class="col-xs-9">Select Site</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
     <!-- Total amount for this site reservation -->
     <div class="row top-margin">
         <div class="form-group">
@@ -129,20 +167,19 @@ Site Reservation
         $(document).ready(function () {
             $("#customerName").autocomplete({
                 source: function (request, response) {
-                    // define a function to call your Action (assuming UserController)
+                    // define a function to call the action (assuming UserController)
                     $.ajax({
-                        url: '/Reservation/SearchByNameOrPhoneResult',
+                        url: '/Reservation/SearchCustomerByNameOrPhoneResult',
                         type: "POST",
                         dataType: "json",
-                        // query will be the param used by your action method
+                        // query will be the param used by the action method
                         data: { query: request.term },
                         success: response
                     });
                 },
                 minLength: 1, // require at least one character from the user
                 select: function (event, ui) {
-                    alert(ui.item.ID);
-                    //window.location.href = ui.item.value;
+                    $('#customerName').val(ui.item.ID); // name of form input field: CustomerID, ProductID
                 }
             });
         });

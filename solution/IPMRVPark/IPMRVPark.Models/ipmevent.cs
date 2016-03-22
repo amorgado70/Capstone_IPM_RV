@@ -18,6 +18,7 @@ namespace IPMRVPark.Models
         {
             this.fees = new HashSet<fee>();
             this.placeinmaps = new HashSet<placeinmap>();
+            this.sessions = new HashSet<session>();
             this.siterates = new HashSet<siterate>();
             this.sitetypes = new HashSet<sitetype>();
             this.styleurls = new HashSet<styleurl>();
@@ -39,6 +40,7 @@ namespace IPMRVPark.Models
     
         public virtual ICollection<fee> fees { get; set; }
         public virtual ICollection<placeinmap> placeinmaps { get; set; }
+        public virtual ICollection<session> sessions { get; set; }
         public virtual ICollection<siterate> siterates { get; set; }
         public virtual ICollection<sitetype> sitetypes { get; set; }
         public virtual ICollection<styleurl> styleurls { get; set; }

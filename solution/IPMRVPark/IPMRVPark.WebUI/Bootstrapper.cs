@@ -29,7 +29,10 @@ namespace IPMRVPark.WebUI
             container.RegisterType<IRepositoryBase<reservation_view>, ReservationViewRepository>();
             container.RegisterType<IRepositoryBase<provincecode>, ProvinceRepository>();
             container.RegisterType<IRepositoryBase<countrycode>, CountryRepository>();
+            container.RegisterType<IRepositoryBase<ipmevent>, IPMEventRepository>();
             container.RegisterType<IRepositoryBase<session>, SessionRepository>();
+            container.RegisterType<IRepositoryBase<selected>, SelectedRepository>();
+            container.RegisterType<IRepositoryBase<rvsite_available>, RVSiteAvailableRepository>();
 
             return container;
         }

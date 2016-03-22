@@ -59,6 +59,9 @@
   <ItemGroup>
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\SelectedRepository.cs" />
+    <Compile Include="Repositories\RVSiteAvailableRepository.cs" />
+    <Compile Include="Repositories\IPMEventRepository.cs" />
     <Compile Include="Repositories\SessionRepository.cs" />
     <Compile Include="Repositories\ProvinceRepository.cs" />
     <Compile Include="Repositories\CountryRepository.cs" />

@@ -29,8 +29,17 @@ namespace IPMRVPark.Services
             //now create a new session and set the creation date.
             session _session = new session();
             _session.createDate = DateTime.Now;
+            _session.lastUpdate = DateTime.Now;
             //create a sessionID as Guid and convert to a string to be stored in database
             _session.sessionGUID = Guid.NewGuid().ToString();
+
+
+            //****** to be removed after test
+            _session.idIPMEvent = 2;
+            _session.isLoggedIn = true;
+            _session.idStaff = 1176262;
+            _session.idCustomer = 1281633;
+            //****** to be removed after test
 
             //add and persist in the database.
             sessions.Insert(_session);
@@ -58,9 +67,13 @@ namespace IPMRVPark.Services
                     if (_sessionGUID != null)//checks if Guid is null
                     {
                         var sessionList = sessions.GetAll();
-                        result = sessionList.Where(s => s.sessionGUID.Contains(_sessionID)).First();
-                        if (result != null)//session found in database
-                            return result;
+                        sessionList = sessionList.Where(s => s.sessionGUID.Contains(_sessionID));
+                        if (sessionList.Count() > 0 )//checks if Guid is in database
+                        {
+                            result = sessionList.First();
+                            if (result != null)//session found in database
+                                return result;
+                        }
                     }
                 }
             }

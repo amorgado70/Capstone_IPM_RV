@@ -17,6 +17,8 @@ namespace IPMRVPark.Models
         public staff()
         {
             this.reservationitems = new HashSet<reservationitem>();
+            this.selecteds = new HashSet<selected>();
+            this.sessions = new HashSet<session>();
         }
     
         public long ID { get; set; }
@@ -26,5 +28,7 @@ namespace IPMRVPark.Models
     
         public virtual person person { get; set; }
         public virtual ICollection<reservationitem> reservationitems { get; set; }
+        public virtual ICollection<selected> selecteds { get; set; }
+        public virtual ICollection<session> sessions { get; set; }
     }
 }

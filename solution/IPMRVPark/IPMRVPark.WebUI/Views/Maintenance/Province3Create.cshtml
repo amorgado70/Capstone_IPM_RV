@@ -28,7 +28,7 @@
             $(document).ready(function () {
                 $("#countryName").autocomplete({
                     source: function (request, response) {
-                        // define a function to call your Action (assuming UserController)
+                        // define a function to call the action (assuming UserController)
                         $.ajax({
                             // URL of controller and action method
                             url: '/Maintenance/SearchByNameResult',

@@ -22,7 +22,6 @@ namespace IPMRVPark.Models
             this.paymentreservationitems = new HashSet<paymentreservationitem>();
             this.reservationitem_partymember = new HashSet<reservationitem_partymember>();
             this.reserveds = new HashSet<reserved>();
-            this.selecteds = new HashSet<selected>();
         }
     
         public long ID { get; set; }
@@ -47,6 +46,5 @@ namespace IPMRVPark.Models
         public virtual staff staff { get; set; }
         public virtual ICollection<reservationitem_partymember> reservationitem_partymember { get; set; }
         public virtual ICollection<reserved> reserveds { get; set; }
-        public virtual ICollection<selected> selecteds { get; set; }
     }
 }

@@ -21,12 +21,16 @@ namespace IPMRVPark.Models
     
         public long ID { get; set; }
         public string sessionGUID { get; set; }
-        public Nullable<long> personID { get; set; }
+        public long idIPMEvent { get; set; }
+        public Nullable<long> idStaff { get; set; }
         public Nullable<bool> isLoggedIn { get; set; }
+        public Nullable<long> idCustomer { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
-        public virtual person person { get; set; }
+        public virtual customer customer { get; set; }
+        public virtual ipmevent ipmevent { get; set; }
         public virtual ICollection<selected> selecteds { get; set; }
+        public virtual staff staff { get; set; }
     }
 }
