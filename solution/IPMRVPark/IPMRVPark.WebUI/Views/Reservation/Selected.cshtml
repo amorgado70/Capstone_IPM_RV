@@ -1,16 +1,16 @@
-﻿@model IEnumerable<IPMRVPark.Models.selected>
+﻿@model IEnumerable<IPMRVPark.Models.total_per_site_view>
 
 <!-- List of selected sites -->
 <div class="col-xs-12">
     <table class="table">
         <thead>
             <tr>
-                <th>idSession</th>
-                <th>idSite</th>
+                <th style="text-align:right;">Selected</th>
+                <th>Site</th>
                 <th>Check In</th>
                 <th>Check Out</th>
                 <th style="text-align:right;">Total</th>
-                <th style="text-align:right;">Selected</th>
+                <th style="text-align:right;"></th>
             </tr>
         </thead>
         <tbody>
@@ -18,12 +18,22 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.idSession)</td>
-                    <td>@Html.DisplayFor(modelItem => item.idRVSite)</td>
+                    <td style="text-align:right;">@Html.DisplayFor(modelItem => item.isSiteChecked)<input type="checkbox" checked></td>
+                    <td>@Html.DisplayFor(modelItem => item.site)</td>
                     <td>@Html.DisplayFor(modelItem => item.checkInDate)</td>
                     <td>@Html.DisplayFor(modelItem => item.checkOutDate)</td>
-                    <td style="text-align:right;">$ 1,400.</td>
-                    <td style="text-align:right;">@Html.DisplayFor(modelItem => item.isSiteChecked)<input type="checkbox" checked></td>
+                    <td style="text-align:right;">@Html.DisplayFor(modelItem => item.total)</td>
+                    <td colspan="4" style="border-top:none">
+                        <div class="dropdown pull-right">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                                Action
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="@Url.Action("RemoveSelected","Reservation", new { id=item.idSelected })"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel</a></li>
+                            </ul>
+                        </div>
+                    </td>                    
                 </tr>
             }
         </tbody>

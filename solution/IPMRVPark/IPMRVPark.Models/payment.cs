@@ -18,12 +18,12 @@ namespace IPMRVPark.Models
         {
             this.customeraccounts = new HashSet<customeraccount>();
             this.paymentreservationitems = new HashSet<paymentreservationitem>();
+            this.reservationitems = new HashSet<reservationitem>();
         }
     
         public long ID { get; set; }
         public long idPaymentMethod { get; set; }
         public long idCustomer { get; set; }
-        public Nullable<long> idReservationItem { get; set; }
         public Nullable<long> reasonForPayment { get; set; }
         public decimal amount { get; set; }
         public Nullable<bool> isCredit { get; set; }
@@ -32,13 +32,14 @@ namespace IPMRVPark.Models
         public string comments { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
+        public Nullable<long> idSession { get; set; }
     
         public virtual customer customer { get; set; }
         public virtual ICollection<customeraccount> customeraccounts { get; set; }
         public virtual paydoctype paydoctype1 { get; set; }
         public virtual paymentmethod paymentmethod { get; set; }
         public virtual reasonforpayment reasonforpayment1 { get; set; }
-        public virtual reservationitem reservationitem { get; set; }
         public virtual ICollection<paymentreservationitem> paymentreservationitems { get; set; }
+        public virtual ICollection<reservationitem> reservationitems { get; set; }
     }
 }

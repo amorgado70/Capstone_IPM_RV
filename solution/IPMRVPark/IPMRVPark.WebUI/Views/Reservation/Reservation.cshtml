@@ -33,7 +33,6 @@ Site Reservation
                         alert("Some error occured.");
                     }
                 });
-
             });
 
             //Selected RV Site List
@@ -52,11 +51,22 @@ Site Reservation
     <!-- RV Site Dates-->
     <div class="row top-margin">
         <div class="form-group">
+
+            <script type="text/javascript">
+                jQuery(document).ready(function () {
+                    jQuery("#checkInDate").datepicker({ minDate: new Date(2007, 1 - 1, 1) });
+                });
+            </script>
+
+            <div id="minDate">@ViewBag.minDate</div>
+            <div id="maxDate">@ViewBag.maxDate</div>
+            <div id="startDate">@ViewBag.startDate</div>
+
             <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>Check In Date</label>
             </div>
             <div class="col-sm-3 col-xs-12 form-top-margin">
-                <input type="date" id="checkInDate" class="form-control" value="2016-03-21" />
+                <input type="date" id="checkInDate" class="form-control" />
             </div>
             <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>Check Out Date</label>

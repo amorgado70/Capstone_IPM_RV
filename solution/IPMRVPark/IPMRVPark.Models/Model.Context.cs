@@ -58,5 +58,6 @@ namespace IPMRVPark.Models
         public DbSet<rvsite_available> rvsite_available { get; set; }
         public DbSet<rvsite_coord_view> rvsite_coord_view { get; set; }
         public DbSet<rvsite_status_view> rvsite_status_view { get; set; }
+        public DbSet<total_per_site_view> total_per_site_view { get; set; }
     }
 }

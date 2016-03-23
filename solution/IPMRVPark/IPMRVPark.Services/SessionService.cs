@@ -35,7 +35,7 @@ namespace IPMRVPark.Services
 
 
             //****** to be removed after test
-            _session.idIPMEvent = 2;
+            _session.idIPMEvent = 3;
             _session.isLoggedIn = true;
             _session.idStaff = 1176262;
             _session.idCustomer = 1281633;

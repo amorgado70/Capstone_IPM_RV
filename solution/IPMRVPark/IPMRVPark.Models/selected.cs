@@ -16,6 +16,7 @@ namespace IPMRVPark.Models
     {
         public long ID { get; set; }
         public long idSession { get; set; }
+        public Nullable<long> idIPMEvent { get; set; }
         public Nullable<long> idRVSite { get; set; }
         public Nullable<long> idCustomer { get; set; }
         public Nullable<long> idStaff { get; set; }
@@ -26,6 +27,7 @@ namespace IPMRVPark.Models
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
         public virtual customer customer { get; set; }
+        public virtual ipmevent ipmevent { get; set; }
         public virtual placeinmap placeinmap { get; set; }
         public virtual session session { get; set; }
         public virtual staff staff { get; set; }

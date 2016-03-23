@@ -139,7 +139,6 @@
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idPaymentMethod" Type="bigint" Nullable="false" />
           <Property Name="idCustomer" Type="bigint" Nullable="false" />
-          <Property Name="idReservationItem" Type="bigint" />
           <Property Name="reasonForPayment" Type="bigint" />
           <Property Name="amount" Type="decimal" Precision="12" Scale="2" Nullable="false" />
           <Property Name="isCredit" Type="bit" />
@@ -148,6 +147,7 @@
           <Property Name="comments" Type="varchar" MaxLength="120" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
+          <Property Name="idSession" Type="bigint" />
         </EntityType>
         <EntityType Name="paymentmethod">
           <Key>
@@ -220,6 +220,7 @@
           <Property Name="idRVSite" Type="bigint" Nullable="false" />
           <Property Name="idCustomer" Type="bigint" Nullable="false" />
           <Property Name="idStaff" Type="bigint" Nullable="false" />
+          <Property Name="idPayment" Type="bigint" Nullable="false" />
           <Property Name="checkInDate" Type="date" Nullable="false" />
           <Property Name="checkOutDate" Type="date" Nullable="false" />
           <Property Name="totalAmount" Type="decimal" Precision="12" Scale="2" />
@@ -254,8 +255,9 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idSession" Type="bigint" Nullable="false" />
+          <Property Name="idIPMEvent" Type="bigint" />
           <Property Name="idRVSite" Type="bigint" />
           <Property Name="idCustomer" Type="bigint" />
           <Property Name="idStaff" Type="bigint" />
@@ -278,7 +280,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="sessionGUID" Type="char" MaxLength="38" Nullable="false" />
           <Property Name="idIPMEvent" Type="bigint" Nullable="false" />
           <Property Name="idStaff" Type="bigint" />
@@ -441,6 +443,45 @@ warning 6002: The table/view 'def.ipmrvpark.rvsite_status_view' does not have a 
           <Property Name="ReservedUntil" Type="date" />
           <Property Name="OutOfServiceFrom" Type="date" />
           <Property Name="OutOfServiceUntil" Type="date" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'def.ipmrvpark.total_per_session_view' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="total_per_session_view">
+          <Property Name="idSession" Type="bigint" />
+          <Property Name="idCustomer" Type="bigint" />
+          <Property Name="idStaff" Type="bigint" />
+          <Property Name="total_amount" Type="decimal" Precision="53" Scale="2" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="total_per_site_view">
+          <Key>
+            <PropertyRef Name="idSelected" />
+            <PropertyRef Name="idSession" />
+            <PropertyRef Name="checkInDate" />
+            <PropertyRef Name="checkOutDate" />
+            <PropertyRef Name="isSiteChecked" />
+            <PropertyRef Name="duration" />
+            <PropertyRef Name="site" />
+            <PropertyRef Name="idSiteType" />
+            <PropertyRef Name="period" />
+            <PropertyRef Name="rate" />
+            <PropertyRef Name="total" />
+          </Key>
+          <Property Name="idSelected" Type="bigint" Nullable="false" />
+          <Property Name="idSession" Type="bigint" Nullable="false" />
+          <Property Name="idRVSite" Type="bigint" />
+          <Property Name="idCustomer" Type="bigint" />
+          <Property Name="idStaff" Type="bigint" />
+          <Property Name="checkInDate" Type="date" Nullable="false" />
+          <Property Name="checkOutDate" Type="date" Nullable="false" />
+          <Property Name="isSiteChecked" Type="bit" Nullable="false" />
+          <Property Name="duration" Type="bigint" Nullable="false" />
+          <Property Name="site" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="idSiteType" Type="bigint" Nullable="false" />
+          <Property Name="period" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="rate" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="total" Type="decimal" Precision="6" Scale="2" Nullable="false" />
         </EntityType>
         <Association Name="CheckInOut_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
@@ -682,18 +723,6 @@ warning 6002: The table/view 'def.ipmrvpark.rvsite_status_view' does not have a 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Payment_ReservationItem_FK">
-          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="0..1" />
-          <End Role="payment" Type="Self.payment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="reservationitem">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="payment">
-              <PropertyRef Name="idReservationItem" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="paymentReservationItem_Payment_FK">
           <End Role="payment" Type="Self.payment" Multiplicity="0..1" />
           <End Role="paymentreservationitem" Type="Self.paymentreservationitem" Multiplicity="*" />
@@ -766,6 +795,18 @@ warning 6002: The table/view 'def.ipmrvpark.rvsite_status_view' does not have a 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="ReservationItem_Payment_FK">
+          <End Role="payment" Type="Self.payment" Multiplicity="1" />
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="payment">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reservationitem">
+              <PropertyRef Name="idPayment" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="ReservationItem_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
           <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
@@ -811,6 +852,18 @@ warning 6002: The table/view 'def.ipmrvpark.rvsite_status_view' does not have a 
             </Principal>
             <Dependent Role="selected">
               <PropertyRef Name="idCustomer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Selected_IPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="0..1" />
+          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ipmevent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="selected">
+              <PropertyRef Name="idIPMEvent" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1065,6 +1118,24 @@ FROM `rvsite_coord_view` AS `rvsite_coord_view`</DefiningQuery>
 `rvsite_status_view`.`OutOfServiceUntil`
 FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="total_per_site_view" EntityType="Self.total_per_site_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`total_per_site_view`.`idSelected`, 
+`total_per_site_view`.`idSession`, 
+`total_per_site_view`.`idRVSite`, 
+`total_per_site_view`.`idCustomer`, 
+`total_per_site_view`.`idStaff`, 
+`total_per_site_view`.`checkInDate`, 
+`total_per_site_view`.`checkOutDate`, 
+`total_per_site_view`.`isSiteChecked`, 
+`total_per_site_view`.`duration`, 
+`total_per_site_view`.`site`, 
+`total_per_site_view`.`idSiteType`, 
+`total_per_site_view`.`period`, 
+`total_per_site_view`.`rate`, 
+`total_per_site_view`.`total`
+FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="CheckInOut_PlaceInMap_FK" Association="Self.CheckInOut_PlaceInMap_FK">
             <End Role="placeinmap" EntitySet="placeinmap" />
             <End Role="checkinout" EntitySet="checkinout" />
@@ -1145,10 +1216,6 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="reasonforpayment" EntitySet="reasonforpayment" />
             <End Role="payment" EntitySet="payment" />
           </AssociationSet>
-          <AssociationSet Name="Payment_ReservationItem_FK" Association="Self.Payment_ReservationItem_FK">
-            <End Role="reservationitem" EntitySet="reservationitem" />
-            <End Role="payment" EntitySet="payment" />
-          </AssociationSet>
           <AssociationSet Name="paymentReservationItem_Payment_FK" Association="Self.paymentReservationItem_Payment_FK">
             <End Role="payment" EntitySet="payment" />
             <End Role="paymentreservationitem" EntitySet="paymentreservationitem" />
@@ -1173,6 +1240,10 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="countrycode" EntitySet="countrycode" />
             <End Role="provincecode" EntitySet="provincecode" />
           </AssociationSet>
+          <AssociationSet Name="ReservationItem_Payment_FK" Association="Self.ReservationItem_Payment_FK">
+            <End Role="payment" EntitySet="payment" />
+            <End Role="reservationitem" EntitySet="reservationitem" />
+          </AssociationSet>
           <AssociationSet Name="ReservationItem_PlaceInMap_FK" Association="Self.ReservationItem_PlaceInMap_FK">
             <End Role="placeinmap" EntitySet="placeinmap" />
             <End Role="reservationitem" EntitySet="reservationitem" />
@@ -1187,6 +1258,10 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="Selected_Customer_FK" Association="Self.Selected_Customer_FK">
             <End Role="customer" EntitySet="customer" />
+            <End Role="selected" EntitySet="selected" />
+          </AssociationSet>
+          <AssociationSet Name="Selected_IPMEvent_FK" Association="Self.Selected_IPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevent" />
             <End Role="selected" EntitySet="selected" />
           </AssociationSet>
           <AssociationSet Name="Selected_RVSite_FK" Association="Self.Selected_RVSite_FK">
@@ -1361,6 +1436,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <Property Name="lastDateRefund" Type="DateTime" />
           <NavigationProperty Name="fees" Relationship="Self.Fees_IPMEvent_FK" FromRole="ipmevent" ToRole="fees" />
           <NavigationProperty Name="placeinmaps" Relationship="Self.PlaceInMap_IPMEvent_FK" FromRole="ipmevent" ToRole="placeinmap" />
+          <NavigationProperty Name="selecteds" Relationship="Self.Selected_IPMEvent_FK" FromRole="ipmevent" ToRole="selected" />
           <NavigationProperty Name="sessions" Relationship="Self.Session_IPMEvent_FK" FromRole="ipmevent" ToRole="session" />
           <NavigationProperty Name="siterates" Relationship="Self.SiteRate_IPMEvent_FK" FromRole="ipmevent" ToRole="siterate" />
           <NavigationProperty Name="sitetypes" Relationship="Self.SiteType_IPMEvent_FK" FromRole="ipmevent" ToRole="sitetype" />
@@ -1408,7 +1484,6 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idPaymentMethod" Type="Int64" Nullable="false" />
           <Property Name="idCustomer" Type="Int64" Nullable="false" />
-          <Property Name="idReservationItem" Type="Int64" />
           <Property Name="reasonForPayment" Type="Int64" />
           <Property Name="amount" Type="Decimal" Nullable="false" />
           <Property Name="isCredit" Type="Boolean" />
@@ -1417,13 +1492,14 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <Property Name="comments" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
+          <Property Name="idSession" Type="Int64" />
           <NavigationProperty Name="customer" Relationship="Self.Payment_Customer_FK" FromRole="payment" ToRole="customer" />
           <NavigationProperty Name="customeraccounts" Relationship="Self.idPayment_Payment_FK" FromRole="payment" ToRole="customeraccount" />
           <NavigationProperty Name="paydoctype1" Relationship="Self.Payment_PayDocType_FK" FromRole="payment" ToRole="paydoctype" />
           <NavigationProperty Name="paymentmethod" Relationship="Self.Payment_PaymentMethod_FK" FromRole="payment" ToRole="paymentmethod" />
           <NavigationProperty Name="reasonforpayment1" Relationship="Self.Payment_ReasonForPayment_FK" FromRole="payment" ToRole="reasonforpayment" />
-          <NavigationProperty Name="reservationitem" Relationship="Self.Payment_ReservationItem_FK" FromRole="payment" ToRole="reservationitem" />
           <NavigationProperty Name="paymentreservationitems" Relationship="Self.paymentReservationItem_Payment_FK" FromRole="payment" ToRole="paymentreservationitem" />
+          <NavigationProperty Name="reservationitems" Relationship="Self.ReservationItem_Payment_FK" FromRole="payment" ToRole="reservationitem" />
         </EntityType>
         <EntityType Name="paymentmethod">
           <Key>
@@ -1513,6 +1589,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <Property Name="idRVSite" Type="Int64" Nullable="false" />
           <Property Name="idCustomer" Type="Int64" Nullable="false" />
           <Property Name="idStaff" Type="Int64" Nullable="false" />
+          <Property Name="idPayment" Type="Int64" Nullable="false" />
           <Property Name="checkInDate" Type="DateTime" Nullable="false" />
           <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
           <Property Name="totalAmount" Type="Decimal" />
@@ -1524,7 +1601,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <NavigationProperty Name="checkinouts" Relationship="Self.CheckInOut_ReservationItem_FK" FromRole="reservationitem" ToRole="checkinout" />
           <NavigationProperty Name="customer" Relationship="Self.idCustomer_Customer_FK" FromRole="reservationitem" ToRole="customer" />
           <NavigationProperty Name="customeraccounts" Relationship="Self.idReservationItem_ReservationItem_FK" FromRole="reservationitem" ToRole="customeraccount" />
-          <NavigationProperty Name="payments" Relationship="Self.Payment_ReservationItem_FK" FromRole="reservationitem" ToRole="payment" />
+          <NavigationProperty Name="payment" Relationship="Self.ReservationItem_Payment_FK" FromRole="reservationitem" ToRole="payment" />
           <NavigationProperty Name="paymentreservationitems" Relationship="Self.paymentReservationItem_ReservationItem_FK" FromRole="reservationitem" ToRole="paymentreservationitem" />
           <NavigationProperty Name="placeinmap" Relationship="Self.ReservationItem_PlaceInMap_FK" FromRole="reservationitem" ToRole="placeinmap" />
           <NavigationProperty Name="staff" Relationship="Self.idStaff_Staff_FK" FromRole="reservationitem" ToRole="staff" />
@@ -1560,8 +1637,9 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idSession" Type="Int64" Nullable="false" />
+          <Property Name="idIPMEvent" Type="Int64" />
           <Property Name="idRVSite" Type="Int64" />
           <Property Name="idCustomer" Type="Int64" />
           <Property Name="idStaff" Type="Int64" />
@@ -1571,6 +1649,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="customer" Relationship="Self.Selected_Customer_FK" FromRole="selected" ToRole="customer" />
+          <NavigationProperty Name="ipmevent" Relationship="Self.Selected_IPMEvent_FK" FromRole="selected" ToRole="ipmevent" />
           <NavigationProperty Name="placeinmap" Relationship="Self.Selected_RVSite_FK" FromRole="selected" ToRole="placeinmap" />
           <NavigationProperty Name="session" Relationship="Self.Selected_Session_FK" FromRole="selected" ToRole="session" />
           <NavigationProperty Name="staff" Relationship="Self.Selected_Staff" FromRole="selected" ToRole="staff" />
@@ -1589,7 +1668,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="sessionGUID" Type="String" Nullable="false" />
           <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
           <Property Name="idStaff" Type="Int64" />
@@ -1761,6 +1840,35 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <Property Name="ReservedUntil" Type="DateTime" />
           <Property Name="OutOfServiceFrom" Type="DateTime" />
           <Property Name="OutOfServiceUntil" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="total_per_site_view">
+          <Key>
+            <PropertyRef Name="idSelected" />
+            <PropertyRef Name="idSession" />
+            <PropertyRef Name="checkInDate" />
+            <PropertyRef Name="checkOutDate" />
+            <PropertyRef Name="isSiteChecked" />
+            <PropertyRef Name="duration" />
+            <PropertyRef Name="site" />
+            <PropertyRef Name="idSiteType" />
+            <PropertyRef Name="period" />
+            <PropertyRef Name="rate" />
+            <PropertyRef Name="total" />
+          </Key>
+          <Property Name="idSelected" Type="Int64" Nullable="false" />
+          <Property Name="idSession" Type="Int64" Nullable="false" />
+          <Property Name="idRVSite" Type="Int64" />
+          <Property Name="idCustomer" Type="Int64" />
+          <Property Name="idStaff" Type="Int64" />
+          <Property Name="checkInDate" Type="DateTime" Nullable="false" />
+          <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
+          <Property Name="isSiteChecked" Type="Boolean" Nullable="false" />
+          <Property Name="duration" Type="Int64" Nullable="false" />
+          <Property Name="site" Type="String" Nullable="false" />
+          <Property Name="idSiteType" Type="Int64" Nullable="false" />
+          <Property Name="period" Type="String" Nullable="false" />
+          <Property Name="rate" Type="Decimal" Nullable="false" />
+          <Property Name="total" Type="Decimal" Nullable="false" />
         </EntityType>
         <Association Name="CheckInOut_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
@@ -1954,6 +2062,18 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Selected_IPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="0..1" />
+          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ipmevent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="selected">
+              <PropertyRef Name="idIPMEvent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Session_IPMEvent_FK">
           <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
           <End Role="session" Type="Self.session" Multiplicity="*" />
@@ -2074,18 +2194,6 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Payment_ReservationItem_FK">
-          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="0..1" />
-          <End Role="payment" Type="Self.payment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="reservationitem">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="payment">
-              <PropertyRef Name="idReservationItem" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="paymentReservationItem_Payment_FK">
           <End Role="payment" Type="Self.payment" Multiplicity="0..1" />
           <End Role="paymentreservationitem" Type="Self.paymentreservationitem" Multiplicity="*" />
@@ -2094,6 +2202,18 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="paymentreservationitem">
+              <PropertyRef Name="idPayment" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReservationItem_Payment_FK">
+          <End Role="payment" Type="Self.payment" Multiplicity="1" />
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="payment">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reservationitem">
               <PropertyRef Name="idPayment" />
             </Dependent>
           </ReferentialConstraint>
@@ -2324,6 +2444,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           <EntitySet Name="rvsite_available" EntityType="Self.rvsite_available" />
           <EntitySet Name="rvsite_coord_view" EntityType="Self.rvsite_coord_view" />
           <EntitySet Name="rvsite_status_view" EntityType="Self.rvsite_status_view" />
+          <EntitySet Name="total_per_site_view" EntityType="Self.total_per_site_view" />
           <AssociationSet Name="CheckInOut_PlaceInMap_FK" Association="Self.CheckInOut_PlaceInMap_FK">
             <End Role="placeinmap" EntitySet="placeinmaps" />
             <End Role="checkinout" EntitySet="checkinouts" />
@@ -2388,6 +2509,10 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="ipmevent" EntitySet="ipmevents" />
             <End Role="placeinmap" EntitySet="placeinmaps" />
           </AssociationSet>
+          <AssociationSet Name="Selected_IPMEvent_FK" Association="Self.Selected_IPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevents" />
+            <End Role="selected" EntitySet="selecteds" />
+          </AssociationSet>
           <AssociationSet Name="Session_IPMEvent_FK" Association="Self.Session_IPMEvent_FK">
             <End Role="ipmevent" EntitySet="ipmevents" />
             <End Role="session" EntitySet="sessions" />
@@ -2428,13 +2553,13 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
             <End Role="reasonforpayment" EntitySet="reasonforpayments" />
             <End Role="payment" EntitySet="payments" />
           </AssociationSet>
-          <AssociationSet Name="Payment_ReservationItem_FK" Association="Self.Payment_ReservationItem_FK">
-            <End Role="reservationitem" EntitySet="reservationitems" />
-            <End Role="payment" EntitySet="payments" />
-          </AssociationSet>
           <AssociationSet Name="paymentReservationItem_Payment_FK" Association="Self.paymentReservationItem_Payment_FK">
             <End Role="payment" EntitySet="payments" />
             <End Role="paymentreservationitem" EntitySet="paymentreservationitems" />
+          </AssociationSet>
+          <AssociationSet Name="ReservationItem_Payment_FK" Association="Self.ReservationItem_Payment_FK">
+            <End Role="payment" EntitySet="payments" />
+            <End Role="reservationitem" EntitySet="reservationitems" />
           </AssociationSet>
           <AssociationSet Name="paymentReservationItem_ReservationItem_FK" Association="Self.paymentReservationItem_ReservationItem_FK">
             <End Role="reservationitem" EntitySet="reservationitems" />
@@ -2650,7 +2775,6 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idPaymentMethod" ColumnName="idPaymentMethod" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
-                <ScalarProperty Name="idReservationItem" ColumnName="idReservationItem" />
                 <ScalarProperty Name="reasonForPayment" ColumnName="reasonForPayment" />
                 <ScalarProperty Name="amount" ColumnName="amount" />
                 <ScalarProperty Name="isCredit" ColumnName="isCredit" />
@@ -2659,6 +2783,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
                 <ScalarProperty Name="comments" ColumnName="comments" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+                <ScalarProperty Name="idSession" ColumnName="idSession" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2738,6 +2863,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
                 <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
                 <ScalarProperty Name="idStaff" ColumnName="idStaff" />
+                <ScalarProperty Name="idPayment" ColumnName="idPayment" />
                 <ScalarProperty Name="checkInDate" ColumnName="checkInDate" />
                 <ScalarProperty Name="checkOutDate" ColumnName="checkOutDate" />
                 <ScalarProperty Name="totalAmount" ColumnName="totalAmount" />
@@ -2777,6 +2903,7 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
               <MappingFragment StoreEntitySet="selected">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idSession" ColumnName="idSession" />
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
                 <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
                 <ScalarProperty Name="idStaff" ColumnName="idStaff" />
@@ -2943,6 +3070,26 @@ FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
                 <ScalarProperty Name="ReservedUntil" ColumnName="ReservedUntil" />
                 <ScalarProperty Name="OutOfServiceFrom" ColumnName="OutOfServiceFrom" />
                 <ScalarProperty Name="OutOfServiceUntil" ColumnName="OutOfServiceUntil" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="total_per_site_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.total_per_site_view">
+              <MappingFragment StoreEntitySet="total_per_site_view">
+                <ScalarProperty Name="idSelected" ColumnName="idSelected" />
+                <ScalarProperty Name="idSession" ColumnName="idSession" />
+                <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
+                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="idStaff" ColumnName="idStaff" />
+                <ScalarProperty Name="checkInDate" ColumnName="checkInDate" />
+                <ScalarProperty Name="checkOutDate" ColumnName="checkOutDate" />
+                <ScalarProperty Name="isSiteChecked" ColumnName="isSiteChecked" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="site" ColumnName="site" />
+                <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
+                <ScalarProperty Name="period" ColumnName="period" />
+                <ScalarProperty Name="rate" ColumnName="rate" />
+                <ScalarProperty Name="total" ColumnName="total" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

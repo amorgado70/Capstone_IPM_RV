@@ -162,6 +162,9 @@
     <Compile Include="styleurl.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="total_per_site_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="View\SelectionOption.cs" />
   </ItemGroup>
   <ItemGroup>

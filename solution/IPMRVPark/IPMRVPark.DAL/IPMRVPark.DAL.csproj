@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\TotalPerSiteViewRepository.cs" />
     <Compile Include="Repositories\SelectedRepository.cs" />
     <Compile Include="Repositories\RVSiteAvailableRepository.cs" />
     <Compile Include="Repositories\IPMEventRepository.cs" />

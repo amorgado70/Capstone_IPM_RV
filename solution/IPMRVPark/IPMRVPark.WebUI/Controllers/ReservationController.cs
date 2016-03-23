@@ -20,6 +20,7 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<session> sessions;
         IRepositoryBase<selected> selecteds;
         IRepositoryBase<rvsite_available> rvsites_available;
+        IRepositoryBase<total_per_site_view> totals_per_site_view;
         SessionService sessionService;
 
         public ReservationController(IRepositoryBase<reservation_view> reservations_view,
@@ -27,6 +28,7 @@ namespace IPMRVPark.WebUI.Controllers
             IRepositoryBase<ipmevent> ipmevents,
             IRepositoryBase<rvsite_available> rvsites_available,
             IRepositoryBase<selected> selecteds,
+            IRepositoryBase<total_per_site_view> totals_per_site_view,
             IRepositoryBase<session> sessions)
         {
             this.reservations_view = reservations_view;
@@ -34,14 +36,16 @@ namespace IPMRVPark.WebUI.Controllers
             this.ipmevents = ipmevents;
             this.selecteds = selecteds;
             this.sessions = sessions;
+            this.totals_per_site_view = totals_per_site_view;
             this.rvsites_available = rvsites_available;
             sessionService = new SessionService(this.sessions);
         }//end Constructor
 
+        // For Partial View : Selected
         public ActionResult UpdateSelectedList()
         {
             var _session = sessionService.GetSession(this.HttpContext);
-            var _selected = selecteds.GetAll();
+            var _selected = totals_per_site_view.GetAll();
             _selected = _selected.Where(q => q.idSession == _session.ID);
 
             return PartialView("Selected", _selected);
@@ -158,6 +162,8 @@ namespace IPMRVPark.WebUI.Controllers
             var _session = sessionService.GetSession(this.HttpContext);
             var _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
 
+            ViewBag.startDate = DateTime.Parse(_IPMEvent.startDate.ToString()).ToString("yyyy-MM-dd");
+
             ViewBag.minDate = DateTime.Parse(_IPMEvent.startDate.ToString()).ToString("yyyy-MM-dd");
             ViewBag.maxDate = DateTime.Parse(_IPMEvent.endDate.ToString()).ToString("yyyy-MM-dd");
 
@@ -169,11 +175,13 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult Reservation(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
         {
             var _selected = new selected();
+            
             _selected.checkInDate = checkInDate;
             _selected.checkOutDate = checkOutDate;
             _selected.idRVSite = idRVSite;
             var _session = sessionService.GetSession(this.HttpContext);
             _selected.idSession = _session.ID;
+            _selected.idIPMEvent = _session.idIPMEvent;
             _selected.idStaff = _session.idStaff;
             _selected.idCustomer = _session.idCustomer;
             _selected.isSiteChecked = true;
@@ -185,33 +193,6 @@ namespace IPMRVPark.WebUI.Controllers
 
             return Json(idRVSite);
         }
-
-        //[HttpPost]
-        //public ActionResult SelectedList()
-        //{
-        //    var selected = selecteds.GetAll();
-        //    var result = selected.ToList();
-        //    return Json(result);
-        //}
-
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Reservation(selected _selected)
-        //{
-        //    var _session = sessionService.GetSession(this.HttpContext);
-        //    _selected.idSession = _session.ID;
-        //    _selected.idStaff = _session.idStaff;
-        //    _selected.idCustomer = _session.idCustomer;
-        //    _selected.isSiteChecked = true;
-        //    _selected.createDate = DateTime.Now;
-        //    _selected.lastUpdate = DateTime.Now;
-
-        //    selecteds.Insert(_selected);
-        //    selecteds.Commit();
-
-        //    return View(_selected);
-        //}
 
         // GET: list with filter
         public ActionResult Index(string searchString)
@@ -291,5 +272,13 @@ namespace IPMRVPark.WebUI.Controllers
             reservations_view.Commit();
             return RedirectToAction("Index");
         }
+
+        public ActionResult RemoveSelected(int id)
+        {
+            selecteds.Delete(selecteds.GetById(id));
+            selecteds.Commit();
+            return RedirectToAction("Reservation");
+        }
+
     }
 }

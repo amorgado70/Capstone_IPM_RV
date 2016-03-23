@@ -18,7 +18,6 @@ namespace IPMRVPark.Models
         {
             this.checkinouts = new HashSet<checkinout>();
             this.customeraccounts = new HashSet<customeraccount>();
-            this.payments = new HashSet<payment>();
             this.paymentreservationitems = new HashSet<paymentreservationitem>();
             this.reservationitem_partymember = new HashSet<reservationitem_partymember>();
             this.reserveds = new HashSet<reserved>();
@@ -28,6 +27,7 @@ namespace IPMRVPark.Models
         public long idRVSite { get; set; }
         public long idCustomer { get; set; }
         public long idStaff { get; set; }
+        public long idPayment { get; set; }
         public System.DateTime checkInDate { get; set; }
         public System.DateTime checkOutDate { get; set; }
         public Nullable<decimal> totalAmount { get; set; }
@@ -40,7 +40,7 @@ namespace IPMRVPark.Models
         public virtual ICollection<checkinout> checkinouts { get; set; }
         public virtual customer customer { get; set; }
         public virtual ICollection<customeraccount> customeraccounts { get; set; }
-        public virtual ICollection<payment> payments { get; set; }
+        public virtual payment payment { get; set; }
         public virtual ICollection<paymentreservationitem> paymentreservationitems { get; set; }
         public virtual placeinmap placeinmap { get; set; }
         public virtual staff staff { get; set; }
