@@ -1,0 +1,31 @@
+﻿@model IEnumerable<IPMRVPark.Models.selected>
+
+<!-- List of selected sites -->
+<div class="col-xs-12">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>idSession</th>
+                <th>idSite</th>
+                <th>Check In</th>
+                <th>Check Out</th>
+                <th style="text-align:right;">Total</th>
+                <th style="text-align:right;">Selected</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.idSession)</td>
+                    <td>@Html.DisplayFor(modelItem => item.idRVSite)</td>
+                    <td>@Html.DisplayFor(modelItem => item.checkInDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.checkOutDate)</td>
+                    <td style="text-align:right;">$ 1,400.</td>
+                    <td style="text-align:right;">@Html.DisplayFor(modelItem => item.isSiteChecked)<input type="checkbox" checked></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

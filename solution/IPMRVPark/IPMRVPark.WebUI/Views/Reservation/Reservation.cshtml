@@ -13,101 +13,98 @@ Site Reservation
 
 <!-- New Reservation-->
 <div class="container-fluid">
-
-
-    @*@using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)*@
-
-
-    <!-- RV Site Dates-->
-        <script type="text/javascript">
-                    $(document).ready(function () {
-                        //function will be called on button click having id btnsave
-                        $("#btnSave").click(function () {
-                            $.ajax(
-                            {
-                                type: "POST", //HTTP POST Method
-                                url: "Reservation", // Controller/View
-                                dataType: "json",
-                                data: { //Passing data
-                                    //checkInDate: $("#idRVSite").val(), //Reading text box values using jQuery
-                                    //checkOutDate: $("#checkOutDate").val(),
-                                    idRVSite: $("#idRVSite").val()
-                                },
-                                //success: function (result) {
-                                //    alert("Success.");
-                                //},
-                                error: function (result) {
-                                    alert("Some error occured." +
-                                        result +
-                                        $("#checkInDate").val() +
-                                        $("#checkOutDate").val() +
-                                        $("#idRVSite").val());
-                                }
-                            });
-
-                        });
-                    });
-        </script>
-        <div class="row top-margin">
-            <div class="form-group">
-                <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <label>Check In Date</label>
-                </div>
-                <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <input type="date" id="checkInDate" class="form-control" value="2016-03-21" />
-                </div>
-                <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <label>Check Out Date</label>
-                </div>
-                <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <input type="date" id="checkOutDate" class="form-control dateselector" value="2016-03-25">
-                </div>
-                <button id="btnSave">Save</button>
-            </div>
-        </div>
-    <!-- RV Site Selection -->
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#siteName").autocomplete({
-                    source: function (request, response) {
-                        // define a function to call the action (assuming UserController)
-                        $.ajax({
-                            url: '/Reservation/SearchSiteByNameResult',
-                            type: "POST",
-                            dataType: "json",
-                            // query will be the param used by the action method
-                            data: { query: request.term },
-                            success: response
-                        });
+    <!-- Script to transfer data from selected site -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //function will be called on button click having id btnsave
+            $("#btnSelectSite").click(function () {
+                $.ajax(
+                {
+                    type: "POST", //HTTP POST Method
+                    url: "Reservation", // Controller/View
+                    dataType: "json",
+                    data: { //Passing data
+                        checkInDate: $("#checkInDate").val(), //Reading text box values using jQuery
+                        checkOutDate: $("#checkOutDate").val(),
+                        idRVSite: $("#idRVSite").val()
                     },
-                    minLength: 1, // require at least one character from the user
-                    select: function (event, ui) {
-                        $('#idRVSite').val(ui.item.ID); // name of form input field: CustomerID, ProductID
+                    success: updateSelectedList(), // Update Selected List
+                    error: function (result) {
+                        alert("Some error occured.");
                     }
                 });
+
             });
-        </script>
-        <div class="row top-margin">
-            <div class="form-group">
-                <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>RV Site</label>
-                </div>
-                <div class="col-sm-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
-                    <input type="text" class="form-control" id="siteName" placeholder="Type letter and number then select from the list" />
-                    <input class="text-box single-line" id="idRVSite" name="idRVSite" type="hidden" value="" />
-                </div>
-                <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Select / Add Site">
-                    <button type="submit" value="Create" @*id="btnSave"*@ class="btn btn-block btn-default">
-                        <span class="col-xs-1 glyphicon glyphicon-plus-sign"></span>
-                        <span class="col-xs-9">Select Site</span>
-                    </button>
-                </div>
+
+            //Selected RV Site List
+            updateSelectedList(); // Load Partial View
+            $('.button-refresh-list').click(function () {
+                updateSelectedList();
+            });
+            function updateSelectedList() {
+                //alert("updateSelectedList");
+                $.post('@Url.Action("UpdateSelectedList", "Reservation")').always(function () {
+                    $('.selected-list').load('/Reservation/UpdateSelectedList');
+                })
+            }
+        });
+    </script>
+    <!-- RV Site Dates-->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Check In Date</label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input type="date" id="checkInDate" class="form-control" value="2016-03-21" />
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Check Out Date</label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input type="date" id="checkOutDate" class="form-control dateselector" value="2016-03-25">
             </div>
         </div>
-    @*}*@
+    </div>
+    <!-- RV Site Selection -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#siteName").autocomplete({
+                source: function (request, response) {
+                    // define a function to call the action (assuming UserController)
+                    $.ajax({
+                        url: '/Reservation/SearchSiteByNameResult',
+                        type: "POST",
+                        dataType: "json",
+                        // query will be the param used by the action method
+                        data: { query: request.term },
+                        success: response
+                    });
+                },
+                minLength: 1, // require at least one character from the user
+                select: function (event, ui) {
+                    $('#idRVSite').val(ui.item.ID); // name of form input field: CustomerID, ProductID
+                }
+            });
+        });
+    </script>
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>RV Site</label>
+            </div>
+            <div class="col-sm-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
+                <input type="text" class="form-control" id="siteName" placeholder="Type letter and number then select from the list" />
+                <input class="text-box single-line" id="idRVSite" name="idRVSite" type="hidden" value="" />
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Select / Add Site">
+                <button id="btnSelectSite" class="btn btn-block btn-default">
+                    <span class="col-xs-1 glyphicon glyphicon-plus-sign"></span>
+                    <span class="col-xs-9">Select Site</span>
+                </button>
+            </div>
+        </div>
+    </div>
     <!-- Total amount for this site reservation -->
     <div class="row top-margin">
         <div class="form-group">
@@ -119,48 +116,24 @@ Site Reservation
             </div>
         </div>
     </div>
-    <!-- List of selected sites -->
+
+    <!-- Selected Site List-->
+    <!-- ********** Dynamic Table -->
     <div class="row top-margin" data-toggle="tooltip" title="List Of Sites That Match The Search Criteria Above">
         <div class="col-sm-8 col-xs-12 form-top-margin">
             <span class="col-xs-1 glyphicon glyphicon-list"></span>
             <b>Selected Sites</b>
         </div>
-        <div class="col-sm-4 col-xs-12 form-top-margin">
+        <div class="col-sm-4 col-xs-12 form-top-margin button-refresh-list">
             <button class="btn btn-block btn-default">
                 <span class="col-xs-1 glyphicon glyphicon-refresh"></span>
                 <span class="col-xs-9">Refresh List</span>
             </button>
         </div>
     </div>
-    <div class="col-xs-12">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Site</th>
-                    <th>Check In</th>
-                    <th>Check Out</th>
-                    <th style="text-align:right;">Total</th>
-                    <th style="text-align:right;">Selected</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>A-23</td>
-                    <td>160221</td>
-                    <td>160228</td>
-                    <td style="text-align:right;">$ 1,400.</td>
-                    <td style="text-align:right;"><input type="checkbox" checked></td>
-                </tr>
-                <tr>
-                    <td>A-27</td>
-                    <td>160221</td>
-                    <td>160228</td>
-                    <td style="text-align:right;">$ 1,400.</td>
-                    <td style="text-align:right;"><input type="checkbox" checked></td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="selected-list">
     </div>
+    <!-- ********** -->
     <!-- Customer Selection -->
     <script type="text/javascript">
         $(document).ready(function () {

@@ -38,6 +38,15 @@ namespace IPMRVPark.WebUI.Controllers
             sessionService = new SessionService(this.sessions);
         }//end Constructor
 
+        public ActionResult UpdateSelectedList()
+        {
+            var _session = sessionService.GetSession(this.HttpContext);
+            var _selected = selecteds.GetAll();
+            _selected = _selected.Where(q => q.idSession == _session.ID);
+
+            return PartialView("Selected", _selected);
+        }
+
         public ActionResult GetSessionGUID()
         {
             var result = sessionService.GetSession(this.HttpContext);
@@ -157,11 +166,11 @@ namespace IPMRVPark.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Reservation(long idRVSite)
+        public ActionResult Reservation(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
         {
             var _selected = new selected();
-            //_selected.checkInDate = checkInDate;
-            //_selected.checkOutDate = checkOutDate;
+            _selected.checkInDate = checkInDate;
+            _selected.checkOutDate = checkOutDate;
             _selected.idRVSite = idRVSite;
             var _session = sessionService.GetSession(this.HttpContext);
             _selected.idSession = _session.ID;
@@ -176,6 +185,15 @@ namespace IPMRVPark.WebUI.Controllers
 
             return Json(idRVSite);
         }
+
+        //[HttpPost]
+        //public ActionResult SelectedList()
+        //{
+        //    var selected = selecteds.GetAll();
+        //    var result = selected.ToList();
+        //    return Json(result);
+        //}
+
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]

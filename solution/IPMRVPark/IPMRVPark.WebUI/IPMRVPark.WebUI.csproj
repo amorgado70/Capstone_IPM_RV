@@ -409,6 +409,7 @@
     <Content Include="Views\Maintenance\Province1Create.cshtml" />
     <Content Include="Views\Maintenance\Province2Create.cshtml" />
     <Content Include="Views\Maintenance\Province3Create.cshtml" />
+    <Content Include="Views\Reservation\Selected.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
