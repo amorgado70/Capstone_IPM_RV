@@ -85,3 +85,10 @@ a, .btn, .btn-mylink, label, b, .glyphicon, th {
 /*.btn-mylink{
     color: #337ab7;
 }*/
+
+.ui-datepicker {
+    position: relative;
+    top: 0;
+    left: 0;
+    width:auto;
+}

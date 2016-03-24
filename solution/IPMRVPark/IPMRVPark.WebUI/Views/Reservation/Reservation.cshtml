@@ -16,6 +16,7 @@ Site Reservation
     <!-- Script to transfer data from selected site -->
     <script type="text/javascript">
         $(document).ready(function () {
+            $('#btnSelectSite').prop('disabled', true);
             //function will be called on button click having id btnsave
             $("#btnSelectSite").click(function () {
                 $.ajax(
@@ -28,7 +29,11 @@ Site Reservation
                         checkOutDate: $("#checkOutDate").val(),
                         idRVSite: $("#idRVSite").val()
                     },
-                    success: updateSelectedList(), // Update Selected List
+                    success: function (result) {
+                        updateSelectedList(); // Update Selected List
+                        $('#btnSelectSite').prop('disabled', true); // Disable select button
+                        $("#siteName").val(""); // Reset site name
+                    },
                     error: function (result) {
                         alert("Some error occured.");
                     }
@@ -51,28 +56,65 @@ Site Reservation
     <!-- RV Site Dates-->
     <div class="row top-margin">
         <div class="form-group">
-
             <script type="text/javascript">
-                jQuery(document).ready(function () {
-                    jQuery("#checkInDate").datepicker({ minDate: new Date(2007, 1 - 1, 1) });
+                $(document).ready(function () {
+                    $("#checkInDate").datepicker({
+                        dateFormat: 'yy-M-dd',
+                        minDate: @ViewBag.minDate,
+                        maxDate: @ViewBag.maxDate,
+                        showOtherMonths: true,
+                        selectOtherMonths: true,
+                        dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                        onSelect: function () {
+                            var dt2 = $('#checkOutDate');
+                            var startDate = $(this).datepicker('getDate');
+                            //add 7 days to selected date
+                            startDate.setDate(startDate.getDate() + 7);
+                            var minDate = $(this).datepicker('getDate');
+                            //minDate of dt2 datepicker = dt1 selected day
+                            dt2.datepicker('setDate', startDate);
+                            //sets dt2 maxDate
+                            dt2.datepicker('option', 'maxDate', @ViewBag.maxDate);
+                            //first day which can be selected in dt2 is selected date in dt1
+                            dt2.datepicker('option', 'minDate', minDate);
+                        }
+                    });
+                    $("#checkInDate").datepicker("setDate", @ViewBag.startDate);
+                    $("#checkInDate").click(function(event){
+                        var dim = $(this).offset();
+                        $("#ui-datepicker-div").offset({
+                            top     :   dim.top - 0,
+                            left    :   dim.left - 0
+                        });
+                    });
+                    $("#checkOutDate").datepicker({
+                        dateFormat: 'yy-M-dd',
+                        showOtherMonths: true,
+                        selectOtherMonths: true,
+                        dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+                    });
+                    $("#checkOutDate").datepicker("setDate", @ViewBag.startDate);
+                    $("#checkOutDate").click(function(event){
+                        var dim = $(this).offset();
+                        $("#ui-datepicker-div").offset({
+                            top     :   dim.top - 0,
+                            left    :   dim.left - 0
+                        });
+                    });
                 });
             </script>
-
-            <div id="minDate">@ViewBag.minDate</div>
-            <div id="maxDate">@ViewBag.maxDate</div>
-            <div id="startDate">@ViewBag.startDate</div>
 
             <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>Check In Date</label>
             </div>
             <div class="col-sm-3 col-xs-12 form-top-margin">
-                <input type="date" id="checkInDate" class="form-control" />
+                <input type="text" id="checkInDate" class="form-control" />
             </div>
             <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>Check Out Date</label>
             </div>
             <div class="col-sm-3 col-xs-12 form-top-margin">
-                <input type="date" id="checkOutDate" class="form-control dateselector" value="2016-03-25">
+                <input type="text" id="checkOutDate" class="form-control" />
             </div>
         </div>
     </div>
@@ -94,6 +136,7 @@ Site Reservation
                 minLength: 1, // require at least one character from the user
                 select: function (event, ui) {
                     $('#idRVSite').val(ui.item.ID); // name of form input field: CustomerID, ProductID
+                    $('#btnSelectSite').prop('disabled', false);
                 }
             });
         });

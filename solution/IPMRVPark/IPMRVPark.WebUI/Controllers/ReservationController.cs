@@ -147,13 +147,14 @@ namespace IPMRVPark.WebUI.Controllers
                     }
                     if (results.Count() > 25)
                     {
+                        results.OrderBy(q => q.Label).ToList();
                         results.Add(new SelectionOptionID(-1, "..."));
                         return results;
                     }
                 }
             }
 
-            return results;
+            return results.OrderBy(q => q.Label).ToList();
         }
 
         // New Reservation page - In fact, this page creates a new "selected"
@@ -162,10 +163,15 @@ namespace IPMRVPark.WebUI.Controllers
             var _session = sessionService.GetSession(this.HttpContext);
             var _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
 
-            ViewBag.startDate = DateTime.Parse(_IPMEvent.startDate.ToString()).ToString("yyyy-MM-dd");
-
-            ViewBag.minDate = DateTime.Parse(_IPMEvent.startDate.ToString()).ToString("yyyy-MM-dd");
-            ViewBag.maxDate = DateTime.Parse(_IPMEvent.endDate.ToString()).ToString("yyyy-MM-dd");
+            var start = _IPMEvent.startDate.Value;
+            var end = _IPMEvent.endDate.Value;
+            var now = DateTime.Now;
+            var min = start - now;
+            var max = end - now;
+            
+            ViewBag.startDate = (int) min.TotalDays + 1;
+            ViewBag.minDate = ViewBag.startDate - 7;
+            ViewBag.maxDate = (int) max.TotalDays + 1;
 
             var _selected = new selected();
             return View(_selected);
