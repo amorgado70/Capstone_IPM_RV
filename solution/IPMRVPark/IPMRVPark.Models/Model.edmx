@@ -23,11 +23,11 @@
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idPlaceInMap" Type="bigint" Nullable="false" />
-          <Property Name="seqCoordinate" Type="char" MaxLength="3" Nullable="false" />
-          <Property Name="longitude" Type="decimal" Precision="16" Scale="14" />
-          <Property Name="latitude" Type="decimal" Precision="16" Scale="14" />
-          <Property Name="createDate" Type="date" />
-          <Property Name="lastUpdate" Type="date" />
+          <Property Name="seqCoordinate" Type="int" Nullable="false" />
+          <Property Name="longitude" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="latitude" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="createDate" Type="datetime" Nullable="false" />
+          <Property Name="lastUpdate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="countrycode">
           <Key>
@@ -392,18 +392,20 @@ warning 6002: The table/view 'def.ipmrvpark.reservation_view' does not have a pr
           <Property Name="isCancelled" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'def.ipmrvpark.rvsite_available' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="rvsite_available">
+warning 6002: The table/view 'def.ipmrvpark.rvsite_available_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="rvsite_available_view">
           <Key>
             <PropertyRef Name="id" />
             <PropertyRef Name="site" />
-            <PropertyRef Name="sitesize" />
-            <PropertyRef Name="service" />
+            <PropertyRef Name="idSiteType" />
           </Key>
           <Property Name="id" Type="bigint" Nullable="false" />
           <Property Name="site" Type="varchar" MaxLength="16" Nullable="false" />
-          <Property Name="sitesize" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="service" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="idIPMEvent" Type="bigint" />
+          <Property Name="idSiteType" Type="bigint" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="41" />
+          <Property Name="weeklyRate" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="dailyRate" Type="decimal" Precision="12" Scale="2" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.ipmrvpark.rvsite_coord_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -413,13 +415,15 @@ warning 6002: The table/view 'def.ipmrvpark.rvsite_coord_view' does not have a p
             <PropertyRef Name="seq" />
             <PropertyRef Name="Year" />
             <PropertyRef Name="RVSite" />
+            <PropertyRef Name="longitude" />
+            <PropertyRef Name="latitude" />
           </Key>
           <Property Name="id" Type="bigint" Nullable="false" />
-          <Property Name="seq" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="seq" Type="int" Nullable="false" />
           <Property Name="Year" Type="bigint" Nullable="false" />
           <Property Name="RVSite" Type="varchar" MaxLength="16" Nullable="false" />
-          <Property Name="longitude" Type="decimal" Precision="16" Scale="14" />
-          <Property Name="latitude" Type="decimal" Precision="16" Scale="14" />
+          <Property Name="longitude" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="latitude" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.ipmrvpark.rvsite_status_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -445,43 +449,79 @@ warning 6002: The table/view 'def.ipmrvpark.rvsite_status_view' does not have a 
           <Property Name="OutOfServiceUntil" Type="date" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'def.ipmrvpark.total_per_session_view' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+warning 6002: The table/view 'def.ipmrvpark.site_description_rate_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="site_description_rate_view">
+          <Key>
+            <PropertyRef Name="idSiteType" />
+          </Key>
+          <Property Name="idIPMEvent" Type="bigint" />
+          <Property Name="idSiteType" Type="bigint" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="41" />
+          <Property Name="weeklyRate" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="dailyRate" Type="decimal" Precision="12" Scale="2" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.sitedescription_by_sitetype_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="sitedescription_by_sitetype_view">
+          <Key>
+            <PropertyRef Name="idSiteType" />
+          </Key>
+          <Property Name="idSiteType" Type="bigint" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="41" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.siterate_by_sitetype_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="siterate_by_sitetype_view">
+          <Key>
+            <PropertyRef Name="idSiteType" />
+          </Key>
+          <Property Name="idIPMEvent" Type="bigint" />
+          <Property Name="idSiteType" Type="bigint" Nullable="false" />
+          <Property Name="weeklyRate" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="dailyRate" Type="decimal" Precision="12" Scale="2" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.total_per_session_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="total_per_session_view">
-          <Property Name="idSession" Type="bigint" />
+          <Key>
+            <PropertyRef Name="idSession" />
+          </Key>
+          <Property Name="idSession" Type="bigint" Nullable="false" />
           <Property Name="idCustomer" Type="bigint" />
           <Property Name="idStaff" Type="bigint" />
-          <Property Name="total_amount" Type="decimal" Precision="53" Scale="2" />
-        </EntityType>-->
+          <Property Name="total_amount" Type="decimal" Precision="45" Scale="2" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="total_per_site_view">
           <Key>
             <PropertyRef Name="idSelected" />
             <PropertyRef Name="idSession" />
+            <PropertyRef Name="idSiteType" />
+            <PropertyRef Name="site" />
             <PropertyRef Name="checkInDate" />
             <PropertyRef Name="checkOutDate" />
-            <PropertyRef Name="isSiteChecked" />
             <PropertyRef Name="duration" />
-            <PropertyRef Name="site" />
-            <PropertyRef Name="idSiteType" />
-            <PropertyRef Name="period" />
-            <PropertyRef Name="rate" />
-            <PropertyRef Name="total" />
+            <PropertyRef Name="isSiteChecked" />
           </Key>
           <Property Name="idSelected" Type="bigint" Nullable="false" />
           <Property Name="idSession" Type="bigint" Nullable="false" />
           <Property Name="idRVSite" Type="bigint" />
+          <Property Name="idSiteType" Type="bigint" Nullable="false" />
+          <Property Name="site" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="descriptionRVSite" Type="varchar" MaxLength="41" />
           <Property Name="idCustomer" Type="bigint" />
           <Property Name="idStaff" Type="bigint" />
           <Property Name="checkInDate" Type="date" Nullable="false" />
           <Property Name="checkOutDate" Type="date" Nullable="false" />
-          <Property Name="isSiteChecked" Type="bit" Nullable="false" />
           <Property Name="duration" Type="bigint" Nullable="false" />
-          <Property Name="site" Type="varchar" MaxLength="16" Nullable="false" />
-          <Property Name="idSiteType" Type="bigint" Nullable="false" />
-          <Property Name="period" Type="varchar" MaxLength="12" Nullable="false" />
-          <Property Name="rate" Type="decimal" Precision="12" Scale="2" Nullable="false" />
-          <Property Name="total" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="weeks" Type="bigint" />
+          <Property Name="weeklyRate" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="days" Type="bigint" />
+          <Property Name="dailyRate" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="amount" Type="decimal" Precision="23" Scale="2" />
+          <Property Name="isSiteChecked" Type="bit" Nullable="false" />
+          <Property Name="total" Type="decimal" Precision="23" Scale="2" />
         </EntityType>
         <Association Name="CheckInOut_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
@@ -1085,13 +1125,16 @@ FROM `customer_view` AS `customer_view`</DefiningQuery>
 `reservation_view`.`isCancelled`
 FROM `reservation_view` AS `reservation_view`</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="rvsite_available" EntityType="Self.rvsite_available" store:Type="Views" store:Schema="ipmrvpark">
+          <EntitySet Name="rvsite_available_view" EntityType="Self.rvsite_available_view" store:Type="Views" store:Schema="ipmrvpark">
             <DefiningQuery>SELECT
-`rvsite_available`.`id`, 
-`rvsite_available`.`site`, 
-`rvsite_available`.`sitesize`, 
-`rvsite_available`.`service`
-FROM `rvsite_available` AS `rvsite_available`</DefiningQuery>
+`rvsite_available_view`.`id`, 
+`rvsite_available_view`.`site`, 
+`rvsite_available_view`.`idIPMEvent`, 
+`rvsite_available_view`.`idSiteType`, 
+`rvsite_available_view`.`description`, 
+`rvsite_available_view`.`weeklyRate`, 
+`rvsite_available_view`.`dailyRate`
+FROM `rvsite_available_view` AS `rvsite_available_view`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="rvsite_coord_view" EntityType="Self.rvsite_coord_view" store:Type="Views" store:Schema="ipmrvpark">
             <DefiningQuery>SELECT
@@ -1118,21 +1161,56 @@ FROM `rvsite_coord_view` AS `rvsite_coord_view`</DefiningQuery>
 `rvsite_status_view`.`OutOfServiceUntil`
 FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="site_description_rate_view" EntityType="Self.site_description_rate_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`site_description_rate_view`.`idIPMEvent`, 
+`site_description_rate_view`.`idSiteType`, 
+`site_description_rate_view`.`description`, 
+`site_description_rate_view`.`weeklyRate`, 
+`site_description_rate_view`.`dailyRate`
+FROM `site_description_rate_view` AS `site_description_rate_view`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="sitedescription_by_sitetype_view" EntityType="Self.sitedescription_by_sitetype_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`sitedescription_by_sitetype_view`.`idSiteType`, 
+`sitedescription_by_sitetype_view`.`description`
+FROM `sitedescription_by_sitetype_view` AS `sitedescription_by_sitetype_view`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="siterate_by_sitetype_view" EntityType="Self.siterate_by_sitetype_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`siterate_by_sitetype_view`.`idIPMEvent`, 
+`siterate_by_sitetype_view`.`idSiteType`, 
+`siterate_by_sitetype_view`.`weeklyRate`, 
+`siterate_by_sitetype_view`.`dailyRate`
+FROM `siterate_by_sitetype_view` AS `siterate_by_sitetype_view`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="total_per_session_view" EntityType="Self.total_per_session_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`total_per_session_view`.`idSession`, 
+`total_per_session_view`.`idCustomer`, 
+`total_per_session_view`.`idStaff`, 
+`total_per_session_view`.`total_amount`
+FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="total_per_site_view" EntityType="Self.total_per_site_view" store:Type="Views" store:Schema="ipmrvpark">
             <DefiningQuery>SELECT
 `total_per_site_view`.`idSelected`, 
 `total_per_site_view`.`idSession`, 
 `total_per_site_view`.`idRVSite`, 
+`total_per_site_view`.`idSiteType`, 
+`total_per_site_view`.`site`, 
+`total_per_site_view`.`descriptionRVSite`, 
 `total_per_site_view`.`idCustomer`, 
 `total_per_site_view`.`idStaff`, 
 `total_per_site_view`.`checkInDate`, 
 `total_per_site_view`.`checkOutDate`, 
-`total_per_site_view`.`isSiteChecked`, 
 `total_per_site_view`.`duration`, 
-`total_per_site_view`.`site`, 
-`total_per_site_view`.`idSiteType`, 
-`total_per_site_view`.`period`, 
-`total_per_site_view`.`rate`, 
+`total_per_site_view`.`weeks`, 
+`total_per_site_view`.`weeklyRate`, 
+`total_per_site_view`.`days`, 
+`total_per_site_view`.`dailyRate`, 
+`total_per_site_view`.`amount`, 
+`total_per_site_view`.`isSiteChecked`, 
 `total_per_site_view`.`total`
 FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           </EntitySet>
@@ -1342,11 +1420,11 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idPlaceInMap" Type="Int64" Nullable="false" />
-          <Property Name="seqCoordinate" Type="String" Nullable="false" />
-          <Property Name="longitude" Type="Decimal" />
-          <Property Name="latitude" Type="Decimal" />
-          <Property Name="createDate" Type="DateTime" />
-          <Property Name="lastUpdate" Type="DateTime" />
+          <Property Name="seqCoordinate" Type="Int32" Nullable="false" />
+          <Property Name="longitude" Type="String" Nullable="false" />
+          <Property Name="latitude" Type="String" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Nullable="false" />
+          <Property Name="lastUpdate" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="placeinmap" Relationship="Self.Coordinates_PlaceInMap_FK" FromRole="coordinates" ToRole="placeinmap" />
         </EntityType>
         <EntityType Name="countrycode">
@@ -1794,17 +1872,19 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="numberMemberInParty" Type="Int32" Nullable="false" />
           <Property Name="isCancelled" Type="Boolean" />
         </EntityType>
-        <EntityType Name="rvsite_available">
+        <EntityType Name="rvsite_available_view">
           <Key>
             <PropertyRef Name="id" />
             <PropertyRef Name="site" />
-            <PropertyRef Name="sitesize" />
-            <PropertyRef Name="service" />
+            <PropertyRef Name="idSiteType" />
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" />
           <Property Name="site" Type="String" Nullable="false" />
-          <Property Name="sitesize" Type="String" Nullable="false" />
-          <Property Name="service" Type="String" Nullable="false" />
+          <Property Name="idIPMEvent" Type="Int64" />
+          <Property Name="idSiteType" Type="Int64" Nullable="false" />
+          <Property Name="description" Type="String" />
+          <Property Name="weeklyRate" Type="Decimal" />
+          <Property Name="dailyRate" Type="Decimal" />
         </EntityType>
         <EntityType Name="rvsite_coord_view">
           <Key>
@@ -1812,13 +1892,15 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <PropertyRef Name="seq" />
             <PropertyRef Name="Year" />
             <PropertyRef Name="RVSite" />
+            <PropertyRef Name="longitude" />
+            <PropertyRef Name="latitude" />
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" />
-          <Property Name="seq" Type="String" Nullable="false" />
+          <Property Name="seq" Type="Int32" Nullable="false" />
           <Property Name="Year" Type="Int64" Nullable="false" />
           <Property Name="RVSite" Type="String" Nullable="false" />
-          <Property Name="longitude" Type="Decimal" />
-          <Property Name="latitude" Type="Decimal" />
+          <Property Name="longitude" Type="String" Nullable="false" />
+          <Property Name="latitude" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="rvsite_status_view">
           <Key>
@@ -1841,34 +1923,70 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="OutOfServiceFrom" Type="DateTime" />
           <Property Name="OutOfServiceUntil" Type="DateTime" />
         </EntityType>
+        <EntityType Name="site_description_rate_view">
+          <Key>
+            <PropertyRef Name="idSiteType" />
+          </Key>
+          <Property Name="idIPMEvent" Type="Int64" />
+          <Property Name="idSiteType" Type="Int64" Nullable="false" />
+          <Property Name="description" Type="String" />
+          <Property Name="weeklyRate" Type="Decimal" />
+          <Property Name="dailyRate" Type="Decimal" />
+        </EntityType>
+        <EntityType Name="sitedescription_by_sitetype_view">
+          <Key>
+            <PropertyRef Name="idSiteType" />
+          </Key>
+          <Property Name="idSiteType" Type="Int64" Nullable="false" />
+          <Property Name="description" Type="String" />
+        </EntityType>
+        <EntityType Name="siterate_by_sitetype_view">
+          <Key>
+            <PropertyRef Name="idSiteType" />
+          </Key>
+          <Property Name="idIPMEvent" Type="Int64" />
+          <Property Name="idSiteType" Type="Int64" Nullable="false" />
+          <Property Name="weeklyRate" Type="Decimal" />
+          <Property Name="dailyRate" Type="Decimal" />
+        </EntityType>
+        <EntityType Name="total_per_session_view">
+          <Key>
+            <PropertyRef Name="idSession" />
+          </Key>
+          <Property Name="idSession" Type="Int64" Nullable="false" />
+          <Property Name="idCustomer" Type="Int64" />
+          <Property Name="idStaff" Type="Int64" />
+          <Property Name="total_amount" Type="Decimal" />
+        </EntityType>
         <EntityType Name="total_per_site_view">
           <Key>
             <PropertyRef Name="idSelected" />
             <PropertyRef Name="idSession" />
+            <PropertyRef Name="idSiteType" />
+            <PropertyRef Name="site" />
             <PropertyRef Name="checkInDate" />
             <PropertyRef Name="checkOutDate" />
-            <PropertyRef Name="isSiteChecked" />
             <PropertyRef Name="duration" />
-            <PropertyRef Name="site" />
-            <PropertyRef Name="idSiteType" />
-            <PropertyRef Name="period" />
-            <PropertyRef Name="rate" />
-            <PropertyRef Name="total" />
+            <PropertyRef Name="isSiteChecked" />
           </Key>
           <Property Name="idSelected" Type="Int64" Nullable="false" />
           <Property Name="idSession" Type="Int64" Nullable="false" />
           <Property Name="idRVSite" Type="Int64" />
+          <Property Name="idSiteType" Type="Int64" Nullable="false" />
+          <Property Name="site" Type="String" Nullable="false" />
+          <Property Name="descriptionRVSite" Type="String" />
           <Property Name="idCustomer" Type="Int64" />
           <Property Name="idStaff" Type="Int64" />
           <Property Name="checkInDate" Type="DateTime" Nullable="false" />
           <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
-          <Property Name="isSiteChecked" Type="Boolean" Nullable="false" />
           <Property Name="duration" Type="Int64" Nullable="false" />
-          <Property Name="site" Type="String" Nullable="false" />
-          <Property Name="idSiteType" Type="Int64" Nullable="false" />
-          <Property Name="period" Type="String" Nullable="false" />
-          <Property Name="rate" Type="Decimal" Nullable="false" />
-          <Property Name="total" Type="Decimal" Nullable="false" />
+          <Property Name="weeks" Type="Int64" />
+          <Property Name="weeklyRate" Type="Decimal" />
+          <Property Name="days" Type="Int64" />
+          <Property Name="dailyRate" Type="Decimal" />
+          <Property Name="amount" Type="Decimal" />
+          <Property Name="isSiteChecked" Type="Boolean" Nullable="false" />
+          <Property Name="total" Type="Decimal" />
         </EntityType>
         <Association Name="CheckInOut_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
@@ -2441,9 +2559,13 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <EntitySet Name="styleurls" EntityType="Self.styleurl" />
           <EntitySet Name="customer_view" EntityType="Self.customer_view" />
           <EntitySet Name="reservation_view" EntityType="Self.reservation_view" />
-          <EntitySet Name="rvsite_available" EntityType="Self.rvsite_available" />
+          <EntitySet Name="rvsite_available_view" EntityType="Self.rvsite_available_view" />
           <EntitySet Name="rvsite_coord_view" EntityType="Self.rvsite_coord_view" />
           <EntitySet Name="rvsite_status_view" EntityType="Self.rvsite_status_view" />
+          <EntitySet Name="site_description_rate_view" EntityType="Self.site_description_rate_view" />
+          <EntitySet Name="sitedescription_by_sitetype_view" EntityType="Self.sitedescription_by_sitetype_view" />
+          <EntitySet Name="siterate_by_sitetype_view" EntityType="Self.siterate_by_sitetype_view" />
+          <EntitySet Name="total_per_session_view" EntityType="Self.total_per_session_view" />
           <EntitySet Name="total_per_site_view" EntityType="Self.total_per_site_view" />
           <AssociationSet Name="CheckInOut_PlaceInMap_FK" Association="Self.CheckInOut_PlaceInMap_FK">
             <End Role="placeinmap" EntitySet="placeinmaps" />
@@ -3034,13 +3156,16 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="rvsite_available">
-            <EntityTypeMapping TypeName="ipmrvparkModel.rvsite_available">
-              <MappingFragment StoreEntitySet="rvsite_available">
+          <EntitySetMapping Name="rvsite_available_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.rvsite_available_view">
+              <MappingFragment StoreEntitySet="rvsite_available_view">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="site" ColumnName="site" />
-                <ScalarProperty Name="sitesize" ColumnName="sitesize" />
-                <ScalarProperty Name="service" ColumnName="service" />
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
+                <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="weeklyRate" ColumnName="weeklyRate" />
+                <ScalarProperty Name="dailyRate" ColumnName="dailyRate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3073,22 +3198,65 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="site_description_rate_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.site_description_rate_view">
+              <MappingFragment StoreEntitySet="site_description_rate_view">
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
+                <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="weeklyRate" ColumnName="weeklyRate" />
+                <ScalarProperty Name="dailyRate" ColumnName="dailyRate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sitedescription_by_sitetype_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.sitedescription_by_sitetype_view">
+              <MappingFragment StoreEntitySet="sitedescription_by_sitetype_view">
+                <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="siterate_by_sitetype_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.siterate_by_sitetype_view">
+              <MappingFragment StoreEntitySet="siterate_by_sitetype_view">
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
+                <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
+                <ScalarProperty Name="weeklyRate" ColumnName="weeklyRate" />
+                <ScalarProperty Name="dailyRate" ColumnName="dailyRate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="total_per_session_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.total_per_session_view">
+              <MappingFragment StoreEntitySet="total_per_session_view">
+                <ScalarProperty Name="idSession" ColumnName="idSession" />
+                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="idStaff" ColumnName="idStaff" />
+                <ScalarProperty Name="total_amount" ColumnName="total_amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="total_per_site_view">
             <EntityTypeMapping TypeName="ipmrvparkModel.total_per_site_view">
               <MappingFragment StoreEntitySet="total_per_site_view">
                 <ScalarProperty Name="idSelected" ColumnName="idSelected" />
                 <ScalarProperty Name="idSession" ColumnName="idSession" />
                 <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
+                <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
+                <ScalarProperty Name="site" ColumnName="site" />
+                <ScalarProperty Name="descriptionRVSite" ColumnName="descriptionRVSite" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
                 <ScalarProperty Name="idStaff" ColumnName="idStaff" />
                 <ScalarProperty Name="checkInDate" ColumnName="checkInDate" />
                 <ScalarProperty Name="checkOutDate" ColumnName="checkOutDate" />
-                <ScalarProperty Name="isSiteChecked" ColumnName="isSiteChecked" />
                 <ScalarProperty Name="duration" ColumnName="duration" />
-                <ScalarProperty Name="site" ColumnName="site" />
-                <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
-                <ScalarProperty Name="period" ColumnName="period" />
-                <ScalarProperty Name="rate" ColumnName="rate" />
+                <ScalarProperty Name="weeks" ColumnName="weeks" />
+                <ScalarProperty Name="weeklyRate" ColumnName="weeklyRate" />
+                <ScalarProperty Name="days" ColumnName="days" />
+                <ScalarProperty Name="dailyRate" ColumnName="dailyRate" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="isSiteChecked" ColumnName="isSiteChecked" />
                 <ScalarProperty Name="total" ColumnName="total" />
               </MappingFragment>
             </EntityTypeMapping>

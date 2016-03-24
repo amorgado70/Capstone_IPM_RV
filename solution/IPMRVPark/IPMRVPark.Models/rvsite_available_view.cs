@@ -12,13 +12,14 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class rvsite_coord_view
+    public partial class rvsite_available_view
     {
         public long id { get; set; }
-        public int seq { get; set; }
-        public long Year { get; set; }
-        public string RVSite { get; set; }
-        public string longitude { get; set; }
-        public string latitude { get; set; }
+        public string site { get; set; }
+        public Nullable<long> idIPMEvent { get; set; }
+        public long idSiteType { get; set; }
+        public string description { get; set; }
+        public Nullable<decimal> weeklyRate { get; set; }
+        public Nullable<decimal> dailyRate { get; set; }
     }
 }

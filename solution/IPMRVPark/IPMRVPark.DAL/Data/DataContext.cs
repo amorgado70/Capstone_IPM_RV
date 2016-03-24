@@ -43,9 +43,13 @@ namespace IPMRVPark.Contracts.Data
         public DbSet<styleurl> styleurls { get; set; }
         public DbSet<customer_view> customer_view { get; set; }
         public DbSet<reservation_view> reservation_view { get; set; }
-        public DbSet<rvsite_available> rvsite_available { get; set; }
+        public DbSet<rvsite_available_view> rvsite_available_view { get; set; }
         public DbSet<rvsite_coord_view> rvsite_coord_view { get; set; }
         public DbSet<rvsite_status_view> rvsite_status_view { get; set; }
+        public DbSet<site_description_rate_view> site_description_rate_view { get; set; }
+        public DbSet<sitedescription_by_sitetype_view> sitedescription_by_sitetype_view { get; set; }
+        public DbSet<siterate_by_sitetype_view> siterate_by_sitetype_view { get; set; }
+        public DbSet<total_per_session_view> total_per_session_view { get; set; }
         public DbSet<total_per_site_view> total_per_site_view { get; set; }
     }
 }

@@ -35,7 +35,7 @@ Site Reservation
                         $("#siteName").val(""); // Reset site name
                     },
                     error: function (result) {
-                        alert("Some error occured.");
+                        alert("2 Some error occured.");
                     }
                 });
             });
@@ -56,54 +56,6 @@ Site Reservation
     <!-- RV Site Dates-->
     <div class="row top-margin">
         <div class="form-group">
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    $("#checkInDate").datepicker({
-                        dateFormat: 'yy-M-dd',
-                        minDate: @ViewBag.minDate,
-                        maxDate: @ViewBag.maxDate,
-                        showOtherMonths: true,
-                        selectOtherMonths: true,
-                        dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-                        onSelect: function () {
-                            var dt2 = $('#checkOutDate');
-                            var startDate = $(this).datepicker('getDate');
-                            //add 7 days to selected date
-                            startDate.setDate(startDate.getDate() + 7);
-                            var minDate = $(this).datepicker('getDate');
-                            //minDate of dt2 datepicker = dt1 selected day
-                            dt2.datepicker('setDate', startDate);
-                            //sets dt2 maxDate
-                            dt2.datepicker('option', 'maxDate', @ViewBag.maxDate);
-                            //first day which can be selected in dt2 is selected date in dt1
-                            dt2.datepicker('option', 'minDate', minDate);
-                        }
-                    });
-                    $("#checkInDate").datepicker("setDate", @ViewBag.startDate);
-                    $("#checkInDate").click(function(event){
-                        var dim = $(this).offset();
-                        $("#ui-datepicker-div").offset({
-                            top     :   dim.top - 0,
-                            left    :   dim.left - 0
-                        });
-                    });
-                    $("#checkOutDate").datepicker({
-                        dateFormat: 'yy-M-dd',
-                        showOtherMonths: true,
-                        selectOtherMonths: true,
-                        dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-                    });
-                    $("#checkOutDate").datepicker("setDate", @ViewBag.startDate);
-                    $("#checkOutDate").click(function(event){
-                        var dim = $(this).offset();
-                        $("#ui-datepicker-div").offset({
-                            top     :   dim.top - 0,
-                            left    :   dim.left - 0
-                        });
-                    });
-                });
-            </script>
-
             <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>Check In Date</label>
             </div>
@@ -121,6 +73,53 @@ Site Reservation
     <!-- RV Site Selection -->
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#checkInDate").datepicker({
+                dateFormat: 'D, dd M',
+                minDate: @ViewBag.minDate,
+                maxDate: @ViewBag.maxDate,
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                onSelect: function () {
+                    var dt2 = $('#checkOutDate');
+                    var startDate = $(this).datepicker('getDate');
+                    //add 7 days to selected date
+                    startDate.setDate(startDate.getDate() + 7);
+                    var minDate = $(this).datepicker('getDate');
+                    //minDate of dt2 datepicker = dt1 selected day
+                    dt2.datepicker('setDate', startDate);
+                    //sets dt2 maxDate
+                    dt2.datepicker('option', 'maxDate', @ViewBag.maxDate);
+                    //first day which can be selected in dt2 is selected date in dt1
+                    dt2.datepicker('option', 'minDate', minDate);
+                    getSiteTotal(); // Calculate total for selected site
+                }
+            });
+            $("#checkInDate").datepicker("setDate", @ViewBag.startDate);
+            $("#checkInDate").click(function(event){
+                var dim = $(this).offset();
+                $("#ui-datepicker-div").offset({
+                    top     :   dim.top - 0,
+                    left    :   dim.left - 0
+                });
+            });
+            $("#checkOutDate").datepicker({
+                dateFormat: 'D, dd M',
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                onSelect: function () {
+                    getSiteTotal(); // Calculate total for selected site
+                }
+            });
+            $("#checkOutDate").datepicker("setDate", @ViewBag.startDate);
+            $("#checkOutDate").click(function(event){
+                var dim = $(this).offset();
+                $("#ui-datepicker-div").offset({
+                    top     :   dim.top - 0,
+                    left    :   dim.left - 0
+                });
+            });
             $("#siteName").autocomplete({
                 source: function (request, response) {
                     // define a function to call the action (assuming UserController)
@@ -137,8 +136,27 @@ Site Reservation
                 select: function (event, ui) {
                     $('#idRVSite').val(ui.item.ID); // name of form input field: CustomerID, ProductID
                     $('#btnSelectSite').prop('disabled', false);
+                    getSiteTotal(); // Calculate total for selected site
                 }
             });
+            function getSiteTotal() {
+                if($("#idRVSite").val().length>0) {// Check if idRVSite is null
+                    $.ajax({
+                        url: '/Reservation/GetSiteTotal',
+                        type: "POST",
+                        dataType: "json",
+                        data: { //Passing data
+                            checkInDate: $("#checkInDate").val(), //Reading text box values using jQuery
+                            checkOutDate: $("#checkOutDate").val(),
+                            idRVSite: $("#idRVSite").val()
+                        },
+                        success: function (result) {
+                            $("#siteTotal").text(result);},
+                        error: function () {
+                            alert("5 Some error occured.");}
+                    });
+                };
+            };
         });
     </script>
     <div class="row top-margin">
@@ -147,7 +165,7 @@ Site Reservation
                 <label>RV Site</label>
             </div>
             <div class="col-sm-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
-                <input type="text" class="form-control" id="siteName" placeholder="Type letter and number then select from the list" />
+                <input type="text" class="form-control" id="siteName" placeholder="Type letter or number then select from the list" />
                 <input class="text-box single-line" id="idRVSite" name="idRVSite" type="hidden" value="" />
             </div>
             <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Select / Add Site">
@@ -165,7 +183,7 @@ Site Reservation
                 <label>Total Amount For Selected Site</label>
             </div>
             <div class="col-sm-4 col-xs-12 form-top-margin">
-                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 1,345." style="text-align:right" disabled>
+                <div id="siteTotal" type="text" class="form-control" style="text-align:right" disabled></div>
             </div>
         </div>
     </div>
@@ -176,12 +194,6 @@ Site Reservation
         <div class="col-sm-8 col-xs-12 form-top-margin">
             <span class="col-xs-1 glyphicon glyphicon-list"></span>
             <b>Selected Sites</b>
-        </div>
-        <div class="col-sm-4 col-xs-12 form-top-margin button-refresh-list">
-            <button class="btn btn-block btn-default">
-                <span class="col-xs-1 glyphicon glyphicon-refresh"></span>
-                <span class="col-xs-9">Refresh List</span>
-            </button>
         </div>
     </div>
     <div class="selected-list">

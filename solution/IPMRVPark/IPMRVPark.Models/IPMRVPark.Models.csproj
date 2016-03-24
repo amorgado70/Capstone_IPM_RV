@@ -129,7 +129,7 @@
     <Compile Include="reserved.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="rvsite_available.cs">
+    <Compile Include="rvsite_available_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="rvsite_coord_view.cs">
@@ -147,7 +147,13 @@
     <Compile Include="session.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="sitedescription_by_sitetype_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="siterate.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="siterate_by_sitetype_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="sitesize.cs">
@@ -156,10 +162,16 @@
     <Compile Include="sitetype.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="site_description_rate_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="staff.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="styleurl.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="total_per_session_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="total_per_site_view.cs">

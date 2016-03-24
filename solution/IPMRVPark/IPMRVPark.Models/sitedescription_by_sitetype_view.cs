@@ -12,11 +12,9 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class rvsite_available
+    public partial class sitedescription_by_sitetype_view
     {
-        public long id { get; set; }
-        public string site { get; set; }
-        public string sitesize { get; set; }
-        public string service { get; set; }
+        public long idSiteType { get; set; }
+        public string description { get; set; }
     }
 }

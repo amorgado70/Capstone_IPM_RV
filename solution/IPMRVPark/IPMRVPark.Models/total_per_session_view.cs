@@ -12,13 +12,11 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class rvsite_coord_view
+    public partial class total_per_session_view
     {
-        public long id { get; set; }
-        public int seq { get; set; }
-        public long Year { get; set; }
-        public string RVSite { get; set; }
-        public string longitude { get; set; }
-        public string latitude { get; set; }
+        public long idSession { get; set; }
+        public Nullable<long> idCustomer { get; set; }
+        public Nullable<long> idStaff { get; set; }
+        public Nullable<decimal> total_amount { get; set; }
     }
 }

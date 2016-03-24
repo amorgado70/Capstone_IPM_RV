@@ -7,9 +7,9 @@ using System.Text;
 
 namespace IPMRVPark.Contracts.Repositories
 {
-    public class RVSiteAvailableRepository : RepositoryBase<rvsite_available>
+    public class RVSiteAvailableViewRepository : RepositoryBase<rvsite_available_view>
     {
-        public RVSiteAvailableRepository(DataContext context)
+        public RVSiteAvailableViewRepository(DataContext context)
             : base(context)
         { if (context == null) throw new ArgumentNullException(); }
     }//end CountryRepository

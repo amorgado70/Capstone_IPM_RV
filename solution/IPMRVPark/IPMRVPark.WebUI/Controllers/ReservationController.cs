@@ -14,30 +14,33 @@ namespace IPMRVPark.WebUI.Controllers
 {
     public class ReservationController : Controller
     {
-        IRepositoryBase<reservation_view> reservations_view;
+        IRepositoryBase<reservation_view> reservations;
         IRepositoryBase<customer_view> customers;
         IRepositoryBase<ipmevent> ipmevents;
         IRepositoryBase<session> sessions;
         IRepositoryBase<selected> selecteds;
-        IRepositoryBase<rvsite_available> rvsites_available;
-        IRepositoryBase<total_per_site_view> totals_per_site_view;
+        IRepositoryBase<rvsite_available_view> rvsites_available;
+        IRepositoryBase<total_per_site_view> totals_per_site;
+        IRepositoryBase<site_description_rate_view> sites_description_rate;
         SessionService sessionService;
 
-        public ReservationController(IRepositoryBase<reservation_view> reservations_view,
+        public ReservationController(IRepositoryBase<reservation_view> reservations,
             IRepositoryBase<customer_view> customers,
             IRepositoryBase<ipmevent> ipmevents,
-            IRepositoryBase<rvsite_available> rvsites_available,
+            IRepositoryBase<rvsite_available_view> rvsites_available,
             IRepositoryBase<selected> selecteds,
-            IRepositoryBase<total_per_site_view> totals_per_site_view,
+            IRepositoryBase<total_per_site_view> totals_per_site,
+            IRepositoryBase<site_description_rate_view> sites_description_rate,
             IRepositoryBase<session> sessions)
         {
-            this.reservations_view = reservations_view;
+            this.reservations = reservations;
             this.customers = customers;
             this.ipmevents = ipmevents;
             this.selecteds = selecteds;
             this.sessions = sessions;
-            this.totals_per_site_view = totals_per_site_view;
+            this.totals_per_site = totals_per_site;
             this.rvsites_available = rvsites_available;
+            this.sites_description_rate = sites_description_rate;
             sessionService = new SessionService(this.sessions);
         }//end Constructor
 
@@ -45,17 +48,19 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult UpdateSelectedList()
         {
             var _session = sessionService.GetSession(this.HttpContext);
-            var _selected = totals_per_site_view.GetAll();
-            _selected = _selected.Where(q => q.idSession == _session.ID);
+            var _selected = totals_per_site.GetAll();
+            _selected = _selected.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
 
             return PartialView("Selected", _selected);
         }
 
         public ActionResult GetSessionGUID()
         {
-            var result = sessionService.GetSession(this.HttpContext);
-            string sessionSummary = "sessionID:" + result.ID +
-                " sessionGUID:" + result.sessionGUID;
+            var _session = sessionService.GetSession(this.HttpContext);
+            var _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
+            string sessionSummary = "sessionID: " + _session.ID +
+                " sessionGUID: " + _session.sessionGUID +
+                " IPMEvent: " + _IPMEvent.year;
             return Json(sessionSummary);
         }
 
@@ -138,7 +143,7 @@ namespace IPMRVPark.WebUI.Controllers
             if (searchString != null)
             {
                 //Filter by RV Site
-                foreach (rvsite_available rvsite in allRVSites)
+                foreach (rvsite_available_view rvsite in allRVSites)
                 {
                     string rvsiteShort = rgx.Replace(rvsite.site, "").ToUpper();
                     if (rvsiteShort.Contains(searchString))
@@ -168,20 +173,37 @@ namespace IPMRVPark.WebUI.Controllers
             var now = DateTime.Now;
             var min = start - now;
             var max = end - now;
-            
-            ViewBag.startDate = (int) min.TotalDays + 1;
+
+            ViewBag.startDate = (int)min.TotalDays + 1;
             ViewBag.minDate = ViewBag.startDate - 7;
-            ViewBag.maxDate = (int) max.TotalDays + 1;
+            ViewBag.maxDate = (int)max.TotalDays + 1;
 
             var _selected = new selected();
             return View(_selected);
         }
 
         [HttpPost]
+        public ActionResult GetSiteTotal(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
+        {
+            double amount = 0;
+            var site = rvsites_available.GetAll().Where(s => s.id == idRVSite).First();
+            if (site != null)
+            {                
+                int duration = (int)(checkOutDate - checkInDate).TotalDays + 1;
+                int weeks = duration / 7;
+                int days = duration % 7;
+                amount = Convert.ToDouble(site.weeklyRate) * weeks +
+                    Convert.ToDouble(site.dailyRate) * days;
+            }
+            string result = amount.ToString("C");
+            return Json(result);
+        }
+
+        [HttpPost]
         public ActionResult Reservation(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
         {
             var _selected = new selected();
-            
+
             _selected.checkInDate = checkInDate;
             _selected.checkOutDate = checkOutDate;
             _selected.idRVSite = idRVSite;
@@ -203,39 +225,39 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: list with filter
         public ActionResult Index(string searchString)
         {
-            var reservation_view = reservations_view.GetAll();
+            var reservation = reservations.GetAll();
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                reservation_view = reservation_view.Where(s => s.fullName.Contains(searchString));
+                reservation = reservation.Where(s => s.fullName.Contains(searchString));
             }
 
-            return View(reservation_view);
+            return View(reservation);
         }
 
         // GET: /Details/5
         public ActionResult Details(int? id)
         {
-            var reservation_view = reservations_view.GetById(id);
-            if (reservation_view == null)
+            var reservation = reservations.GetById(id);
+            if (reservation == null)
             {
                 return HttpNotFound();
             }
-            return View(reservation_view);
+            return View(reservation);
         }
 
         // GET: /Create
         public ActionResult Create()
         {
-            var reservation_view = new reservation_view();
-            return View(reservation_view);
+            var reservation = new reservation_view();
+            return View(reservation);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(reservation_view reservation_view)
+        public ActionResult Create(reservation_view reservation)
         {
-            reservations_view.Insert(reservation_view);
-            reservations_view.Commit();
+            reservations.Insert(reservation);
+            reservations.Commit();
 
             return RedirectToAction("Index");
         }
@@ -243,19 +265,19 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Edit/5
         public ActionResult Edit(int id)
         {
-            reservation_view reservation_view = reservations_view.GetById(id);
-            if (reservation_view == null)
+            reservation_view reservation = reservations.GetById(id);
+            if (reservation == null)
             {
                 return HttpNotFound();
             }
-            return View(reservation_view);
+            return View(reservation);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(reservation_view reservation_view)
+        public ActionResult Edit(reservation_view reservation)
         {
-            reservations_view.Update(reservation_view);
-            reservations_view.Commit();
+            reservations.Update(reservation);
+            reservations.Commit();
 
             return RedirectToAction("Index");
         }
@@ -263,19 +285,19 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Delete/5
         public ActionResult Delete(int id)
         {
-            reservation_view reservation_view = reservations_view.GetById(id);
-            if (reservation_view == null)
+            reservation_view reservation = reservations.GetById(id);
+            if (reservation == null)
             {
                 return HttpNotFound();
             }
-            return View(reservation_view);
+            return View(reservation);
         }
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirm(int id)
         {
-            reservations_view.Delete(reservations_view.GetById(id));
-            reservations_view.Commit();
+            reservations.Delete(reservations.GetById(id));
+            reservations.Commit();
             return RedirectToAction("Index");
         }
 

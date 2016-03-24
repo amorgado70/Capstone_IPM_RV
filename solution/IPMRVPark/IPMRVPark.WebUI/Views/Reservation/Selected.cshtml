@@ -19,9 +19,9 @@
             {
                 <tr>
                     <td style="text-align:right;">@Html.DisplayFor(modelItem => item.isSiteChecked)<input type="checkbox" checked></td>
-                    <td>@Html.DisplayFor(modelItem => item.site)</td>
-                    <td>@Html.DisplayFor(modelItem => item.checkInDate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.checkOutDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.site)</td>                    
+                    <td>@item.checkInDate.ToString("ddd"), @item.checkInDate.ToString("dd") @item.checkInDate.ToString("MMM")</td>
+                    <td>@item.checkOutDate.ToString("ddd"), @item.checkOutDate.ToString("dd") @item.checkOutDate.ToString("MMM")</td>
                     <td style="text-align:right;">@Html.DisplayFor(modelItem => item.total)</td>
                     <td colspan="4" style="border-top:none">
                         <div class="dropdown pull-right">

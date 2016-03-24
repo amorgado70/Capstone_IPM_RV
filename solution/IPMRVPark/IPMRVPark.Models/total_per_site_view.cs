@@ -17,16 +17,20 @@ namespace IPMRVPark.Models
         public long idSelected { get; set; }
         public long idSession { get; set; }
         public Nullable<long> idRVSite { get; set; }
+        public long idSiteType { get; set; }
+        public string site { get; set; }
+        public string descriptionRVSite { get; set; }
         public Nullable<long> idCustomer { get; set; }
         public Nullable<long> idStaff { get; set; }
         public System.DateTime checkInDate { get; set; }
         public System.DateTime checkOutDate { get; set; }
-        public bool isSiteChecked { get; set; }
         public long duration { get; set; }
-        public string site { get; set; }
-        public long idSiteType { get; set; }
-        public string period { get; set; }
-        public decimal rate { get; set; }
-        public decimal total { get; set; }
+        public Nullable<long> weeks { get; set; }
+        public Nullable<decimal> weeklyRate { get; set; }
+        public Nullable<long> days { get; set; }
+        public Nullable<decimal> dailyRate { get; set; }
+        public Nullable<decimal> amount { get; set; }
+        public bool isSiteChecked { get; set; }
+        public Nullable<decimal> total { get; set; }
     }
 }
