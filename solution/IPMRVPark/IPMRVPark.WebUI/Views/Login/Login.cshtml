@@ -1,0 +1,138 @@
+﻿@{
+    ViewBag.Title = "Staff Log In";
+    ViewBag.PageTitle = "Staff Log In";
+}
+
+@Html.ActionLink("Home", "Home", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Staff Log In", "Login", "PrototypeUI")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#unauthorizedUser").hide();
+        // User Email
+        $.ajax({
+            url: '/Login/GetSessionEmail',
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                var userID = data.ID;
+                var userLabel = data.Label;
+                $("#idUser").val(userID);
+                $('#userEmail').val(userLabel);
+                //check user ID
+                if (userID == -1) {
+                    $("#unauthorizedUser").show();
+                }
+                else {
+                    $("#unauthorizedUser").hide();
+                }
+            },
+            error: function () {
+                alert("3 Some error occured.");
+            }
+        });
+        $("#userEmail").click(function () {
+            $("#userEmail").val("");
+            $("#userUnauthorized").hide;
+        });
+        //function will be called on button click
+        $("#btnSelectUser").click(function () {
+            $.ajax(
+            {
+                type: "POST", //HTTP POST Method
+                url: "/Login/SelectUser", // Controller/View
+                dataType: "json",
+                data: { //Passing data
+                    userEmail: $("#userEmail").val()
+                },
+                success: function (result) {
+                    var userID = result;
+                    $("#idUser").val(userID);
+                    //check user ID
+                    if (userID == -1) {
+                        $("#unauthorizedUser").show();
+                    }
+                    else {
+                        $("#unauthorizedUser").hide();
+                    }
+                },
+                error: function (result) {
+                    alert("7 Some error occured.");
+                }
+            });
+        });
+        //function will be called on button click
+        $("#btnChangeYear").click(function () {
+            $.ajax(
+            {
+                type: "POST", //HTTP POST Method
+                url: "/Login/ChangeYear", // Controller/View
+                dataType: "json",
+                data: { //Passing data
+                    idIPMEvent: $("#IPMEventYear").val()
+                },
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (result) {
+                    alert("7 Some error occured.");
+                }
+            });
+        });
+
+    });
+</script>
+
+<div class="container-fluid">
+    <!-- IPM Event Year -->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
+                <div class="col-sm-6 col-xs-12 form-top-margin">
+                    <label>IPM Event Year</label>
+                </div>
+                <div class="col-sm-6 col-xs-12 form-top-margin">
+                    @Html.DropDownList("IPMEventYear", null, null, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
+            <div class="col-sm-9 col-sm-push-3 col-xs-12 form-top-margin">
+                <button id="btnChangeYear" class="btn btn-block btn-default">
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                    <span class="col-xs-9">Change Year</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Email -->
+    <div class="row form-top-margin">
+        <div class="form-group">
+            <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <label>Email</label>
+                </div>
+                <div class="col-sm-9 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="userEmail" placeholder="Type email" />
+                    <input class="text-box single-line" id="idUser" name="idUser" type="hidden" />
+                    <div id="unauthorizedUser" style="color: red; font-weight: bold;">
+                        non authorized user
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
+            <div class="col-sm-9 col-sm-push-3 col-xs-12 form-top-margin">
+                <button id="btnSelectUser" class="btn btn-block btn-default">
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                    <span class="col-xs-9">Confirm User</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

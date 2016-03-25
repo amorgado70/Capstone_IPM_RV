@@ -229,6 +229,7 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\CustomerViewController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\PrototypeUIController.cs" />
     <Compile Include="Controllers\ReservationController.cs" />
@@ -358,11 +359,6 @@
     <Content Include="Views\Customers\Delete.cshtml" />
     <Content Include="Views\Country\Index.cshtml" />
     <Content Include="Views\CustomerView\Index.cshtml" />
-    <Content Include="Views\Reservation\Create.cshtml" />
-    <Content Include="Views\Reservation\Delete.cshtml" />
-    <Content Include="Views\Reservation\Details.cshtml" />
-    <Content Include="Views\Reservation\Edit.cshtml" />
-    <Content Include="Views\Reservation\Index.cshtml" />
     <Content Include="Views\PrototypeUI\Home.cshtml" />
     <Content Include="Views\PrototypeUI\IPMEventMap.cshtml" />
     <Content Include="Views\PrototypeUI\Reservation.cshtml" />
@@ -385,6 +381,7 @@
     <Content Include="Views\Maintenance\Province2Create.cshtml" />
     <Content Include="Views\Maintenance\Province3Create.cshtml" />
     <Content Include="Views\Reservation\Selected.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

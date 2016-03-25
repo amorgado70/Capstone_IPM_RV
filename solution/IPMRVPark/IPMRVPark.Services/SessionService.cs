@@ -33,13 +33,10 @@ namespace IPMRVPark.Services
             //create a sessionID as Guid and convert to a string to be stored in database
             _session.sessionGUID = Guid.NewGuid().ToString();
 
-
-            //****** to be removed after test
             _session.idIPMEvent = 3;
-            //_session.isLoggedIn = false;
-            //_session.idStaff = 1176262;
-            //_session.idCustomer = 1281633;
-            //****** to be removed after test
+            _session.isLoggedIn = false;
+            _session.idStaff = -1;
+            _session.idCustomer = -1;
 
             //add and persist in the database.
             sessions.Insert(_session);
@@ -47,7 +44,7 @@ namespace IPMRVPark.Services
 
             //add the session id to a cookie
             cookie.Value = _session.sessionGUID;
-            cookie.Expires = DateTime.Now.AddDays(1);
+            cookie.Expires = DateTime.Now.AddDays(7);
             httpContext.Response.Cookies.Add(cookie);
 
             return _session;
@@ -72,7 +69,10 @@ namespace IPMRVPark.Services
                         {
                             result = sessionList.First();
                             if (result != null)//session found in database
-                                return result;
+                            {
+                                cookie.Expires = DateTime.Now.AddDays(7);//update cookie expiry date
+                                return result;                                
+                            };
                         }
                     }
                 }

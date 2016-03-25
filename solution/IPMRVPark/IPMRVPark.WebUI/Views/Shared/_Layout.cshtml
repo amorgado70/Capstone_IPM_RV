@@ -26,22 +26,6 @@
                 </div>
             </div>
         </div>
-        <p>
-            <script type="text/javascript">
-                            $(document).ready(function () {
-                                $.ajax({
-                                    url: '/Reservation/GetSessionGUID',
-                                    type: "POST",
-                                    dataType: "json",
-                                    success: function (data) {
-                                        $("#sessionGUID").text(data);},
-                                    error: function () {
-                                        alert("Some error occured.");}
-                                });
-                            });
-            </script>
-            <span sytle="color: white;" id="sessionGUID"></span>
-        </p>
     </header>
 
     <section>
@@ -63,7 +47,22 @@
             </div>
         </div>
     </div>
-
+    <p>
+        <script type="text/javascript">
+                            $(document).ready(function () {
+                                $.ajax({
+                                    url: '/Reservation/GetSessionGUID',
+                                    type: "POST",
+                                    dataType: "json",
+                                    success: function (data) {
+                                        $("#sessionGUID").text(data);},
+                                    error: function () {
+                                        alert("Some error occured.");}
+                                });
+                            });
+        </script>
+        <span id="sessionGUID"></span>
+    </p>
     <h1>
         @Html.ActionLink("3 Examples", "ProvinceIndex", "Maintenance")
     </h1>
