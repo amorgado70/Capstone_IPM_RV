@@ -51,6 +51,11 @@ namespace IPMRVPark.WebUI.Controllers
             var _selected = totals_per_site.GetAll();
             _selected = _selected.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
 
+            if (_selected.Count() > 0)
+            {
+                ViewBag.totalAmount = _selected.Sum(s => s.amount).Value.ToString("C");
+            }
+
             return PartialView("Selected", _selected);
         }
 
@@ -62,6 +67,66 @@ namespace IPMRVPark.WebUI.Controllers
                 " sessionGUID: " + _session.sessionGUID +
                 " IPMEvent: " + _IPMEvent.year;
             return Json(sessionSummary);
+        }
+
+        public ActionResult GetSessionCustomer()
+        {
+            SelectionOptionID customer = new SelectionOptionID(-1, "");
+            var _session = sessionService.GetSession(this.HttpContext);
+            if (_session.idCustomer != null)
+            {
+                var _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).First();
+                if (_customer != null)
+                {
+                    customer.ID = _session.idCustomer.Value;
+                    customer.Label = _customer.fullName + " - Phone: " + _customer.mainPhone;
+                };
+            };
+            return Json(customer);
+        }
+
+        public ActionResult GetReservationSummary()
+        {
+            string summary = string.Empty;
+            var _session = sessionService.GetSession(this.HttpContext);
+            if (_session.idCustomer != null)
+            {
+                var _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).First();
+                var _selected = totals_per_site.GetAll();
+                if (_session.ID > 0)
+                {
+                    _selected = _selected.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
+
+                    if ( _selected.Count() > 0)
+                    {
+                        summary = _customer.fullName + ", " + _customer.mainPhone;
+                        foreach (var item in _selected)
+                        {
+                            summary = summary + ", " + item.site;
+                        }
+                        string totalAmount = _selected.Sum(s => s.amount).Value.ToString("C");
+                        summary = summary + ", CAD" + totalAmount;
+                    };
+                };
+            };
+            return Json(summary);
+        }
+
+        public ActionResult GetReservationTotal()
+        {
+            string total = string.Empty;
+            var _session = sessionService.GetSession(this.HttpContext);
+            var _selected = totals_per_site.GetAll();
+            _selected = _selected.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
+
+            if (_selected.Count() > 0)
+            {
+                total = "( " + _selected.Count() + " ) ";
+                string totalAmount = _selected.Sum(s => s.amount).Value.ToString("C");
+                total = total + "CAD" + totalAmount;
+            };
+
+            return Json(total);
         }
 
         // Search results for autocomplete dropdown list
@@ -178,8 +243,7 @@ namespace IPMRVPark.WebUI.Controllers
             ViewBag.minDate = ViewBag.startDate - 7;
             ViewBag.maxDate = (int)max.TotalDays + 1;
 
-            var _selected = new selected();
-            return View(_selected);
+            return View();
         }
 
         [HttpPost]
@@ -188,7 +252,7 @@ namespace IPMRVPark.WebUI.Controllers
             double amount = 0;
             var site = rvsites_available.GetAll().Where(s => s.id == idRVSite).First();
             if (site != null)
-            {                
+            {
                 int duration = (int)(checkOutDate - checkInDate).TotalDays + 1;
                 int weeks = duration / 7;
                 int days = duration % 7;
@@ -200,7 +264,7 @@ namespace IPMRVPark.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Reservation(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
+        public ActionResult SelectSite(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
         {
             var _selected = new selected();
 
@@ -220,6 +284,16 @@ namespace IPMRVPark.WebUI.Controllers
             selecteds.Commit();
 
             return Json(idRVSite);
+        }
+
+        [HttpPost]
+        public ActionResult SelectCustomer(long idCustomer)
+        {
+            session _session = sessions.GetById(sessionService.GetSession(this.HttpContext).ID);
+            _session.idCustomer = idCustomer;
+            sessions.Update(_session);
+            sessions.Commit();
+            return Json(idCustomer);
         }
 
         // GET: list with filter
@@ -299,6 +373,24 @@ namespace IPMRVPark.WebUI.Controllers
             reservations.Delete(reservations.GetById(id));
             reservations.Commit();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult RemoveAllSelected()
+        {
+            var _session = sessionService.GetSession(this.HttpContext);
+            var allSelected = totals_per_site.GetAll();
+            allSelected = allSelected.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
+
+            if (allSelected.Count() > 0)
+            {
+                foreach (var _selected in allSelected)
+                {
+                    selecteds.Delete(selecteds.GetById(_selected.idSelected));
+                }
+                selecteds.Commit();
+            }
+
+            return RedirectToAction("Reservation");
         }
 
         public ActionResult RemoveSelected(int id)

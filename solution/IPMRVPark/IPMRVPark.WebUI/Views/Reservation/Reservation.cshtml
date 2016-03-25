@@ -1,5 +1,3 @@
-@model IPMRVPark.Models.selected
-
 @{
     ViewBag.Title = "Site Reservation";
     ViewBag.PageTitle = "New Reservation";
@@ -11,18 +9,89 @@ Site Reservation
 <span class="glyphicon glyphicon-chevron-right"></span>
 @Html.ActionLink("New Reservation", "Reservation", "PrototypeUI")
 
-<!-- New Reservation-->
-<div class="container-fluid">
-    <!-- Script to transfer data from selected site -->
-    <script type="text/javascript">
-        $(document).ready(function () {
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // ***** Dates Selection
+        $("#checkInDate").datepicker({
+            dateFormat: 'D, dd M',
+            minDate: @ViewBag.minDate,
+            maxDate: @ViewBag.maxDate,
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            onSelect: function () {
+                var dt2 = $('#checkOutDate');
+                var startDate = $(this).datepicker('getDate');
+                //add 7 days to selected date
+                startDate.setDate(startDate.getDate() + 7);
+                var minDate = $(this).datepicker('getDate');
+                //minDate of dt2 datepicker = dt1 selected day
+                dt2.datepicker('setDate', startDate);
+                //sets dt2 maxDate
+                dt2.datepicker('option', 'maxDate', @ViewBag.maxDate);
+                //first day which can be selected in dt2 is selected date in dt1
+                dt2.datepicker('option', 'minDate', minDate);
+                getSiteTotal(); // Calculate total for selected site
+            }
+        });
+        $("#checkInDate").datepicker("setDate", @ViewBag.startDate);
+        $("#checkInDate").click(function(event){
+            var dim = $(this).offset();
+            $("#ui-datepicker-div").offset({
+                top     :   dim.top - 0,
+                left    :   dim.left - 0
+            });
+        });
+        $("#checkOutDate").datepicker({
+            dateFormat: 'D, dd M',
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            onSelect: function () {
+                getSiteTotal(); // Calculate total for selected site
+            }
+        });
+        $("#checkOutDate").datepicker("setDate", @ViewBag.startDate);
+        $("#checkOutDate").click(function(event){
+            var dim = $(this).offset();
+            $("#ui-datepicker-div").offset({
+                top     :   dim.top - 0,
+                left    :   dim.left - 0
+            });
+        });
+
+        // ***** Site Search
+        $("#siteName").click(function (){
+            $("#siteName").val("");
+            $("#siteTotal").text("");
             $('#btnSelectSite').prop('disabled', true);
-            //function will be called on button click having id btnsave
-            $("#btnSelectSite").click(function () {
-                $.ajax(
-                {
-                    type: "POST", //HTTP POST Method
-                    url: "Reservation", // Controller/View
+        });
+        $("#siteName").autocomplete({
+            source: function (request, response) {
+                // define a function to call the action (assuming UserController)
+                $.ajax({
+                    url: '/Reservation/SearchSiteByNameResult',
+                    type: "POST",
+                    dataType: "json",
+                    // query will be the param used by the action method
+                    data: { query: request.term },
+                    success: response
+                });
+            },
+            minLength: 1, // require at least one character from the user
+            select: function (event, ui) {
+                $('#idRVSite').val(ui.item.ID); // name of form input field: CustomerID, ProductID
+                $('#btnSelectSite').prop('disabled', false);
+                $('#btnSelectSite').focus();
+                getSiteTotal(); // Calculate total for selected site
+            }
+        });
+        function getSiteTotal() {
+            if($("#idRVSite").val().length>0) {// Check if idRVSite is null
+                $.ajax({
+                    url: '/Reservation/GetSiteTotal',
+                    type: "POST",
                     dataType: "json",
                     data: { //Passing data
                         checkInDate: $("#checkInDate").val(), //Reading text box values using jQuery
@@ -30,29 +99,131 @@ Site Reservation
                         idRVSite: $("#idRVSite").val()
                     },
                     success: function (result) {
-                        updateSelectedList(); // Update Selected List
-                        $('#btnSelectSite').prop('disabled', true); // Disable select button
-                        $("#siteName").val(""); // Reset site name
-                    },
-                    error: function (result) {
-                        alert("2 Some error occured.");
-                    }
+                        $("#siteTotal").text(result);},
+                    error: function () {
+                        alert("5 Some error occured.");}
                 });
-            });
+            };
+        };
 
-            //Selected RV Site List
-            updateSelectedList(); // Load Partial View
-            $('.button-refresh-list').click(function () {
-                updateSelectedList();
+        // ***** Site Selection
+        $('#btnSelectSite').prop('disabled', true);
+        //function will be called on button click
+        $("#btnSelectSite").click(function () {
+            $.ajax(
+            {
+                type: "POST", //HTTP POST Method
+                url: "/Reservation/SelectSite", // Controller/View
+                dataType: "json",
+                data: { //Passing data
+                    checkInDate: $("#checkInDate").val(), //Reading text box values using jQuery
+                    checkOutDate: $("#checkOutDate").val(),
+                    idRVSite: $("#idRVSite").val()
+                },
+                success: function (result) {
+                    updateSelectedList(); // Update Selected List
+                    $('#btnSelectSite').prop('disabled', true); // Disable select button
+                    $("#siteName").val(""); // Reset site name
+                },
+                error: function (result) {
+                    alert("2 Some error occured." + $("#idRVSite").val() );
+                }
             });
-            function updateSelectedList() {
-                //alert("updateSelectedList");
-                $.post('@Url.Action("UpdateSelectedList", "Reservation")').always(function () {
-                    $('.selected-list').load('/Reservation/UpdateSelectedList');
-                })
+        });
+        updateSelectedList(); //execute when page is ready
+        function updateSelectedList() {
+            $('#selected-list').load('/Reservation/UpdateSelectedList'); // load partial view
+            getReservationTotal(); // Update reservation total
+            getReservationSummary(); // Update reservation summary
+        }
+
+        // ***** Customer Search
+        $("#customerName").click(function (){
+            $("#customerName").val("");
+            $('#btnSelectCustomer').prop('disabled', true);
+        });
+        $("#customerName").autocomplete({
+            source: function (request, response) {
+                // define a function to call the action (assuming UserController)
+                $.ajax({
+                    url: '/Reservation/SearchCustomerByNameOrPhoneResult',
+                    type: "POST",
+                    dataType: "json",
+                    // query will be the param used by the action method
+                    data: { query: request.term },
+                    success: response
+                });
+            },
+            minLength: 1, // require at least one character from the user
+            select: function (event, ui) {
+                $('#idCustomer').val(ui.item.ID); // name of form input field: CustomerID, ProductID
+                $('#btnSelectCustomer').prop('disabled', false);
+                $('#btnSelectCustomer').focus();
             }
         });
-    </script>
+        $.ajax({
+            url: '/Reservation/GetSessionCustomer',
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                var customerID = data.ID;
+                var customerLabel = data.Label;
+                $("#idCustomer").val(customerID);
+                $('#customerName').val(customerLabel);
+                $('#btnSelectCustomer').prop('disabled', false);
+            },
+            error: function () {
+                alert("3 Some error occured.");}
+        });
+
+        // ***** Customer Selection
+        $('#btnSelectCustomer').prop('disabled', true);
+        //function will be called on button click
+        $("#btnSelectCustomer").click(function () {
+            $.ajax(
+            {
+                type: "POST", //HTTP POST Method
+                url: "/Reservation/SelectCustomer", // Controller/View
+                dataType: "json",
+                data: { //Passing data
+                    idCustomer: $("#idCustomer").val()
+                },
+                success: function (result) {
+                    getReservationSummary();
+                },
+                error: function (result) {
+                    alert("7 Some error occured.");
+                }
+            });
+        });
+        function getReservationTotal() {
+            $.ajax({
+                url: '/Reservation/GetReservationTotal',
+                type: "POST",
+                dataType: "json",
+                success: function (result) {
+                    $("#reservationTotal").text(result);},
+                error: function () {
+                    alert("9 Some error occured.");}
+            });
+        };
+
+        function getReservationSummary() {
+            $.ajax({
+                url: '/Reservation/GetReservationSummary',
+                type: "POST",
+                dataType: "json",
+                success: function (result) {
+                    $("#reservationSummary").text(result);},
+                error: function () {
+                    alert("8 Some error occured.");}
+            });
+        };
+    });
+</script>
+
+<!-- New Reservation-->
+<div class="container-fluid">
     <!-- RV Site Dates-->
     <div class="row top-margin">
         <div class="form-group">
@@ -71,209 +242,102 @@ Site Reservation
         </div>
     </div>
     <!-- RV Site Selection -->
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#checkInDate").datepicker({
-                dateFormat: 'D, dd M',
-                minDate: @ViewBag.minDate,
-                maxDate: @ViewBag.maxDate,
-                showOtherMonths: true,
-                selectOtherMonths: true,
-                dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-                onSelect: function () {
-                    var dt2 = $('#checkOutDate');
-                    var startDate = $(this).datepicker('getDate');
-                    //add 7 days to selected date
-                    startDate.setDate(startDate.getDate() + 7);
-                    var minDate = $(this).datepicker('getDate');
-                    //minDate of dt2 datepicker = dt1 selected day
-                    dt2.datepicker('setDate', startDate);
-                    //sets dt2 maxDate
-                    dt2.datepicker('option', 'maxDate', @ViewBag.maxDate);
-                    //first day which can be selected in dt2 is selected date in dt1
-                    dt2.datepicker('option', 'minDate', minDate);
-                    getSiteTotal(); // Calculate total for selected site
-                }
-            });
-            $("#checkInDate").datepicker("setDate", @ViewBag.startDate);
-            $("#checkInDate").click(function(event){
-                var dim = $(this).offset();
-                $("#ui-datepicker-div").offset({
-                    top     :   dim.top - 0,
-                    left    :   dim.left - 0
-                });
-            });
-            $("#checkOutDate").datepicker({
-                dateFormat: 'D, dd M',
-                showOtherMonths: true,
-                selectOtherMonths: true,
-                dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-                onSelect: function () {
-                    getSiteTotal(); // Calculate total for selected site
-                }
-            });
-            $("#checkOutDate").datepicker("setDate", @ViewBag.startDate);
-            $("#checkOutDate").click(function(event){
-                var dim = $(this).offset();
-                $("#ui-datepicker-div").offset({
-                    top     :   dim.top - 0,
-                    left    :   dim.left - 0
-                });
-            });
-            $("#siteName").autocomplete({
-                source: function (request, response) {
-                    // define a function to call the action (assuming UserController)
-                    $.ajax({
-                        url: '/Reservation/SearchSiteByNameResult',
-                        type: "POST",
-                        dataType: "json",
-                        // query will be the param used by the action method
-                        data: { query: request.term },
-                        success: response
-                    });
-                },
-                minLength: 1, // require at least one character from the user
-                select: function (event, ui) {
-                    $('#idRVSite').val(ui.item.ID); // name of form input field: CustomerID, ProductID
-                    $('#btnSelectSite').prop('disabled', false);
-                    getSiteTotal(); // Calculate total for selected site
-                }
-            });
-            function getSiteTotal() {
-                if($("#idRVSite").val().length>0) {// Check if idRVSite is null
-                    $.ajax({
-                        url: '/Reservation/GetSiteTotal',
-                        type: "POST",
-                        dataType: "json",
-                        data: { //Passing data
-                            checkInDate: $("#checkInDate").val(), //Reading text box values using jQuery
-                            checkOutDate: $("#checkOutDate").val(),
-                            idRVSite: $("#idRVSite").val()
-                        },
-                        success: function (result) {
-                            $("#siteTotal").text(result);},
-                        error: function () {
-                            alert("5 Some error occured.");}
-                    });
-                };
-            };
-        });
-    </script>
     <div class="row top-margin">
         <div class="form-group">
             <div class="col-sm-2 col-xs-12 form-top-margin">
                 <label>RV Site</label>
             </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
                 <input type="text" class="form-control" id="siteName" placeholder="Type letter or number then select from the list" />
                 <input class="text-box single-line" id="idRVSite" name="idRVSite" type="hidden" value="" />
             </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <div id="siteTotal" type="text" class="form-control" style="text-align:right" disabled>$ 0.00</div>
+            </div>
             <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Select / Add Site">
                 <button id="btnSelectSite" class="btn btn-block btn-default">
-                    <span class="col-xs-1 glyphicon glyphicon-plus-sign"></span>
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
                     <span class="col-xs-9">Select Site</span>
                 </button>
             </div>
         </div>
     </div>
-    <!-- Total amount for this site reservation -->
     <div class="row top-margin">
         <div class="form-group">
-            <div class="col-sm-8 col-xs-12 form-top-margin">
-                <label>Total Amount For Selected Site</label>
+            <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Select / Add Site">
+                <a href="@Url.Action("IPMEventMap", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-map-marker"></span>
+                    <span>Large Screen Display</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
             </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin">
-                <div id="siteTotal" type="text" class="form-control" style="text-align:right" disabled></div>
-            </div>
+        </div>
+    </div>
+    <!-- ********** Dynamic Table -->
+    <div class="row top-margin" data-toggle="tooltip" title="List of Selected Sites">
+        <div class="col-sm-4 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
+            <button class="btn btn-block btn-default" data-toggle="collapse" data-target="#selected-list">
+                <span class="col-xs-1 glyphicon glyphicon-list"></span>
+                <span class="col-xs-9">Selected Sites &nbsp;<span class="caret"></span></span>
+            </button>
+        </div>
+        <div class="col-sm-4 col-xs-12 form-top-margin">
+            <label>Selected Sites Total</label>
+        </div>
+        <div class="col-sm-4 col-xs-12 form-top-margin">
+            <div id="reservationTotal" type="text" class="form-control" style="text-align:right" disabled></div>
         </div>
     </div>
 
-    <!-- Selected Site List-->
-    <!-- ********** Dynamic Table -->
-    <div class="row top-margin" data-toggle="tooltip" title="List Of Sites That Match The Search Criteria Above">
-        <div class="col-sm-8 col-xs-12 form-top-margin">
-            <span class="col-xs-1 glyphicon glyphicon-list"></span>
-            <b>Selected Sites</b>
-        </div>
-    </div>
-    <div class="selected-list">
+    <div id="selected-list" class="collapse">
     </div>
     <!-- ********** -->
     <!-- Customer Selection -->
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#customerName").autocomplete({
-                source: function (request, response) {
-                    // define a function to call the action (assuming UserController)
-                    $.ajax({
-                        url: '/Reservation/SearchCustomerByNameOrPhoneResult',
-                        type: "POST",
-                        dataType: "json",
-                        // query will be the param used by the action method
-                        data: { query: request.term },
-                        success: response
-                    });
-                },
-                minLength: 1, // require at least one character from the user
-                select: function (event, ui) {
-                    $('#customerName').val(ui.item.ID); // name of form input field: CustomerID, ProductID
-                }
-            });
-        });
-    </script>
     <div class="row top-margin">
         <div class="form-group">
             <div class="col-sm-2 col-xs-12 form-top-margin">
                 <label>Customer</label>
             </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
+            <div class="col-sm-6 col-xs-10 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
                 <input type="text" class="form-control" id="customerName" placeholder="Type name or phone and then select from the list" />
+                <input class="text-box single-line" id="idCustomer" name="idCustomer" type="hidden" />
             </div>
             <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                <button id="btnSelectCustomer" class="btn btn-block btn-default">
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                    <span class="col-xs-9">Select Customer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
                 <a href="@Url.Action("Customer", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    <span class="glyphicon glyphicon-user"></span>
                     <span>New Customer</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
             </div>
         </div>
     </div>
-    <!-- Confirmation -->
-    <div class="row">
+
+    <!-- Proceed To Payment -->
+    <div class="row top-margin">
         <div class="form-group">
             <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>Reservation Summary</label>
             </div>
             <div class="col-sm-9 col-xs-12 form-top-margin">
-                <textarea class="form-control" rows="2" disabled>Site X-88, Mary Denver, Jun-21/Jun-25, CAD$ 2,850.</textarea>
+                <textarea id="reservationSummary" class="form-control" rows="2" disabled></textarea>
             </div>
             <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
-                <button class="btn btn-block btn-default">
-                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
-                    <span class="col-xs-9">Confirm Site Reservation</span>
-                </button>
+                <a href="@Url.Action("Payment", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-plus-usd"></span>
+                    <span>Proceed To Payment</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
             </div>
-        </div>
-    </div>
-    <!-- Account Balance for this customer -->
-    <div class="row top-margin">
-        <div class="form-group">
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <label>Account Balance For This Customer</label>
-            </div>
-            <div class="col-sm-6 col-xs-12 form-top-margin">
-                <input type="text" min="0.00" step="any" class="form-control" placeholder="CAD$ 3,045." style="text-align:right" disabled>
-            </div>
-        </div>
-    </div>
-    <!-- Payment-->
-    <div class="row top-margin">
-        <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
-            <a href="@Url.Action("Payment", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                <span class="glyphicon glyphicon-plus-usd"></span>
-                <span>Proceed To Payment</span>
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
         </div>
     </div>
 </div>

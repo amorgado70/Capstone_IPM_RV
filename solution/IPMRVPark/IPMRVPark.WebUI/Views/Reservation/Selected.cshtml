@@ -5,12 +5,23 @@
     <table class="table">
         <thead>
             <tr>
-                <th style="text-align:right;">Selected</th>
+                @*<th style="text-align:right;">Selected</th>*@
                 <th>Site</th>
                 <th>Check In</th>
                 <th>Check Out</th>
                 <th style="text-align:right;">Total</th>
                 <th style="text-align:right;"></th>
+                <td colspan="4" style="border-top:none">
+                    <div class="dropdown pull-right">
+                        <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                            Action
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="@Url.Action("RemoveAllSelected","Reservation")"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel All</a></li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
         </thead>
         <tbody>
@@ -18,8 +29,8 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td style="text-align:right;">@Html.DisplayFor(modelItem => item.isSiteChecked)<input type="checkbox" checked></td>
-                    <td>@Html.DisplayFor(modelItem => item.site)</td>                    
+                    @*<td style="text-align:right;">@Html.DisplayFor(modelItem => item.isSiteChecked)<input type="checkbox" checked></td>*@
+                    <td>@Html.DisplayFor(modelItem => item.site)</td>
                     <td>@item.checkInDate.ToString("ddd"), @item.checkInDate.ToString("dd") @item.checkInDate.ToString("MMM")</td>
                     <td>@item.checkOutDate.ToString("ddd"), @item.checkOutDate.ToString("dd") @item.checkOutDate.ToString("MMM")</td>
                     <td style="text-align:right;">@Html.DisplayFor(modelItem => item.total)</td>
@@ -33,9 +44,24 @@
                                 <li><a href="@Url.Action("RemoveSelected","Reservation", new { id=item.idSelected })"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel</a></li>
                             </ul>
                         </div>
-                    </td>                    
+                    </td>
                 </tr>
             }
+            <tr>
+                <td>Total</td><td></td><td></td>
+                <td style="text-align:right;">@ViewBag.totalAmount</td><td></td>
+            </tr>
         </tbody>
     </table>
+</div>
+<!-- Total amount for selected sites -->
+<div class="row top-margin">
+    <div class="form-group">
+        <div class="col-sm-8 col-xs-12 form-top-margin">
+            <label>Total Amount For Selected Sites</label>
+        </div>
+        <div class="col-sm-4 col-xs-12 form-top-margin">
+            <div id="siteTotal" type="text" class="form-control" style="text-align:right" disabled></div>
+        </div>
+    </div>
 </div>
