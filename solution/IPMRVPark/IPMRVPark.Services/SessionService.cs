@@ -35,8 +35,8 @@ namespace IPMRVPark.Services
 
             _session.idIPMEvent = 3;
             _session.isLoggedIn = false;
-            _session.idStaff = -1;
-            _session.idCustomer = -1;
+            _session.idStaff = null;
+            _session.idCustomer = null;
 
             //add and persist in the database.
             sessions.Insert(_session);

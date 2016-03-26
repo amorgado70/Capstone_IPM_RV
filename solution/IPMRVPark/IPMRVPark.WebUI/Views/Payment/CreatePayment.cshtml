@@ -1,0 +1,208 @@
+﻿@model IPMRVPark.Models.payment
+
+@{
+    ViewBag.Title = "Payments & Refunds";
+    ViewBag.PageTitle = "New Payment";
+}
+
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Payments & Refunds
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("New Payment", "Payment", "PrototypeUI")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+</script>
+
+ <div class="container-fluid">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="col-sm-3 col-xs-12">
+                    <label>Payment Method :</label>
+                </div>
+                <div class="col-sm-3 col-xs-12">
+                    @Html.DropDownListFor(model => model.idPaymentMethod,
+                    new SelectList(ViewBag.PaymentMethod, "ID", "description"),
+                    "select payment method ...",
+                    new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.idPaymentMethod, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-3 col-xs-12">
+                    <label>Credit / Debit :</label>
+                </div>
+                <div class="col-sm-3 col-xs-12">
+                    <select class="form-control" id="isCredit" name="isCredit" style="border: 1px solid black;">
+                        <option value="1" selected>Credit</option>
+                        <option value="2">Debit</option>
+                    </select>
+                    @Html.ValidationMessageFor(model => model.isCredit, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="col-sm-3 col-xs-12">
+                <label>Customer :</label>
+            </div>
+            <div class="col-sm-3 col-xs-12">
+                @Html.DropDownListFor(model => model.idCustomer,
+                new SelectList(ViewBag.Customer, "ID", "fullname", "phone"),
+                "select customer ...",
+                new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.idCustomer, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row top-margin">
+                <div class="col-sm-3 col-xs-12">
+                    <label>Payment Reason :</label>
+                </div>
+            <div class="col-sm-3 col-xs-12">
+                @Html.DropDownListFor(model => model.reasonForPayment,
+                new SelectList(ViewBag.ReasonForPayments, "ID", "description"),
+                "select payment reason ...",
+                new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.reasonForPayment, "", new { @class = "text-danger" })
+            </div>
+         </div>
+        //===================Start Payment Calculation
+        <fieldset oninput="
+            i.value = a.value / (100 + 13) * 100;
+            ii.value = a.value / (100 + 13) * 13;
+            c.value = a.value - b.value;
+            e.value = c.value - amount.value;" style="border:2px solid red; padding:.2em; margin:.2em;">
+             <div class="row top-margin">
+                <div class="col-sm-6 col-xs-12">
+                    <label class="btn btn-default btn-block col-sm-6 col-xs-12" data-toggle="collapse" data-target="#AmountBreakUp" style="text-align:left">a) Total Receivable Amount (In CAD) : (Breakdown) <span class="caret"></span></label>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <input type="number" name ="a" id ="a" class="form-control" style=" text-align:right; border: 1px solid black;">
+                </div>
+                <div id="AmountBreakUp" class="col-xs-12 collapse">
+                    <div class="top-margin col-xs-6 col-xs-push-2 col-sm-10 col-sm-push-1">
+                        <div class="col-sm-6 col-xs-12">
+                            <label>(i) Site Rent Amount (In CAD) :</label>
+                        </div>
+                        <div class="col-sm-4 col-xs-12">
+                            <output name="i" id="i" class="form-control" style="text-align:right; border: 1px solid black;" for="a"></output>
+                        </div>
+                    </div>
+                    <div class="top-margin col-xs-6 col-xs-push-2 col-sm-10 col-sm-push-1">
+                        <div class="col-sm-6 col-xs-12">
+                            <label>(ii) HST Amount  (In CAD) :</label>
+                        </div>
+                        <div class="col-sm-4 col-xs-12">
+                            <output name="ii" id="ii" class="form-control" style="text-align:right; border: 1px solid black;" for="a"></output>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="col-sm-6 col-xs-12">
+                    <label>b) Prev. Paid Amount  (In CAD) :</label>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <input type="number" name="b" id="b" class="form-control" style="text-align:right; border: 1px solid black;">
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="col-sm-6 col-xs-12">
+                    <label>c) Prev. Due Amount  (In CAD) [a-b]:</label>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <output name="c" id="c" class="form-control" style="text-align:right; border: 1px solid black;" for="a b"></output>
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="col-sm-6 col-xs-12">
+                    <label>d) Paid Amount  (In CAD) :</label>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <input type="number" name="amount" id="amount" min="0.00" step="any" class="form-control" placeholder="enter pay amount ..." style="text-align:right; font-weight:bolder; color:green; border: 1px solid black;">
+                    @Html.ValidationMessageFor(model => model.amount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="col-sm-6 col-xs-12">
+                    <label>e) Due Amount  (In CAD) [c-d]:</label>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <output name="e" id="e" class="form-control" style="text-align:right; border: 1px solid black;" for="c amount"></output>
+                </div>
+            </div>
+        </fieldset>
+        //=================== End Payment Calculation
+
+             <div class="row top-margin">
+                 <div class="col-sm-6 col-xs-12">
+                     <label>Pay Document Type :</label>
+                 </div>
+            <div class="col-sm-6 col-xs-12">
+                 @Html.DropDownListFor(model => model.payDocType,
+                new SelectList(ViewBag.PayDocType, "ID", "description"),
+                "select payment document type ...",
+                new { @class = "form-control" })
+                 @Html.ValidationMessageFor(model => model.payDocType, "", new { @class = "text-danger" })
+            </div>
+             </div>
+             <div class="row top-margin">
+                 <div class="col-sm-6 col-xs-12">
+                     <label>Number of Document :</label>
+                 </div>
+                 <div class="col-sm-6 col-xs-12">
+                     <input type="text" class="form-control" name="docNumber" id="docNumber" placeholder="type document number ..." style="text-align:left; border: 1px solid black;">
+                     @Html.ValidationMessageFor(model => model.docNumber, "", new { @class = "text-danger" })
+                 </div>
+             </div>
+             <div class="row top-margin">
+                 <div class="col-sm-6 col-xs-12">
+                     <label>Special Notes :</label>
+                 </div>
+                 <div class="col-sm-6 col-xs-12">
+                     <textarea class="form-control" name="comments" id="comments" rows="2" style="text-align:left; border: 1px solid black;"></textarea>
+                     @Html.ValidationMessageFor(model => model.comments, "", new { @class = "text-danger" })
+                 </div>
+             </div>
+
+             <div class="row top-margin">
+                 <div class="form-group">
+                     <div class="col-sm-3 col-xs-12">
+                         <label>Create Date :</label>
+                     </div>
+                     <div class="col-sm-3 col-xs-12">
+                         @{  var dateAndTime = DateTime.Now;}
+                         <input type="date" class="form-control" name="createDate" id="createDate" placeholder="@dateAndTime.ToString("MMM/dd/yyyy")" style="text-align:left; border: 1px solid black;"/>
+                         @Html.ValidationMessageFor(model => model.createDate, "", new { @class = "text-danger" })
+                     </div>
+
+                     <div class="col-sm-3 col-xs-12">
+                         <label>Last Update :</label>
+                     </div>
+                     <div class="col-sm-3 col-xs-12">
+                         @{  var dateAndTime1 = DateTime.Now;}
+                         <input type="date" class="form-control" name="lastUpdate" id="lastUpdate" placeholder="@dateAndTime1.ToString("MMM/dd/yyyy")" style="text-align:left; border: 1px solid black;"/>
+                         @Html.ValidationMessageFor(model => model.lastUpdate, "", new { @class = "text-danger" })
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-5 col-xs-12 form-top-margin">
+                 <button class="btn btn-block btn-default" type="reset">
+                     <span class="col-xs-1 glyphicon glyphicon-remove"></span>
+                     <span class="col-xs-9">Clear All</span>
+                 </button>
+             </div>
+             <div class="col-sm-5 col-sm-push-2 col-xs-12 form-top-margin">
+                 <button class="btn btn-block btn-default" type="submit">
+                     <span class="col-xs-1 glyphicon glyphicon-floppy-save"></span>
+                     <span class="col-xs-1 glyphicon glyphicon-print"></span>
+                     <span class="col-xs-9">Save and Print</span>
+                 </button>
+             </div>
+             }
+         </div>

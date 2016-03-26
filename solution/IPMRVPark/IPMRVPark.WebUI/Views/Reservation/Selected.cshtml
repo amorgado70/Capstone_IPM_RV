@@ -48,16 +48,31 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="@Url.Action("Reservation", "Reservation", new { selectedID = item.idSelected })">
+                                    <span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit
+                                    </a>
+                                </li>
                                 <li><a href="@Url.Action("RemoveSelected","Reservation", new { id=item.idSelected })"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel</a></li>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            }
+    }
             <tr>
-                <td>Total</td><td></td><td></td>
-                <td style="text-align:right;">@ViewBag.totalAmount</td><td></td>
+                <td>Total</td>
+                <td></td>
+                <td></td>
+                <td style="text-align:right;">@ViewBag.totalAmount</td>
+                <td></td>
             </tr>
         </tbody>
     </table>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        @foreach (var item in Model)
+                    {}
+
+    });
+</script>

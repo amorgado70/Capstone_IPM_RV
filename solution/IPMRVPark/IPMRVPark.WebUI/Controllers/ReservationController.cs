@@ -14,6 +14,7 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<customer_view> customers;
         IRepositoryBase<ipmevent> ipmevents;
         IRepositoryBase<session> sessions;
+        IRepositoryBase<placeinmap> placesinmap;
         IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<rvsite_available_view> rvsites_available;
         IRepositoryBase<total_per_site_view> totals_per_site;
@@ -22,6 +23,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ReservationController(
             IRepositoryBase<customer_view> customers,
             IRepositoryBase<ipmevent> ipmevents,
+            IRepositoryBase<placeinmap> placesinmap,
             IRepositoryBase<rvsite_available_view> rvsites_available,
             IRepositoryBase<selecteditem> selecteditems,
             IRepositoryBase<total_per_site_view> totals_per_site,
@@ -29,15 +31,18 @@ namespace IPMRVPark.WebUI.Controllers
         {
             this.customers = customers;
             this.ipmevents = ipmevents;
-            this.selecteditems = selecteditems;
             this.sessions = sessions;
+            this.placesinmap = placesinmap;
+            this.selecteditems = selecteditems;            
             this.totals_per_site = totals_per_site;
             this.rvsites_available = rvsites_available;
             sessionService = new SessionService(this.sessions);
         }//end Constructor
 
+        const long newReservationMode = -1;
+
         // Main reservation page
-        public ActionResult Reservation()
+        public ActionResult Reservation( long selectedID = newReservationMode)
         {
             session _session = sessionService.GetSession(this.HttpContext);
             ipmevent _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
@@ -46,10 +51,32 @@ namespace IPMRVPark.WebUI.Controllers
             DateTime start = _IPMEvent.startDate.Value;
             DateTime end = _IPMEvent.endDate.Value;
             DateTime now = DateTime.Now;
-            DateTime checkInDate = _session.checkInDate;
-            DateTime checkOutDate = _session.checkOutDate;
+            DateTime checkInDate = DateTime.MinValue;
+            DateTime checkOutDate = DateTime.MinValue;
 
-            if (!(checkInDate >= start && checkInDate <= end)){
+            // Parameters for Edit Reservation, NOT used for New Reservation
+            if (selectedID != newReservationMode)
+            {
+                selecteditem _selecteditem = selecteditems.GetById(selectedID);
+                ViewBag.SelectedID = selectedID;
+                ViewBag.SiteID = _selecteditem.idRVSite;
+                placeinmap _placeinmap  = placesinmap.GetById(_selecteditem.idRVSite);
+                ViewBag.SiteName = _placeinmap.site;                
+                checkInDate = _selecteditem.checkInDate;
+                checkOutDate = _selecteditem.checkOutDate;
+            }
+            else
+            {
+                ViewBag.SiteID = newReservationMode;
+            }
+
+            if (checkInDate == DateTime.MinValue) {
+                checkInDate = _session.checkInDate; };
+            if (checkOutDate == DateTime.MinValue) {
+                checkOutDate = _session.checkOutDate; };
+
+            if (!(checkInDate >= start && checkInDate <= end))
+            {
                 checkInDate = start;
             };
             if (!(checkOutDate >= checkInDate && checkOutDate <= end))
@@ -73,7 +100,7 @@ namespace IPMRVPark.WebUI.Controllers
         // Update session's check-in and check-out dates
         [HttpPost]
         public ActionResult SelectCheckInOutDates(DateTime checkInDate, DateTime checkOutDate)
-        {            
+        {
             var _session = sessionService.GetSession(this.HttpContext);
             _session.checkInDate = checkInDate;
             _session.checkOutDate = checkOutDate;
@@ -136,8 +163,40 @@ namespace IPMRVPark.WebUI.Controllers
             {
                 ViewBag.totalAmount = _selecteditem.Sum(s => s.amount).Value.ToString("C");
             }
-
             return PartialView("Selected", _selecteditem);
+        }
+
+        // For Partial View : Show Reservation Summary
+        public ActionResult ShowReservationSummary()
+        {
+            session _session = sessionService.GetSession(this.HttpContext);
+            var _selecteditem = totals_per_site.GetAll();
+            _selecteditem = _selecteditem.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
+
+            if (_selecteditem.Count() > 0)
+            {
+                ViewBag.totalAmount = _selecteditem.Sum(s => s.amount).Value.ToString("C");
+            }
+
+            // Read customer from session
+            customer_view _customer = new customer_view();
+            bool tryResult = false;
+            try //checks if customer is in database
+            {
+                _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).FirstOrDefault();
+                tryResult = !(_customer.Equals(default(session)));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred: '{0}'", e);
+            }
+
+            if (tryResult)//customer found in database
+            {
+                ViewBag.Customer = _customer.fullName + ", " + _customer.mainPhone;
+            };
+
+            return PartialView("Summary", _selecteditem);
         }
 
         // Selected sites total
@@ -158,32 +217,20 @@ namespace IPMRVPark.WebUI.Controllers
             return Json(total);
         }
 
-        // Summary of selected sites, customer and total
-        public ActionResult GetReservationSummary()
+        // Update on selected site
+        public ActionResult UpdateSelected(int id)
         {
-            string summary = string.Empty;
             var _session = sessionService.GetSession(this.HttpContext);
-            if (_session.idCustomer != null)
-            {
-                var _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).First();
-                var _selecteditem = totals_per_site.GetAll();
-                if (_session.ID > 0)
-                {
-                    _selecteditem = _selecteditem.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
+            var _selecteditem = selecteditems.GetById(id);
 
-                    if (_selecteditem.Count() > 0)
-                    {
-                        summary = _customer.fullName + ", " + _customer.mainPhone;
-                        foreach (var item in _selecteditem)
-                        {
-                            summary = summary + ", " + item.site;
-                        }
-                        string totalAmount = _selecteditem.Sum(s => s.amount).Value.ToString("C");
-                        summary = summary + ", CAD" + totalAmount;
-                    };
-                };
-            };
-            return Json(summary);
+            _selecteditem.checkInDate = _session.checkInDate;
+            _selecteditem.checkOutDate = _session.checkOutDate;
+            _selecteditem.lastUpdate = DateTime.Now;
+
+            selecteditems.Update(_selecteditem);
+            selecteditems.Commit();
+
+            return RedirectToAction("Reservation");
         }
 
         // Delete on selected site

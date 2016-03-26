@@ -37,6 +37,13 @@ namespace IPMRVPark.WebUI
             container.RegisterType<IRepositoryBase<total_per_site_view>, TotalPerSiteViewRepository>();
             container.RegisterType<IRepositoryBase<site_description_rate_view>, SiteDescriptionRateViewRepository>();
 
+            container.RegisterType<IRepositoryBase<placeinmap>, PlaceInMapRepository>();
+            container.RegisterType<IRepositoryBase<reasonforpayment>, ReasonForPaymentRepository>();
+            container.RegisterType<IRepositoryBase<paymentmethod>, PaymentMethodRepository>();
+            container.RegisterType<IRepositoryBase<paydoctype>, PayDocTypeRepository>();
+            container.RegisterType<IRepositoryBase<payment>, PaymentRepository>();
+            container.RegisterType<IRepositoryBase<reservationitem>, ReservationItemRepository>();
+
             return container;
         }
     }

@@ -59,6 +59,12 @@
   <ItemGroup>
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\PlaceInMapRepository.cs" />
+    <Compile Include="Repositories\PayDocTypeRepository.cs" />
+    <Compile Include="Repositories\PaymentMethodRepository.cs" />
+    <Compile Include="Repositories\PaymentRepository.cs" />
+    <Compile Include="Repositories\ReasonForPaymentRepository.cs" />
+    <Compile Include="Repositories\ReservationItemepository.cs" />
     <Compile Include="Repositories\StaffRepository.cs" />
     <Compile Include="Repositories\SiteDescriptionRateViewRepository.cs" />
     <Compile Include="Repositories\TotalPerSiteViewRepository.cs" />

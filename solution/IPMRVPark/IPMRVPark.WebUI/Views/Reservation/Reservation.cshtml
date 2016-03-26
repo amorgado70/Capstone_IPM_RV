@@ -21,6 +21,24 @@ Site Reservation
             error: function () {
                 alert("21 Some error occured.");}
         });
+
+        // ****** Preparation For Edit Reservation
+        if(@ViewBag.SiteID != -1){
+            $("#btnSelectSite").hide();
+            $("#btnLargeDisplay").hide();
+            $("#btnUpdateSite").show();
+            $("#btnRemoveSite").show();
+            $("#idRVSite").val(@ViewBag.SiteID);
+            $("#siteName").prop('disabled', true);           
+            setTimeout( function(){
+                getSiteTotal();
+            }, 5000);
+        }
+        else{
+        }
+        $("#btnUpdateSite").click(function(event){
+            $("#waitMsg").show();// Show wait message
+        });
         // ***** Dates Selection
         $("#checkInDate").datepicker({
             dateFormat: 'D, dd M',
@@ -62,6 +80,7 @@ Site Reservation
             onSelect: function () {
                 selectCheckInOutDates(); // Update session with dates
                 getSiteTotal(); // Calculate total for selected site
+                $("#siteName").focus();
             }
         });
         $("#checkOutDate").datepicker("setDate", @ViewBag.checkOutDate);
@@ -156,6 +175,7 @@ Site Reservation
                     $("#siteName").val(""); // Reset site name
                     $("#siteTotal").text(""); // Reset site total
                     $("#waitMsg").hide();
+                    $('#customerName').focus();
                 },
                 error: function (result) {
                     alert("2 Some error occured." + $("#idRVSite").val() );
@@ -166,7 +186,7 @@ Site Reservation
         function updateSelectedList() {
             $('#selected-list').load('/Reservation/UpdateSelectedList'); // load partial view
             getReservationTotal(); // Update reservation total
-            getReservationSummary(); // Update reservation summary
+            showReservationSummary(); // Update reservation summary
         }
 
         // ***** Customer Search
@@ -222,7 +242,7 @@ Site Reservation
                     idCustomer: $("#idCustomer").val()
                 },
                 success: function (result) {
-                    getReservationSummary();
+                    showReservationSummary();
                 },
                 error: function (result) {
                     alert("7 Some error occured.");
@@ -240,20 +260,9 @@ Site Reservation
                     alert("9 Some error occured.");}
             });
         };
-
-        function getReservationSummary() {
-            $.ajax({
-                url: '/Reservation/GetReservationSummary',
-                type: "POST",
-                dataType: "json",
-                success: function (result) {
-                    $("#reservationSummary").text(result);
-                    $("#waitMsg").hide();// Hide wait message
-                },
-                error: function () {
-                    alert("8 Some error occured.");}
-            });
-        };
+        function showReservationSummary() {
+            $('#reservation-summary').load('/Reservation/ShowReservationSummary'); // load partial view
+        }
     });
 </script>
 
@@ -270,7 +279,7 @@ Site Reservation
     <!-- RV Site Dates-->
     <div class="row">
         <div class="form-group">
-            <div class="col-sm-3 col-xs-12">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
                 <label>Check In Date</label>
             </div>
             <div class="col-sm-3 col-xs-12 form-top-margin">
@@ -286,34 +295,40 @@ Site Reservation
     </div>
     <!-- RV Site Selection -->
     <div class="row top-margin">
-        <div class="form-group">
-            <div class="col-sm-2 col-xs-12 form-top-margin">
-                <label>RV Site</label>
-            </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
-                <input type="text" class="form-control" id="siteName" placeholder="Type letter or number then select from the list" />
-                <input class="text-box single-line" id="idRVSite" name="idRVSite" type="hidden" value="" />
-            </div>
-            <div class="col-sm-2 col-xs-12 form-top-margin">
-                <div id="siteTotal" type="text" class="form-control" style="text-align:right" disabled>$ 0.00</div>
-            </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Select / Add Site">
-                <button id="btnSelectSite" class="btn btn-block btn-default">
-                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
-                    <span class="col-xs-9">Select Site</span>
-                </button>
-            </div>
+        <div class="col-sm-2 col-xs-12 form-top-margin">
+            <label>RV Site</label>
+        </div>
+        <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
+            <input type="text" class="form-control" id="siteName" placeholder="Type letter or number then select from the list" value="@ViewBag.SiteName" />
+            <input class="text-box single-line" id="idRVSite" name="idRVSite" type="hidden" />
+        </div>
+        <div class="col-sm-2 col-xs-12 form-top-margin">
+            <div id="siteTotal" type="text" class="form-control" style="text-align:right" disabled>$ 0.00</div>
+        </div>
+        <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Select / Add Site">
+            <button id="btnSelectSite" class="btn btn-block btn-default">
+                <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                <span class="col-xs-9">Select Site</span>
+            </button>
+            <!-- Update Selected Site Dates -->
+            <a id="btnUpdateSite" style="display: none;" href="/Reservation/UpdateSelected/@ViewBag.SelectedID" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-pencil"></span>
+                <span>Update Dates</span>
+            </a>
         </div>
     </div>
-    <div class="row top-margin">
-        <div class="form-group">
-            <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Select / Add Site">
-                <a href="@Url.Action("IPMEventMap", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                    <span class="glyphicon glyphicon-map-marker"></span>
-                    <span>Large Screen Display</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-            </div>
+    <div class="row form-top-margin">
+        <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Select / Add Site">
+            <a id="btnLargeDisplay" href="@Url.Action("IPMEventMap", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-map-marker"></span>
+                <span>Large Screen Display</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+            <!-- Remove Selected Site -->
+            <a id="btnRemoveSite" style="display: none;" href="/Reservation/RemoveSelected/@ViewBag.SelectedID" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-erase"></span>
+                <span>Remove Site</span>
+            </a>
         </div>
     </div>
     <!-- ********** Dynamic Table -->
@@ -354,33 +369,25 @@ Site Reservation
         </div>
     </div>
     <div class="row top-margin">
-        <div class="form-group">
-            <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
-                <a href="@Url.Action("Customer", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                    <span class="glyphicon glyphicon-user"></span>
-                    <span>New Customer</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-            </div>
+        <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+            <a href="@Url.Action("Customer", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-user"></span>
+                <span>New Customer</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
         </div>
     </div>
 
+    <div id="reservation-summary">
+    </div>
     <!-- Proceed To Payment -->
-    <div class="row top-margin">
-        <div class="form-group">
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Reservation Summary</label>
-            </div>
-            <div class="col-sm-9 col-xs-12 form-top-margin">
-                <textarea id="reservationSummary" class="form-control" rows="2" disabled></textarea>
-            </div>
-            <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
-                <a href="@Url.Action("Payment", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                    <span class="glyphicon glyphicon-plus-usd"></span>
-                    <span>Proceed To Payment</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-            </div>
+    <div class="row form-top-margin">
+        <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+            <a href="@Url.Action("Customer", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-usd"></span>
+                <span>Payment</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
         </div>
     </div>
 </div>
