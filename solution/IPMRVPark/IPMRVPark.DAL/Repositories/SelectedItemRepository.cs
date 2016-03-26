@@ -7,9 +7,9 @@ using System.Text;
 
 namespace IPMRVPark.Contracts.Repositories
 {
-    public class SelectedRepository : RepositoryBase<selected>
+    public class SelectedItemRepository : RepositoryBase<selecteditem>
     {
-        public SelectedRepository(DataContext context)
+        public SelectedItemRepository(DataContext context)
             : base(context)
         { if (context == null) throw new ArgumentNullException(); }
     }//end SelectedRepository

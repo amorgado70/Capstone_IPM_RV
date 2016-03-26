@@ -31,7 +31,7 @@ namespace IPMRVPark.WebUI
             container.RegisterType<IRepositoryBase<countrycode>, CountryRepository>();
             container.RegisterType<IRepositoryBase<ipmevent>, IPMEventRepository>();
             container.RegisterType<IRepositoryBase<session>, SessionRepository>();
-            container.RegisterType<IRepositoryBase<selected>, SelectedRepository>();
+            container.RegisterType<IRepositoryBase<selecteditem>, SelectedItemRepository>();
             container.RegisterType<IRepositoryBase<staff>, StaffRepository>();
             container.RegisterType<IRepositoryBase<rvsite_available_view>, RVSiteAvailableViewRepository>();
             container.RegisterType<IRepositoryBase<total_per_site_view>, TotalPerSiteViewRepository>();

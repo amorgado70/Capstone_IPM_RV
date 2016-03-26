@@ -15,6 +15,7 @@ namespace IPMRVPark.Models
     public partial class coordinate
     {
         public long ID { get; set; }
+        public long idIPMEvent { get; set; }
         public long idPlaceInMap { get; set; }
         public int seqCoordinate { get; set; }
         public string longitude { get; set; }
@@ -22,6 +23,6 @@ namespace IPMRVPark.Models
         public System.DateTime createDate { get; set; }
         public System.DateTime lastUpdate { get; set; }
     
-        public virtual placeinmap placeinmap { get; set; }
+        public virtual ipmevent ipmevent { get; set; }
     }
 }

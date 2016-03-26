@@ -28,6 +28,8 @@
         </div>
     </header>
 
+    <div id="waitMsg" class="waitMsg">...Please wait...</div>
+
     <section>
         @RenderBody()
     </section>
@@ -51,7 +53,7 @@
         <script type="text/javascript">
                             $(document).ready(function () {
                                 $.ajax({
-                                    url: '/Reservation/GetSessionGUID',
+                                    url: '/Login/GetSessionGUID',
                                     type: "POST",
                                     dataType: "json",
                                     success: function (data) {

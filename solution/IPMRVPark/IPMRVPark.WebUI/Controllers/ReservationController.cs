@@ -2,11 +2,8 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using IPMRVPark.Models;
-using IPMRVPark.Models.View;
 using IPMRVPark.Contracts.Repositories;
 using IPMRVPark.Services;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 
 
@@ -14,238 +11,103 @@ namespace IPMRVPark.WebUI.Controllers
 {
     public class ReservationController : Controller
     {
-        IRepositoryBase<reservation_view> reservations;
         IRepositoryBase<customer_view> customers;
         IRepositoryBase<ipmevent> ipmevents;
         IRepositoryBase<session> sessions;
-        IRepositoryBase<selected> selecteds;
+        IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<rvsite_available_view> rvsites_available;
         IRepositoryBase<total_per_site_view> totals_per_site;
-        IRepositoryBase<site_description_rate_view> sites_description_rate;
         SessionService sessionService;
 
-        public ReservationController(IRepositoryBase<reservation_view> reservations,
+        public ReservationController(
             IRepositoryBase<customer_view> customers,
             IRepositoryBase<ipmevent> ipmevents,
             IRepositoryBase<rvsite_available_view> rvsites_available,
-            IRepositoryBase<selected> selecteds,
+            IRepositoryBase<selecteditem> selecteditems,
             IRepositoryBase<total_per_site_view> totals_per_site,
-            IRepositoryBase<site_description_rate_view> sites_description_rate,
             IRepositoryBase<session> sessions)
         {
-            this.reservations = reservations;
             this.customers = customers;
             this.ipmevents = ipmevents;
-            this.selecteds = selecteds;
+            this.selecteditems = selecteditems;
             this.sessions = sessions;
             this.totals_per_site = totals_per_site;
             this.rvsites_available = rvsites_available;
-            this.sites_description_rate = sites_description_rate;
             sessionService = new SessionService(this.sessions);
         }//end Constructor
 
-        // For Partial View : Selected
-        public ActionResult UpdateSelectedList()
-        {
-            var _session = sessionService.GetSession(this.HttpContext);
-            var _selected = totals_per_site.GetAll();
-            _selected = _selected.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
-
-            if (_selected.Count() > 0)
-            {
-                ViewBag.totalAmount = _selected.Sum(s => s.amount).Value.ToString("C");
-            }
-
-            return PartialView("Selected", _selected);
-        }
-
-        public ActionResult GetSessionGUID()
-        {
-            var _session = sessionService.GetSession(this.HttpContext);
-            var _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
-            string sessionSummary = "sessionID: " + _session.ID +
-                " sessionGUID: " + _session.sessionGUID +
-                " IPMEvent: " + _IPMEvent.year;
-            return Json(sessionSummary);
-        }
-
-        public ActionResult GetSessionCustomer()
-        {
-            SelectionOptionID customer = new SelectionOptionID(-1, "");
-            var _session = sessionService.GetSession(this.HttpContext);
-            if (_session.idCustomer != null)
-            {
-                var _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).First();
-                if (_customer != null)
-                {
-                    customer.ID = _session.idCustomer.Value;
-                    customer.Label = _customer.fullName + " - Phone: " + _customer.mainPhone;
-                };
-            };
-            return Json(customer);
-        }
-
-        public ActionResult GetReservationSummary()
-        {
-            string summary = string.Empty;
-            var _session = sessionService.GetSession(this.HttpContext);
-            if (_session.idCustomer != null)
-            {
-                var _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).First();
-                var _selected = totals_per_site.GetAll();
-                if (_session.ID > 0)
-                {
-                    _selected = _selected.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
-
-                    if ( _selected.Count() > 0)
-                    {
-                        summary = _customer.fullName + ", " + _customer.mainPhone;
-                        foreach (var item in _selected)
-                        {
-                            summary = summary + ", " + item.site;
-                        }
-                        string totalAmount = _selected.Sum(s => s.amount).Value.ToString("C");
-                        summary = summary + ", CAD" + totalAmount;
-                    };
-                };
-            };
-            return Json(summary);
-        }
-
-        public ActionResult GetReservationTotal()
-        {
-            string total = string.Empty;
-            var _session = sessionService.GetSession(this.HttpContext);
-            var _selected = totals_per_site.GetAll();
-            _selected = _selected.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
-
-            if (_selected.Count() > 0)
-            {
-                total = "( " + _selected.Count() + " ) ";
-                string totalAmount = _selected.Sum(s => s.amount).Value.ToString("C");
-                total = total + "CAD" + totalAmount;
-            };
-
-            return Json(total);
-        }
-
-        // Search results for autocomplete dropdown list
-        public ActionResult SearchCustomerByNameOrPhoneResult(string query)
-        {
-            return Json(SearchCustomerByNameOrPhoneList(query).Select(c => new { label = c.Label, ID = c.ID }));
-        }
-        private List<SelectionOptionID> SearchCustomerByNameOrPhoneList(string searchString)
-        {
-            //Return value
-            List<SelectionOptionID> results = new List<SelectionOptionID>();
-            if (searchString != null)
-            {
-                //Regex for phone number
-                Regex rgx = new Regex("[^0-9]");
-
-                //Read customer data
-                var allCustomers = customers.GetAll();
-
-                //Check if search is by phone number or by customer name
-                if (searchString.Any(char.IsDigit))
-                {
-                    searchString = rgx.Replace(searchString, "");
-                    //Filter by phone number
-                    foreach (customer_view customer in allCustomers)
-                    {
-                        string phoneNumber = rgx.Replace(customer.mainPhone, "");
-                        if (phoneNumber.Contains(searchString))
-                        {
-                            results.Add(new SelectionOptionID(customer.id, customer.fullName + " - Phone: " + customer.mainPhone));
-                        }
-                        if (results.Count() > 5)
-                        {
-                            results.Add(new SelectionOptionID(-1, "..."));
-                            return results;
-                        }
-                    };
-                }
-                else
-                {
-                    //Filter by customer name
-                    allCustomers = allCustomers.Where(s => s.fullName.ToUpper().Contains(searchString));
-                    if (allCustomers != null)
-                        foreach (customer_view customer in allCustomers)
-                        {
-                            {
-                                results.Add(new SelectionOptionID(customer.id, customer.fullName + " - Phone: " + customer.mainPhone));
-                            }
-                            if (results.Count() > 5)
-                            {
-                                results.Add(new SelectionOptionID(-1, "..."));
-                                return results;
-                            }
-                        };
-                }
-            }
-            return results;
-        }
-
-        // Search results for autocomplete dropdown list
-        public ActionResult SearchSiteByNameResult(string query)
-        {
-            return Json(SearchSiteByName(query).Select(c => new { label = c.Label, ID = c.ID }));
-        }
-        private List<SelectionOptionID> SearchSiteByName(string searchString)
-        {
-            //Return value
-            List<SelectionOptionID> results = new List<SelectionOptionID>();
-
-            //Regex for site name
-            Regex rgx = new Regex("[^a-zA-Z0-9]");
-
-            //Read RVSite available
-            var allRVSites = rvsites_available.GetAll();
-
-            //Remove characters from search string
-            searchString = rgx.Replace(searchString, "").ToUpper();
-
-            if (searchString != null)
-            {
-                //Filter by RV Site
-                foreach (rvsite_available_view rvsite in allRVSites)
-                {
-                    string rvsiteShort = rgx.Replace(rvsite.site, "").ToUpper();
-                    if (rvsiteShort.Contains(searchString))
-                    {
-                        results.Add(new SelectionOptionID(rvsite.id, rvsite.site));
-                    }
-                    if (results.Count() > 25)
-                    {
-                        results.OrderBy(q => q.Label).ToList();
-                        results.Add(new SelectionOptionID(-1, "..."));
-                        return results;
-                    }
-                }
-            }
-
-            return results.OrderBy(q => q.Label).ToList();
-        }
-
-        // New Reservation page - In fact, this page creates a new "selected"
+        // Main reservation page
         public ActionResult Reservation()
         {
-            var _session = sessionService.GetSession(this.HttpContext);
-            var _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
+            session _session = sessionService.GetSession(this.HttpContext);
+            ipmevent _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
 
-            var start = _IPMEvent.startDate.Value;
-            var end = _IPMEvent.endDate.Value;
-            var now = DateTime.Now;
-            var min = start - now;
-            var max = end - now;
+            // Read and convert the dates to a value than can be used by jQuery Datepicker
+            DateTime start = _IPMEvent.startDate.Value;
+            DateTime end = _IPMEvent.endDate.Value;
+            DateTime now = DateTime.Now;
+            DateTime checkInDate = _session.checkInDate;
+            DateTime checkOutDate = _session.checkOutDate;
 
-            ViewBag.startDate = (int)min.TotalDays + 1;
-            ViewBag.minDate = ViewBag.startDate - 7;
+            if (!(checkInDate >= start && checkInDate <= end)){
+                checkInDate = start;
+            };
+            if (!(checkOutDate >= checkInDate && checkOutDate <= end))
+            {
+                checkOutDate = end;
+            };
+
+            TimeSpan min = start - now;
+            TimeSpan max = end - now;
+            TimeSpan checkIn = checkInDate - now;
+            TimeSpan checkOut = checkOutDate - now;
+
+            ViewBag.checkInDate = (int)checkIn.TotalDays + 1;
+            ViewBag.checkOutDate = (int)checkOut.TotalDays + 1;
+            ViewBag.minDate = (int)min.TotalDays - 7;
             ViewBag.maxDate = (int)max.TotalDays + 1;
 
             return View();
         }
 
+        // Update session's check-in and check-out dates
+        [HttpPost]
+        public ActionResult SelectCheckInOutDates(DateTime checkInDate, DateTime checkOutDate)
+        {            
+            var _session = sessionService.GetSession(this.HttpContext);
+            _session.checkInDate = checkInDate;
+            _session.checkOutDate = checkOutDate;
+            sessions.Update(sessions.GetById(_session.ID));
+            sessions.Commit();
+
+            return Json(checkInDate);
+        }
+        // Select site button, add site to table
+        [HttpPost]
+        public ActionResult SelectSite(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
+        {
+            var _session = sessionService.GetSession(this.HttpContext);
+
+            // Add selected item to database
+            var _selecteditem = new selecteditem();
+            _selecteditem.checkInDate = checkInDate;
+            _selecteditem.checkOutDate = checkOutDate;
+            _selecteditem.idRVSite = idRVSite;
+            _selecteditem.idSession = _session.ID;
+            _selecteditem.idIPMEvent = _session.idIPMEvent;
+            _selecteditem.idStaff = _session.idStaff;
+            _selecteditem.idCustomer = _session.idCustomer;
+            _selecteditem.isSiteChecked = true;
+            _selecteditem.createDate = DateTime.Now;
+            _selecteditem.lastUpdate = DateTime.Now;
+
+            selecteditems.Insert(_selecteditem);
+            selecteditems.Commit();
+
+            return Json(idRVSite);
+        }
+
+        // Calculate total for site selected on the dropdown list
         [HttpPost]
         public ActionResult GetSiteTotal(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
         {
@@ -253,7 +115,7 @@ namespace IPMRVPark.WebUI.Controllers
             var site = rvsites_available.GetAll().Where(s => s.id == idRVSite).First();
             if (site != null)
             {
-                int duration = (int)(checkOutDate - checkInDate).TotalDays + 1;
+                int duration = (int)(checkOutDate - checkInDate).TotalDays;
                 int weeks = duration / 7;
                 int days = duration % 7;
                 amount = Convert.ToDouble(site.weeklyRate) * weeks +
@@ -263,118 +125,76 @@ namespace IPMRVPark.WebUI.Controllers
             return Json(result);
         }
 
-        [HttpPost]
-        public ActionResult SelectSite(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
+        // For Partial View : Selected Site List
+        public ActionResult UpdateSelectedList()
         {
-            var _selected = new selected();
-
-            _selected.checkInDate = checkInDate;
-            _selected.checkOutDate = checkOutDate;
-            _selected.idRVSite = idRVSite;
             var _session = sessionService.GetSession(this.HttpContext);
-            _selected.idSession = _session.ID;
-            _selected.idIPMEvent = _session.idIPMEvent;
-            _selected.idStaff = _session.idStaff;
-            _selected.idCustomer = _session.idCustomer;
-            _selected.isSiteChecked = true;
-            _selected.createDate = DateTime.Now;
-            _selected.lastUpdate = DateTime.Now;
+            var _selecteditem = totals_per_site.GetAll();
+            _selecteditem = _selecteditem.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
 
-            selecteds.Insert(_selected);
-            selecteds.Commit();
-
-            return Json(idRVSite);
-        }
-
-        [HttpPost]
-        public ActionResult SelectCustomer(long idCustomer)
-        {
-            session _session = sessions.GetById(sessionService.GetSession(this.HttpContext).ID);
-            _session.idCustomer = idCustomer;
-            sessions.Update(_session);
-            sessions.Commit();
-            return Json(idCustomer);
-        }
-
-        // GET: list with filter
-        public ActionResult Index(string searchString)
-        {
-            var reservation = reservations.GetAll();
-
-            if (!String.IsNullOrEmpty(searchString))
+            if (_selecteditem.Count() > 0)
             {
-                reservation = reservation.Where(s => s.fullName.Contains(searchString));
+                ViewBag.totalAmount = _selecteditem.Sum(s => s.amount).Value.ToString("C");
             }
 
-            return View(reservation);
+            return PartialView("Selected", _selecteditem);
         }
 
-        // GET: /Details/5
-        public ActionResult Details(int? id)
+        // Selected sites total
+        public ActionResult GetReservationTotal()
         {
-            var reservation = reservations.GetById(id);
-            if (reservation == null)
+            string total = string.Empty;
+            var _session = sessionService.GetSession(this.HttpContext);
+            var _selecteditem = totals_per_site.GetAll();
+            _selecteditem = _selecteditem.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
+
+            if (_selecteditem.Count() > 0)
             {
-                return HttpNotFound();
-            }
-            return View(reservation);
+                total = "( " + _selecteditem.Count() + " ) ";
+                string totalAmount = _selecteditem.Sum(s => s.amount).Value.ToString("C");
+                total = total + "CAD" + totalAmount;
+            };
+
+            return Json(total);
         }
 
-        // GET: /Create
-        public ActionResult Create()
+        // Summary of selected sites, customer and total
+        public ActionResult GetReservationSummary()
         {
-            var reservation = new reservation_view();
-            return View(reservation);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(reservation_view reservation)
-        {
-            reservations.Insert(reservation);
-            reservations.Commit();
-
-            return RedirectToAction("Index");
-        }
-
-        // GET: /Edit/5
-        public ActionResult Edit(int id)
-        {
-            reservation_view reservation = reservations.GetById(id);
-            if (reservation == null)
+            string summary = string.Empty;
+            var _session = sessionService.GetSession(this.HttpContext);
+            if (_session.idCustomer != null)
             {
-                return HttpNotFound();
-            }
-            return View(reservation);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(reservation_view reservation)
-        {
-            reservations.Update(reservation);
-            reservations.Commit();
+                var _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).First();
+                var _selecteditem = totals_per_site.GetAll();
+                if (_session.ID > 0)
+                {
+                    _selecteditem = _selecteditem.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
 
-            return RedirectToAction("Index");
-        }
-
-        // GET: /Delete/5
-        public ActionResult Delete(int id)
-        {
-            reservation_view reservation = reservations.GetById(id);
-            if (reservation == null)
-            {
-                return HttpNotFound();
-            }
-            return View(reservation);
-        }
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirm(int id)
-        {
-            reservations.Delete(reservations.GetById(id));
-            reservations.Commit();
-            return RedirectToAction("Index");
+                    if (_selecteditem.Count() > 0)
+                    {
+                        summary = _customer.fullName + ", " + _customer.mainPhone;
+                        foreach (var item in _selecteditem)
+                        {
+                            summary = summary + ", " + item.site;
+                        }
+                        string totalAmount = _selecteditem.Sum(s => s.amount).Value.ToString("C");
+                        summary = summary + ", CAD" + totalAmount;
+                    };
+                };
+            };
+            return Json(summary);
         }
 
+        // Delete on selected site
+        public ActionResult RemoveSelected(int id)
+        {
+            selecteditems.Delete(selecteditems.GetById(id));
+            selecteditems.Commit();
+            return RedirectToAction("Reservation");
+        }
+
+        // Delete all selected sites
         public ActionResult RemoveAllSelected()
         {
             var _session = sessionService.GetSession(this.HttpContext);
@@ -385,20 +205,12 @@ namespace IPMRVPark.WebUI.Controllers
             {
                 foreach (var _selected in allSelected)
                 {
-                    selecteds.Delete(selecteds.GetById(_selected.idSelected));
+                    selecteditems.Delete(selecteditems.GetById(_selected.idSelected));
                 }
-                selecteds.Commit();
+                selecteditems.Commit();
             }
 
             return RedirectToAction("Reservation");
         }
-
-        public ActionResult RemoveSelected(int id)
-        {
-            selecteds.Delete(selecteds.GetById(id));
-            selecteds.Commit();
-            return RedirectToAction("Reservation");
-        }
-
     }
 }

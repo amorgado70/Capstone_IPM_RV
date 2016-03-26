@@ -86,7 +86,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
-    <Compile Include="outofservice.cs">
+    <Compile Include="outofserviceitem.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="partymember.cs">
@@ -126,9 +126,6 @@
     <Compile Include="reservation_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="reserved.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="rvsite_available_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -138,7 +135,7 @@
     <Compile Include="rvsite_status_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="selected.cs">
+    <Compile Include="selecteditem.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="service.cs">

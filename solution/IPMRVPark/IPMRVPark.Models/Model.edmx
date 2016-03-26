@@ -22,6 +22,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idIPMEvent" Type="bigint" Nullable="false" />
           <Property Name="idPlaceInMap" Type="bigint" Nullable="false" />
           <Property Name="seqCoordinate" Type="int" Nullable="false" />
           <Property Name="longitude" Type="varchar" MaxLength="30" Nullable="false" />
@@ -101,7 +102,7 @@
           <Property Name="lastUpdate" Type="date" />
           <Property Name="lastDateRefund" Type="date" />
         </EntityType>
-        <EntityType Name="outofservice">
+        <EntityType Name="outofserviceitem">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -241,17 +242,7 @@
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
-        <EntityType Name="reserved">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="bigint" Nullable="false" />
-          <Property Name="idReservationItem" Type="bigint" />
-          <Property Name="idRVSite" Type="bigint" />
-          <Property Name="createDate" Type="date" />
-          <Property Name="lastUpdate" Type="date" />
-        </EntityType>
-        <EntityType Name="selected">
+        <EntityType Name="selecteditem">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -286,6 +277,8 @@
           <Property Name="idStaff" Type="bigint" />
           <Property Name="isLoggedIn" Type="bit" />
           <Property Name="idCustomer" Type="bigint" />
+          <Property Name="checkInDate" Type="date" Nullable="false" />
+          <Property Name="checkOutDate" Type="date" Nullable="false" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
@@ -547,15 +540,15 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Coordinates_PlaceInMap_FK">
-          <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
+        <Association Name="Coordinates_idIPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
           <End Role="coordinates" Type="Self.coordinates" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="placeinmap">
+            <Principal Role="ipmevent">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="coordinates">
-              <PropertyRef Name="idPlaceInMap" />
+              <PropertyRef Name="idIPMEvent" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -679,14 +672,14 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="OutOfService_PlaceInMap_FK">
+        <Association Name="OutOfServiceItem_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
-          <End Role="outofservice" Type="Self.outofservice" Multiplicity="*" />
+          <End Role="outofserviceitem" Type="Self.outofserviceitem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="placeinmap">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="outofservice">
+            <Dependent Role="outofserviceitem">
               <PropertyRef Name="idRVSite" />
             </Dependent>
           </ReferentialConstraint>
@@ -859,86 +852,62 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Reserved_PlaceInMap_FK">
-          <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="0..1" />
-          <End Role="reserved" Type="Self.reserved" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="placeinmap">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="reserved">
-              <PropertyRef Name="idRVSite" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Reserved_ReservationItem_FK">
-          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="0..1" />
-          <End Role="reserved" Type="Self.reserved" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="reservationitem">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="reserved">
-              <PropertyRef Name="idReservationItem" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Selected_Customer_FK">
+        <Association Name="SelectedItem_Customer_FK">
           <End Role="customer" Type="Self.customer" Multiplicity="0..1" />
-          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <End Role="selecteditem" Type="Self.selecteditem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="customer">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="selected">
+            <Dependent Role="selecteditem">
               <PropertyRef Name="idCustomer" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Selected_IPMEvent_FK">
+        <Association Name="SelectedItem_IPMEvent_FK">
           <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="0..1" />
-          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <End Role="selecteditem" Type="Self.selecteditem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ipmevent">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="selected">
+            <Dependent Role="selecteditem">
               <PropertyRef Name="idIPMEvent" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Selected_RVSite_FK">
+        <Association Name="SelectedItem_RVSite_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="0..1" />
-          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <End Role="selecteditem" Type="Self.selecteditem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="placeinmap">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="selected">
+            <Dependent Role="selecteditem">
               <PropertyRef Name="idRVSite" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Selected_Session_FK">
+        <Association Name="SelectedItem_Session_FK">
           <End Role="session" Type="Self.session" Multiplicity="1" />
-          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <End Role="selecteditem" Type="Self.selecteditem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="session">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="selected">
+            <Dependent Role="selecteditem">
               <PropertyRef Name="idSession" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Selected_Staff">
+        <Association Name="SelectedItem_Staff">
           <End Role="staff" Type="Self.staff" Multiplicity="0..1" />
-          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <End Role="selecteditem" Type="Self.selecteditem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="staff">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="selected">
+            <Dependent Role="selecteditem">
               <PropertyRef Name="idStaff" />
             </Dependent>
           </ReferentialConstraint>
@@ -1071,7 +1040,7 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a
           <EntitySet Name="customeraccount" EntityType="Self.customeraccount" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="fees" EntityType="Self.fees" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="ipmevent" EntityType="Self.ipmevent" Schema="ipmrvpark" store:Type="Tables" />
-          <EntitySet Name="outofservice" EntityType="Self.outofservice" Schema="ipmrvpark" store:Type="Tables" />
+          <EntitySet Name="outofserviceitem" EntityType="Self.outofserviceitem" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="partymember" EntityType="Self.partymember" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="paydoctype" EntityType="Self.paydoctype" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="payment" EntityType="Self.payment" Schema="ipmrvpark" store:Type="Tables" />
@@ -1083,8 +1052,7 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a
           <EntitySet Name="reasonforpayment" EntityType="Self.reasonforpayment" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="reservationitem" EntityType="Self.reservationitem" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="reservationitem_partymember" EntityType="Self.reservationitem_partymember" Schema="ipmrvpark" store:Type="Tables" />
-          <EntitySet Name="reserved" EntityType="Self.reserved" Schema="ipmrvpark" store:Type="Tables" />
-          <EntitySet Name="selected" EntityType="Self.selected" Schema="ipmrvpark" store:Type="Tables" />
+          <EntitySet Name="selecteditem" EntityType="Self.selecteditem" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="service" EntityType="Self.service" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="session" EntityType="Self.session" Schema="ipmrvpark" store:Type="Tables" />
           <EntitySet Name="siterate" EntityType="Self.siterate" Schema="ipmrvpark" store:Type="Tables" />
@@ -1222,8 +1190,8 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="reservationitem" EntitySet="reservationitem" />
             <End Role="checkinout" EntitySet="checkinout" />
           </AssociationSet>
-          <AssociationSet Name="Coordinates_PlaceInMap_FK" Association="Self.Coordinates_PlaceInMap_FK">
-            <End Role="placeinmap" EntitySet="placeinmap" />
+          <AssociationSet Name="Coordinates_idIPMEvent_FK" Association="Self.Coordinates_idIPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevent" />
             <End Role="coordinates" EntitySet="coordinates" />
           </AssociationSet>
           <AssociationSet Name="Customer_countryCode_FK" Association="Self.Customer_countryCode_FK">
@@ -1266,9 +1234,9 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="person" EntitySet="person" />
             <End Role="partymember" EntitySet="partymember" />
           </AssociationSet>
-          <AssociationSet Name="OutOfService_PlaceInMap_FK" Association="Self.OutOfService_PlaceInMap_FK">
+          <AssociationSet Name="OutOfServiceItem_PlaceInMap_FK" Association="Self.OutOfServiceItem_PlaceInMap_FK">
             <End Role="placeinmap" EntitySet="placeinmap" />
-            <End Role="outofservice" EntitySet="outofservice" />
+            <End Role="outofserviceitem" EntitySet="outofserviceitem" />
           </AssociationSet>
           <AssociationSet Name="Party2_PartyMember_FK" Association="Self.Party2_PartyMember_FK">
             <End Role="partymember" EntitySet="partymember" />
@@ -1326,33 +1294,25 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="placeinmap" EntitySet="placeinmap" />
             <End Role="reservationitem" EntitySet="reservationitem" />
           </AssociationSet>
-          <AssociationSet Name="Reserved_PlaceInMap_FK" Association="Self.Reserved_PlaceInMap_FK">
-            <End Role="placeinmap" EntitySet="placeinmap" />
-            <End Role="reserved" EntitySet="reserved" />
-          </AssociationSet>
-          <AssociationSet Name="Reserved_ReservationItem_FK" Association="Self.Reserved_ReservationItem_FK">
-            <End Role="reservationitem" EntitySet="reservationitem" />
-            <End Role="reserved" EntitySet="reserved" />
-          </AssociationSet>
-          <AssociationSet Name="Selected_Customer_FK" Association="Self.Selected_Customer_FK">
+          <AssociationSet Name="SelectedItem_Customer_FK" Association="Self.SelectedItem_Customer_FK">
             <End Role="customer" EntitySet="customer" />
-            <End Role="selected" EntitySet="selected" />
+            <End Role="selecteditem" EntitySet="selecteditem" />
           </AssociationSet>
-          <AssociationSet Name="Selected_IPMEvent_FK" Association="Self.Selected_IPMEvent_FK">
+          <AssociationSet Name="SelectedItem_IPMEvent_FK" Association="Self.SelectedItem_IPMEvent_FK">
             <End Role="ipmevent" EntitySet="ipmevent" />
-            <End Role="selected" EntitySet="selected" />
+            <End Role="selecteditem" EntitySet="selecteditem" />
           </AssociationSet>
-          <AssociationSet Name="Selected_RVSite_FK" Association="Self.Selected_RVSite_FK">
+          <AssociationSet Name="SelectedItem_RVSite_FK" Association="Self.SelectedItem_RVSite_FK">
             <End Role="placeinmap" EntitySet="placeinmap" />
-            <End Role="selected" EntitySet="selected" />
+            <End Role="selecteditem" EntitySet="selecteditem" />
           </AssociationSet>
-          <AssociationSet Name="Selected_Session_FK" Association="Self.Selected_Session_FK">
+          <AssociationSet Name="SelectedItem_Session_FK" Association="Self.SelectedItem_Session_FK">
             <End Role="session" EntitySet="session" />
-            <End Role="selected" EntitySet="selected" />
+            <End Role="selecteditem" EntitySet="selecteditem" />
           </AssociationSet>
-          <AssociationSet Name="Selected_Staff" Association="Self.Selected_Staff">
+          <AssociationSet Name="SelectedItem_Staff" Association="Self.SelectedItem_Staff">
             <End Role="staff" EntitySet="staff" />
-            <End Role="selected" EntitySet="selected" />
+            <End Role="selecteditem" EntitySet="selecteditem" />
           </AssociationSet>
           <AssociationSet Name="Session_Customer_FK" Association="Self.Session_Customer_FK">
             <End Role="customer" EntitySet="customer" />
@@ -1419,13 +1379,14 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
           <Property Name="idPlaceInMap" Type="Int64" Nullable="false" />
           <Property Name="seqCoordinate" Type="Int32" Nullable="false" />
           <Property Name="longitude" Type="String" Nullable="false" />
           <Property Name="latitude" Type="String" Nullable="false" />
           <Property Name="createDate" Type="DateTime" Nullable="false" />
           <Property Name="lastUpdate" Type="DateTime" Nullable="false" />
-          <NavigationProperty Name="placeinmap" Relationship="Self.Coordinates_PlaceInMap_FK" FromRole="coordinates" ToRole="placeinmap" />
+          <NavigationProperty Name="ipmevent" Relationship="Self.Coordinates_idIPMEvent_FK" FromRole="coordinates" ToRole="ipmevent" />
         </EntityType>
         <EntityType Name="countrycode">
           <Key>
@@ -1460,7 +1421,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <NavigationProperty Name="reservationitems" Relationship="Self.idCustomer_Customer_FK" FromRole="customer" ToRole="reservationitem" />
           <NavigationProperty Name="customeraccounts" Relationship="Self.idCustomerID_Customer_FK" FromRole="customer" ToRole="customeraccount" />
           <NavigationProperty Name="payments" Relationship="Self.Payment_Customer_FK" FromRole="customer" ToRole="payment" />
-          <NavigationProperty Name="selecteds" Relationship="Self.Selected_Customer_FK" FromRole="customer" ToRole="selected" />
+          <NavigationProperty Name="selecteditems" Relationship="Self.SelectedItem_Customer_FK" FromRole="customer" ToRole="selecteditem" />
           <NavigationProperty Name="sessions" Relationship="Self.Session_Customer_FK" FromRole="customer" ToRole="session" />
         </EntityType>
         <EntityType Name="customeraccount">
@@ -1512,15 +1473,16 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <Property Name="lastDateRefund" Type="DateTime" />
+          <NavigationProperty Name="coordinates" Relationship="Self.Coordinates_idIPMEvent_FK" FromRole="ipmevent" ToRole="coordinates" />
           <NavigationProperty Name="fees" Relationship="Self.Fees_IPMEvent_FK" FromRole="ipmevent" ToRole="fees" />
           <NavigationProperty Name="placeinmaps" Relationship="Self.PlaceInMap_IPMEvent_FK" FromRole="ipmevent" ToRole="placeinmap" />
-          <NavigationProperty Name="selecteds" Relationship="Self.Selected_IPMEvent_FK" FromRole="ipmevent" ToRole="selected" />
+          <NavigationProperty Name="selecteditems" Relationship="Self.SelectedItem_IPMEvent_FK" FromRole="ipmevent" ToRole="selecteditem" />
           <NavigationProperty Name="sessions" Relationship="Self.Session_IPMEvent_FK" FromRole="ipmevent" ToRole="session" />
           <NavigationProperty Name="siterates" Relationship="Self.SiteRate_IPMEvent_FK" FromRole="ipmevent" ToRole="siterate" />
           <NavigationProperty Name="sitetypes" Relationship="Self.SiteType_IPMEvent_FK" FromRole="ipmevent" ToRole="sitetype" />
           <NavigationProperty Name="styleurls" Relationship="Self.StyleUrl_IPMEvent_FK" FromRole="ipmevent" ToRole="styleurl" />
         </EntityType>
-        <EntityType Name="outofservice">
+        <EntityType Name="outofserviceitem">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -1530,7 +1492,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="endDate" Type="DateTime" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
-          <NavigationProperty Name="placeinmap" Relationship="Self.OutOfService_PlaceInMap_FK" FromRole="outofservice" ToRole="placeinmap" />
+          <NavigationProperty Name="placeinmap" Relationship="Self.OutOfServiceItem_PlaceInMap_FK" FromRole="outofserviceitem" ToRole="placeinmap" />
         </EntityType>
         <EntityType Name="partymember">
           <Key>
@@ -1629,13 +1591,11 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="lastUpdate" Type="DateTime" />
           <Property Name="isRVSite" Type="Boolean" />
           <NavigationProperty Name="checkinouts" Relationship="Self.CheckInOut_PlaceInMap_FK" FromRole="placeinmap" ToRole="checkinout" />
-          <NavigationProperty Name="coordinates" Relationship="Self.Coordinates_PlaceInMap_FK" FromRole="placeinmap" ToRole="coordinates" />
           <NavigationProperty Name="ipmevent" Relationship="Self.PlaceInMap_IPMEvent_FK" FromRole="placeinmap" ToRole="ipmevent" />
-          <NavigationProperty Name="outofservices" Relationship="Self.OutOfService_PlaceInMap_FK" FromRole="placeinmap" ToRole="outofservice" />
+          <NavigationProperty Name="outofserviceitems" Relationship="Self.OutOfServiceItem_PlaceInMap_FK" FromRole="placeinmap" ToRole="outofserviceitem" />
           <NavigationProperty Name="sitetype" Relationship="Self.PlaceInMap_SiteStyle_FK" FromRole="placeinmap" ToRole="sitetype" />
           <NavigationProperty Name="reservationitems" Relationship="Self.ReservationItem_PlaceInMap_FK" FromRole="placeinmap" ToRole="reservationitem" />
-          <NavigationProperty Name="reserveds" Relationship="Self.Reserved_PlaceInMap_FK" FromRole="placeinmap" ToRole="reserved" />
-          <NavigationProperty Name="selecteds" Relationship="Self.Selected_RVSite_FK" FromRole="placeinmap" ToRole="selected" />
+          <NavigationProperty Name="selecteditems" Relationship="Self.SelectedItem_RVSite_FK" FromRole="placeinmap" ToRole="selecteditem" />
         </EntityType>
         <EntityType Name="provincecode">
           <Key>
@@ -1684,7 +1644,6 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <NavigationProperty Name="placeinmap" Relationship="Self.ReservationItem_PlaceInMap_FK" FromRole="reservationitem" ToRole="placeinmap" />
           <NavigationProperty Name="staff" Relationship="Self.idStaff_Staff_FK" FromRole="reservationitem" ToRole="staff" />
           <NavigationProperty Name="reservationitem_partymember" Relationship="Self.Party2_ReservationItem_FK" FromRole="reservationitem" ToRole="reservationitem_partymember" />
-          <NavigationProperty Name="reserveds" Relationship="Self.Reserved_ReservationItem_FK" FromRole="reservationitem" ToRole="reserved" />
         </EntityType>
         <EntityType Name="reservationitem_partymember">
           <Key>
@@ -1699,19 +1658,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <NavigationProperty Name="partymember" Relationship="Self.Party2_PartyMember_FK" FromRole="reservationitem_partymember" ToRole="partymember" />
           <NavigationProperty Name="reservationitem" Relationship="Self.Party2_ReservationItem_FK" FromRole="reservationitem_partymember" ToRole="reservationitem" />
         </EntityType>
-        <EntityType Name="reserved">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="idReservationItem" Type="Int64" />
-          <Property Name="idRVSite" Type="Int64" />
-          <Property Name="createDate" Type="DateTime" />
-          <Property Name="lastUpdate" Type="DateTime" />
-          <NavigationProperty Name="placeinmap" Relationship="Self.Reserved_PlaceInMap_FK" FromRole="reserved" ToRole="placeinmap" />
-          <NavigationProperty Name="reservationitem" Relationship="Self.Reserved_ReservationItem_FK" FromRole="reserved" ToRole="reservationitem" />
-        </EntityType>
-        <EntityType Name="selected">
+        <EntityType Name="selecteditem">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -1726,11 +1673,11 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
-          <NavigationProperty Name="customer" Relationship="Self.Selected_Customer_FK" FromRole="selected" ToRole="customer" />
-          <NavigationProperty Name="ipmevent" Relationship="Self.Selected_IPMEvent_FK" FromRole="selected" ToRole="ipmevent" />
-          <NavigationProperty Name="placeinmap" Relationship="Self.Selected_RVSite_FK" FromRole="selected" ToRole="placeinmap" />
-          <NavigationProperty Name="session" Relationship="Self.Selected_Session_FK" FromRole="selected" ToRole="session" />
-          <NavigationProperty Name="staff" Relationship="Self.Selected_Staff" FromRole="selected" ToRole="staff" />
+          <NavigationProperty Name="customer" Relationship="Self.SelectedItem_Customer_FK" FromRole="selecteditem" ToRole="customer" />
+          <NavigationProperty Name="ipmevent" Relationship="Self.SelectedItem_IPMEvent_FK" FromRole="selecteditem" ToRole="ipmevent" />
+          <NavigationProperty Name="placeinmap" Relationship="Self.SelectedItem_RVSite_FK" FromRole="selecteditem" ToRole="placeinmap" />
+          <NavigationProperty Name="session" Relationship="Self.SelectedItem_Session_FK" FromRole="selecteditem" ToRole="session" />
+          <NavigationProperty Name="staff" Relationship="Self.SelectedItem_Staff" FromRole="selecteditem" ToRole="staff" />
         </EntityType>
         <EntityType Name="service">
           <Key>
@@ -1752,11 +1699,13 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="idStaff" Type="Int64" />
           <Property Name="isLoggedIn" Type="Boolean" />
           <Property Name="idCustomer" Type="Int64" />
+          <Property Name="checkInDate" Type="DateTime" Nullable="false" />
+          <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="customer" Relationship="Self.Session_Customer_FK" FromRole="session" ToRole="customer" />
           <NavigationProperty Name="ipmevent" Relationship="Self.Session_IPMEvent_FK" FromRole="session" ToRole="ipmevent" />
-          <NavigationProperty Name="selecteds" Relationship="Self.Selected_Session_FK" FromRole="session" ToRole="selected" />
+          <NavigationProperty Name="selecteditems" Relationship="Self.SelectedItem_Session_FK" FromRole="session" ToRole="selecteditem" />
           <NavigationProperty Name="staff" Relationship="Self.Session_Staff_FK" FromRole="session" ToRole="staff" />
         </EntityType>
         <EntityType Name="siterate">
@@ -1811,7 +1760,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="person" Relationship="Self.Person_Staff_FK" FromRole="staff" ToRole="person" />
           <NavigationProperty Name="reservationitems" Relationship="Self.idStaff_Staff_FK" FromRole="staff" ToRole="reservationitem" />
-          <NavigationProperty Name="selecteds" Relationship="Self.Selected_Staff" FromRole="staff" ToRole="selected" />
+          <NavigationProperty Name="selecteditems" Relationship="Self.SelectedItem_Staff" FromRole="staff" ToRole="selecteditem" />
           <NavigationProperty Name="sessions" Relationship="Self.Session_Staff_FK" FromRole="staff" ToRole="session" />
         </EntityType>
         <EntityType Name="styleurl">
@@ -2012,15 +1961,15 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Coordinates_PlaceInMap_FK">
-          <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
+        <Association Name="Coordinates_idIPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
           <End Role="coordinates" Type="Self.coordinate" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="placeinmap">
+            <Principal Role="ipmevent">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="coordinates">
-              <PropertyRef Name="idPlaceInMap" />
+              <PropertyRef Name="idIPMEvent" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2108,14 +2057,14 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Selected_Customer_FK">
+        <Association Name="SelectedItem_Customer_FK">
           <End Role="customer" Type="Self.customer" Multiplicity="0..1" />
-          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <End Role="selecteditem" Type="Self.selecteditem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="customer">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="selected">
+            <Dependent Role="selecteditem">
               <PropertyRef Name="idCustomer" />
             </Dependent>
           </ReferentialConstraint>
@@ -2180,14 +2129,14 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Selected_IPMEvent_FK">
+        <Association Name="SelectedItem_IPMEvent_FK">
           <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="0..1" />
-          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <End Role="selecteditem" Type="Self.selecteditem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ipmevent">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="selected">
+            <Dependent Role="selecteditem">
               <PropertyRef Name="idIPMEvent" />
             </Dependent>
           </ReferentialConstraint>
@@ -2240,14 +2189,14 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="OutOfService_PlaceInMap_FK">
+        <Association Name="OutOfServiceItem_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
-          <End Role="outofservice" Type="Self.outofservice" Multiplicity="*" />
+          <End Role="outofserviceitem" Type="Self.outofserviceitem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="placeinmap">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="outofservice">
+            <Dependent Role="outofserviceitem">
               <PropertyRef Name="idRVSite" />
             </Dependent>
           </ReferentialConstraint>
@@ -2384,26 +2333,14 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Reserved_PlaceInMap_FK">
+        <Association Name="SelectedItem_RVSite_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="0..1" />
-          <End Role="reserved" Type="Self.reserved" Multiplicity="*" />
+          <End Role="selecteditem" Type="Self.selecteditem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="placeinmap">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="reserved">
-              <PropertyRef Name="idRVSite" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Selected_RVSite_FK">
-          <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="0..1" />
-          <End Role="selected" Type="Self.selected" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="placeinmap">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="selected">
+            <Dependent Role="selecteditem">
               <PropertyRef Name="idRVSite" />
             </Dependent>
           </ReferentialConstraint>
@@ -2432,38 +2369,26 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Reserved_ReservationItem_FK">
-          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="0..1" />
-          <End Role="reserved" Type="Self.reserved" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="reservationitem">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="reserved">
-              <PropertyRef Name="idReservationItem" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Selected_Session_FK">
+        <Association Name="SelectedItem_Session_FK">
           <End Role="session" Type="Self.session" Multiplicity="1" />
-          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <End Role="selecteditem" Type="Self.selecteditem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="session">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="selected">
+            <Dependent Role="selecteditem">
               <PropertyRef Name="idSession" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Selected_Staff">
+        <Association Name="SelectedItem_Staff">
           <End Role="staff" Type="Self.staff" Multiplicity="0..1" />
-          <End Role="selected" Type="Self.selected" Multiplicity="*" />
+          <End Role="selecteditem" Type="Self.selecteditem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="staff">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="selected">
+            <Dependent Role="selecteditem">
               <PropertyRef Name="idStaff" />
             </Dependent>
           </ReferentialConstraint>
@@ -2536,7 +2461,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <EntitySet Name="customeraccounts" EntityType="Self.customeraccount" />
           <EntitySet Name="fees" EntityType="Self.fee" />
           <EntitySet Name="ipmevents" EntityType="Self.ipmevent" />
-          <EntitySet Name="outofservices" EntityType="Self.outofservice" />
+          <EntitySet Name="outofserviceitems" EntityType="Self.outofserviceitem" />
           <EntitySet Name="partymembers" EntityType="Self.partymember" />
           <EntitySet Name="paydoctypes" EntityType="Self.paydoctype" />
           <EntitySet Name="payments" EntityType="Self.payment" />
@@ -2548,8 +2473,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <EntitySet Name="reasonforpayments" EntityType="Self.reasonforpayment" />
           <EntitySet Name="reservationitems" EntityType="Self.reservationitem" />
           <EntitySet Name="reservationitem_partymember" EntityType="Self.reservationitem_partymember" />
-          <EntitySet Name="reserveds" EntityType="Self.reserved" />
-          <EntitySet Name="selecteds" EntityType="Self.selected" />
+          <EntitySet Name="selecteditems" EntityType="Self.selecteditem" />
           <EntitySet Name="services" EntityType="Self.service" />
           <EntitySet Name="sessions" EntityType="Self.session" />
           <EntitySet Name="siterates" EntityType="Self.siterate" />
@@ -2575,8 +2499,8 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="reservationitem" EntitySet="reservationitems" />
             <End Role="checkinout" EntitySet="checkinouts" />
           </AssociationSet>
-          <AssociationSet Name="Coordinates_PlaceInMap_FK" Association="Self.Coordinates_PlaceInMap_FK">
-            <End Role="placeinmap" EntitySet="placeinmaps" />
+          <AssociationSet Name="Coordinates_idIPMEvent_FK" Association="Self.Coordinates_idIPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevents" />
             <End Role="coordinates" EntitySet="coordinates" />
           </AssociationSet>
           <AssociationSet Name="Customer_countryCode_FK" Association="Self.Customer_countryCode_FK">
@@ -2607,9 +2531,9 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="customer" EntitySet="customers" />
             <End Role="payment" EntitySet="payments" />
           </AssociationSet>
-          <AssociationSet Name="Selected_Customer_FK" Association="Self.Selected_Customer_FK">
+          <AssociationSet Name="SelectedItem_Customer_FK" Association="Self.SelectedItem_Customer_FK">
             <End Role="customer" EntitySet="customers" />
-            <End Role="selected" EntitySet="selecteds" />
+            <End Role="selecteditem" EntitySet="selecteditems" />
           </AssociationSet>
           <AssociationSet Name="Session_Customer_FK" Association="Self.Session_Customer_FK">
             <End Role="customer" EntitySet="customers" />
@@ -2631,9 +2555,9 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="ipmevent" EntitySet="ipmevents" />
             <End Role="placeinmap" EntitySet="placeinmaps" />
           </AssociationSet>
-          <AssociationSet Name="Selected_IPMEvent_FK" Association="Self.Selected_IPMEvent_FK">
+          <AssociationSet Name="SelectedItem_IPMEvent_FK" Association="Self.SelectedItem_IPMEvent_FK">
             <End Role="ipmevent" EntitySet="ipmevents" />
-            <End Role="selected" EntitySet="selecteds" />
+            <End Role="selecteditem" EntitySet="selecteditems" />
           </AssociationSet>
           <AssociationSet Name="Session_IPMEvent_FK" Association="Self.Session_IPMEvent_FK">
             <End Role="ipmevent" EntitySet="ipmevents" />
@@ -2651,9 +2575,9 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="ipmevent" EntitySet="ipmevents" />
             <End Role="styleurl" EntitySet="styleurls" />
           </AssociationSet>
-          <AssociationSet Name="OutOfService_PlaceInMap_FK" Association="Self.OutOfService_PlaceInMap_FK">
+          <AssociationSet Name="OutOfServiceItem_PlaceInMap_FK" Association="Self.OutOfServiceItem_PlaceInMap_FK">
             <End Role="placeinmap" EntitySet="placeinmaps" />
-            <End Role="outofservice" EntitySet="outofservices" />
+            <End Role="outofserviceitem" EntitySet="outofserviceitems" />
           </AssociationSet>
           <AssociationSet Name="Member_Person_FK" Association="Self.Member_Person_FK">
             <End Role="person" EntitySet="people" />
@@ -2699,13 +2623,9 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="placeinmap" EntitySet="placeinmaps" />
             <End Role="reservationitem" EntitySet="reservationitems" />
           </AssociationSet>
-          <AssociationSet Name="Reserved_PlaceInMap_FK" Association="Self.Reserved_PlaceInMap_FK">
+          <AssociationSet Name="SelectedItem_RVSite_FK" Association="Self.SelectedItem_RVSite_FK">
             <End Role="placeinmap" EntitySet="placeinmaps" />
-            <End Role="reserved" EntitySet="reserveds" />
-          </AssociationSet>
-          <AssociationSet Name="Selected_RVSite_FK" Association="Self.Selected_RVSite_FK">
-            <End Role="placeinmap" EntitySet="placeinmaps" />
-            <End Role="selected" EntitySet="selecteds" />
+            <End Role="selecteditem" EntitySet="selecteditems" />
           </AssociationSet>
           <AssociationSet Name="idStaff_Staff_FK" Association="Self.idStaff_Staff_FK">
             <End Role="staff" EntitySet="staffs" />
@@ -2715,17 +2635,13 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="reservationitem" EntitySet="reservationitems" />
             <End Role="reservationitem_partymember" EntitySet="reservationitem_partymember" />
           </AssociationSet>
-          <AssociationSet Name="Reserved_ReservationItem_FK" Association="Self.Reserved_ReservationItem_FK">
-            <End Role="reservationitem" EntitySet="reservationitems" />
-            <End Role="reserved" EntitySet="reserveds" />
-          </AssociationSet>
-          <AssociationSet Name="Selected_Session_FK" Association="Self.Selected_Session_FK">
+          <AssociationSet Name="SelectedItem_Session_FK" Association="Self.SelectedItem_Session_FK">
             <End Role="session" EntitySet="sessions" />
-            <End Role="selected" EntitySet="selecteds" />
+            <End Role="selecteditem" EntitySet="selecteditems" />
           </AssociationSet>
-          <AssociationSet Name="Selected_Staff" Association="Self.Selected_Staff">
+          <AssociationSet Name="SelectedItem_Staff" Association="Self.SelectedItem_Staff">
             <End Role="staff" EntitySet="staffs" />
-            <End Role="selected" EntitySet="selecteds" />
+            <End Role="selecteditem" EntitySet="selecteditems" />
           </AssociationSet>
           <AssociationSet Name="SiteType_Service_FK" Association="Self.SiteType_Service_FK">
             <End Role="service" EntitySet="services" />
@@ -2771,6 +2687,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <EntityTypeMapping TypeName="ipmrvparkModel.coordinate">
               <MappingFragment StoreEntitySet="coordinates">
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
                 <ScalarProperty Name="idPlaceInMap" ColumnName="idPlaceInMap" />
                 <ScalarProperty Name="seqCoordinate" ColumnName="seqCoordinate" />
                 <ScalarProperty Name="longitude" ColumnName="longitude" />
@@ -2857,9 +2774,9 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="outofservices">
-            <EntityTypeMapping TypeName="ipmrvparkModel.outofservice">
-              <MappingFragment StoreEntitySet="outofservice">
+          <EntitySetMapping Name="outofserviceitems">
+            <EntityTypeMapping TypeName="ipmrvparkModel.outofserviceitem">
+              <MappingFragment StoreEntitySet="outofserviceitem">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
                 <ScalarProperty Name="startDate" ColumnName="startDate" />
@@ -3009,20 +2926,9 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="reserveds">
-            <EntityTypeMapping TypeName="ipmrvparkModel.reserved">
-              <MappingFragment StoreEntitySet="reserved">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="idReservationItem" ColumnName="idReservationItem" />
-                <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
-                <ScalarProperty Name="createDate" ColumnName="createDate" />
-                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="selecteds">
-            <EntityTypeMapping TypeName="ipmrvparkModel.selected">
-              <MappingFragment StoreEntitySet="selected">
+          <EntitySetMapping Name="selecteditems">
+            <EntityTypeMapping TypeName="ipmrvparkModel.selecteditem">
+              <MappingFragment StoreEntitySet="selecteditem">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idSession" ColumnName="idSession" />
                 <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
@@ -3056,6 +2962,8 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
                 <ScalarProperty Name="idStaff" ColumnName="idStaff" />
                 <ScalarProperty Name="isLoggedIn" ColumnName="isLoggedIn" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="checkInDate" ColumnName="checkInDate" />
+                <ScalarProperty Name="checkOutDate" ColumnName="checkOutDate" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
               </MappingFragment>

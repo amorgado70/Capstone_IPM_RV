@@ -13,16 +13,19 @@ namespace IPMRVPark.WebUI.Controllers
     {
         IRepositoryBase<ipmevent> ipmevents;
         IRepositoryBase<session> sessions;
+        IRepositoryBase<customer_view> customers;
         IRepositoryBase<staff> users;
         SessionService sessionService;
 
         public LoginController(
             IRepositoryBase<ipmevent> ipmevents,
             IRepositoryBase<session> sessions,
+            IRepositoryBase<customer_view> customers,
             IRepositoryBase<staff> users)
         {
             this.ipmevents = ipmevents;
             this.sessions = sessions;
+            this.customers = customers;
             this.users = users;
             sessionService = new SessionService(this.sessions);
         }//end Constructor
@@ -47,6 +50,7 @@ namespace IPMRVPark.WebUI.Controllers
             return View();
         }
 
+        [HttpPost]
         public ActionResult GetSessionEmail()
         {
             SelectionOptionID user = new SelectionOptionID(-1, "");
@@ -61,6 +65,13 @@ namespace IPMRVPark.WebUI.Controllers
                 };
             };
             return Json(user);
+        }
+
+        [HttpPost]
+        public ActionResult GetSessionYear()
+        {
+            string year = ipmevents.GetById(sessionService.GetSession(this.HttpContext).idIPMEvent).year.ToString();
+            return Json(year);
         }
 
         [HttpPost]
@@ -93,6 +104,41 @@ namespace IPMRVPark.WebUI.Controllers
             return Json(idIPMEvent);
         }
 
+        public ActionResult GetSessionGUID()
+        {
+            var _session = sessionService.GetSession(this.HttpContext);
+            var _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
+            string sessionSummary = "sessionID: " + _session.ID +
+                " sessionGUID: " + _session.sessionGUID +
+                " IPMEvent: " + _IPMEvent.year;
+            return Json(sessionSummary);
+        }
+
+        public ActionResult GetSessionCustomer()
+        {
+            SelectionOptionID customer = new SelectionOptionID(-1, "");
+            var _session = sessionService.GetSession(this.HttpContext);
+            if (_session.idCustomer != null)
+            {
+                var _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).First();
+                if (_customer != null)
+                {
+                    customer.ID = _session.idCustomer.Value;
+                    customer.Label = _customer.fullName + " - Phone: " + _customer.mainPhone;
+                };
+            };
+            return Json(customer);
+        }
+
+        [HttpPost]
+        public ActionResult SelectCustomer(long idCustomer)
+        {
+            session _session = sessions.GetById(sessionService.GetSession(this.HttpContext).ID);
+            _session.idCustomer = idCustomer;
+            sessions.Update(_session);
+            sessions.Commit();
+            return Json(idCustomer);
+        }
     }
 
 }

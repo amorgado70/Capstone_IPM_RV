@@ -16,7 +16,7 @@ namespace IPMRVPark.Models
     {
         public session()
         {
-            this.selecteds = new HashSet<selected>();
+            this.selecteditems = new HashSet<selecteditem>();
         }
     
         public long ID { get; set; }
@@ -25,12 +25,14 @@ namespace IPMRVPark.Models
         public Nullable<long> idStaff { get; set; }
         public Nullable<bool> isLoggedIn { get; set; }
         public Nullable<long> idCustomer { get; set; }
+        public System.DateTime checkInDate { get; set; }
+        public System.DateTime checkOutDate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
         public virtual customer customer { get; set; }
         public virtual ipmevent ipmevent { get; set; }
-        public virtual ICollection<selected> selecteds { get; set; }
+        public virtual ICollection<selecteditem> selecteditems { get; set; }
         public virtual staff staff { get; set; }
     }
 }

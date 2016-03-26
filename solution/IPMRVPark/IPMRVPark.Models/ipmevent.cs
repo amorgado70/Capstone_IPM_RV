@@ -16,9 +16,10 @@ namespace IPMRVPark.Models
     {
         public ipmevent()
         {
+            this.coordinates = new HashSet<coordinate>();
             this.fees = new HashSet<fee>();
             this.placeinmaps = new HashSet<placeinmap>();
-            this.selecteds = new HashSet<selected>();
+            this.selecteditems = new HashSet<selecteditem>();
             this.sessions = new HashSet<session>();
             this.siterates = new HashSet<siterate>();
             this.sitetypes = new HashSet<sitetype>();
@@ -39,9 +40,10 @@ namespace IPMRVPark.Models
         public Nullable<System.DateTime> lastUpdate { get; set; }
         public Nullable<System.DateTime> lastDateRefund { get; set; }
     
+        public virtual ICollection<coordinate> coordinates { get; set; }
         public virtual ICollection<fee> fees { get; set; }
         public virtual ICollection<placeinmap> placeinmaps { get; set; }
-        public virtual ICollection<selected> selecteds { get; set; }
+        public virtual ICollection<selecteditem> selecteditems { get; set; }
         public virtual ICollection<session> sessions { get; set; }
         public virtual ICollection<siterate> siterates { get; set; }
         public virtual ICollection<sitetype> sitetypes { get; set; }

@@ -65,15 +65,24 @@ namespace IPMRVPark.Services
                     {
                         var sessionList = sessions.GetAll();
                         sessionList = sessionList.Where(s => s.sessionGUID.Contains(_sessionID));
-                        if (sessionList.Count() > 0 )//checks if Guid is in database
+                        session _session = new session();
+                        bool tryResult = false;
+
+                        try //checks if Guid is in database
                         {
-                            result = sessionList.First();
-                            if (result != null)//session found in database
-                            {
-                                cookie.Expires = DateTime.Now.AddDays(7);//update cookie expiry date
-                                return result;                                
-                            };
+                            _session = sessionList.FirstOrDefault();
+                            tryResult = !(_session.Equals(default(session)));
                         }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("An error occurred: '{0}'", e);
+                        }
+
+                        if (tryResult)//session found in database
+                        {
+                            cookie.Expires = DateTime.Now.AddDays(7);//update cookie expiry date
+                            return _session;
+                        };
                     }
                 }
             }

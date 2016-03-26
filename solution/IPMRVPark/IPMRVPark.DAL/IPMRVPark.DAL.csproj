@@ -62,7 +62,7 @@
     <Compile Include="Repositories\StaffRepository.cs" />
     <Compile Include="Repositories\SiteDescriptionRateViewRepository.cs" />
     <Compile Include="Repositories\TotalPerSiteViewRepository.cs" />
-    <Compile Include="Repositories\SelectedRepository.cs" />
+    <Compile Include="Repositories\SelectedItemRepository.cs" />
     <Compile Include="Repositories\RVSiteAvailableViewRepository.cs" />
     <Compile Include="Repositories\IPMEventRepository.cs" />
     <Compile Include="Repositories\SessionRepository.cs" />

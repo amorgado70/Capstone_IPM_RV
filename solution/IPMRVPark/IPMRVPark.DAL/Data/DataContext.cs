@@ -13,6 +13,7 @@ namespace IPMRVPark.Contracts.Data
         {
 
         }
+
         public DbSet<checkinout> checkinouts { get; set; }
         public DbSet<coordinate> coordinates { get; set; }
         public DbSet<countrycode> countrycodes { get; set; }
@@ -20,7 +21,7 @@ namespace IPMRVPark.Contracts.Data
         public DbSet<customeraccount> customeraccounts { get; set; }
         public DbSet<fee> fees { get; set; }
         public DbSet<ipmevent> ipmevents { get; set; }
-        public DbSet<outofservice> outofservices { get; set; }
+        public DbSet<outofserviceitem> outofserviceitems { get; set; }
         public DbSet<partymember> partymembers { get; set; }
         public DbSet<paydoctype> paydoctypes { get; set; }
         public DbSet<payment> payments { get; set; }
@@ -32,8 +33,7 @@ namespace IPMRVPark.Contracts.Data
         public DbSet<reasonforpayment> reasonforpayments { get; set; }
         public DbSet<reservationitem> reservationitems { get; set; }
         public DbSet<reservationitem_partymember> reservationitem_partymember { get; set; }
-        public DbSet<reserved> reserveds { get; set; }
-        public DbSet<selected> selecteds { get; set; }
+        public DbSet<selecteditem> selecteditems { get; set; }
         public DbSet<service> services { get; set; }
         public DbSet<session> sessions { get; set; }
         public DbSet<siterate> siterates { get; set; }
@@ -45,7 +45,6 @@ namespace IPMRVPark.Contracts.Data
         public DbSet<reservation_view> reservation_view { get; set; }
         public DbSet<rvsite_available_view> rvsite_available_view { get; set; }
         public DbSet<rvsite_coord_view> rvsite_coord_view { get; set; }
-        public DbSet<rvsite_status_view> rvsite_status_view { get; set; }
         public DbSet<site_description_rate_view> site_description_rate_view { get; set; }
         public DbSet<sitedescription_by_sitetype_view> sitedescription_by_sitetype_view { get; set; }
         public DbSet<siterate_by_sitetype_view> siterate_by_sitetype_view { get; set; }

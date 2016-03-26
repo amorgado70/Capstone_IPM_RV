@@ -11,7 +11,16 @@ Site Reservation
 
 <script type="text/javascript">
     $(document).ready(function () {
-
+        // ***** IPM Event Year
+        $.ajax({
+            url: '/Login/GetSessionYear',
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                $("#sessionYear").text(data);},
+            error: function () {
+                alert("21 Some error occured.");}
+        });
         // ***** Dates Selection
         $("#checkInDate").datepicker({
             dateFormat: 'D, dd M',
@@ -32,10 +41,12 @@ Site Reservation
                 dt2.datepicker('option', 'maxDate', @ViewBag.maxDate);
                 //first day which can be selected in dt2 is selected date in dt1
                 dt2.datepicker('option', 'minDate', minDate);
+                //$("#checkOutDate").val(startDate);
+                selectCheckInOutDates(); // Update session with dates
                 getSiteTotal(); // Calculate total for selected site
             }
         });
-        $("#checkInDate").datepicker("setDate", @ViewBag.startDate);
+        $("#checkInDate").datepicker("setDate", @ViewBag.checkInDate);
         $("#checkInDate").click(function(event){
             var dim = $(this).offset();
             $("#ui-datepicker-div").offset({
@@ -49,10 +60,11 @@ Site Reservation
             selectOtherMonths: true,
             dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
             onSelect: function () {
+                selectCheckInOutDates(); // Update session with dates
                 getSiteTotal(); // Calculate total for selected site
             }
         });
-        $("#checkOutDate").datepicker("setDate", @ViewBag.startDate);
+        $("#checkOutDate").datepicker("setDate", @ViewBag.checkOutDate);
         $("#checkOutDate").click(function(event){
             var dim = $(this).offset();
             $("#ui-datepicker-div").offset({
@@ -60,7 +72,23 @@ Site Reservation
                 left    :   dim.left - 0
             });
         });
-
+        function selectCheckInOutDates() {
+            $.ajax(
+                    {
+                        type: "POST", //HTTP POST Method
+                        url: "/Reservation/SelectCheckInOutDates", // Controller/View
+                        dataType: "json",
+                        data: { //Passing data
+                            checkInDate: $("#checkInDate").val(), //Reading text box values using jQuery
+                            checkOutDate: $("#checkOutDate").val() //Reading text box values using jQuery
+                        },
+                        success: function (result) {
+                        },
+                        error: function (result) {
+                            alert("25 Some error occured.");
+                        }
+                    });
+        };
         // ***** Site Search
         $("#siteName").click(function (){
             $("#siteName").val("");
@@ -71,7 +99,7 @@ Site Reservation
             source: function (request, response) {
                 // define a function to call the action (assuming UserController)
                 $.ajax({
-                    url: '/Reservation/SearchSiteByNameResult',
+                    url: '/Search/SearchSiteByNameResult',
                     type: "POST",
                     dataType: "json",
                     // query will be the param used by the action method
@@ -99,17 +127,19 @@ Site Reservation
                         idRVSite: $("#idRVSite").val()
                     },
                     success: function (result) {
-                        $("#siteTotal").text(result);},
+                        $("#siteTotal").text(result);
+                        $("#waitMsg").hide();// Show wait message
+                    },
                     error: function () {
                         alert("5 Some error occured.");}
                 });
             };
         };
-
         // ***** Site Selection
         $('#btnSelectSite').prop('disabled', true);
         //function will be called on button click
         $("#btnSelectSite").click(function () {
+            $("#waitMsg").show();// Show wait message
             $.ajax(
             {
                 type: "POST", //HTTP POST Method
@@ -124,6 +154,8 @@ Site Reservation
                     updateSelectedList(); // Update Selected List
                     $('#btnSelectSite').prop('disabled', true); // Disable select button
                     $("#siteName").val(""); // Reset site name
+                    $("#siteTotal").text(""); // Reset site total
+                    $("#waitMsg").hide();
                 },
                 error: function (result) {
                     alert("2 Some error occured." + $("#idRVSite").val() );
@@ -146,7 +178,7 @@ Site Reservation
             source: function (request, response) {
                 // define a function to call the action (assuming UserController)
                 $.ajax({
-                    url: '/Reservation/SearchCustomerByNameOrPhoneResult',
+                    url: '/Search/SearchCustomerByNameOrPhoneResult',
                     type: "POST",
                     dataType: "json",
                     // query will be the param used by the action method
@@ -162,7 +194,7 @@ Site Reservation
             }
         });
         $.ajax({
-            url: '/Reservation/GetSessionCustomer',
+            url: '/Login/GetSessionCustomer',
             type: "POST",
             dataType: "json",
             success: function (data) {
@@ -180,10 +212,11 @@ Site Reservation
         $('#btnSelectCustomer').prop('disabled', true);
         //function will be called on button click
         $("#btnSelectCustomer").click(function () {
+            $("#waitMsg").show();// Show wait message
             $.ajax(
             {
                 type: "POST", //HTTP POST Method
-                url: "/Reservation/SelectCustomer", // Controller/View
+                url: "/Login/SelectCustomer", // Controller/View
                 dataType: "json",
                 data: { //Passing data
                     idCustomer: $("#idCustomer").val()
@@ -214,7 +247,9 @@ Site Reservation
                 type: "POST",
                 dataType: "json",
                 success: function (result) {
-                    $("#reservationSummary").text(result);},
+                    $("#reservationSummary").text(result);
+                    $("#waitMsg").hide();// Hide wait message
+                },
                 error: function () {
                     alert("8 Some error occured.");}
             });
@@ -224,10 +259,18 @@ Site Reservation
 
 <!-- New Reservation-->
 <div class="container-fluid">
-    <!-- RV Site Dates-->
-    <div class="row top-margin">
+    <!-- IPM Event Year -->
+    <div class="row">
         <div class="form-group">
-            <div class="col-sm-3 col-xs-12 form-top-margin">
+            <div class="col-xs-12">
+                <label class="pull-right">IPM Event <span id="sessionYear"></span></label>
+            </div>
+        </div>
+    </div>
+    <!-- RV Site Dates-->
+    <div class="row">
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12">
                 <label>Check In Date</label>
             </div>
             <div class="col-sm-3 col-xs-12 form-top-margin">

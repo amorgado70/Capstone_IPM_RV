@@ -19,7 +19,7 @@ namespace IPMRVPark.Models
             this.reservationitems = new HashSet<reservationitem>();
             this.customeraccounts = new HashSet<customeraccount>();
             this.payments = new HashSet<payment>();
-            this.selecteds = new HashSet<selected>();
+            this.selecteditems = new HashSet<selecteditem>();
             this.sessions = new HashSet<session>();
         }
     
@@ -42,7 +42,7 @@ namespace IPMRVPark.Models
         public virtual ICollection<reservationitem> reservationitems { get; set; }
         public virtual ICollection<customeraccount> customeraccounts { get; set; }
         public virtual ICollection<payment> payments { get; set; }
-        public virtual ICollection<selected> selecteds { get; set; }
+        public virtual ICollection<selecteditem> selecteditems { get; set; }
         public virtual ICollection<session> sessions { get; set; }
     }
 }

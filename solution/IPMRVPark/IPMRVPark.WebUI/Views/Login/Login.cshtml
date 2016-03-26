@@ -62,8 +62,9 @@
                 }
             });
         });
-        //function will be called on button click
-        $("#btnChangeYear").click(function () {
+        //function will be called on dropdownlist selection
+        $("#IPMEventYear").change(function () {
+            $("#waitMsg").show();
             $.ajax(
             {
                 type: "POST", //HTTP POST Method
@@ -98,7 +99,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    @*<div class="row">
         <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
             <div class="col-sm-9 col-sm-push-3 col-xs-12 form-top-margin">
                 <button id="btnChangeYear" class="btn btn-block btn-default">
@@ -107,7 +108,7 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div>*@
     <!-- Email -->
     <div class="row form-top-margin">
         <div class="form-group">

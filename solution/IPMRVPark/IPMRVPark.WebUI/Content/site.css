@@ -92,3 +92,22 @@ a, .btn, .btn-mylink, label, b, .glyphicon, th {
     left: 0;
     width:auto;
 }
+
+.waitMsg {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 20%;
+    z-index: 200;
+    width: 9em;
+    height: 6em;
+    padding: 1em;
+    color:#AEA093;
+    background-color:#453425;
+    border-radius: 5px;
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
