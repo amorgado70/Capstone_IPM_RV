@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "PrintPayment";
+}
+
+<h2>PrintPayment</h2>
+
+<div class="container-fluid">
+    <div class="row form-top-margin">
+        <!-- Receive Total -->
+        <div class="col-sm-4 col-xs-12">
+            <label>(c) Temp Balance (a)-(b)</label>
+        </div>
+        <div class="col-sm-4 col-xs-12 ">
+            <div disabled class="form-control payment-output">-@ViewBag.Total</div>
+        </div>
+        <div class="col-sm-4 col-xs-12" data-toggle="tooltip" title="Go To">
+            <a href="@Url.Action("Reservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-tag"></span>
+                <span>&nbsp; New Reservation</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </div>
+</div>

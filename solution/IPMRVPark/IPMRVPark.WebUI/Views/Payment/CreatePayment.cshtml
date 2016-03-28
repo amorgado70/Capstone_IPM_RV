@@ -13,6 +13,16 @@ Payments & Refunds
 
 <script type="text/javascript">
     $(document).ready(function () {
+        // **** Handle form submit
+        var formSubmit = false;
+        $("form").submit(function() {
+            return formSubmit;
+        });
+        $( "#btnSave" ).click(function() {
+            $("#waitMsg").show();// Show wait message
+            formSubmit = true;
+        });
+        // *****
         $('#reservation-summary').load('/Reservation/ShowReservationSummary'); // load partial view
         $('#ReasonForPayment').change(function () {
             updateReasonForPayment()
@@ -42,6 +52,43 @@ Payments & Refunds
             //alert(array[id-1].Value + " " + array[id-1].Text);
             $('#docNumber').prop('placeholder', "Type here: " + array[id-1].Text);
         }
+        // ***** Total Calculation
+        showTotal();
+        function showTotal(){
+            var customerBalance = parseFloat(@ViewBag.CustomerBalance);
+            var reservationTotal = parseFloat(@ViewBag.Total);
+            var provinceTax = parseFloat(@ViewBag.ProvinceTax);
+            var i = (reservationTotal * 100 / (100 + provinceTax)).toFixed(2);
+            var ii = reservationTotal - i;
+            var tempBalance = customerBalance - reservationTotal;
+            var amount = tempBalance * -1;
+            var finalBalance = amount + tempBalance;
+            $('#customerBalance').text(customerBalance.toFixed(2));
+            $('#reservationTotal').text(reservationTotal.toFixed(2));
+            $('#provinceTax').text(provinceTax.toFixed(2));
+            $('#i').text(i);
+            $('#ii').text(ii.toFixed(2));
+            $('#tempBalance').text(tempBalance.toFixed(2));
+            $('#amount').val(amount);
+            $('#finalBalance').text(finalBalance.toFixed(2));
+            $('#PaymentMethod').focus();
+        }
+        $('#amount').click(function(){
+            $('#amount').val("");
+        });
+        $('#amount').change(function(){
+            updateTotal();
+            $('#PaymentMethod').focus();
+        });
+        function updateTotal(){
+            var amount = $('#amount').val();
+            var amount = parseFloat(amount).toFixed(2)
+            $('#amount').val(amount);
+            var tempBalance = parseFloat($('#tempBalance').text());
+            var finalBalance = parseFloat(amount) + tempBalance;
+            var finalBalance = parseFloat(finalBalance).toFixed(2)
+            $('#finalBalance').text(finalBalance);
+        }
     });
 </script>
 
@@ -53,229 +100,188 @@ Payments & Refunds
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
 
-        <div class="row top-margin">
-            <!-- Customer Details -->
-            <div class="col-sm-2 col-xs-12 form-top-margin">
-                <label>Customer</label>
-            </div>
-            <div class="col-sm-6 col-xs-10 form-top-margin">
-                @if (ViewBag.CustomerName == null)
-                {
-                    <div class="form-control reservationWarning">NO CUSTOMER SELECTED YET</div>
-                }
-                else
-                {
-                    <div class="form-control">@ViewBag.CustomerName</div>
-                    <input class="form-control" type="text" id="idCustomer" name="idCustomer" value="@ViewBag.CustomerID" />
-                }
-            </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
-                <a href="@Url.Action(" CreatePayment", "Payment" )" class="btn btn-block btn-default btn-mylink pagination-centered">
-                    <span class="glyphicon glyphicon-user"></span>
-                    <span>&nbsp; Search Customer</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Customer Account Details -->
-            <div class="col-sm-4 col-xs-12 form-top-margin">
-                <label>(a) Account Balance</label>
-            </div>
-            <div class="col-sm-4 col-xs-10 form-top-margin">
-                <div class="form-control payment-output" type="text" id="idCustomerBalance" name="idCustomerBalance">@ViewBag.CustomerBalance</div>
-            </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
-                <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#account-details">
-                    <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
-                    <span class="col-xs-9">Account Details &nbsp;<span class="caret"></span></span>
-                </button>
-            </div>
-        </div>
-        <div id="account-details" class="collapse">
-            Customer Account Details
-        </div>
-        <div class="row">
-
-        </div>
-
-        <div class="row top-margin">
-            <!-- Payment Reason -->
-            <div class="col-sm-4 col-xs-12 form-top-margin">
-                <label>Reason For Payment</label>
-            </div>
-            <div class="col-sm-8 col-xs-12 form-top-margin">
-                @Html.DropDownList("ReasonForPayment", null, null, new { @class = "form-control" })
-                <input class="text-box single-line" id="idReasonForPayment" name="idReasonForPayment" type="hidden" />
-            </div>
-        </div>
-        <div class="row">
-            <!-- New Reservation Details -->
-            <div class="col-sm-4 col-xs-12 form-top-margin">
-                <label>(b) New Reservation Total</label>
-            </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin">
-                @if (ViewBag.Total == null)
-                {
-                    <div class="form-control reservationWarning">NO SITE SELECTED YET</div>
-                }
-                else
-                {
-                    <div class="form-control payment-output">@ViewBag.Total</div>
-                }
-            </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
-                <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#reservation-summary">
-                    <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
-                    <span class="col-xs-9">Reservation Details &nbsp;<span class="caret"></span></span>
-                </button>
-            </div>
-        </div>
-        <div id="reservation-summary" class="collapse">
-        </div>
-        <div class="row">
-            <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
-                <a href="@Url.Action("Reservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
-                    <span class="glyphicon glyphicon-tag"></span>
-                    <span>&nbsp; Back To Reservation</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-            </div>
-        </div>
-
-
-        <div class="row top-margin">
-            <!-- Receive Total -->
-            <div class="col-sm-4 col-xs-12 form-top-margin">
-                <label>(a)+(b)</label>
-            </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin">
-                <div class="form-control payment-output">"@ViewBag.Total"</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Receive Total -->
-            <div class="col-sm-4 col-xs-12 form-top-margin">
-                <label>(c) Amount Received</label>
-            </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin">
-                <input type="number" name="amount" id="amount" min="0.00" step="0.01" class="form-control payment-input" value="@ViewBag.Total">
-            </div>
-            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
-                <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#payment-calculation">
-                    <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
-                    <span class="col-xs-9">Payment Calc &nbsp;<span class="caret"></span></span>
-                </button>
-            </div>
-        </div>
-        @*<div id="payment-calculation" class="collapse">
-            Payment Calculation Details
-        </div>*@
-
-        //=================== Start Payment Calculation
-        <fieldset id="payment-calculation" class="collapse" oninput="
-                      i.value=a.value / (100 + 13) * 100;
-            ii.value = a.value / (100 + 13) * 13;
-            c.value = a.value - b.value;
-            e.value = c.value - amount.value;" style="border:2px solid red; padding:.2em; margin:.2em;">
             <div class="row top-margin">
-                <div class="col-sm-6 col-xs-12">
-                    <label class="btn btn-default btn-block col-sm-6 col-xs-12" data-toggle="collapse" data-target="#AmountBreakUp" style="text-align:left">a) Total Receivable Amount (In CAD) : (Breakdown) <span class="caret"></span></label>
+                <!-- Customer Details -->
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Customer</label>
                 </div>
-                <div class="col-sm-6 col-xs-12">
-                    <input type="number" name="a" id="a" class="form-control" style=" text-align:right; border 1px solid black;">
+                <div class="col-sm-6 col-xs-10 form-top-margin">
+                    @if (ViewBag.CustomerName == null)
+                {
+                        <div class="form-control reservationWarning">NO CUSTOMER SELECTED YET</div>
+                    }
+                    else
+                    {
+                        <div disabled class="form-control">@ViewBag.CustomerName</div>
+                        <input class="form-control" type="hidden" id="idCustomer" name="idCustomer" value="@ViewBag.CustomerID" />
+                    }
                 </div>
-                <div id="AmountBreakUp" class="col-xs-12 collapse">
-                    <div class="top-margin col-xs-6 col-xs-push-2 col-sm-10 col-sm-push-1">
-                        <div class="col-sm-6 col-xs-12">
-                            <label>(i) Site Rent Amount (In CAD) :</label>
-                        </div>
-                        <div class="col-sm-4 col-xs-12">
-                            <output name="i" id="i" step="0.01" class="form-control payment-output" for="a"></output>
-                        </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
+                    <a href="@Url.Action(" CreatePayment", "Payment" )" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-user"></span>
+                        <span>&nbsp; Search Customer</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Customer Account Details -->
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <label>(a) Account Balance</label>
+                </div>
+                <div class="col-sm-4 col-xs-10 form-top-margin">
+                    <div disabled class="form-control payment-output" type="text" id="customerBalance" name="customerBalance"></div>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
+                    <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#account-details">
+                        <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
+                        <span class="col-xs-9">Account Details &nbsp;<span class="caret"></span></span>
+                    </button>
+                </div>
+            </div>
+            <div id="account-details" class="collapse">
+                Customer Account Details
+            </div>
+            <div class="row">
+
+            </div>
+
+            <div class="row top-margin">
+                <!-- Payment Reason -->
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <label>Reason For Payment</label>
+                </div>
+                <div class="col-sm-8 col-xs-12 form-top-margin">
+                    @Html.DropDownList("ReasonForPayment", null, null, new { @class = "form-control" })
+                    <input class="text-box single-line" id="idReasonForPayment" name="idReasonForPayment" type="hidden" />
+                </div>
+            </div>
+            <div class="row">
+                <!-- New Reservation Details -->
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <label>(b) New Reservation Total</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    @if (ViewBag.Total == null)
+                {
+                        <div class="form-control reservationWarning">NO SITE SELECTED YET</div>
+                    }
+                    else
+                    {
+                        <div id="reservationTotal"disabled class="form-control payment-output"></div>
+                    }
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
+                    <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#reservation-summary">
+                        <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
+                        <span class="col-xs-9">Reservation Details &nbsp;<span class="caret"></span></span>
+                    </button>
+                </div>
+            </div>
+            <div id="reservation-summary" class="collapse">
+            </div>
+            <div class="row">
+                <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                    <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#tax-calculation">
+                        <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
+                        <span class="col-xs-9">Tax Breakdown &nbsp;<span class="caret"></span></span>
+                    </button>
+                </div>
+            </div>
+            <div id="tax-calculation" class="collapse">
+                <div class="row form-top-margin">
+                    <div class="col-sm-4 col-sm-push-1 col-xs-12">
+                        <label>(i) Amount Without Tax</label>
                     </div>
-                    <div class="top-margin col-xs-6 col-xs-push-2 col-sm-10 col-sm-push-1">
-                        <div class="col-sm-6 col-xs-12">
-                            <label>(ii) HST Amount  (In CAD) :</label>
-                        </div>
-                        <div class="col-sm-4 col-xs-12">
-                            <output name="ii" id="ii" step="0.01" class="form-control payment-output" for="a"></output>
-                        </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <output disabled name="i" id="i" step="0.01" class="form-control payment-output" for="a"></output>
+                    </div>
+                </div>
+                <div class="row form-top-margin">
+                    <div class="col-sm-4 col-sm-push-1 col-xs-12">
+                        <label>(ii) HST/QST/PST</label>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <output disabled name="ii" id="ii" step="0.01" class="form-control payment-output" for="a"></output>
                     </div>
                 </div>
             </div>
-            <div class="row top-margin">
-                <div class="col-sm-6 col-xs-12">
-                    <label>b) Prev. Paid Amount  (In CAD) :</label>
+            <div class="row form-top-margin">
+                <!-- Receive Total -->
+                <div class="col-sm-4 col-xs-12">
+                    <label>(c) Temp Balance (a)-(b)</label>
                 </div>
-                <div class="col-sm-6 col-xs-12">
-                    <input type="number" name="b" id="b" class="form-control payment-input">
+                <div class="col-sm-4 col-xs-12 ">
+                    <div id="tempBalance"disabled class="form-control payment-output"></div>
                 </div>
-            </div>
-            <div class="row top-margin">
-                <div class="col-sm-6 col-xs-12">
-                    <label>c) Prev. Due Amount  (In CAD) [a-b]:</label>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <output name="c" id="c" class="form-control payment-output" for="a b"></output>
-                </div>
-            </div>
-            <div class="row top-margin">
-                <div class="col-sm-6 col-xs-12">
-                    <label>d) Paid Amount  (In CAD) :</label>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <input type="number" name="amount" id="amount" min="0.00" step="0.01" class="form-control" placeholder="enter pay amount ..." style="text-align:right; font-weight:bolder; color:green; border: 1px solid black;">
-                    @Html.ValidationMessageFor(model => model.amount, "", new { @class = "text-danger" })
+                <div class="col-sm-4 col-xs-12" data-toggle="tooltip" title="Go To">
+                    <a href="@Url.Action("Reservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-tag"></span>
+                        <span>&nbsp; Back To Reservation</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
                 </div>
             </div>
-            <div class="row top-margin">
-                <div class="col-sm-6 col-xs-12">
-                    <label>e) Due Amount  (In CAD) [c-d]:</label>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <output name="e" id="e" class="form-control payment-output" for="c amount"></output>
-                </div>
-            </div>
-            </fieldset>
-        //=================== End Payment Calculation
 
-        <div class="row form-top-margin">
-            <div class="col-sm-2 col-xs-12">
-                <label>Pay With</label>
+            <div class="row top-margin">
+                <!-- Receive Total -->
+                <div class="col-sm-4 col-xs-12">
+                    <label>(d) Receive Amount</label>
+                </div>
+                <div class="col-sm-4 col-xs-12">
+                    <input type="number" name="amount" id="amount" min="0.00" step="0.01" class="form-control payment-input">
+                </div>
             </div>
-            <div class="col-sm-3 col-xs-12">
-                @Html.DropDownList("PaymentMethod", null, null, new { @class = "form-control" })
-                <input class="text-box single-line" id="idPaymentMethod" name="idPaymentMethod" type="hidden" />
+
+            <div class="row">
+                <!-- Receive Total -->
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <label>(e) Final Balance (c)+(d)</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <div id="finalBalance" disabled class="form-control payment-output">0.01</div>
+                </div>
             </div>
-            <div class="col-sm-7 col-xs-12">
-                <input type="text" class="form-control" name="docNumber" id="docNumber">
-                @Html.ValidationMessageFor(model => model.docNumber, "", new { @class = "text-danger" })
+            @*<div id="payment-calculation" class="collapse">
+                    Payment Calculation Details
+                </div>*@
+            <div class="row form-top-margin">
+                <div class="col-sm-2 col-xs-12">
+                    <label>Pay With</label>
+                </div>
+                <div class="col-sm-3 col-xs-12">
+                    @Html.DropDownList("PaymentMethod", null, null, new { @class = "form-control" })
+                    <input class="text-box single-line" id="idPaymentMethod" name="idPaymentMethod" type="hidden" />
+                </div>
+                <div class="col-sm-7 col-xs-12">
+                    <input type="text" class="form-control" name="docNumber" id="docNumber">
+                    @Html.ValidationMessageFor(model => model.docNumber, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-        <div class="row form-top-margin">
-            <div class="col-sm-6 col-xs-12">
-                <label>Special Notes</label>
+            <div class="row form-top-margin">
+                <div class="col-sm-6 col-xs-12">
+                    <label>Special Notes</label>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <textarea class="form-control" name="comments" id="comments" rows="2"></textarea>
+                    @Html.ValidationMessageFor(model => model.comments, "", new { @class = "text-danger" })
+                </div>
             </div>
-            <div class="col-sm-6 col-xs-12">
-                <textarea class="form-control" name="comments" id="comments" rows="2"></textarea>
-                @Html.ValidationMessageFor(model => model.comments, "", new { @class = "text-danger" })
+            <div class="col-sm-5 col-xs-12 form-top-margin">
+                <button class="btn btn-block btn-default">
+                    <span class="col-xs-1 glyphicon glyphicon-remove"></span>
+                    <span class="col-xs-9">Clear All</span>
+                </button>
             </div>
-        </div>
-        <div class="col-sm-5 col-xs-12 form-top-margin">
-            <button class="btn btn-block btn-default">
-                <span class="col-xs-1 glyphicon glyphicon-remove"></span>
-                <span class="col-xs-9">Clear All</span>
-            </button>
-        </div>
-        <div class="col-sm-5 col-sm-push-2 col-xs-12 form-top-margin">
-            <button class="btn btn-block btn-default" type="submit">
-                <span class="col-xs-1 glyphicon glyphicon-floppy-save"></span>
-                <span class="col-xs-1 glyphicon glyphicon-print"></span>
-                <span class="col-xs-9">Save and Print</span>
-            </button>
-        </div>
+            <div class="col-sm-5 col-sm-push-2 col-xs-12 form-top-margin">
+                <button id="btnSave" class="btn btn-block btn-default" type="submit">
+                    <span class="col-xs-1 glyphicon glyphicon-floppy-save"></span>
+                    <span class="col-xs-1 glyphicon glyphicon-print"></span>
+                    <span class="col-xs-9">Save and Print</span>
+                </button>
+            </div>
+
     }
 </div>
+

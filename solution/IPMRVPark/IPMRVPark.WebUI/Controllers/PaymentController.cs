@@ -23,7 +23,7 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<session> sessions;
         SessionService sessionService;
 
-        public PaymentController(IRepositoryBase<payment> payments, 
+        public PaymentController(IRepositoryBase<payment> payments,
             IRepositoryBase<customer_view> customers,
             IRepositoryBase<total_per_session_view> totals_per_session,
             IRepositoryBase<reasonforpayment> reasonforpayments,
@@ -69,7 +69,6 @@ namespace IPMRVPark.WebUI.Controllers
             {
                 ViewBag.CustomerID = _customer.id;
                 ViewBag.CustomerName = _customer.fullName + ", " + _customer.mainPhone;
-                
             };
             ViewBag.CustomerBalance = 0.01;
 
@@ -89,7 +88,10 @@ namespace IPMRVPark.WebUI.Controllers
             if (tryResult)//customer found in database
             {
                 ViewBag.Total = _total_per_session.total_amount;
-            };          
+            };
+
+            // Tax Percentage
+            ViewBag.ProvinceTax = 13.00;
 
             // Configure dropdown list items
             var reasonforpayment = reasonforpayments.GetAll().OrderBy(s => s.description);
@@ -102,7 +104,7 @@ namespace IPMRVPark.WebUI.Controllers
                 string selectedText = "New Reservation";
                 selectListItem.Selected =
                  (selectListItem.Text == selectedText);
-                selectReasonForPayment.Add(selectListItem);                                    
+                selectReasonForPayment.Add(selectListItem);
             }
             ViewBag.ReasonForPayment = selectReasonForPayment;
 
@@ -132,22 +134,22 @@ namespace IPMRVPark.WebUI.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreatePayment(payment payment)
+        public ActionResult CreatePayment(payment _payment)
         {
             // Identify session
             session _session = sessionService.GetSession(this.HttpContext);
             long sessionID = _session.ID;
 
             // Create and insert payment
-            payment.idSession = sessionID;
-            payment.isCredit = true;
-            payment.createDate = DateTime.Now;
-            payment.lastUpdate = DateTime.Now;
-            payments.Insert(payment);
+            _payment.idSession = sessionID;
+            _payment.isCredit = true;
+            _payment.createDate = DateTime.Now;
+            _payment.lastUpdate = DateTime.Now;
+            payments.Insert(_payment);
             payments.Commit();
 
             var _selecteditems = totals_per_site.GetAll().Where(s => s.idSession == sessionID);
-            foreach(total_per_site_view item in _selecteditems)
+            foreach (total_per_site_view item in _selecteditems)
             {
                 // Create and insert reservation items
                 var _reservationitem = new reservationitem();
@@ -160,11 +162,11 @@ namespace IPMRVPark.WebUI.Controllers
                 _reservationitem.createDate = DateTime.Now;
                 _reservationitem.lastUpdate = DateTime.Now;
                 reservationitems.Insert(_reservationitem);
-                reservationitems.Commit();              
+                reservationitems.Commit();
                 // Create link between payment and reservation
                 // *****_reservationitem.idPayment
                 var _paymentreservationitem = new paymentreservationitem();
-                _paymentreservationitem.idPayment = payment.ID;
+                _paymentreservationitem.idPayment = _payment.ID;
                 _paymentreservationitem.idReservationItem = _reservationitem.ID;
                 _paymentreservationitem.createDate = DateTime.Now;
                 _paymentreservationitem.lastUpdate = DateTime.Now;
@@ -180,8 +182,12 @@ namespace IPMRVPark.WebUI.Controllers
             sessions.Update(_session);
             sessions.Commit();
 
-            return RedirectToAction("CreatePayment");
+            return RedirectToAction("PrintPayment",_payment);
         }
 
+        public ActionResult PrintPayment(payment _payment)
+        {
+            return View(_payment);
+        }
     }
 }

@@ -388,6 +388,7 @@
     <Content Include="Views\Reservation\Summary.cshtml" />
     <Content Include="Views\Login\Home.cshtml" />
     <Content Include="Views\Login\Menu.cshtml" />
+    <Content Include="Views\Payment\PrintPayment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
