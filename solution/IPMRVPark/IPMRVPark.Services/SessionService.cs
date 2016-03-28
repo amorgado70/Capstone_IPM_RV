@@ -64,13 +64,12 @@ namespace IPMRVPark.Services
                     if (_sessionGUID != null)//checks if Guid is null
                     {
                         var sessionList = sessions.GetAll();
-                        sessionList = sessionList.Where(s => s.sessionGUID.Contains(_sessionID));
                         session _session = new session();
                         bool tryResult = false;
 
                         try //checks if Guid is in database
                         {
-                            _session = sessionList.FirstOrDefault();
+                            _session = sessionList.Where(s => s.sessionGUID.Contains(_sessionID)).FirstOrDefault();
                             tryResult = !(_session.Equals(default(session)));
                         }
                         catch (Exception e)

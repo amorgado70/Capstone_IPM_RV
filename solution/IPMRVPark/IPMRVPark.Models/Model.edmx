@@ -140,7 +140,7 @@
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idPaymentMethod" Type="bigint" Nullable="false" />
           <Property Name="idCustomer" Type="bigint" Nullable="false" />
-          <Property Name="reasonForPayment" Type="bigint" />
+          <Property Name="idReasonForPayment" Type="bigint" />
           <Property Name="amount" Type="decimal" Precision="12" Scale="2" Nullable="false" />
           <Property Name="isCredit" Type="bit" />
           <Property Name="payDocType" Type="bigint" />
@@ -156,6 +156,7 @@
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="12" />
+          <Property Name="doctype" Type="varchar" MaxLength="45" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
@@ -163,7 +164,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idPayment" Type="bigint" />
           <Property Name="idReservationItem" Type="bigint" />
           <Property Name="createDate" Type="date" />
@@ -217,11 +218,10 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idRVSite" Type="bigint" Nullable="false" />
           <Property Name="idCustomer" Type="bigint" Nullable="false" />
           <Property Name="idStaff" Type="bigint" Nullable="false" />
-          <Property Name="idPayment" Type="bigint" Nullable="false" />
           <Property Name="checkInDate" Type="date" Nullable="false" />
           <Property Name="checkOutDate" Type="date" Nullable="false" />
           <Property Name="totalAmount" Type="decimal" Precision="12" Scale="2" />
@@ -277,8 +277,8 @@
           <Property Name="idStaff" Type="bigint" />
           <Property Name="isLoggedIn" Type="bit" />
           <Property Name="idCustomer" Type="bigint" />
-          <Property Name="checkInDate" Type="date" Nullable="false" />
-          <Property Name="checkOutDate" Type="date" Nullable="false" />
+          <Property Name="checkInDate" Type="date" />
+          <Property Name="checkOutDate" Type="date" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
@@ -328,7 +328,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="styleUrl" Type="varchar" MaxLength="16" />
           <Property Name="backgroundColor" Type="varchar" MaxLength="8" />
           <Property Name="idIPMEvent" Type="bigint" />
@@ -474,6 +474,21 @@ warning 6002: The table/view 'def.ipmrvpark.siterate_by_sitetype_view' does not 
           <Property Name="dailyRate" Type="decimal" Precision="12" Scale="2" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.staff_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="staff_view">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="firstName" />
+            <PropertyRef Name="lastName" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="firstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="lastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fullName" Type="varchar" MaxLength="101" />
+          <Property Name="mainPhone" Type="varchar" MaxLength="30" />
+          <Property Name="email" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'def.ipmrvpark.total_per_session_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="total_per_session_view">
           <Key>
@@ -482,7 +497,7 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_session_view' does not hav
           <Property Name="idSession" Type="bigint" Nullable="false" />
           <Property Name="idCustomer" Type="bigint" />
           <Property Name="idStaff" Type="bigint" />
-          <Property Name="total_amount" Type="decimal" Precision="45" Scale="2" />
+          <Property Name="total_amount" Type="decimal" Precision="44" Scale="2" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -512,9 +527,9 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a
           <Property Name="weeklyRate" Type="decimal" Precision="12" Scale="2" />
           <Property Name="days" Type="bigint" />
           <Property Name="dailyRate" Type="decimal" Precision="12" Scale="2" />
-          <Property Name="amount" Type="decimal" Precision="23" Scale="2" />
+          <Property Name="amount" Type="decimal" Precision="22" Scale="2" />
           <Property Name="isSiteChecked" Type="bit" Nullable="false" />
-          <Property Name="total" Type="decimal" Precision="23" Scale="2" />
+          <Property Name="total" Type="decimal" Precision="22" Scale="2" />
         </EntityType>
         <Association Name="CheckInOut_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
@@ -752,7 +767,7 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="payment">
-              <PropertyRef Name="reasonForPayment" />
+              <PropertyRef Name="idReasonForPayment" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -825,18 +840,6 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a
             </Principal>
             <Dependent Role="provincecode">
               <PropertyRef Name="countryCode" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ReservationItem_Payment_FK">
-          <End Role="payment" Type="Self.payment" Multiplicity="1" />
-          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="payment">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="reservationitem">
-              <PropertyRef Name="idPayment" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1152,6 +1155,16 @@ FROM `sitedescription_by_sitetype_view` AS `sitedescription_by_sitetype_view`</D
 `siterate_by_sitetype_view`.`dailyRate`
 FROM `siterate_by_sitetype_view` AS `siterate_by_sitetype_view`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="staff_view" EntityType="Self.staff_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`staff_view`.`id`, 
+`staff_view`.`firstName`, 
+`staff_view`.`lastName`, 
+`staff_view`.`fullName`, 
+`staff_view`.`mainPhone`, 
+`staff_view`.`email`
+FROM `staff_view` AS `staff_view`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="total_per_session_view" EntityType="Self.total_per_session_view" store:Type="Views" store:Schema="ipmrvpark">
             <DefiningQuery>SELECT
 `total_per_session_view`.`idSession`, 
@@ -1285,10 +1298,6 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <AssociationSet Name="provinceCode_countryCode_FK" Association="Self.provinceCode_countryCode_FK">
             <End Role="countrycode" EntitySet="countrycode" />
             <End Role="provincecode" EntitySet="provincecode" />
-          </AssociationSet>
-          <AssociationSet Name="ReservationItem_Payment_FK" Association="Self.ReservationItem_Payment_FK">
-            <End Role="payment" EntitySet="payment" />
-            <End Role="reservationitem" EntitySet="reservationitem" />
           </AssociationSet>
           <AssociationSet Name="ReservationItem_PlaceInMap_FK" Association="Self.ReservationItem_PlaceInMap_FK">
             <End Role="placeinmap" EntitySet="placeinmap" />
@@ -1524,7 +1533,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idPaymentMethod" Type="Int64" Nullable="false" />
           <Property Name="idCustomer" Type="Int64" Nullable="false" />
-          <Property Name="reasonForPayment" Type="Int64" />
+          <Property Name="idReasonForPayment" Type="Int64" />
           <Property Name="amount" Type="Decimal" Nullable="false" />
           <Property Name="isCredit" Type="Boolean" />
           <Property Name="payDocType" Type="Int64" />
@@ -1537,9 +1546,8 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <NavigationProperty Name="customeraccounts" Relationship="Self.idPayment_Payment_FK" FromRole="payment" ToRole="customeraccount" />
           <NavigationProperty Name="paydoctype1" Relationship="Self.Payment_PayDocType_FK" FromRole="payment" ToRole="paydoctype" />
           <NavigationProperty Name="paymentmethod" Relationship="Self.Payment_PaymentMethod_FK" FromRole="payment" ToRole="paymentmethod" />
-          <NavigationProperty Name="reasonforpayment1" Relationship="Self.Payment_ReasonForPayment_FK" FromRole="payment" ToRole="reasonforpayment" />
+          <NavigationProperty Name="reasonforpayment" Relationship="Self.Payment_ReasonForPayment_FK" FromRole="payment" ToRole="reasonforpayment" />
           <NavigationProperty Name="paymentreservationitems" Relationship="Self.paymentReservationItem_Payment_FK" FromRole="payment" ToRole="paymentreservationitem" />
-          <NavigationProperty Name="reservationitems" Relationship="Self.ReservationItem_Payment_FK" FromRole="payment" ToRole="reservationitem" />
         </EntityType>
         <EntityType Name="paymentmethod">
           <Key>
@@ -1547,6 +1555,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="description" Type="String" />
+          <Property Name="doctype" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="payments" Relationship="Self.Payment_PaymentMethod_FK" FromRole="paymentmethod" ToRole="payment" />
@@ -1555,7 +1564,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idPayment" Type="Int64" />
           <Property Name="idReservationItem" Type="Int64" />
           <Property Name="createDate" Type="DateTime" />
@@ -1623,11 +1632,10 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idRVSite" Type="Int64" Nullable="false" />
           <Property Name="idCustomer" Type="Int64" Nullable="false" />
           <Property Name="idStaff" Type="Int64" Nullable="false" />
-          <Property Name="idPayment" Type="Int64" Nullable="false" />
           <Property Name="checkInDate" Type="DateTime" Nullable="false" />
           <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
           <Property Name="totalAmount" Type="Decimal" />
@@ -1639,7 +1647,6 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <NavigationProperty Name="checkinouts" Relationship="Self.CheckInOut_ReservationItem_FK" FromRole="reservationitem" ToRole="checkinout" />
           <NavigationProperty Name="customer" Relationship="Self.idCustomer_Customer_FK" FromRole="reservationitem" ToRole="customer" />
           <NavigationProperty Name="customeraccounts" Relationship="Self.idReservationItem_ReservationItem_FK" FromRole="reservationitem" ToRole="customeraccount" />
-          <NavigationProperty Name="payment" Relationship="Self.ReservationItem_Payment_FK" FromRole="reservationitem" ToRole="payment" />
           <NavigationProperty Name="paymentreservationitems" Relationship="Self.paymentReservationItem_ReservationItem_FK" FromRole="reservationitem" ToRole="paymentreservationitem" />
           <NavigationProperty Name="placeinmap" Relationship="Self.ReservationItem_PlaceInMap_FK" FromRole="reservationitem" ToRole="placeinmap" />
           <NavigationProperty Name="staff" Relationship="Self.idStaff_Staff_FK" FromRole="reservationitem" ToRole="staff" />
@@ -1699,8 +1706,8 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="idStaff" Type="Int64" />
           <Property Name="isLoggedIn" Type="Boolean" />
           <Property Name="idCustomer" Type="Int64" />
-          <Property Name="checkInDate" Type="DateTime" Nullable="false" />
-          <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
+          <Property Name="checkInDate" Type="DateTime" />
+          <Property Name="checkOutDate" Type="DateTime" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="customer" Relationship="Self.Session_Customer_FK" FromRole="session" ToRole="customer" />
@@ -1767,7 +1774,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="styleUrl1" Type="String" />
           <Property Name="backgroundColor" Type="String" />
           <Property Name="idIPMEvent" Type="Int64" />
@@ -1897,6 +1904,19 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="idSiteType" Type="Int64" Nullable="false" />
           <Property Name="weeklyRate" Type="Decimal" />
           <Property Name="dailyRate" Type="Decimal" />
+        </EntityType>
+        <EntityType Name="staff_view">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="firstName" />
+            <PropertyRef Name="lastName" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="firstName" Type="String" Nullable="false" />
+          <Property Name="lastName" Type="String" Nullable="false" />
+          <Property Name="fullName" Type="String" />
+          <Property Name="mainPhone" Type="String" />
+          <Property Name="email" Type="String" />
         </EntityType>
         <EntityType Name="total_per_session_view">
           <Key>
@@ -2257,7 +2277,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="payment">
-              <PropertyRef Name="reasonForPayment" />
+              <PropertyRef Name="idReasonForPayment" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2269,18 +2289,6 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="paymentreservationitem">
-              <PropertyRef Name="idPayment" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ReservationItem_Payment_FK">
-          <End Role="payment" Type="Self.payment" Multiplicity="1" />
-          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="payment">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="reservationitem">
               <PropertyRef Name="idPayment" />
             </Dependent>
           </ReferentialConstraint>
@@ -2453,7 +2461,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ipmrvparkDbContext" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="ipmrvparkEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="checkinouts" EntityType="Self.checkinout" />
           <EntitySet Name="coordinates" EntityType="Self.coordinate" />
           <EntitySet Name="countrycodes" EntityType="Self.countrycode" />
@@ -2489,6 +2497,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <EntitySet Name="site_description_rate_view" EntityType="Self.site_description_rate_view" />
           <EntitySet Name="sitedescription_by_sitetype_view" EntityType="Self.sitedescription_by_sitetype_view" />
           <EntitySet Name="siterate_by_sitetype_view" EntityType="Self.siterate_by_sitetype_view" />
+          <EntitySet Name="staff_view" EntityType="Self.staff_view" />
           <EntitySet Name="total_per_session_view" EntityType="Self.total_per_session_view" />
           <EntitySet Name="total_per_site_view" EntityType="Self.total_per_site_view" />
           <AssociationSet Name="CheckInOut_PlaceInMap_FK" Association="Self.CheckInOut_PlaceInMap_FK">
@@ -2603,10 +2612,6 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="payment" EntitySet="payments" />
             <End Role="paymentreservationitem" EntitySet="paymentreservationitems" />
           </AssociationSet>
-          <AssociationSet Name="ReservationItem_Payment_FK" Association="Self.ReservationItem_Payment_FK">
-            <End Role="payment" EntitySet="payments" />
-            <End Role="reservationitem" EntitySet="reservationitems" />
-          </AssociationSet>
           <AssociationSet Name="paymentReservationItem_ReservationItem_FK" Association="Self.paymentReservationItem_ReservationItem_FK">
             <End Role="reservationitem" EntitySet="reservationitems" />
             <End Role="paymentreservationitem" EntitySet="paymentreservationitems" />
@@ -2669,7 +2674,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ipmrvparkModelStoreContainer" CdmEntityContainer="ipmrvparkDbContext">
+        <EntityContainerMapping StorageEntityContainer="ipmrvparkModelStoreContainer" CdmEntityContainer="ipmrvparkEntities">
           <EntitySetMapping Name="checkinouts">
             <EntityTypeMapping TypeName="ipmrvparkModel.checkinout">
               <MappingFragment StoreEntitySet="checkinout">
@@ -2814,7 +2819,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="idPaymentMethod" ColumnName="idPaymentMethod" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
-                <ScalarProperty Name="reasonForPayment" ColumnName="reasonForPayment" />
+                <ScalarProperty Name="idReasonForPayment" ColumnName="idReasonForPayment" />
                 <ScalarProperty Name="amount" ColumnName="amount" />
                 <ScalarProperty Name="isCredit" ColumnName="isCredit" />
                 <ScalarProperty Name="payDocType" ColumnName="payDocType" />
@@ -2831,6 +2836,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
               <MappingFragment StoreEntitySet="paymentmethod">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="doctype" ColumnName="doctype" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
               </MappingFragment>
@@ -2902,7 +2908,6 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
                 <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
                 <ScalarProperty Name="idStaff" ColumnName="idStaff" />
-                <ScalarProperty Name="idPayment" ColumnName="idPayment" />
                 <ScalarProperty Name="checkInDate" ColumnName="checkInDate" />
                 <ScalarProperty Name="checkOutDate" ColumnName="checkOutDate" />
                 <ScalarProperty Name="totalAmount" ColumnName="totalAmount" />
@@ -3132,6 +3137,18 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
                 <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
                 <ScalarProperty Name="weeklyRate" ColumnName="weeklyRate" />
                 <ScalarProperty Name="dailyRate" ColumnName="dailyRate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="staff_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.staff_view">
+              <MappingFragment StoreEntitySet="staff_view">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="fullName" ColumnName="fullName" />
+                <ScalarProperty Name="mainPhone" ColumnName="mainPhone" />
+                <ScalarProperty Name="email" ColumnName="email" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

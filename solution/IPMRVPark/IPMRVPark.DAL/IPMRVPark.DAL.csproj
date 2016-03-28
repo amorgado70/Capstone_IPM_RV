@@ -60,13 +60,14 @@
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\PlaceInMapRepository.cs" />
-    <Compile Include="Repositories\PayDocTypeRepository.cs" />
     <Compile Include="Repositories\PaymentMethodRepository.cs" />
     <Compile Include="Repositories\PaymentRepository.cs" />
     <Compile Include="Repositories\ReasonForPaymentRepository.cs" />
-    <Compile Include="Repositories\ReservationItemepository.cs" />
+    <Compile Include="Repositories\PaymentReservationItemRepository.cs" />
+    <Compile Include="Repositories\ReservationItemRepository.cs" />
     <Compile Include="Repositories\StaffRepository.cs" />
     <Compile Include="Repositories\SiteDescriptionRateViewRepository.cs" />
+    <Compile Include="Repositories\TotalPerSessionViewRepository.cs" />
     <Compile Include="Repositories\TotalPerSiteViewRepository.cs" />
     <Compile Include="Repositories\SelectedItemRepository.cs" />
     <Compile Include="Repositories\RVSiteAvailableViewRepository.cs" />

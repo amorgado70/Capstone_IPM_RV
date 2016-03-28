@@ -14,6 +14,7 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<ipmevent> ipmevents;
         IRepositoryBase<session> sessions;
         IRepositoryBase<customer_view> customers;
+        IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<staff> users;
         SessionService sessionService;
 
@@ -21,14 +22,26 @@ namespace IPMRVPark.WebUI.Controllers
             IRepositoryBase<ipmevent> ipmevents,
             IRepositoryBase<session> sessions,
             IRepositoryBase<customer_view> customers,
-            IRepositoryBase<staff> users)
+                    IRepositoryBase<selecteditem> selecteditems,
+        IRepositoryBase<staff> users)
         {
             this.ipmevents = ipmevents;
             this.sessions = sessions;
             this.customers = customers;
+            this.selecteditems = selecteditems;
             this.users = users;
             sessionService = new SessionService(this.sessions);
         }//end Constructor
+
+        public ActionResult Home()
+        {
+            return View();
+        }
+
+        public ActionResult Menu()
+        {
+            return View();
+        }
 
         public ActionResult Login()
         {
@@ -135,7 +148,17 @@ namespace IPMRVPark.WebUI.Controllers
         {
             session _session = sessions.GetById(sessionService.GetSession(this.HttpContext).ID);
             _session.idCustomer = idCustomer;
+
+            long sessionID = _session.ID;
+            var _selecteditems = selecteditems.GetAll().Where(s => s.idSession == sessionID);
+            foreach (selecteditem item in _selecteditems)
+            {
+                item.idCustomer = idCustomer;
+                selecteditems.Update(item);
+            }
             sessions.Update(_session);
+
+            selecteditems.Commit();
             sessions.Commit();
             return Json(idCustomer);
         }

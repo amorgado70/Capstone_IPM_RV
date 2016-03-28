@@ -7,11 +7,10 @@ using System.Text;
 
 namespace IPMRVPark.Contracts.Repositories
 {
-    public class PayDocTypeRepository : RepositoryBase<paydoctype>
+    public class TotalPerSessionViewRepository : RepositoryBase<total_per_session_view>
     {
-        public PayDocTypeRepository(DataContext context)
+        public TotalPerSessionViewRepository(DataContext context)
             : base(context)
         { if (context == null) throw new ArgumentNullException(); }
-    }//end PayDocTypeRepository
-
+    }//end CountryRepository
 }

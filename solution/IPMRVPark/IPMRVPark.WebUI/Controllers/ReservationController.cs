@@ -71,9 +71,9 @@ namespace IPMRVPark.WebUI.Controllers
             }
 
             if (checkInDate == DateTime.MinValue) {
-                checkInDate = _session.checkInDate; };
+                checkInDate = _session.checkInDate.Value; };
             if (checkOutDate == DateTime.MinValue) {
-                checkOutDate = _session.checkOutDate; };
+                checkOutDate = _session.checkOutDate.Value; };
 
             if (!(checkInDate >= start && checkInDate <= end))
             {
@@ -223,8 +223,8 @@ namespace IPMRVPark.WebUI.Controllers
             var _session = sessionService.GetSession(this.HttpContext);
             var _selecteditem = selecteditems.GetById(id);
 
-            _selecteditem.checkInDate = _session.checkInDate;
-            _selecteditem.checkOutDate = _session.checkOutDate;
+            _selecteditem.checkInDate = _session.checkInDate.Value;
+            _selecteditem.checkOutDate = _session.checkOutDate.Value;
             _selecteditem.lastUpdate = DateTime.Now;
 
             selecteditems.Update(_selecteditem);

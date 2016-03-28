@@ -358,7 +358,7 @@ Site Reservation
             </div>
             <div class="col-sm-6 col-xs-10 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
                 <input type="text" class="form-control" id="customerName" placeholder="Type name or phone and then select from the list" />
-                <input class="text-box single-line" id="idCustomer" name="idCustomer" type="hidden" />
+                <input class="text-box single-line" id="idCustomer" name="idCustomer" type="text" />
             </div>
             <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
                 <button id="btnSelectCustomer" class="btn btn-block btn-default">
@@ -383,7 +383,7 @@ Site Reservation
     <!-- Proceed To Payment -->
     <div class="row form-top-margin">
         <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
-            <a href="@Url.Action("Customer", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+            <a href="@Url.Action("CreatePayment", "Payment")" class="btn btn-block btn-default btn-mylink pagination-centered">
                 <span class="glyphicon glyphicon-usd"></span>
                 <span>Payment</span>
                 <span class="glyphicon glyphicon-chevron-right"></span>

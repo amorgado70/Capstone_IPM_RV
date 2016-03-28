@@ -165,6 +165,9 @@
     <Compile Include="staff.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="staff_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="styleurl.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

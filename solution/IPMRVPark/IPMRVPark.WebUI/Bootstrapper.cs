@@ -40,9 +40,10 @@ namespace IPMRVPark.WebUI
             container.RegisterType<IRepositoryBase<placeinmap>, PlaceInMapRepository>();
             container.RegisterType<IRepositoryBase<reasonforpayment>, ReasonForPaymentRepository>();
             container.RegisterType<IRepositoryBase<paymentmethod>, PaymentMethodRepository>();
-            container.RegisterType<IRepositoryBase<paydoctype>, PayDocTypeRepository>();
             container.RegisterType<IRepositoryBase<payment>, PaymentRepository>();
             container.RegisterType<IRepositoryBase<reservationitem>, ReservationItemRepository>();
+            container.RegisterType<IRepositoryBase<total_per_session_view>, TotalPerSessionViewRepository>();
+            container.RegisterType<IRepositoryBase<paymentreservationitem>, PaymentReservationItemRepository>();
 
             return container;
         }

@@ -11,7 +11,16 @@
         <label>Reservation Summary For Customer</label>
     </div>
     <div class="col-sm-6 col-xs-10 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
-        <div>@ViewBag.Customer</div>
+
+        @if (ViewBag.Customer == null)
+        {
+            <div class="reservationWarning">NO CUSTOMER SELECTED YET</div>
+        }
+        else
+        {
+            <div>@ViewBag.Customer</div>
+        }
+
     </div>
     <div class="col-xs-12">
         <table class="table">
@@ -41,6 +50,15 @@
                     <td></td>
                     <td></td>
                     <td style="text-align:right;">@ViewBag.totalAmount</td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td colspan="1">
+                        @if (@ViewBag.totalAmount == null)
+                        {
+                            <div class="reservationWarning">NO SITE SELECTED YET</div>
+                        }
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -386,6 +386,8 @@
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Payment\CreatePayment.cshtml" />
     <Content Include="Views\Reservation\Summary.cshtml" />
+    <Content Include="Views\Login\Home.cshtml" />
+    <Content Include="Views\Login\Menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

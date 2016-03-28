@@ -38,6 +38,7 @@
         });
         //function will be called on button click
         $("#btnSelectUser").click(function () {
+            $("#waitMsg").show();
             $.ajax(
             {
                 type: "POST", //HTTP POST Method
@@ -56,6 +57,7 @@
                     else {
                         $("#unauthorizedUser").hide();
                     }
+                    $("#waitMsg").hide();
                 },
                 error: function (result) {
                     alert("7 Some error occured.");
@@ -99,16 +101,6 @@
             </div>
         </div>
     </div>
-    @*<div class="row">
-        <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
-            <div class="col-sm-9 col-sm-push-3 col-xs-12 form-top-margin">
-                <button id="btnChangeYear" class="btn btn-block btn-default">
-                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
-                    <span class="col-xs-9">Change Year</span>
-                </button>
-            </div>
-        </div>
-    </div>*@
     <!-- Email -->
     <div class="row form-top-margin">
         <div class="form-group">
@@ -117,7 +109,7 @@
                     <label>Email</label>
                 </div>
                 <div class="col-sm-9 col-xs-12 form-top-margin">
-                    <input type="text" class="form-control" id="userEmail" placeholder="Type email" />
+                    <input type="text" class="form-control" id="userEmail" placeholder="Type your email" />
                     <input class="text-box single-line" id="idUser" name="idUser" type="hidden" />
                     <div id="unauthorizedUser" style="color: red; font-weight: bold;">
                         non authorized user

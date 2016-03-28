@@ -25,8 +25,8 @@ namespace IPMRVPark.Models
         public Nullable<long> idStaff { get; set; }
         public Nullable<bool> isLoggedIn { get; set; }
         public Nullable<long> idCustomer { get; set; }
-        public System.DateTime checkInDate { get; set; }
-        public System.DateTime checkOutDate { get; set; }
+        public Nullable<System.DateTime> checkInDate { get; set; }
+        public Nullable<System.DateTime> checkOutDate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     

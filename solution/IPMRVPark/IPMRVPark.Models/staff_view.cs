@@ -12,19 +12,13 @@ namespace IPMRVPark.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class paymentmethod
+    public partial class staff_view
     {
-        public paymentmethod()
-        {
-            this.payments = new HashSet<payment>();
-        }
-    
-        public long ID { get; set; }
-        public string description { get; set; }
-        public string doctype { get; set; }
-        public Nullable<System.DateTime> createDate { get; set; }
-        public Nullable<System.DateTime> lastUpdate { get; set; }
-    
-        public virtual ICollection<payment> payments { get; set; }
+        public long id { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string fullName { get; set; }
+        public string mainPhone { get; set; }
+        public string email { get; set; }
     }
 }

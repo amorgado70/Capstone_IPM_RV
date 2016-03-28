@@ -13,10 +13,10 @@ namespace IPMRVPark.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ipmrvparkDbContext : DbContext
+    public partial class ipmrvparkEntities : DbContext
     {
-        public ipmrvparkDbContext()
-            : base("name=ipmrvparkDbContext")
+        public ipmrvparkEntities()
+            : base("name=ipmrvparkEntities")
         {
         }
     
@@ -60,6 +60,7 @@ namespace IPMRVPark.Models
         public DbSet<site_description_rate_view> site_description_rate_view { get; set; }
         public DbSet<sitedescription_by_sitetype_view> sitedescription_by_sitetype_view { get; set; }
         public DbSet<siterate_by_sitetype_view> siterate_by_sitetype_view { get; set; }
+        public DbSet<staff_view> staff_view { get; set; }
         public DbSet<total_per_session_view> total_per_session_view { get; set; }
         public DbSet<total_per_site_view> total_per_site_view { get; set; }
     }
