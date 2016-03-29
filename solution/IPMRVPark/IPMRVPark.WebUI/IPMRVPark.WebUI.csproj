@@ -298,6 +298,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.2.1.js" />
     <Content Include="Scripts\jquery-2.2.1.min.js" />
+    <Content Include="Scripts\jquery-scrollTo.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -377,19 +378,20 @@
     <Content Include="Views\PrototypeUI\IPMEventInfo.cshtml" />
     <Content Include="Views\PrototypeUI\DigitizeMap.cshtml" />
     <Content Include="Views\PrototypeUI\DigitizeMap_parse.cshtml" />
-    <Content Include="Views\Reservation\Reservation.cshtml" />
+    <Content Include="Views\Reservation\NewReservation.cshtml" />
     <Content Include="Views\Maintenance\ProvinceIndex.cshtml" />
     <Content Include="Views\Maintenance\Province1Create.cshtml" />
     <Content Include="Views\Maintenance\Province2Create.cshtml" />
     <Content Include="Views\Maintenance\Province3Create.cshtml" />
     <Content Include="Views\Reservation\Selected.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
-    <Content Include="Views\Payment\CreatePayment.cshtml" />
+    <Content Include="Views\Payment\NewReservation.cshtml" />
     <Content Include="Views\Reservation\Summary.cshtml" />
     <Content Include="Views\Login\Home.cshtml" />
     <Content Include="Views\Login\Menu.cshtml" />
     <Content Include="Views\Payment\PrintPayment.cshtml" />
     <Content Include="Views\Payment\Summary.cshtml" />
+    <Content Include="Views\Payment\PaymentPerCustomer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

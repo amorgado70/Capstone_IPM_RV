@@ -39,10 +39,13 @@ namespace IPMRVPark.WebUI.Controllers
             sessionService = new SessionService(this.sessions);
         }//end Constructor
 
+
+        #region New Reservation
+
         const long newReservationMode = -1;
 
         // Main reservation page
-        public ActionResult Reservation( long selectedID = newReservationMode)
+        public ActionResult NewReservation( long selectedID = newReservationMode)
         {
             session _session = sessionService.GetSession(this.HttpContext);
             ipmevent _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
@@ -230,7 +233,7 @@ namespace IPMRVPark.WebUI.Controllers
             selecteditems.Update(_selecteditem);
             selecteditems.Commit();
 
-            return RedirectToAction("Reservation");
+            return RedirectToAction("NewReservation");
         }
 
         // Delete on selected site
@@ -238,7 +241,7 @@ namespace IPMRVPark.WebUI.Controllers
         {
             selecteditems.Delete(selecteditems.GetById(id));
             selecteditems.Commit();
-            return RedirectToAction("Reservation");
+            return RedirectToAction("NewReservation");
         }
 
         // Delete all selected sites
@@ -257,7 +260,9 @@ namespace IPMRVPark.WebUI.Controllers
                 selecteditems.Commit();
             }
 
-            return RedirectToAction("Reservation");
+            return RedirectToAction("NewReservation");
         }
+
+        #endregion
     }
 }

@@ -17,6 +17,7 @@ namespace IPMRVPark.Models
         public placeinmap()
         {
             this.checkinouts = new HashSet<checkinout>();
+            this.coordinates = new HashSet<coordinate>();
             this.outofserviceitems = new HashSet<outofserviceitem>();
             this.reservationitems = new HashSet<reservationitem>();
             this.selecteditems = new HashSet<selecteditem>();
@@ -32,6 +33,7 @@ namespace IPMRVPark.Models
         public Nullable<bool> isRVSite { get; set; }
     
         public virtual ICollection<checkinout> checkinouts { get; set; }
+        public virtual ICollection<coordinate> coordinates { get; set; }
         public virtual ipmevent ipmevent { get; set; }
         public virtual ICollection<outofserviceitem> outofserviceitems { get; set; }
         public virtual sitetype sitetype { get; set; }

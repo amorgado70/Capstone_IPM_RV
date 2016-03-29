@@ -57,7 +57,7 @@ namespace IPMRVPark.WebUI.Controllers
         }//end Constructor
 
         // GET: /Create
-        public ActionResult CreatePayment()
+        public ActionResult NewReservation()
         {
             session _session = sessionService.GetSession(this.HttpContext);
 
@@ -67,7 +67,7 @@ namespace IPMRVPark.WebUI.Controllers
             try //checks if customer is in database
             {
                 _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).FirstOrDefault();
-                tryResult = !(_customer.Equals(default(session)));
+                tryResult = !(_customer.Equals(default(customer_view)));
             }
             catch (Exception e)
             {
@@ -78,8 +78,9 @@ namespace IPMRVPark.WebUI.Controllers
             {
                 ViewBag.CustomerID = _customer.id;
                 ViewBag.CustomerName = _customer.fullName + ", " + _customer.mainPhone;
+                ViewBag.CustomerBalance = totals_per_customer.GetById(_customer.id).balance.Value;
             };
-            ViewBag.CustomerBalance = 0.01;
+            //ViewBag.CustomerBalance = 0.00;
 
             // Read total for session
             total_per_session_view _total_per_session = new total_per_session_view();
@@ -141,9 +142,10 @@ namespace IPMRVPark.WebUI.Controllers
             var payment = new payment();
             return View(payment);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreatePayment(payment _payment)
+        public ActionResult NewReservation(payment _payment)
         {
             // Identify session
             session _session = sessionService.GetSession(this.HttpContext);
@@ -152,6 +154,7 @@ namespace IPMRVPark.WebUI.Controllers
             // Create and insert payment
             _payment.idSession = sessionID;
             _payment.isCredit = true;
+            _payment.idReasonForPayment = 2; // New Reservation
             _payment.createDate = DateTime.Now;
             _payment.lastUpdate = DateTime.Now;
             payments.Insert(_payment);
@@ -195,6 +198,42 @@ namespace IPMRVPark.WebUI.Controllers
             return RedirectToAction("PrintPayment", new { id = ID });
         }
 
+        public ActionResult PaymentPerCustomer(long id)
+        {
+
+            var _payments = totals_per_payment.GetAll();
+
+            customer_view _customer = new customer_view();
+            bool tryResult = false;
+            try //checks if customer is in database
+            {
+                _customer = customers.GetAll().Where(c => c.id == id).FirstOrDefault();
+                tryResult = !(_customer.Equals(default(customer_view)));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred: '{0}'", e);
+            }
+
+            if (tryResult)//customer found in database
+            {
+                ViewBag.CustomerID = _customer.id;
+                ViewBag.CustomerName = _customer.fullName + ", " + _customer.mainPhone;
+                ViewBag.CustomerBalance = totals_per_customer.GetById(_customer.id).balance.Value;
+                _payments = _payments.Where(p => p.idCustomer == id).OrderBy(p => p.idPayment);
+
+                // Calculate balance
+                decimal balance = 0;
+                foreach (var _payment in _payments)
+                {
+                    balance = balance + (_payment.paymentAmount.Value - _payment.reservationitem_total.Value);
+                    _payment.balance = balance;
+                }
+            };            
+
+            return View(_payments);
+        }
+
         public ActionResult PrintPayment(long id)
         {
             var _payment = payments.GetById(id);
@@ -207,6 +246,8 @@ namespace IPMRVPark.WebUI.Controllers
             ViewBag.PaymentAmount = _payment.amount;
             ViewBag.PaymentDate = _payment.createDate.Value.ToString("R").Substring(0,16);
             ViewBag.PaymentMethod = paymentmethods.GetById(_payment.idPaymentMethod).description;
+
+            ViewBag.CustomerBalance = totals_per_customer.GetById(_payment.idCustomer).balance.Value;
 
             return View(_reservationitems);
         }

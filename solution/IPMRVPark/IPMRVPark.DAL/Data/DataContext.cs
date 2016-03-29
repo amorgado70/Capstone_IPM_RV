@@ -55,5 +55,6 @@ namespace IPMRVPark.Contracts.Data
         public DbSet<total_per_reservationitem_view> total_per_reservationitem_view { get; set; }
         public DbSet<total_per_selecteditem_view> total_per_selecteditem_view { get; set; }
         public DbSet<total_per_session_view> total_per_session_view { get; set; }
+
     }
 }

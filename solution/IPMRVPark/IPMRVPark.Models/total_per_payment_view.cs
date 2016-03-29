@@ -15,10 +15,12 @@ namespace IPMRVPark.Models
     public partial class total_per_payment_view
     {
         public long idPayment { get; set; }
-        public Nullable<long> createDate { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public string reasonForPayment { get; set; }
         public Nullable<long> idCustomer { get; set; }
         public Nullable<long> idStaff { get; set; }
         public Nullable<decimal> paymentAmount { get; set; }
         public Nullable<decimal> reservationitem_total { get; set; }
+        public decimal balance { get; set; }
     }
 }

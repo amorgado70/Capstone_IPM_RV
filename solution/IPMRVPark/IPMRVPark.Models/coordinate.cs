@@ -24,5 +24,6 @@ namespace IPMRVPark.Models
         public System.DateTime lastUpdate { get; set; }
     
         public virtual ipmevent ipmevent { get; set; }
+        public virtual placeinmap placeinmap { get; set; }
     }
 }

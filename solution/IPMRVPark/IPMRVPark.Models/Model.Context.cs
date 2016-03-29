@@ -13,10 +13,10 @@ namespace IPMRVPark.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ipmrvparkDbContext : DbContext
+    public partial class ipmrvparkEntities : DbContext
     {
-        public ipmrvparkDbContext()
-            : base("name=ipmrvparkDbContext")
+        public ipmrvparkEntities()
+            : base("name=ipmrvparkEntities")
         {
         }
     

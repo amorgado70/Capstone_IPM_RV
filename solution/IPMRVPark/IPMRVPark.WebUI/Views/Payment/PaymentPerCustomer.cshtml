@@ -1,0 +1,57 @@
+﻿@model IEnumerable<IPMRVPark.Models.total_per_payment_view>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#waitMsg").hide();// Show wait message
+    });
+</script>
+<!-- Reservation Summary -->
+<div class="row top-margin">
+    <div class="col-sm-6 col-xs-12 form-top-margin">
+        <label>Payments Summary For Customer</label>
+    </div>
+    <div class="col-sm-6 col-xs-10 form-top-margin">
+
+        @if (ViewBag.CustomerID == null)
+        {
+            <div class="reservationWarning">NO CUSTOMER SELECTED YET</div>
+        }
+        else
+        {
+            <div>@ViewBag.CustomerName</div>
+        }
+
+    </div>
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Payment #</th>
+                    <th>Date</th>
+                    <th>Reason For Payment</th>
+                    <th style="text-align:right;">Reservation Item</th>
+                    <th style="text-align:right;">Paid Amount</th>
+                    <th style="text-align:right;">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.idPayment)</td>
+                        <td>@item.createDate.Value.ToString("MMM") @item.createDate.Value.ToString("dd") @item.createDate.Value.ToString("yyyy") </td>
+                        <td>@Html.DisplayFor(modelItem => item.reasonForPayment)</td>
+                        <td style="text-align:right;">@Html.DisplayFor(modelItem => item.reservationitem_total)</td>
+                        <td style="text-align:right;">@Html.DisplayFor(modelItem => item.paymentAmount)</td>
+                        <td style="text-align:right;">@Html.DisplayFor(modelItem => item.balance)</td>
+                    </tr>
+                }
+                <tr>
+                    <td>Final Balance</td>
+                    <td colspan="4"></td>
+                    <td style="text-align:right;">@ViewBag.CustomerBalance.ToString("C")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

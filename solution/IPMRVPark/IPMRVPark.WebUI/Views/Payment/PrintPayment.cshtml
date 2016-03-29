@@ -26,13 +26,13 @@ Payments & Refunds
 <div class="container-fluid">
     <!-- Payment Summary -->
     <div class="row top-margin">
-        <div class="col-sm-3 col-xs-6 form-top-margin">
+        <div class="col-sm-2 col-xs-6 form-top-margin">
             <label>Payment #</label>
         </div>
         <div class="col-sm-3 col-xs-6 form-top-margin">
             <div disabled class="form-control">@ViewBag.PaymentID</div>
         </div>
-        <div class="col-sm-3 col-xs-6 form-top-margin">
+        <div class="col-sm-3 col-sm-push-1 col-xs-6 form-top-margin">
             <label>Date</label>
         </div>
         <div class="col-sm-3 col-xs-6 form-top-margin">
@@ -40,13 +40,13 @@ Payments & Refunds
         </div>
     </div>
     <div class="row top-margin">
-        <div class="col-sm-3 col-xs-6 form-top-margin">
+        <div class="col-sm-2 col-xs-6 form-top-margin">
             <label>Paid With</label>
         </div>
         <div class="col-sm-3 col-xs-6 form-top-margin">
             <div disabled class="form-control">@ViewBag.PaymentMethod</div>
         </div>
-        <div class="col-sm-3 col-xs-6 form-top-margin">
+        <div class="col-sm-3 col-sm-push-1 col-xs-6 form-top-margin">
             <label>Paid Amount</label>
         </div>
         <div class="col-sm-3 col-xs-6 form-top-margin">
@@ -55,12 +55,19 @@ Payments & Refunds
     </div>
     <!-- Customer Info -->
     <div class="row top-margin">
-        <div class="col-sm-3 col-xs-12 form-top-margin">
+        <div class="col-sm-2 col-xs-12 form-top-margin">
             <label>Customer</label>
         </div>
-        <div class="col-sm-9 col-xs-10 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
+        <div class="col-sm-6 col-xs-12 form-top-margin">
             <div disabled class="form-control">@Model.First().fullName , Phone: @Model.First().mainPhone</div>
         </div>
+        <div class="col-sm-2 col-xs-12 form-top-margin">
+            <label>Final Balance</label>
+        </div>
+        <div class="col-sm-2 col-xs-12 form-top-margin">
+            <div disabled class="form-control">@ViewBag.CustomerBalance</div>
+        </div>      
+
     </div>
     <!-- Reservation Info -->
     <div class="row top-margin">

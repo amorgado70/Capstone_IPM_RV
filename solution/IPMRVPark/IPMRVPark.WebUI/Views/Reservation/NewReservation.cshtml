@@ -13,7 +13,7 @@ Site Reservation
     $(document).ready(function () {
         // ***** IPM Event Year
         $.ajax({
-            url: '/Login/GetSessionYear',
+            url: '../Login/GetSessionYear',
             type: "POST",
             dataType: "json",
             success: function (data) {
@@ -81,6 +81,7 @@ Site Reservation
                 selectCheckInOutDates(); // Update session with dates
                 getSiteTotal(); // Calculate total for selected site
                 $("#siteName").focus();
+                $('body').scrollTo('#siteName');
             }
         });
         $("#checkOutDate").datepicker("setDate", @ViewBag.checkOutDate);
@@ -118,7 +119,7 @@ Site Reservation
             source: function (request, response) {
                 // define a function to call the action (assuming UserController)
                 $.ajax({
-                    url: '/Search/SearchSiteByNameResult',
+                    url: '../Search/SearchSiteByNameResult',
                     type: "POST",
                     dataType: "json",
                     // query will be the param used by the action method
@@ -131,13 +132,14 @@ Site Reservation
                 $('#idRVSite').val(ui.item.ID); // name of form input field: CustomerID, ProductID
                 $('#btnSelectSite').prop('disabled', false);
                 $('#btnSelectSite').focus();
+                $('body').scrollTo('#btnSelectSite');
                 getSiteTotal(); // Calculate total for selected site
             }
         });
         function getSiteTotal() {
             if($("#idRVSite").val().length>0) {// Check if idRVSite is null
                 $.ajax({
-                    url: '/Reservation/GetSiteTotal',
+                    url: '../Reservation/GetSiteTotal',
                     type: "POST",
                     dataType: "json",
                     data: { //Passing data
@@ -176,6 +178,7 @@ Site Reservation
                     $("#siteTotal").text(""); // Reset site total
                     $("#waitMsg").hide();
                     $('#customerName').focus();
+                    $('body').scrollTo('#customerName');
                 },
                 error: function (result) {
                     alert("2 Some error occured." + $("#idRVSite").val() );
@@ -198,7 +201,7 @@ Site Reservation
             source: function (request, response) {
                 // define a function to call the action (assuming UserController)
                 $.ajax({
-                    url: '/Search/SearchCustomerByNameOrPhoneResult',
+                    url: '../Search/SearchCustomerByNameOrPhoneResult',
                     type: "POST",
                     dataType: "json",
                     // query will be the param used by the action method
@@ -211,10 +214,11 @@ Site Reservation
                 $('#idCustomer').val(ui.item.ID); // name of form input field: CustomerID, ProductID
                 $('#btnSelectCustomer').prop('disabled', false);
                 $('#btnSelectCustomer').focus();
+                $('body').scrollTo('#btnSelectCustomer');
             }
         });
         $.ajax({
-            url: '/Login/GetSessionCustomer',
+            url: '../Login/GetSessionCustomer',
             type: "POST",
             dataType: "json",
             success: function (data) {
@@ -233,6 +237,8 @@ Site Reservation
         //function will be called on button click
         $("#btnSelectCustomer").click(function () {
             $("#waitMsg").show();// Show wait message
+            $('#btnPayment').focus();
+            $('body').scrollTo('#btnPayment');
             $.ajax(
             {
                 type: "POST", //HTTP POST Method
@@ -251,7 +257,7 @@ Site Reservation
         });
         function getReservationTotal() {
             $.ajax({
-                url: '/Reservation/GetReservationTotal',
+                url: '../Reservation/GetReservationTotal',
                 type: "POST",
                 dataType: "json",
                 success: function (result) {
@@ -383,7 +389,7 @@ Site Reservation
     <!-- Proceed To Payment -->
     <div class="row form-top-margin">
         <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
-            <a href="@Url.Action("CreatePayment", "Payment")" class="btn btn-block btn-default btn-mylink pagination-centered">
+            <a id="btnPayment" href="@Url.Action("NewReservation", "Payment")" class="btn btn-block btn-default btn-mylink pagination-centered">
                 <span class="glyphicon glyphicon-usd"></span>
                 <span>Payment</span>
                 <span class="glyphicon glyphicon-chevron-right"></span>

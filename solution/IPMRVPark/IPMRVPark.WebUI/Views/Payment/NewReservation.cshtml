@@ -2,14 +2,14 @@
 
 @{
     ViewBag.Title = "Payments & Refunds";
-    ViewBag.PageTitle = "New Payment";
+    ViewBag.PageTitle = "Payment For New Reservation";
 }
 
 @Html.ActionLink("Home", "Menu", "PrototypeUI")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Payments & Refunds
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("New Payment", "Payment", "PrototypeUI")
+@Html.ActionLink("Payment For New Reservation", "Payment", "PrototypeUI")
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -69,7 +69,7 @@ Payments & Refunds
             $('#i').text(i);
             $('#ii').text(ii.toFixed(2));
             $('#tempBalance').text(tempBalance.toFixed(2));
-            $('#amount').val(amount);
+            $('#amount').val(parseFloat(amount).toFixed(2));
             $('#finalBalance').text(finalBalance.toFixed(2));
             $('#PaymentMethod').focus();
         }
@@ -130,10 +130,10 @@ Payments & Refunds
                         <input class="form-control" type="hidden" id="idCustomer" name="idCustomer" value="@ViewBag.CustomerID" />
                     }
                 </div>
-                <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
-                    <a href="@Url.Action(" CreatePayment", "Payment" )" class="btn btn-block btn-default btn-mylink pagination-centered">
-                        <span class="glyphicon glyphicon-user"></span>
-                        <span>&nbsp; Search Customer</span>
+                <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                    <a href="@Url.Action("NewReservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-tag"></span>
+                        <span>&nbsp; Back To Reservation</span>
                         <span class="glyphicon glyphicon-chevron-right"></span>
                     </a>
                 </div>
@@ -159,17 +159,6 @@ Payments & Refunds
             </div>
             <div class="row">
 
-            </div>
-
-            <div class="row top-margin">
-                <!-- Payment Reason -->
-                <div class="col-sm-4 col-xs-12 form-top-margin">
-                    <label>Reason For Payment</label>
-                </div>
-                <div class="col-sm-8 col-xs-12 form-top-margin">
-                    @Html.DropDownList("ReasonForPayment", null, null, new { @class = "form-control" })
-                    <input class="text-box single-line" id="idReasonForPayment" name="idReasonForPayment" type="hidden" />
-                </div>
             </div>
             <div class="row">
                 <!-- New Reservation Details -->
@@ -228,13 +217,6 @@ Payments & Refunds
                 </div>
                 <div class="col-sm-4 col-xs-12 ">
                     <div id="tempBalance"disabled class="form-control payment-output"></div>
-                </div>
-                <div class="col-sm-4 col-xs-12" data-toggle="tooltip" title="Go To">
-                    <a href="@Url.Action("Reservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
-                        <span class="glyphicon glyphicon-tag"></span>
-                        <span>&nbsp; Back To Reservation</span>
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                    </a>
                 </div>
             </div>
 

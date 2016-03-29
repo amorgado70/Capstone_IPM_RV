@@ -27,8 +27,8 @@
           <Property Name="seqCoordinate" Type="int" Nullable="false" />
           <Property Name="longitude" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="latitude" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="createDate" Type="datetime" Nullable="false" />
-          <Property Name="lastUpdate" Type="datetime" Nullable="false" />
+          <Property Name="createDate" Type="date" Nullable="false" />
+          <Property Name="lastUpdate" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="countrycode">
           <Key>
@@ -497,20 +497,23 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_customer_view' does not ha
           <Property Name="id" Type="bigint" Nullable="false" />
           <Property Name="fullName" Type="varchar" MaxLength="101" />
           <Property Name="mainPhone" Type="varchar" MaxLength="30" />
-          <Property Name="balance" Type="decimal" Precision="65" Scale="6" />
+          <Property Name="balance" Type="decimal" Precision="61" Scale="6" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.ipmrvpark.total_per_payment_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="total_per_payment_view">
           <Key>
             <PropertyRef Name="idPayment" />
+            <PropertyRef Name="balance" />
           </Key>
           <Property Name="idPayment" Type="bigint" Nullable="false" />
-          <Property Name="createDate" Type="bigint" />
+          <Property Name="createDate" Type="date" />
+          <Property Name="reasonForPayment" Type="varchar" MaxLength="45" />
           <Property Name="idCustomer" Type="bigint" />
           <Property Name="idStaff" Type="bigint" />
           <Property Name="paymentAmount" Type="decimal" Precision="38" Scale="6" />
-          <Property Name="reservationitem_total" Type="decimal" Precision="44" Scale="2" />
+          <Property Name="reservationitem_total" Type="decimal" Precision="22" Scale="2" />
+          <Property Name="balance" Type="decimal" Precision="3" Scale="2" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.ipmrvpark.total_per_reservationitem_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -621,6 +624,18 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_session_view' does not hav
             </Principal>
             <Dependent Role="coordinates">
               <PropertyRef Name="idIPMEvent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Coordinates_PlaceInMap_FK">
+          <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
+          <End Role="coordinates" Type="Self.coordinates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="placeinmap">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="coordinates">
+              <PropertyRef Name="idPlaceInMap" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1246,10 +1261,12 @@ FROM `total_per_customer_view` AS `total_per_customer_view`</DefiningQuery>
             <DefiningQuery>SELECT
 `total_per_payment_view`.`idPayment`, 
 `total_per_payment_view`.`createDate`, 
+`total_per_payment_view`.`reasonForPayment`, 
 `total_per_payment_view`.`idCustomer`, 
 `total_per_payment_view`.`idStaff`, 
 `total_per_payment_view`.`paymentAmount`, 
-`total_per_payment_view`.`reservationitem_total`
+`total_per_payment_view`.`reservationitem_total`, 
+`total_per_payment_view`.`balance`
 FROM `total_per_payment_view` AS `total_per_payment_view`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="total_per_reservationitem_view" EntityType="Self.total_per_reservationitem_view" store:Type="Views" store:Schema="ipmrvpark">
@@ -1314,6 +1331,10 @@ FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="Coordinates_idIPMEvent_FK" Association="Self.Coordinates_idIPMEvent_FK">
             <End Role="ipmevent" EntitySet="ipmevent" />
+            <End Role="coordinates" EntitySet="coordinates" />
+          </AssociationSet>
+          <AssociationSet Name="Coordinates_PlaceInMap_FK" Association="Self.Coordinates_PlaceInMap_FK">
+            <End Role="placeinmap" EntitySet="placeinmap" />
             <End Role="coordinates" EntitySet="coordinates" />
           </AssociationSet>
           <AssociationSet Name="Customer_countryCode_FK" Association="Self.Customer_countryCode_FK">
@@ -1509,6 +1530,7 @@ FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
           <Property Name="createDate" Type="DateTime" Nullable="false" />
           <Property Name="lastUpdate" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="ipmevent" Relationship="Self.Coordinates_idIPMEvent_FK" FromRole="coordinates" ToRole="ipmevent" />
+          <NavigationProperty Name="placeinmap" Relationship="Self.Coordinates_PlaceInMap_FK" FromRole="coordinates" ToRole="placeinmap" />
         </EntityType>
         <EntityType Name="countrycode">
           <Key>
@@ -1714,6 +1736,7 @@ FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
           <Property Name="lastUpdate" Type="DateTime" />
           <Property Name="isRVSite" Type="Boolean" />
           <NavigationProperty Name="checkinouts" Relationship="Self.CheckInOut_PlaceInMap_FK" FromRole="placeinmap" ToRole="checkinout" />
+          <NavigationProperty Name="coordinates" Relationship="Self.Coordinates_PlaceInMap_FK" FromRole="placeinmap" ToRole="coordinates" />
           <NavigationProperty Name="ipmevent" Relationship="Self.PlaceInMap_IPMEvent_FK" FromRole="placeinmap" ToRole="ipmevent" />
           <NavigationProperty Name="outofserviceitems" Relationship="Self.OutOfServiceItem_PlaceInMap_FK" FromRole="placeinmap" ToRole="outofserviceitem" />
           <NavigationProperty Name="sitetype" Relationship="Self.PlaceInMap_SiteStyle_FK" FromRole="placeinmap" ToRole="sitetype" />
@@ -2045,13 +2068,16 @@ FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
         <EntityType Name="total_per_payment_view">
           <Key>
             <PropertyRef Name="idPayment" />
+            <PropertyRef Name="balance" />
           </Key>
           <Property Name="idPayment" Type="Int64" Nullable="false" />
-          <Property Name="createDate" Type="Int64" />
+          <Property Name="createDate" Type="DateTime" />
+          <Property Name="reasonForPayment" Type="String" />
           <Property Name="idCustomer" Type="Int64" />
           <Property Name="idStaff" Type="Int64" />
           <Property Name="paymentAmount" Type="Decimal" />
           <Property Name="reservationitem_total" Type="Decimal" />
+          <Property Name="balance" Type="Decimal" Nullable="false" />
         </EntityType>
         <EntityType Name="total_per_reservationitem_view">
           <Key>
@@ -2156,6 +2182,18 @@ FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
             </Principal>
             <Dependent Role="coordinates">
               <PropertyRef Name="idIPMEvent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Coordinates_PlaceInMap_FK">
+          <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
+          <End Role="coordinates" Type="Self.coordinate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="placeinmap">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="coordinates">
+              <PropertyRef Name="idPlaceInMap" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2639,7 +2677,7 @@ FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ipmrvparkDbContext" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="ipmrvparkEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="checkinouts" EntityType="Self.checkinout" />
           <EntitySet Name="coordinates" EntityType="Self.coordinate" />
           <EntitySet Name="countrycodes" EntityType="Self.countrycode" />
@@ -2691,6 +2729,10 @@ FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="Coordinates_idIPMEvent_FK" Association="Self.Coordinates_idIPMEvent_FK">
             <End Role="ipmevent" EntitySet="ipmevents" />
+            <End Role="coordinates" EntitySet="coordinates" />
+          </AssociationSet>
+          <AssociationSet Name="Coordinates_PlaceInMap_FK" Association="Self.Coordinates_PlaceInMap_FK">
+            <End Role="placeinmap" EntitySet="placeinmaps" />
             <End Role="coordinates" EntitySet="coordinates" />
           </AssociationSet>
           <AssociationSet Name="Customer_countryCode_FK" Association="Self.Customer_countryCode_FK">
@@ -2859,7 +2901,7 @@ FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ipmrvparkModelStoreContainer" CdmEntityContainer="ipmrvparkDbContext">
+        <EntityContainerMapping StorageEntityContainer="ipmrvparkModelStoreContainer" CdmEntityContainer="ipmrvparkEntities">
           <EntitySetMapping Name="checkinouts">
             <EntityTypeMapping TypeName="ipmrvparkModel.checkinout">
               <MappingFragment StoreEntitySet="checkinout">
@@ -3352,10 +3394,12 @@ FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
               <MappingFragment StoreEntitySet="total_per_payment_view">
                 <ScalarProperty Name="idPayment" ColumnName="idPayment" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="reasonForPayment" ColumnName="reasonForPayment" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
                 <ScalarProperty Name="idStaff" ColumnName="idStaff" />
                 <ScalarProperty Name="paymentAmount" ColumnName="paymentAmount" />
                 <ScalarProperty Name="reservationitem_total" ColumnName="reservationitem_total" />
+                <ScalarProperty Name="balance" ColumnName="balance" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
