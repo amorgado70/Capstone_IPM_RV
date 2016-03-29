@@ -16,6 +16,7 @@ namespace IPMRVPark.Models
     {
         public session()
         {
+            this.payments = new HashSet<payment>();
             this.selecteditems = new HashSet<selecteditem>();
         }
     
@@ -32,6 +33,7 @@ namespace IPMRVPark.Models
     
         public virtual customer customer { get; set; }
         public virtual ipmevent ipmevent { get; set; }
+        public virtual ICollection<payment> payments { get; set; }
         public virtual ICollection<selecteditem> selecteditems { get; set; }
         public virtual staff staff { get; set; }
     }

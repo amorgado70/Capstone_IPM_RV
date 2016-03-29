@@ -171,10 +171,19 @@
     <Compile Include="styleurl.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="total_per_session_view.cs">
+    <Compile Include="total_per_customer_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="total_per_site_view.cs">
+    <Compile Include="total_per_payment_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="total_per_reservationitem_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="total_per_selecteditem_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="total_per_session_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="View\SelectionOption.cs" />

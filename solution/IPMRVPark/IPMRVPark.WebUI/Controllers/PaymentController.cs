@@ -18,7 +18,10 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<paymentmethod> paymentmethods;
         IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<reservationitem> reservationitems;
-        IRepositoryBase<total_per_site_view> totals_per_site;
+        IRepositoryBase<total_per_selecteditem_view> totals_per_selecteditem;
+        IRepositoryBase<total_per_reservationitem_view> totals_per_reservationitem;
+        IRepositoryBase<total_per_payment_view> totals_per_payment;
+        IRepositoryBase<total_per_customer_view> totals_per_customer;
         IRepositoryBase<paymentreservationitem> paymentsreservationitems;
         IRepositoryBase<session> sessions;
         SessionService sessionService;
@@ -30,9 +33,12 @@ namespace IPMRVPark.WebUI.Controllers
             IRepositoryBase<paymentmethod> paymentmethods,
             IRepositoryBase<selecteditem> selecteditems,
             IRepositoryBase<reservationitem> reservationitems,
-            IRepositoryBase<total_per_site_view> totals_per_site,
+            IRepositoryBase<total_per_selecteditem_view> totals_per_selecteditem,
+            IRepositoryBase<total_per_reservationitem_view> totals_per_reservationitem,
+            IRepositoryBase<total_per_payment_view> totals_per_payment,
+            IRepositoryBase<total_per_customer_view> totals_per_customer,
             IRepositoryBase<paymentreservationitem> paymentsreservationitems,
-        IRepositoryBase<session> sessions)
+            IRepositoryBase<session> sessions)
         {
             this.sessions = sessions;
             this.payments = payments;
@@ -41,8 +47,11 @@ namespace IPMRVPark.WebUI.Controllers
             this.reasonforpayments = reasonforpayments;
             this.paymentmethods = paymentmethods;
             this.selecteditems = selecteditems;
-            this.reservationitems = reservationitems;
-            this.totals_per_site = totals_per_site;
+            this.reservationitems = reservationitems;            
+            this.totals_per_selecteditem = totals_per_selecteditem;
+            this.totals_per_reservationitem = totals_per_reservationitem;
+            this.totals_per_payment = totals_per_payment;
+            this.totals_per_customer = totals_per_customer;
             this.paymentsreservationitems = paymentsreservationitems;
             sessionService = new SessionService(this.sessions);
         }//end Constructor
@@ -147,9 +156,10 @@ namespace IPMRVPark.WebUI.Controllers
             _payment.lastUpdate = DateTime.Now;
             payments.Insert(_payment);
             payments.Commit();
+            long ID = _payment.ID;
 
-            var _selecteditems = totals_per_site.GetAll().Where(s => s.idSession == sessionID);
-            foreach (total_per_site_view item in _selecteditems)
+            var _selecteditems = totals_per_selecteditem.GetAll().Where(s => s.idSession == sessionID);
+            foreach (total_per_selecteditem_view item in _selecteditems)
             {
                 // Create and insert reservation items
                 var _reservationitem = new reservationitem();
@@ -182,12 +192,23 @@ namespace IPMRVPark.WebUI.Controllers
             sessions.Update(_session);
             sessions.Commit();
 
-            return RedirectToAction("PrintPayment",_payment);
+            return RedirectToAction("PrintPayment", new { id = ID });
         }
 
-        public ActionResult PrintPayment(payment _payment)
+        public ActionResult PrintPayment(long id)
         {
-            return View(_payment);
+            var _payment = payments.GetById(id);
+            var _reservationitems = totals_per_reservationitem.GetAll().
+                Where(q => q.idPayment == _payment.ID);
+
+            ViewBag.ReservationTotal = _reservationitems.Sum(q => q.amount);
+
+            ViewBag.PaymentID = _payment.ID;
+            ViewBag.PaymentAmount = _payment.amount;
+            ViewBag.PaymentDate = _payment.createDate.Value.ToString("R").Substring(0,16);
+            ViewBag.PaymentMethod = paymentmethods.GetById(_payment.idPaymentMethod).description;
+
+            return View(_reservationitems);
         }
     }
 }

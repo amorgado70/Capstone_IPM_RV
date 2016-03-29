@@ -1,24 +1,107 @@
-﻿@{
-    ViewBag.Title = "PrintPayment";
+﻿@model IEnumerable<IPMRVPark.Models.total_per_reservationitem_view>
+
+@{
+    ViewBag.Title = "Print Payment";
+    ViewBag.PageTitle = "Print Payment";
 }
 
-<h2>PrintPayment</h2>
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Payments & Refunds
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Print Payment", "Payment", "PrototypeUI")
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#waitMsg").hide();// Show wait message
+        $("#btnPrint").click(function () {
+            window.print();
+        });
+    });
+</script>
 
 <div class="container-fluid">
-    <div class="row form-top-margin">
-        <!-- Receive Total -->
-        <div class="col-sm-4 col-xs-12">
-            <label>(c) Temp Balance (a)-(b)</label>
+    <!-- Payment Summary -->
+    <div class="row top-margin">
+        <div class="col-sm-3 col-xs-6 form-top-margin">
+            <label>Payment #</label>
         </div>
-        <div class="col-sm-4 col-xs-12 ">
-            <div disabled class="form-control payment-output">-@ViewBag.Total</div>
+        <div class="col-sm-3 col-xs-6 form-top-margin">
+            <div disabled class="form-control">@ViewBag.PaymentID</div>
         </div>
-        <div class="col-sm-4 col-xs-12" data-toggle="tooltip" title="Go To">
-            <a href="@Url.Action("Reservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
-                <span class="glyphicon glyphicon-tag"></span>
-                <span>&nbsp; New Reservation</span>
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
+        <div class="col-sm-3 col-xs-6 form-top-margin">
+            <label>Date</label>
+        </div>
+        <div class="col-sm-3 col-xs-6 form-top-margin">
+            <div disabled class="form-control">@ViewBag.PaymentDate</div>
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="col-sm-3 col-xs-6 form-top-margin">
+            <label>Paid With</label>
+        </div>
+        <div class="col-sm-3 col-xs-6 form-top-margin">
+            <div disabled class="form-control">@ViewBag.PaymentMethod</div>
+        </div>
+        <div class="col-sm-3 col-xs-6 form-top-margin">
+            <label>Paid Amount</label>
+        </div>
+        <div class="col-sm-3 col-xs-6 form-top-margin">
+            <div disabled class="form-control">@ViewBag.PaymentAmount</div>
+        </div>
+    </div>
+    <!-- Customer Info -->
+    <div class="row top-margin">
+        <div class="col-sm-3 col-xs-12 form-top-margin">
+            <label>Customer</label>
+        </div>
+        <div class="col-sm-9 col-xs-10 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
+            <div disabled class="form-control">@Model.First().fullName , Phone: @Model.First().mainPhone</div>
+        </div>
+    </div>
+    <!-- Reservation Info -->
+    <div class="row top-margin">
+        <div class="col-xs-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Site</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th style="text-align:right;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.site)</td>
+                            <td>@item.checkInDate.ToString("ddd"), @item.checkInDate.ToString("dd") @item.checkInDate.ToString("MMM")</td>
+                            <td>@item.checkOutDate.ToString("ddd"), @item.checkOutDate.ToString("dd") @item.checkOutDate.ToString("MMM")</td>
+                            <td style="text-align:right;">@Html.DisplayFor(modelItem => item.amount)</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align:right;">@ViewBag.ReservationTotal</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Print Payment Info-->
+    <div class="row top-margin">
+        <div class="col-sm-3 col-sm-push-9 col-xs-12 form-top-margin">
+            <button id="btnPrint" class="btn btn-block btn-default">
+                <span class="col-xs-1 glyphicon glyphicon-print"></span>
+                <span class="col-xs-9">Print</span>
+            </button>
         </div>
     </div>
 </div>

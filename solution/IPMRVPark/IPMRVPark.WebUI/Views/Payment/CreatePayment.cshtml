@@ -89,6 +89,20 @@ Payments & Refunds
             var finalBalance = parseFloat(finalBalance).toFixed(2)
             $('#finalBalance').text(finalBalance);
         }
+        // Create Date
+        $("#paymentDate").datepicker({
+            dateFormat: 'D, dd M',
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            onSelect: function () {
+                var createDate = $("#paymentDate").datepicker('getDate');
+                $("#createDate").val(createDate.toISOString().substring(0, 10));
+            }
+        });
+        $("#paymentDate").datepicker( "setDate", "0" );
+        var createDate = $("#paymentDate").datepicker('getDate');
+        $("#createDate").val(createDate.toISOString().substring(0, 10));
     });
 </script>
 
@@ -232,6 +246,13 @@ Payments & Refunds
                 <div class="col-sm-4 col-xs-12">
                     <input type="number" name="amount" id="amount" min="0.00" step="0.01" class="form-control payment-input">
                 </div>
+                <div class="col-sm-1 col-xs-12">
+                    <label>Date</label>
+                </div>
+                <div class="col-sm-3 col-xs-12">
+                    <input type="text" id="paymentDate" class="form-control"/>
+                    <input style="display: none" type="date" id="createDate" class="form-control" />
+                </div>
             </div>
 
             <div class="row">
@@ -276,9 +297,8 @@ Payments & Refunds
             </div>
             <div class="col-sm-5 col-sm-push-2 col-xs-12 form-top-margin">
                 <button id="btnSave" class="btn btn-block btn-default" type="submit">
-                    <span class="col-xs-1 glyphicon glyphicon-floppy-save"></span>
-                    <span class="col-xs-1 glyphicon glyphicon-print"></span>
-                    <span class="col-xs-9">Save and Print</span>
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                    <span class="col-xs-9">Confirm</span>
                 </button>
             </div>
 

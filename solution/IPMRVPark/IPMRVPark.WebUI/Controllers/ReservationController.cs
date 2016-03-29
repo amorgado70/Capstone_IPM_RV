@@ -17,7 +17,7 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<placeinmap> placesinmap;
         IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<rvsite_available_view> rvsites_available;
-        IRepositoryBase<total_per_site_view> totals_per_site;
+        IRepositoryBase<total_per_selecteditem_view> totals_per_selecteditem;
         SessionService sessionService;
 
         public ReservationController(
@@ -26,7 +26,7 @@ namespace IPMRVPark.WebUI.Controllers
             IRepositoryBase<placeinmap> placesinmap,
             IRepositoryBase<rvsite_available_view> rvsites_available,
             IRepositoryBase<selecteditem> selecteditems,
-            IRepositoryBase<total_per_site_view> totals_per_site,
+            IRepositoryBase<total_per_selecteditem_view> totals_per_selecteditem,
             IRepositoryBase<session> sessions)
         {
             this.customers = customers;
@@ -34,7 +34,7 @@ namespace IPMRVPark.WebUI.Controllers
             this.sessions = sessions;
             this.placesinmap = placesinmap;
             this.selecteditems = selecteditems;            
-            this.totals_per_site = totals_per_site;
+            this.totals_per_selecteditem = totals_per_selecteditem;
             this.rvsites_available = rvsites_available;
             sessionService = new SessionService(this.sessions);
         }//end Constructor
@@ -156,7 +156,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult UpdateSelectedList()
         {
             var _session = sessionService.GetSession(this.HttpContext);
-            var _selecteditem = totals_per_site.GetAll();
+            var _selecteditem = totals_per_selecteditem.GetAll();
             _selecteditem = _selecteditem.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
 
             if (_selecteditem.Count() > 0)
@@ -170,7 +170,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult ShowReservationSummary()
         {
             session _session = sessionService.GetSession(this.HttpContext);
-            var _selecteditem = totals_per_site.GetAll();
+            var _selecteditem = totals_per_selecteditem.GetAll();
             _selecteditem = _selecteditem.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
 
             if (_selecteditem.Count() > 0)
@@ -204,7 +204,7 @@ namespace IPMRVPark.WebUI.Controllers
         {
             string total = string.Empty;
             var _session = sessionService.GetSession(this.HttpContext);
-            var _selecteditem = totals_per_site.GetAll();
+            var _selecteditem = totals_per_selecteditem.GetAll();
             _selecteditem = _selecteditem.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
 
             if (_selecteditem.Count() > 0)
@@ -245,7 +245,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult RemoveAllSelected()
         {
             var _session = sessionService.GetSession(this.HttpContext);
-            var allSelected = totals_per_site.GetAll();
+            var allSelected = totals_per_selecteditem.GetAll();
             allSelected = allSelected.Where(q => q.idSession == _session.ID).OrderByDescending(o => o.idSelected);
 
             if (allSelected.Count() > 0)

@@ -7,9 +7,9 @@ using System.Text;
 
 namespace IPMRVPark.Contracts.Repositories
 {
-    public class TotalPerSiteViewRepository : RepositoryBase<total_per_site_view>
+    public class TotalPerCustomerViewRepository : RepositoryBase<total_per_customer_view>
     {
-        public TotalPerSiteViewRepository(DataContext context)
+        public TotalPerCustomerViewRepository(DataContext context)
             : base(context)
         { if (context == null) throw new ArgumentNullException(); }
     }//end CountryRepository

@@ -38,6 +38,7 @@ namespace IPMRVPark.Models
         public virtual paydoctype paydoctype1 { get; set; }
         public virtual paymentmethod paymentmethod { get; set; }
         public virtual reasonforpayment reasonforpayment { get; set; }
+        public virtual session session { get; set; }
         public virtual ICollection<paymentreservationitem> paymentreservationitems { get; set; }
     }
 }

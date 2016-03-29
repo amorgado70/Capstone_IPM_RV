@@ -489,19 +489,65 @@ warning 6002: The table/view 'def.ipmrvpark.staff_view' does not have a primary 
           <Property Name="email" Type="varchar" MaxLength="30" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'def.ipmrvpark.total_per_session_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="total_per_session_view">
+warning 6002: The table/view 'def.ipmrvpark.total_per_customer_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="total_per_customer_view">
           <Key>
-            <PropertyRef Name="idSession" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="idSession" Type="bigint" Nullable="false" />
-          <Property Name="idCustomer" Type="bigint" />
-          <Property Name="idStaff" Type="bigint" />
-          <Property Name="total_amount" Type="decimal" Precision="44" Scale="2" />
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="fullName" Type="varchar" MaxLength="101" />
+          <Property Name="mainPhone" Type="varchar" MaxLength="30" />
+          <Property Name="balance" Type="decimal" Precision="65" Scale="6" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="total_per_site_view">
+warning 6002: The table/view 'def.ipmrvpark.total_per_payment_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="total_per_payment_view">
+          <Key>
+            <PropertyRef Name="idPayment" />
+          </Key>
+          <Property Name="idPayment" Type="bigint" Nullable="false" />
+          <Property Name="createDate" Type="bigint" />
+          <Property Name="idCustomer" Type="bigint" />
+          <Property Name="idStaff" Type="bigint" />
+          <Property Name="paymentAmount" Type="decimal" Precision="38" Scale="6" />
+          <Property Name="reservationitem_total" Type="decimal" Precision="44" Scale="2" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.total_per_reservationitem_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="total_per_reservationitem_view">
+          <Key>
+            <PropertyRef Name="idReservationItem" />
+            <PropertyRef Name="idRVSite" />
+            <PropertyRef Name="idSiteType" />
+            <PropertyRef Name="site" />
+            <PropertyRef Name="idCustomer" />
+            <PropertyRef Name="idStaff" />
+            <PropertyRef Name="checkInDate" />
+            <PropertyRef Name="checkOutDate" />
+            <PropertyRef Name="duration" />
+          </Key>
+          <Property Name="idPayment" Type="bigint" />
+          <Property Name="idReservationItem" Type="bigint" Nullable="false" />
+          <Property Name="idRVSite" Type="bigint" Nullable="false" />
+          <Property Name="idSiteType" Type="bigint" Nullable="false" />
+          <Property Name="site" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="descriptionRVSite" Type="varchar" MaxLength="41" />
+          <Property Name="idCustomer" Type="bigint" Nullable="false" />
+          <Property Name="fullName" Type="varchar" MaxLength="101" />
+          <Property Name="mainPhone" Type="varchar" MaxLength="30" />
+          <Property Name="idStaff" Type="bigint" Nullable="false" />
+          <Property Name="checkInDate" Type="date" Nullable="false" />
+          <Property Name="checkOutDate" Type="date" Nullable="false" />
+          <Property Name="duration" Type="bigint" Nullable="false" />
+          <Property Name="weeks" Type="bigint" />
+          <Property Name="weeklyRate" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="days" Type="bigint" />
+          <Property Name="dailyRate" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="amount" Type="decimal" Precision="22" Scale="2" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.total_per_selecteditem_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="total_per_selecteditem_view">
           <Key>
             <PropertyRef Name="idSelected" />
             <PropertyRef Name="idSession" />
@@ -530,6 +576,17 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a
           <Property Name="amount" Type="decimal" Precision="22" Scale="2" />
           <Property Name="isSiteChecked" Type="bit" Nullable="false" />
           <Property Name="total" Type="decimal" Precision="22" Scale="2" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.ipmrvpark.total_per_session_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="total_per_session_view">
+          <Key>
+            <PropertyRef Name="idSession" />
+          </Key>
+          <Property Name="idSession" Type="bigint" Nullable="false" />
+          <Property Name="idCustomer" Type="bigint" />
+          <Property Name="idStaff" Type="bigint" />
+          <Property Name="total_amount" Type="decimal" Precision="44" Scale="2" />
         </EntityType>
         <Association Name="CheckInOut_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
@@ -768,6 +825,18 @@ warning 6002: The table/view 'def.ipmrvpark.total_per_site_view' does not have a
             </Principal>
             <Dependent Role="payment">
               <PropertyRef Name="idReasonForPayment" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Payment_Session_FK">
+          <End Role="session" Type="Self.session" Multiplicity="0..1" />
+          <End Role="payment" Type="Self.payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="session">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="payment">
+              <PropertyRef Name="idSession" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1165,6 +1234,68 @@ FROM `siterate_by_sitetype_view` AS `siterate_by_sitetype_view`</DefiningQuery>
 `staff_view`.`email`
 FROM `staff_view` AS `staff_view`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="total_per_customer_view" EntityType="Self.total_per_customer_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`total_per_customer_view`.`id`, 
+`total_per_customer_view`.`fullName`, 
+`total_per_customer_view`.`mainPhone`, 
+`total_per_customer_view`.`balance`
+FROM `total_per_customer_view` AS `total_per_customer_view`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="total_per_payment_view" EntityType="Self.total_per_payment_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`total_per_payment_view`.`idPayment`, 
+`total_per_payment_view`.`createDate`, 
+`total_per_payment_view`.`idCustomer`, 
+`total_per_payment_view`.`idStaff`, 
+`total_per_payment_view`.`paymentAmount`, 
+`total_per_payment_view`.`reservationitem_total`
+FROM `total_per_payment_view` AS `total_per_payment_view`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="total_per_reservationitem_view" EntityType="Self.total_per_reservationitem_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`total_per_reservationitem_view`.`idPayment`, 
+`total_per_reservationitem_view`.`idReservationItem`, 
+`total_per_reservationitem_view`.`idRVSite`, 
+`total_per_reservationitem_view`.`idSiteType`, 
+`total_per_reservationitem_view`.`site`, 
+`total_per_reservationitem_view`.`descriptionRVSite`, 
+`total_per_reservationitem_view`.`idCustomer`, 
+`total_per_reservationitem_view`.`fullName`, 
+`total_per_reservationitem_view`.`mainPhone`, 
+`total_per_reservationitem_view`.`idStaff`, 
+`total_per_reservationitem_view`.`checkInDate`, 
+`total_per_reservationitem_view`.`checkOutDate`, 
+`total_per_reservationitem_view`.`duration`, 
+`total_per_reservationitem_view`.`weeks`, 
+`total_per_reservationitem_view`.`weeklyRate`, 
+`total_per_reservationitem_view`.`days`, 
+`total_per_reservationitem_view`.`dailyRate`, 
+`total_per_reservationitem_view`.`amount`
+FROM `total_per_reservationitem_view` AS `total_per_reservationitem_view`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="total_per_selecteditem_view" EntityType="Self.total_per_selecteditem_view" store:Type="Views" store:Schema="ipmrvpark">
+            <DefiningQuery>SELECT
+`total_per_selecteditem_view`.`idSelected`, 
+`total_per_selecteditem_view`.`idSession`, 
+`total_per_selecteditem_view`.`idRVSite`, 
+`total_per_selecteditem_view`.`idSiteType`, 
+`total_per_selecteditem_view`.`site`, 
+`total_per_selecteditem_view`.`descriptionRVSite`, 
+`total_per_selecteditem_view`.`idCustomer`, 
+`total_per_selecteditem_view`.`idStaff`, 
+`total_per_selecteditem_view`.`checkInDate`, 
+`total_per_selecteditem_view`.`checkOutDate`, 
+`total_per_selecteditem_view`.`duration`, 
+`total_per_selecteditem_view`.`weeks`, 
+`total_per_selecteditem_view`.`weeklyRate`, 
+`total_per_selecteditem_view`.`days`, 
+`total_per_selecteditem_view`.`dailyRate`, 
+`total_per_selecteditem_view`.`amount`, 
+`total_per_selecteditem_view`.`isSiteChecked`, 
+`total_per_selecteditem_view`.`total`
+FROM `total_per_selecteditem_view` AS `total_per_selecteditem_view`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="total_per_session_view" EntityType="Self.total_per_session_view" store:Type="Views" store:Schema="ipmrvpark">
             <DefiningQuery>SELECT
 `total_per_session_view`.`idSession`, 
@@ -1172,28 +1303,6 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
 `total_per_session_view`.`idStaff`, 
 `total_per_session_view`.`total_amount`
 FROM `total_per_session_view` AS `total_per_session_view`</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="total_per_site_view" EntityType="Self.total_per_site_view" store:Type="Views" store:Schema="ipmrvpark">
-            <DefiningQuery>SELECT
-`total_per_site_view`.`idSelected`, 
-`total_per_site_view`.`idSession`, 
-`total_per_site_view`.`idRVSite`, 
-`total_per_site_view`.`idSiteType`, 
-`total_per_site_view`.`site`, 
-`total_per_site_view`.`descriptionRVSite`, 
-`total_per_site_view`.`idCustomer`, 
-`total_per_site_view`.`idStaff`, 
-`total_per_site_view`.`checkInDate`, 
-`total_per_site_view`.`checkOutDate`, 
-`total_per_site_view`.`duration`, 
-`total_per_site_view`.`weeks`, 
-`total_per_site_view`.`weeklyRate`, 
-`total_per_site_view`.`days`, 
-`total_per_site_view`.`dailyRate`, 
-`total_per_site_view`.`amount`, 
-`total_per_site_view`.`isSiteChecked`, 
-`total_per_site_view`.`total`
-FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="CheckInOut_PlaceInMap_FK" Association="Self.CheckInOut_PlaceInMap_FK">
             <End Role="placeinmap" EntitySet="placeinmap" />
@@ -1273,6 +1382,10 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="Payment_ReasonForPayment_FK" Association="Self.Payment_ReasonForPayment_FK">
             <End Role="reasonforpayment" EntitySet="reasonforpayment" />
+            <End Role="payment" EntitySet="payment" />
+          </AssociationSet>
+          <AssociationSet Name="Payment_Session_FK" Association="Self.Payment_Session_FK">
+            <End Role="session" EntitySet="session" />
             <End Role="payment" EntitySet="payment" />
           </AssociationSet>
           <AssociationSet Name="paymentReservationItem_Payment_FK" Association="Self.paymentReservationItem_Payment_FK">
@@ -1547,6 +1660,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <NavigationProperty Name="paydoctype1" Relationship="Self.Payment_PayDocType_FK" FromRole="payment" ToRole="paydoctype" />
           <NavigationProperty Name="paymentmethod" Relationship="Self.Payment_PaymentMethod_FK" FromRole="payment" ToRole="paymentmethod" />
           <NavigationProperty Name="reasonforpayment" Relationship="Self.Payment_ReasonForPayment_FK" FromRole="payment" ToRole="reasonforpayment" />
+          <NavigationProperty Name="session" Relationship="Self.Payment_Session_FK" FromRole="payment" ToRole="session" />
           <NavigationProperty Name="paymentreservationitems" Relationship="Self.paymentReservationItem_Payment_FK" FromRole="payment" ToRole="paymentreservationitem" />
         </EntityType>
         <EntityType Name="paymentmethod">
@@ -1712,6 +1826,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="customer" Relationship="Self.Session_Customer_FK" FromRole="session" ToRole="customer" />
           <NavigationProperty Name="ipmevent" Relationship="Self.Session_IPMEvent_FK" FromRole="session" ToRole="ipmevent" />
+          <NavigationProperty Name="payments" Relationship="Self.Payment_Session_FK" FromRole="session" ToRole="payment" />
           <NavigationProperty Name="selecteditems" Relationship="Self.SelectedItem_Session_FK" FromRole="session" ToRole="selecteditem" />
           <NavigationProperty Name="staff" Relationship="Self.Session_Staff_FK" FromRole="session" ToRole="staff" />
         </EntityType>
@@ -1918,16 +2033,58 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="mainPhone" Type="String" />
           <Property Name="email" Type="String" />
         </EntityType>
-        <EntityType Name="total_per_session_view">
+        <EntityType Name="total_per_customer_view">
           <Key>
-            <PropertyRef Name="idSession" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="idSession" Type="Int64" Nullable="false" />
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="fullName" Type="String" />
+          <Property Name="mainPhone" Type="String" />
+          <Property Name="balance" Type="Decimal" />
+        </EntityType>
+        <EntityType Name="total_per_payment_view">
+          <Key>
+            <PropertyRef Name="idPayment" />
+          </Key>
+          <Property Name="idPayment" Type="Int64" Nullable="false" />
+          <Property Name="createDate" Type="Int64" />
           <Property Name="idCustomer" Type="Int64" />
           <Property Name="idStaff" Type="Int64" />
-          <Property Name="total_amount" Type="Decimal" />
+          <Property Name="paymentAmount" Type="Decimal" />
+          <Property Name="reservationitem_total" Type="Decimal" />
         </EntityType>
-        <EntityType Name="total_per_site_view">
+        <EntityType Name="total_per_reservationitem_view">
+          <Key>
+            <PropertyRef Name="idReservationItem" />
+            <PropertyRef Name="idRVSite" />
+            <PropertyRef Name="idSiteType" />
+            <PropertyRef Name="site" />
+            <PropertyRef Name="idCustomer" />
+            <PropertyRef Name="idStaff" />
+            <PropertyRef Name="checkInDate" />
+            <PropertyRef Name="checkOutDate" />
+            <PropertyRef Name="duration" />
+          </Key>
+          <Property Name="idPayment" Type="Int64" />
+          <Property Name="idReservationItem" Type="Int64" Nullable="false" />
+          <Property Name="idRVSite" Type="Int64" Nullable="false" />
+          <Property Name="idSiteType" Type="Int64" Nullable="false" />
+          <Property Name="site" Type="String" Nullable="false" />
+          <Property Name="descriptionRVSite" Type="String" />
+          <Property Name="idCustomer" Type="Int64" Nullable="false" />
+          <Property Name="fullName" Type="String" />
+          <Property Name="mainPhone" Type="String" />
+          <Property Name="idStaff" Type="Int64" Nullable="false" />
+          <Property Name="checkInDate" Type="DateTime" Nullable="false" />
+          <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
+          <Property Name="duration" Type="Int64" Nullable="false" />
+          <Property Name="weeks" Type="Int64" />
+          <Property Name="weeklyRate" Type="Decimal" />
+          <Property Name="days" Type="Int64" />
+          <Property Name="dailyRate" Type="Decimal" />
+          <Property Name="amount" Type="Decimal" />
+        </EntityType>
+        <EntityType Name="total_per_selecteditem_view">
           <Key>
             <PropertyRef Name="idSelected" />
             <PropertyRef Name="idSession" />
@@ -1956,6 +2113,15 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <Property Name="amount" Type="Decimal" />
           <Property Name="isSiteChecked" Type="Boolean" Nullable="false" />
           <Property Name="total" Type="Decimal" />
+        </EntityType>
+        <EntityType Name="total_per_session_view">
+          <Key>
+            <PropertyRef Name="idSession" />
+          </Key>
+          <Property Name="idSession" Type="Int64" Nullable="false" />
+          <Property Name="idCustomer" Type="Int64" />
+          <Property Name="idStaff" Type="Int64" />
+          <Property Name="total_amount" Type="Decimal" />
         </EntityType>
         <Association Name="CheckInOut_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
@@ -2281,6 +2447,18 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Payment_Session_FK">
+          <End Role="session" Type="Self.session" Multiplicity="0..1" />
+          <End Role="payment" Type="Self.payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="session">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="payment">
+              <PropertyRef Name="idSession" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="paymentReservationItem_Payment_FK">
           <End Role="payment" Type="Self.payment" Multiplicity="0..1" />
           <End Role="paymentreservationitem" Type="Self.paymentreservationitem" Multiplicity="*" />
@@ -2461,7 +2639,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ipmrvparkEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="ipmrvparkDbContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="checkinouts" EntityType="Self.checkinout" />
           <EntitySet Name="coordinates" EntityType="Self.coordinate" />
           <EntitySet Name="countrycodes" EntityType="Self.countrycode" />
@@ -2498,8 +2676,11 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
           <EntitySet Name="sitedescription_by_sitetype_view" EntityType="Self.sitedescription_by_sitetype_view" />
           <EntitySet Name="siterate_by_sitetype_view" EntityType="Self.siterate_by_sitetype_view" />
           <EntitySet Name="staff_view" EntityType="Self.staff_view" />
+          <EntitySet Name="total_per_customer_view" EntityType="Self.total_per_customer_view" />
+          <EntitySet Name="total_per_payment_view" EntityType="Self.total_per_payment_view" />
+          <EntitySet Name="total_per_reservationitem_view" EntityType="Self.total_per_reservationitem_view" />
+          <EntitySet Name="total_per_selecteditem_view" EntityType="Self.total_per_selecteditem_view" />
           <EntitySet Name="total_per_session_view" EntityType="Self.total_per_session_view" />
-          <EntitySet Name="total_per_site_view" EntityType="Self.total_per_site_view" />
           <AssociationSet Name="CheckInOut_PlaceInMap_FK" Association="Self.CheckInOut_PlaceInMap_FK">
             <End Role="placeinmap" EntitySet="placeinmaps" />
             <End Role="checkinout" EntitySet="checkinouts" />
@@ -2608,6 +2789,10 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
             <End Role="reasonforpayment" EntitySet="reasonforpayments" />
             <End Role="payment" EntitySet="payments" />
           </AssociationSet>
+          <AssociationSet Name="Payment_Session_FK" Association="Self.Payment_Session_FK">
+            <End Role="session" EntitySet="sessions" />
+            <End Role="payment" EntitySet="payments" />
+          </AssociationSet>
           <AssociationSet Name="paymentReservationItem_Payment_FK" Association="Self.paymentReservationItem_Payment_FK">
             <End Role="payment" EntitySet="payments" />
             <End Role="paymentreservationitem" EntitySet="paymentreservationitems" />
@@ -2674,7 +2859,7 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ipmrvparkModelStoreContainer" CdmEntityContainer="ipmrvparkEntities">
+        <EntityContainerMapping StorageEntityContainer="ipmrvparkModelStoreContainer" CdmEntityContainer="ipmrvparkDbContext">
           <EntitySetMapping Name="checkinouts">
             <EntityTypeMapping TypeName="ipmrvparkModel.checkinout">
               <MappingFragment StoreEntitySet="checkinout">
@@ -3152,19 +3337,55 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="total_per_session_view">
-            <EntityTypeMapping TypeName="ipmrvparkModel.total_per_session_view">
-              <MappingFragment StoreEntitySet="total_per_session_view">
-                <ScalarProperty Name="idSession" ColumnName="idSession" />
-                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
-                <ScalarProperty Name="idStaff" ColumnName="idStaff" />
-                <ScalarProperty Name="total_amount" ColumnName="total_amount" />
+          <EntitySetMapping Name="total_per_customer_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.total_per_customer_view">
+              <MappingFragment StoreEntitySet="total_per_customer_view">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="fullName" ColumnName="fullName" />
+                <ScalarProperty Name="mainPhone" ColumnName="mainPhone" />
+                <ScalarProperty Name="balance" ColumnName="balance" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="total_per_site_view">
-            <EntityTypeMapping TypeName="ipmrvparkModel.total_per_site_view">
-              <MappingFragment StoreEntitySet="total_per_site_view">
+          <EntitySetMapping Name="total_per_payment_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.total_per_payment_view">
+              <MappingFragment StoreEntitySet="total_per_payment_view">
+                <ScalarProperty Name="idPayment" ColumnName="idPayment" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="idStaff" ColumnName="idStaff" />
+                <ScalarProperty Name="paymentAmount" ColumnName="paymentAmount" />
+                <ScalarProperty Name="reservationitem_total" ColumnName="reservationitem_total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="total_per_reservationitem_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.total_per_reservationitem_view">
+              <MappingFragment StoreEntitySet="total_per_reservationitem_view">
+                <ScalarProperty Name="idPayment" ColumnName="idPayment" />
+                <ScalarProperty Name="idReservationItem" ColumnName="idReservationItem" />
+                <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
+                <ScalarProperty Name="idSiteType" ColumnName="idSiteType" />
+                <ScalarProperty Name="site" ColumnName="site" />
+                <ScalarProperty Name="descriptionRVSite" ColumnName="descriptionRVSite" />
+                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="fullName" ColumnName="fullName" />
+                <ScalarProperty Name="mainPhone" ColumnName="mainPhone" />
+                <ScalarProperty Name="idStaff" ColumnName="idStaff" />
+                <ScalarProperty Name="checkInDate" ColumnName="checkInDate" />
+                <ScalarProperty Name="checkOutDate" ColumnName="checkOutDate" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="weeks" ColumnName="weeks" />
+                <ScalarProperty Name="weeklyRate" ColumnName="weeklyRate" />
+                <ScalarProperty Name="days" ColumnName="days" />
+                <ScalarProperty Name="dailyRate" ColumnName="dailyRate" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="total_per_selecteditem_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.total_per_selecteditem_view">
+              <MappingFragment StoreEntitySet="total_per_selecteditem_view">
                 <ScalarProperty Name="idSelected" ColumnName="idSelected" />
                 <ScalarProperty Name="idSession" ColumnName="idSession" />
                 <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
@@ -3183,6 +3404,16 @@ FROM `total_per_site_view` AS `total_per_site_view`</DefiningQuery>
                 <ScalarProperty Name="amount" ColumnName="amount" />
                 <ScalarProperty Name="isSiteChecked" ColumnName="isSiteChecked" />
                 <ScalarProperty Name="total" ColumnName="total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="total_per_session_view">
+            <EntityTypeMapping TypeName="ipmrvparkModel.total_per_session_view">
+              <MappingFragment StoreEntitySet="total_per_session_view">
+                <ScalarProperty Name="idSession" ColumnName="idSession" />
+                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="idStaff" ColumnName="idStaff" />
+                <ScalarProperty Name="total_amount" ColumnName="total_amount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
