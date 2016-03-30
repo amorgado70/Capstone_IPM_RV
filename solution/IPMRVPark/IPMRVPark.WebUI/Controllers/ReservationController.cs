@@ -33,7 +33,7 @@ namespace IPMRVPark.WebUI.Controllers
             this.ipmevents = ipmevents;
             this.sessions = sessions;
             this.placesinmap = placesinmap;
-            this.selecteditems = selecteditems;            
+            this.selecteditems = selecteditems;
             this.totals_per_selecteditem = totals_per_selecteditem;
             this.rvsites_available = rvsites_available;
             sessionService = new SessionService(this.sessions);
@@ -45,7 +45,7 @@ namespace IPMRVPark.WebUI.Controllers
         const long newReservationMode = -1;
 
         // Main reservation page
-        public ActionResult NewReservation( long selectedID = newReservationMode)
+        public ActionResult NewReservation(long selectedID = newReservationMode)
         {
             session _session = sessionService.GetSession(this.HttpContext);
             ipmevent _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
@@ -63,8 +63,8 @@ namespace IPMRVPark.WebUI.Controllers
                 selecteditem _selecteditem = selecteditems.GetById(selectedID);
                 ViewBag.SelectedID = selectedID;
                 ViewBag.SiteID = _selecteditem.idRVSite;
-                placeinmap _placeinmap  = placesinmap.GetById(_selecteditem.idRVSite);
-                ViewBag.SiteName = _placeinmap.site;                
+                placeinmap _placeinmap = placesinmap.GetById(_selecteditem.idRVSite);
+                ViewBag.SiteName = _placeinmap.site;
                 checkInDate = _selecteditem.checkInDate;
                 checkOutDate = _selecteditem.checkOutDate;
             }
@@ -73,10 +73,20 @@ namespace IPMRVPark.WebUI.Controllers
                 ViewBag.SiteID = newReservationMode;
             }
 
-            if (checkInDate == DateTime.MinValue) {
-                checkInDate = _session.checkInDate.Value; };
-            if (checkOutDate == DateTime.MinValue) {
-                checkOutDate = _session.checkOutDate.Value; };
+            if (checkInDate == DateTime.MinValue)
+            {
+                if (_session.checkInDate != null)
+                {
+                    checkInDate = _session.checkInDate.Value;
+                };
+            };
+            if (checkOutDate == DateTime.MinValue)
+            {
+                if (_session.checkOutDate != null)
+                {
+                    checkOutDate = _session.checkOutDate.Value;
+                };
+            };
 
             if (!(checkInDate >= start && checkInDate <= end))
             {
@@ -96,6 +106,8 @@ namespace IPMRVPark.WebUI.Controllers
             ViewBag.checkOutDate = (int)checkOut.TotalDays + 1;
             ViewBag.minDate = (int)min.TotalDays - 7;
             ViewBag.maxDate = (int)max.TotalDays + 1;
+
+            ViewBag.UserID = _session.idStaff;
 
             return View();
         }
@@ -199,7 +211,16 @@ namespace IPMRVPark.WebUI.Controllers
                 ViewBag.Customer = _customer.fullName + ", " + _customer.mainPhone;
             };
 
-            return PartialView("Summary", _selecteditem);
+            if ( _selecteditem.Count() > 0)
+            {
+                return PartialView("Summary", _selecteditem);
+            }
+            else
+            {
+                return PartialView("../Login/EmptyPartial");
+            }
+
+            
         }
 
         // Selected sites total

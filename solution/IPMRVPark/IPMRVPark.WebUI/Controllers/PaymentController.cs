@@ -21,7 +21,6 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<total_per_selecteditem_view> totals_per_selecteditem;
         IRepositoryBase<total_per_reservationitem_view> totals_per_reservationitem;
         IRepositoryBase<total_per_payment_view> totals_per_payment;
-        IRepositoryBase<total_per_customer_view> totals_per_customer;
         IRepositoryBase<paymentreservationitem> paymentsreservationitems;
         IRepositoryBase<session> sessions;
         SessionService sessionService;
@@ -36,7 +35,6 @@ namespace IPMRVPark.WebUI.Controllers
             IRepositoryBase<total_per_selecteditem_view> totals_per_selecteditem,
             IRepositoryBase<total_per_reservationitem_view> totals_per_reservationitem,
             IRepositoryBase<total_per_payment_view> totals_per_payment,
-            IRepositoryBase<total_per_customer_view> totals_per_customer,
             IRepositoryBase<paymentreservationitem> paymentsreservationitems,
             IRepositoryBase<session> sessions)
         {
@@ -50,8 +48,7 @@ namespace IPMRVPark.WebUI.Controllers
             this.reservationitems = reservationitems;            
             this.totals_per_selecteditem = totals_per_selecteditem;
             this.totals_per_reservationitem = totals_per_reservationitem;
-            this.totals_per_payment = totals_per_payment;
-            this.totals_per_customer = totals_per_customer;
+            this.totals_per_payment = totals_per_payment;           
             this.paymentsreservationitems = paymentsreservationitems;
             sessionService = new SessionService(this.sessions);
         }//end Constructor
@@ -78,9 +75,8 @@ namespace IPMRVPark.WebUI.Controllers
             {
                 ViewBag.CustomerID = _customer.id;
                 ViewBag.CustomerName = _customer.fullName + ", " + _customer.mainPhone;
-                ViewBag.CustomerBalance = totals_per_customer.GetById(_customer.id).balance.Value;
+                ViewBag.CustomerBalance = CustomerAccountFinalBalance(_customer.id);
             };
-            //ViewBag.CustomerBalance = 0.00;
 
             // Read total for session
             total_per_session_view _total_per_session = new total_per_session_view();
@@ -198,10 +194,10 @@ namespace IPMRVPark.WebUI.Controllers
             return RedirectToAction("PrintPayment", new { id = ID });
         }
 
-        public ActionResult PaymentPerCustomer(long id)
+        // For Partial View : Show Payments Per Customer
+        public ActionResult ShowPaymentPerCustomer(long id = -1)
         {
-
-            var _payments = totals_per_payment.GetAll();
+         
 
             customer_view _customer = new customer_view();
             bool tryResult = false;
@@ -219,19 +215,37 @@ namespace IPMRVPark.WebUI.Controllers
             {
                 ViewBag.CustomerID = _customer.id;
                 ViewBag.CustomerName = _customer.fullName + ", " + _customer.mainPhone;
-                ViewBag.CustomerBalance = totals_per_customer.GetById(_customer.id).balance.Value;
-                _payments = _payments.Where(p => p.idCustomer == id).OrderBy(p => p.idPayment);
 
-                // Calculate balance
-                decimal balance = 0;
-                foreach (var _payment in _payments)
-                {
-                    balance = balance + (_payment.paymentAmount.Value - _payment.reservationitem_total.Value);
-                    _payment.balance = balance;
-                }
-            };            
+                var _payments = CustomerAccountBalance(_customer.id);
 
-            return View(_payments);
+                ViewBag.CustomerBalance = CustomerAccountFinalBalance(_customer.id);
+                
+                return PartialView("PaymentPerCustomer", _payments);
+            };
+
+            return PartialView("../Login/EmptyPartial");
+        }
+
+        private IQueryable<total_per_payment_view> CustomerAccountBalance(long idCustomer)
+        {
+            var _payments = totals_per_payment.GetAll();
+            _payments = _payments.Where(p => p.idCustomer == idCustomer).OrderBy(p => p.idPayment);
+
+            // Calculate balance
+            decimal balance = 0;
+            foreach (var _payment in _payments)
+            {
+                balance = balance + (_payment.paymentAmount.Value - _payment.reservationitem_total.Value);
+                _payment.balance = balance;
+            }
+            return _payments;
+        }
+        private decimal CustomerAccountFinalBalance(long idCustomer)
+        {
+            var _payments = CustomerAccountBalance(idCustomer).ToList();
+            var _last = _payments.LastOrDefault();
+            decimal result = (_last != null)? _last.balance : 0;
+            return result;
         }
 
         public ActionResult PrintPayment(long id)
@@ -247,7 +261,7 @@ namespace IPMRVPark.WebUI.Controllers
             ViewBag.PaymentDate = _payment.createDate.Value.ToString("R").Substring(0,16);
             ViewBag.PaymentMethod = paymentmethods.GetById(_payment.idPaymentMethod).description;
 
-            ViewBag.CustomerBalance = totals_per_customer.GetById(_payment.idCustomer).balance.Value;
+            ViewBag.CustomerBalance = CustomerAccountFinalBalance(_payment.idCustomer);
 
             return View(_reservationitems);
         }

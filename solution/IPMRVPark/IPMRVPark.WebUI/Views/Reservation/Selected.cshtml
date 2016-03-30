@@ -17,8 +17,7 @@
                 <th>Check In</th>
                 <th>Check Out</th>
                 <th style="text-align:right;">Total</th>
-                <th style="text-align:right;"></th>
-                <td colspan="4" style="border-top:none">
+                <th style="border-top:none">
                     <div class="dropdown pull-right">
                         <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
                             Action
@@ -28,7 +27,7 @@
                             <li><a id="removeAllSelected" href="@Url.Action("RemoveAllSelected","Reservation")"><span class="glyphicon glyphicon-erase"></span>&nbsp; Cancel All</a></li>
                         </ul>
                     </div>
-                </td>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -41,7 +40,7 @@
                     <td>@item.checkInDate.ToString("ddd"), @item.checkInDate.ToString("dd") @item.checkInDate.ToString("MMM")</td>
                     <td>@item.checkOutDate.ToString("ddd"), @item.checkOutDate.ToString("dd") @item.checkOutDate.ToString("MMM")</td>
                     <td style="text-align:right;">@Html.DisplayFor(modelItem => item.total)</td>
-                    <td colspan="4" style="border-top:none">
+                    <td style="border-top:none">
                         <div class="dropdown pull-right">
                             <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
                                 Action
@@ -49,7 +48,7 @@
                             </button>
                             <ul class="dropdown-menu pull-right">
                                 <li>
-                                    <a href="@Url.Action("Reservation", "Reservation", new { selectedID = item.idSelected })">
+                                    <a href="@Url.Action("NewReservation", "Reservation", new { selectedID = item.idSelected })">
                                     <span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit
                                     </a>
                                 </li>

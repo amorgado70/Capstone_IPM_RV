@@ -29,7 +29,7 @@ Site Reservation
             $("#btnUpdateSite").show();
             $("#btnRemoveSite").show();
             $("#idRVSite").val(@ViewBag.SiteID);
-            $("#siteName").prop('disabled', true);           
+            $("#siteName").prop('disabled', true);
             setTimeout( function(){
                 getSiteTotal();
             }, 5000);
@@ -81,7 +81,7 @@ Site Reservation
                 selectCheckInOutDates(); // Update session with dates
                 getSiteTotal(); // Calculate total for selected site
                 $("#siteName").focus();
-                $('body').scrollTo('#siteName');
+                //$('body').scrollTo('#siteName');
             }
         });
         $("#checkOutDate").datepicker("setDate", @ViewBag.checkOutDate);
@@ -132,7 +132,7 @@ Site Reservation
                 $('#idRVSite').val(ui.item.ID); // name of form input field: CustomerID, ProductID
                 $('#btnSelectSite').prop('disabled', false);
                 $('#btnSelectSite').focus();
-                $('body').scrollTo('#btnSelectSite');
+                //$('body').scrollTo('#btnSelectSite');
                 getSiteTotal(); // Calculate total for selected site
             }
         });
@@ -178,7 +178,7 @@ Site Reservation
                     $("#siteTotal").text(""); // Reset site total
                     $("#waitMsg").hide();
                     $('#customerName').focus();
-                    $('body').scrollTo('#customerName');
+                    //$('body').scrollTo('#customerName');
                 },
                 error: function (result) {
                     alert("2 Some error occured." + $("#idRVSite").val() );
@@ -187,7 +187,7 @@ Site Reservation
         });
         updateSelectedList(); //execute when page is ready
         function updateSelectedList() {
-            $('#selected-list').load('/Reservation/UpdateSelectedList'); // load partial view
+            $('#selected-list').load('../Reservation/UpdateSelectedList'); // load partial view
             getReservationTotal(); // Update reservation total
             showReservationSummary(); // Update reservation summary
         }
@@ -214,7 +214,7 @@ Site Reservation
                 $('#idCustomer').val(ui.item.ID); // name of form input field: CustomerID, ProductID
                 $('#btnSelectCustomer').prop('disabled', false);
                 $('#btnSelectCustomer').focus();
-                $('body').scrollTo('#btnSelectCustomer');
+                //$('body').scrollTo('#btnSelectCustomer');
             }
         });
         $.ajax({
@@ -226,7 +226,7 @@ Site Reservation
                 var customerLabel = data.Label;
                 $("#idCustomer").val(customerID);
                 $('#customerName').val(customerLabel);
-                $('#btnSelectCustomer').prop('disabled', false);
+                //$('#btnSelectCustomer').prop('disabled', false);
             },
             error: function () {
                 alert("3 Some error occured.");}
@@ -238,7 +238,7 @@ Site Reservation
         $("#btnSelectCustomer").click(function () {
             $("#waitMsg").show();// Show wait message
             $('#btnPayment').focus();
-            $('body').scrollTo('#btnPayment');
+            //$('body').scrollTo('#btnPayment');
             $.ajax(
             {
                 type: "POST", //HTTP POST Method
@@ -249,6 +249,8 @@ Site Reservation
                 },
                 success: function (result) {
                     showReservationSummary();
+                    $('#btnSelectCustomer').prop('disabled', true);
+                    $("#waitMsg").hide();
                 },
                 error: function (result) {
                     alert("7 Some error occured.");
@@ -267,7 +269,7 @@ Site Reservation
             });
         };
         function showReservationSummary() {
-            $('#reservation-summary').load('/Reservation/ShowReservationSummary'); // load partial view
+            $('#reservation-summary').load('../Reservation/ShowReservationSummary'); // load partial view
         }
     });
 </script>
@@ -276,27 +278,33 @@ Site Reservation
 <div class="container-fluid">
     <!-- IPM Event Year -->
     <div class="row">
-        <div class="form-group">
-            <div class="col-xs-12">
-                <label class="pull-right">IPM Event <span id="sessionYear"></span></label>
-            </div>
+        <div class="col-xs-12">
+            <label class="pull-right">IPM Event <span id="sessionYear"></span></label>
         </div>
     </div>
+
+    @if (ViewBag.UserID == null)
+            {
+        <div class="row">
+            <div class="col-sm-6 col-sm-push-6 col-xs-12  form-top-margin">
+                <div class="form-control reservationWarning">NO USER LOGGED IN</div>
+            </div>
+        </div>
+    }
+
     <!-- RV Site Dates-->
     <div class="row">
-        <div class="form-group">
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Check In Date</label>
-            </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <input type="text" id="checkInDate" class="form-control" />
-            </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <label>Check Out Date</label>
-            </div>
-            <div class="col-sm-3 col-xs-12 form-top-margin">
-                <input type="text" id="checkOutDate" class="form-control" />
-            </div>
+        <div class="col-sm-3 col-xs-12 form-top-margin">
+            <label>Check In Date</label>
+        </div>
+        <div class="col-sm-3 col-xs-12 form-top-margin">
+            <input type="text" id="checkInDate" class="form-control" />
+        </div>
+        <div class="col-sm-3 col-xs-12 form-top-margin">
+            <label>Check Out Date</label>
+        </div>
+        <div class="col-sm-3 col-xs-12 form-top-margin">
+            <input type="text" id="checkOutDate" class="form-control" />
         </div>
     </div>
     <!-- RV Site Selection -->

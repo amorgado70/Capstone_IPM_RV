@@ -69,7 +69,6 @@
     <Compile Include="Repositories\SiteDescriptionRateViewRepository.cs" />
     <Compile Include="Repositories\TotalPerPaymentView.cs" />
     <Compile Include="Repositories\TotalPerReservationItemView.cs" />
-    <Compile Include="Repositories\TotalPerCustomerView.cs" />
     <Compile Include="Repositories\TotalPerSessionViewRepository.cs" />
     <Compile Include="Repositories\TotalPerSelectedItemViewRepository.cs" />
     <Compile Include="Repositories\SelectedItemRepository.cs" />

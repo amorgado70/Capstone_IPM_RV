@@ -87,6 +87,7 @@ namespace IPMRVPark.Services
             }
             //Session not found, create new
             result = createNewSession(httpContext);
+
             return result;
         }
     }

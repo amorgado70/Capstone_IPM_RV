@@ -35,7 +35,7 @@ Payments & Refunds
         <div class="col-sm-3 col-sm-push-1 col-xs-6 form-top-margin">
             <label>Date</label>
         </div>
-        <div class="col-sm-3 col-xs-6 form-top-margin">
+        <div class="col-sm-3 col-sm-push-1 col-xs-6 form-top-margin">
             <div disabled class="form-control">@ViewBag.PaymentDate</div>
         </div>
     </div>
@@ -49,25 +49,9 @@ Payments & Refunds
         <div class="col-sm-3 col-sm-push-1 col-xs-6 form-top-margin">
             <label>Paid Amount</label>
         </div>
-        <div class="col-sm-3 col-xs-6 form-top-margin">
-            <div disabled class="form-control">@ViewBag.PaymentAmount</div>
+        <div class="col-sm-3 col-sm-push-1 col-xs-6 form-top-margin">
+            <div style="text-align:right;" disabled class="form-control">@ViewBag.PaymentAmount</div>
         </div>
-    </div>
-    <!-- Customer Info -->
-    <div class="row top-margin">
-        <div class="col-sm-2 col-xs-12 form-top-margin">
-            <label>Customer</label>
-        </div>
-        <div class="col-sm-6 col-xs-12 form-top-margin">
-            <div disabled class="form-control">@Model.First().fullName , Phone: @Model.First().mainPhone</div>
-        </div>
-        <div class="col-sm-2 col-xs-12 form-top-margin">
-            <label>Final Balance</label>
-        </div>
-        <div class="col-sm-2 col-xs-12 form-top-margin">
-            <div disabled class="form-control">@ViewBag.CustomerBalance</div>
-        </div>      
-
     </div>
     <!-- Reservation Info -->
     <div class="row top-margin">
@@ -102,13 +86,37 @@ Payments & Refunds
             </table>
         </div>
     </div>
+    <!-- Customer Info -->
+    <div class="row form-top-margin">
+        <div class="col-sm-2 col-xs-12 form-top-margin">
+            <label>Customer</label>
+        </div>
+        <div class="col-sm-6 col-xs-12 form-top-margin">
+            <div disabled class="form-control">@Model.First().fullName , Phone: @Model.First().mainPhone</div>
+        </div>
+        <div class="col-sm-2 col-xs-12 form-top-margin">
+            <label>Due Amount</label>
+        </div>
+        <div class="col-sm-2 col-xs-12 form-top-margin">
+            @{ string DueAmount = (ViewBag.CustomerBalance * -1).ToString("0.00"); }
+            <div style="text-align:right;" disabled class="form-control">@DueAmount</div>
+        </div>
+
+    </div>
     <!-- Print Payment Info-->
     <div class="row top-margin">
-        <div class="col-sm-3 col-sm-push-9 col-xs-12 form-top-margin">
+        <div class="col-sm-3 col-xs-12 form-top-margin">
             <button id="btnPrint" class="btn btn-block btn-default">
                 <span class="col-xs-1 glyphicon glyphicon-print"></span>
                 <span class="col-xs-9">Print</span>
             </button>
+        </div>
+        <div class="col-sm-4 col-sm-push-5 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+            <a href="@Url.Action("NewReservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-tag"></span>
+                <span>&nbsp; New Reservation</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
         </div>
     </div>
 </div>

@@ -22,8 +22,10 @@ Payments & Refunds
             $("#waitMsg").show();// Show wait message
             formSubmit = true;
         });
-        // *****
-        $('#reservation-summary').load('/Reservation/ShowReservationSummary'); // load partial view
+        // ***** Load partial view Payments For Customer
+        $('#account-details').load('../Payment/ShowPaymentPerCustomer/@ViewBag.CustomerID');
+        // ***** Load partial view Reservations For Customer
+        $('#reservation-summary').load('/Reservation/ShowReservationSummary');
         $('#ReasonForPayment').change(function () {
             updateReasonForPayment()
         });
@@ -62,7 +64,7 @@ Payments & Refunds
             var ii = reservationTotal - i;
             var tempBalance = customerBalance - reservationTotal;
             var amount = tempBalance * -1;
-            var finalBalance = amount + tempBalance;
+            var finalBalance = (amount + tempBalance)*-1;
             $('#customerBalance').text(customerBalance.toFixed(2));
             $('#reservationTotal').text(reservationTotal.toFixed(2));
             $('#provinceTax').text(provinceTax.toFixed(2));
@@ -85,7 +87,7 @@ Payments & Refunds
             var amount = parseFloat(amount).toFixed(2)
             $('#amount').val(amount);
             var tempBalance = parseFloat($('#tempBalance').text());
-            var finalBalance = parseFloat(amount) + tempBalance;
+            var finalBalance = (parseFloat(amount) + tempBalance)*-1;
             var finalBalance = parseFloat(finalBalance).toFixed(2)
             $('#finalBalance').text(finalBalance);
         }
@@ -114,48 +116,47 @@ Payments & Refunds
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
 
-            <div class="row top-margin">
-                <!-- Customer Details -->
-                <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Customer</label>
-                </div>
-                <div class="col-sm-6 col-xs-10 form-top-margin">
-                    @if (ViewBag.CustomerName == null)
+        <div class="row top-margin">
+            <!-- Customer Details -->
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>Customer</label>
+            </div>
+            <div class="col-sm-6 col-xs-10 form-top-margin">
+                @if (ViewBag.CustomerName == null)
                 {
-                        <div class="form-control reservationWarning">NO CUSTOMER SELECTED YET</div>
-                    }
-                    else
-                    {
-                        <div disabled class="form-control">@ViewBag.CustomerName</div>
-                        <input class="form-control" type="hidden" id="idCustomer" name="idCustomer" value="@ViewBag.CustomerID" />
-                    }
-                </div>
-                <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
-                    <a href="@Url.Action("NewReservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
-                        <span class="glyphicon glyphicon-tag"></span>
-                        <span>&nbsp; Back To Reservation</span>
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                    </a>
-                </div>
+                    <div class="form-control reservationWarning">NO CUSTOMER SELECTED YET</div>
+                }
+                else
+                {
+                    <div disabled class="form-control">@ViewBag.CustomerName</div>
+                    <input class="form-control" type="hidden" id="idCustomer" name="idCustomer" value="@ViewBag.CustomerID" />
+                }
             </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                <a href="@Url.Action("NewReservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-tag"></span>
+                    <span>&nbsp; Back To Reservation</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
 
-            <div class="row">
-                <!-- Customer Account Details -->
-                <div class="col-sm-4 col-xs-12 form-top-margin">
-                    <label>(a) Account Balance</label>
-                </div>
-                <div class="col-sm-4 col-xs-10 form-top-margin">
-                    <div disabled class="form-control payment-output" type="text" id="customerBalance" name="customerBalance"></div>
-                </div>
-                <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
-                    <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#account-details">
-                        <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
-                        <span class="col-xs-9">Account Details &nbsp;<span class="caret"></span></span>
-                    </button>
-                </div>
+        <div class="row">
+            <!-- Customer Account Details -->
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <label>(a) Account Balance</label>
             </div>
+            <div class="col-sm-4 col-xs-10 form-top-margin">
+                <div disabled class="form-control payment-output" type="text" id="customerBalance" name="customerBalance"></div>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
+                <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#account-details">
+                    <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
+                    <span class="col-xs-9">Account Details &nbsp;<span class="caret"></span></span>
+                </button>
+            </div>
+        </div>
             <div id="account-details" class="collapse">
-                Customer Account Details
             </div>
             <div class="row">
 
@@ -172,7 +173,7 @@ Payments & Refunds
                     }
                     else
                     {
-                        <div id="reservationTotal"disabled class="form-control payment-output"></div>
+                        <div id="reservationTotal" disabled class="form-control payment-output"></div>
                     }
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
@@ -216,7 +217,7 @@ Payments & Refunds
                     <label>(c) Temp Balance (a)-(b)</label>
                 </div>
                 <div class="col-sm-4 col-xs-12 ">
-                    <div id="tempBalance"disabled class="form-control payment-output"></div>
+                    <div id="tempBalance" disabled class="form-control payment-output"></div>
                 </div>
             </div>
 
@@ -232,7 +233,7 @@ Payments & Refunds
                     <label>Date</label>
                 </div>
                 <div class="col-sm-3 col-xs-12">
-                    <input type="text" id="paymentDate" class="form-control"/>
+                    <input type="text" id="paymentDate" class="form-control" />
                     <input style="display: none" type="date" id="createDate" class="form-control" />
                 </div>
             </div>
@@ -240,7 +241,7 @@ Payments & Refunds
             <div class="row">
                 <!-- Receive Total -->
                 <div class="col-sm-4 col-xs-12 form-top-margin">
-                    <label>(e) Final Balance (c)+(d)</label>
+                    <label>(e) Due Amount (d)-(c)</label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     <div id="finalBalance" disabled class="form-control payment-output">0.01</div>

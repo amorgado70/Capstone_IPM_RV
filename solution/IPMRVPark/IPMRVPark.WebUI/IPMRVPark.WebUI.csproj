@@ -392,6 +392,7 @@
     <Content Include="Views\Payment\PrintPayment.cshtml" />
     <Content Include="Views\Payment\Summary.cshtml" />
     <Content Include="Views\Payment\PaymentPerCustomer.cshtml" />
+    <Content Include="Views\Login\EmptyPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
