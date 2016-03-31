@@ -393,6 +393,7 @@
     <Content Include="Views\Payment\Summary.cshtml" />
     <Content Include="Views\Payment\PaymentPerCustomer.cshtml" />
     <Content Include="Views\Login\EmptyPartial.cshtml" />
+    <Content Include="Views\Reservation\CRUDSelectedItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -4,8 +4,7 @@ using System.Web.Mvc;
 using IPMRVPark.Models;
 using IPMRVPark.Contracts.Repositories;
 using IPMRVPark.Services;
-
-
+using System.Collections.Generic;
 
 namespace IPMRVPark.WebUI.Controllers
 {
@@ -43,6 +42,77 @@ namespace IPMRVPark.WebUI.Controllers
         #region New Reservation
 
         const long newReservationMode = -1;
+
+
+        public ActionResult CRUDSelectedItem(long selectedID = newReservationMode)
+        {
+            session _session = sessionService.GetSession(this.HttpContext);
+            ipmevent _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
+
+            // Read and convert the dates to a value than can be used by jQuery Datepicker
+            DateTime start = _IPMEvent.startDate.Value;
+            DateTime end = _IPMEvent.endDate.Value;
+            DateTime now = DateTime.Now;
+            DateTime checkInDate = DateTime.MinValue;
+            DateTime checkOutDate = DateTime.MinValue;
+
+            // Parameters for Edit Reservation, NOT used for New Reservation
+            if (selectedID != newReservationMode)
+            {
+                selecteditem _selecteditem = selecteditems.GetById(selectedID);
+                ViewBag.SelectedID = selectedID;
+                ViewBag.SiteID = _selecteditem.idRVSite;
+                placeinmap _placeinmap = placesinmap.GetById(_selecteditem.idRVSite);
+                ViewBag.SiteName = _placeinmap.site;
+                checkInDate = _selecteditem.checkInDate;
+                checkOutDate = _selecteditem.checkOutDate;
+            }
+            else
+            {
+                ViewBag.SiteID = newReservationMode;
+            }
+
+            if (checkInDate == DateTime.MinValue)
+            {
+                if (_session.checkInDate != null)
+                {
+                    checkInDate = _session.checkInDate.Value;
+                };
+            };
+            if (checkOutDate == DateTime.MinValue)
+            {
+                if (_session.checkOutDate != null)
+                {
+                    checkOutDate = _session.checkOutDate.Value;
+                };
+            };
+
+            if (!(checkInDate >= start && checkInDate <= end))
+            {
+                checkInDate = start;
+            };
+            if (!(checkOutDate >= checkInDate && checkOutDate <= end))
+            {
+                checkOutDate = end;
+            };
+
+            TimeSpan min = start - now;
+            TimeSpan max = end - now;
+            TimeSpan checkIn = checkInDate - now;
+            TimeSpan checkOut = checkOutDate - now;
+
+            ViewBag.checkInDate = (int)checkIn.TotalDays + 1;
+            ViewBag.checkOutDate = (int)checkOut.TotalDays + 1;
+            ViewBag.minDate = (int)min.TotalDays - 7;
+            ViewBag.maxDate = (int)max.TotalDays + 1;
+
+            ViewBag.UserID = _session.idStaff;
+
+            return PartialView();
+        }
+
+
+
 
         // Main reservation page
         public ActionResult NewReservation(long selectedID = newReservationMode)
@@ -167,6 +237,31 @@ namespace IPMRVPark.WebUI.Controllers
             return Json(result);
         }
 
+        // Calculate total for site selected on the dropdown list
+        [HttpPost]
+        public ActionResult GetSiteData(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
+        {
+            double amount = 0;
+            double weeklyRate = 0;
+            double dailyRate =0;
+
+            var site = rvsites_available.GetAll().Where(s => s.id == idRVSite).First();
+            if (site != null)
+            {
+                int duration = (int)(checkOutDate - checkInDate).TotalDays;
+                int weeks = duration / 7;
+                int days = duration % 7;
+                weeklyRate = Convert.ToDouble(site.weeklyRate);
+                dailyRate = Convert.ToDouble(site.dailyRate);
+                amount = weeklyRate * weeks +
+                    dailyRate * days;
+            }
+            string result = amount.ToString("C");
+
+            return Json(new { amount = amount.ToString("C"), type = site.description,
+                weeklyRate = weeklyRate.ToString("C"), dailyRate = dailyRate.ToString("C") });
+        }
+
         // For Partial View : Selected Site List
         public ActionResult UpdateSelectedList()
         {
@@ -211,7 +306,7 @@ namespace IPMRVPark.WebUI.Controllers
                 ViewBag.Customer = _customer.fullName + ", " + _customer.mainPhone;
             };
 
-            if ( _selecteditem.Count() > 0)
+            if (_selecteditem.Count() > 0)
             {
                 return PartialView("Summary", _selecteditem);
             }
@@ -220,7 +315,7 @@ namespace IPMRVPark.WebUI.Controllers
                 return PartialView("../Login/EmptyPartial");
             }
 
-            
+
         }
 
         // Selected sites total

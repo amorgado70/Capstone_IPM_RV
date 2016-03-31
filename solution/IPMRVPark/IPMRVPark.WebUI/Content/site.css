@@ -1,6 +1,6 @@
 ﻿html {
     /*background-image: url('/Images/background.jpg');*/
-    background-image: url('http://www.alvm.com.br/ipmrvpark/Images/background.jpg');
+    background-image: url('../Images/background.jpg');
     /*background-image: url('http://www.plowingmatch.org/images/template-images/opa/bg3.jpg');*/
     background-color: #453425;
     background-size: auto;
