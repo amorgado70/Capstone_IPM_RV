@@ -1,0 +1,96 @@
+﻿@model IPMRVPark.Models.staff_view
+
+@{
+    ViewBag.Title = "Update Staff";
+    ViewBag.PageTitle = "Update Staff";
+}
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Maintenance
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Update Staff", "EditStaff", "StaffView")
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+<div class="container-fluid">
+    <fieldset>
+        <legend></legend>
+        @Html.HiddenFor(model => model.id)
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    First Name :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @*<input type="text" class="form-control" id="firstName" name="firstName" value="<%= Model.Value %>" />*@
+                    @Html.EditorFor(model => model.firstName)
+                    @Html.ValidationMessageFor(model => model.firstName)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                   Last Name:
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.lastName)
+                    @Html.ValidationMessageFor(model => model.lastName)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                   Full Name:
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.fullName)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    E-mail :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.email)
+                    @Html.ValidationMessageFor(model => model.email)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Main Phone :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.mainPhone)
+                    @Html.ValidationMessageFor(model => model.mainPhone)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Role :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.role)
+                    @Html.ValidationMessageFor(model => model.role)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
+                    <button type="submit" class="btn btn-block btn-default">
+                        <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                        <span class="col-xs-9">Confirm Staff Update</span>
+                    </button>
+                </div>
+                <div class="editor-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
+                    <a href="@Url.Action("Index", "StaffView")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span>Back to List</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

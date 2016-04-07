@@ -14,10 +14,12 @@ namespace IPMRVPark.Models
     
     public partial class site_description_rate_view
     {
-        public Nullable<long> idIPMEvent { get; set; }
+        public long id { get; set; }
+        public long idIPMEvent { get; set; }
+        public string RVSite { get; set; }
         public long idSiteType { get; set; }
         public string description { get; set; }
-        public Nullable<decimal> weeklyRate { get; set; }
         public Nullable<decimal> dailyRate { get; set; }
+        public Nullable<decimal> weeklyRate { get; set; }
     }
 }

@@ -1,0 +1,59 @@
+﻿@model IPMRVPark.Models.reasonforpayment
+
+@{
+    ViewBag.Title = "Edit Reason For Payment";
+    ViewBag.PageTitle = "Update Reason For Payment";
+}
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Maintenance
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Update Reason For Payment", "EditReasonForPayment", "ReasonForPayment")
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+<div class="container-fluid">
+    <fieldset>
+        <legend></legend>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    ID :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.ID)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Description :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.description)
+                    @Html.ValidationMessageFor(model => model.description)
+                </div>
+            </div>
+        </div>
+
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
+                    <button type="submit" class="btn btn-block btn-default">
+                        <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                        <span class="col-xs-9">Confirm Reason For Payment Update</span>
+                    </button>
+                </div>
+                <div class="editor-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
+                    <a href="@Url.Action("Index", "ReasonForPayment")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span>Back to List</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

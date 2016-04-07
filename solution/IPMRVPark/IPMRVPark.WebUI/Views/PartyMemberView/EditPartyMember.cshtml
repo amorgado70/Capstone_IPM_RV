@@ -1,0 +1,115 @@
+﻿@model IPMRVPark.Models.partymember_view
+
+@{
+    ViewBag.Title = "Update Party Member";
+    ViewBag.PageTitle = "Update Party Member";
+}
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Maintenance
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Update Party Member", "EditPartyMember", "PartyMemberView")
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+<div class="container-fluid">
+    <fieldset>
+        <legend></legend>
+        @Html.HiddenFor(model => model.id)
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    First Name :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.firstName)
+                    @Html.ValidationMessageFor(model => model.firstName)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                   Last Name:
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.lastName)
+                    @Html.ValidationMessageFor(model => model.lastName)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                   Full Name:
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.fullName)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    E-mail :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.email)
+                    @Html.ValidationMessageFor(model => model.email)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Main Phone :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.mainPhone)
+                    @Html.ValidationMessageFor(model => model.mainPhone)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Cell Phone :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.cellPhone)
+                    @Html.ValidationMessageFor(model => model.cellPhone)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Pet Info. :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.petDescription)
+                    @Html.ValidationMessageFor(model => model.petDescription)
+                </div>
+
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Comments :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.comments)
+                    @Html.ValidationMessageFor(model => model.comments)
+                </div>
+            </div>
+        </div>
+
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
+                    <button type="submit" class="btn btn-block btn-default">
+                        <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                        <span class="col-xs-9">Confirm Party Member Update</span>
+                    </button>
+                </div>
+                <div class="editor-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
+                    <a href="@Url.Action("Index", "PartyMemberView")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span>Back to List</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

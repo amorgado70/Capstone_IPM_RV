@@ -3,83 +3,103 @@
     ViewBag.PageTitle = "User Log In";
 }
 
-@Html.ActionLink("Home", "Home", "PrototypeUI")
+@Html.ActionLink("Home", "Home", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("User Log In", "Login", "PrototypeUI")
+@Html.ActionLink("User Log In", "Login", "Login")
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#unauthorizedUser").hide();
+        // Resolve root path
+        var origin = window.location.origin;
+        if (origin == 'http://www.alvm.com.br') {
+            var root = 'http://www.alvm.com.br/ipmrvpark/';
+        }
+        else {
+            var root = '../';
+        }
+        $('#unauthorizedUser').hide();
         // User Email
+        var postpath = root + 'Login/GetSessionEmail';
         $.ajax({
-            url: '/Login/GetSessionEmail',
-            type: "POST",
-            dataType: "json",
+            url: postpath,
+            type: 'POST',
+            dataType: 'json',
             success: function (data) {
                 var userID = data.ID;
                 var userLabel = data.Label;
-                $("#idUser").val(userID);
+                $('#idUser').val(userID);
                 $('#userEmail').val(userLabel);
                 //check user ID
                 if (userID == -1) {
-                    $("#unauthorizedUser").show();
+                    $('#userEmail').focus();
+                    //$('#unauthorizedUser').show();
                 }
                 else {
-                    $("#unauthorizedUser").hide();
+                    $('#btnSelectUser').focus();
+                    //$('#unauthorizedUser').hide();
                 }
             },
             error: function () {
-                alert("3 Some error occured.");
+                alert('3 Some error occured.');
             }
         });
-        $("#userEmail").click(function () {
-            $("#userEmail").val("");
-            $("#unauthorizedUser").hide();
+        $('#userEmail').click(function () {
+            $('#userEmail').val('');
+            $('#unauthorizedUser').hide();
         });
         //function will be called on button click
-        $("#btnSelectUser").click(function () {
-            $("#waitMsg").show();
+        $('#btnSelectUser').click(function () {
+            $('#waitMsg').show();
+            var postpath = root + 'Login/SelectUser';
             $.ajax(
             {
-                type: "POST", //HTTP POST Method
-                url: "/Login/SelectUser", // Controller/View
-                dataType: "json",
+                url: postpath,
+                type: 'POST',
+                dataType: 'json',
                 data: { //Passing data
-                    userEmail: $("#userEmail").val()
+                    userEmail: $('#userEmail').val()
                 },
-                success: function (result) {
-                    var userID = result;
-                    $("#idUser").val(userID);
+                success: function (data) {
+                    var userID = data.ID;
+                    var userLabel = data.Label;
+                    $('#idUser').val(userID);
                     //check user ID
                     if (userID == -1) {
-                        $("#unauthorizedUser").show();
+                        $('#unauthorizedUser').show();
                     }
                     else {
-                        $("#unauthorizedUser").hide();
+                        $('#unauthorizedUser').hide();
+                        var postpath = root + 'Login/Menu';
+                        window.location.href = postpath;
                     }
-                    $("#waitMsg").hide();
+                    $('#waitMsg').hide();
                 },
-                error: function (result) {
-                    alert("7 Some error occured.");
+                error: function(xhr, status, error) {
+                    var acc = []
+                    $.each(xhr, function(index, value) {
+                        acc.push(index + ': ' + value);
+                    });
+                    alert(JSON.stringify(acc));
                 }
             });
         });
         //function will be called on dropdownlist selection
-        $("#IPMEventYear").change(function () {
-            $("#waitMsg").show();
+        $('#IPMEventYear').change(function () {
+            $('#waitMsg').show();
+            var postpath = root + 'Login/ChangeYear';
             $.ajax(
             {
-                type: "POST", //HTTP POST Method
-                url: "/Login/ChangeYear", // Controller/View
-                dataType: "json",
+                url: postpath, // Controller/View
+                type: 'POST', //HTTP POST Method
+                dataType: 'json',
                 data: { //Passing data
-                    idIPMEvent: $("#IPMEventYear").val()
+                    idIPMEvent: $('#IPMEventYear').val()
                 },
                 success: function (result) {
                     location.reload();
                 },
                 error: function (result) {
-                    alert("7 Some error occured.");
+                    alert('7 Some error occured.');
                 }
             });
         });
@@ -120,12 +140,7 @@
     </div>
     <div class="row">
         <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
-            <div class="col-sm-9 col-sm-push-3 col-xs-12 form-top-margin">
-                <button id="btnSelectUser" class="btn btn-block btn-default">
-                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
-                    <span class="col-xs-9">Confirm User</span>
-                </button>
-            </div>
+            <div id="btnSelectUser" class="btn btn-block btn-default btn-mylink pagination-centered" ><span class="glyphicon glyphicon-log-in"></span>&nbsp; Confirm Log In</div>            
         </div>
     </div>
 </div>

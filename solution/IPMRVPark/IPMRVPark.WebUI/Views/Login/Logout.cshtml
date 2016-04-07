@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "User Log In";
+    ViewBag.PageTitle = "User Log In";
+}
+
+@Html.ActionLink("Home", "Home", "Login")
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("User Log In", "Login", "Login")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Resolve root path
+        var origin = window.location.origin;
+        if (origin == 'http://www.alvm.com.br') {
+            var root = 'http://www.alvm.com.br/ipmrvpark/';
+        }
+        else {
+            var root = '../';
+        }
+        // User Email
+        var postpath = root + 'Login/GetSessionEmail';
+        $.ajax({
+            url: postpath,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                var userID = data.ID;
+                var userLabel = data.Label;
+                $('#idUser').val(userID);
+                $('#userEmail').val(userLabel);
+            },
+            error: function () {
+                alert('3 Some error occured.');
+            }
+        });
+        //function will be called on button click
+        $('#btnConfirmLogout').click(function () {
+            $('#waitMsg').show();
+            var postpath = root + 'Login/SelectUser';
+            $.ajax(
+            {
+                url: postpath,
+                type: 'POST',
+                dataType: 'json',
+                data: { //Passing data
+                    userEmail: ""
+                },
+                success: function (data) {
+                    var postpath = root + 'Login/Login';
+                    window.location.href = postpath;
+                },
+                error: function (xhr, status, error) {
+                    var acc = []
+                    $.each(xhr, function (index, value) {
+                        acc.push(index + ': ' + value);
+                    });
+                    alert(JSON.stringify(acc));
+                }
+            });
+        });
+    });
+</script>
+
+<div class="container-fluid">
+    <!-- Email -->
+    <div class="row form-top-margin">
+        <div class="form-group">
+            <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <label>Email</label>
+                </div>
+                <div class="col-sm-9 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="userEmail" placeholder="Type your email" disabled />
+                    <input class="text-box single-line" id="idUser" name="idUser" type="hidden" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
+            <div id="btnConfirmLogout" class="btn btn-block btn-warning btn-mylink pagination-centered"><span class="glyphicon glyphicon-log-out"></span>&nbsp; Confirm Logout</div>
+        </div>
+    </div>
+</div>

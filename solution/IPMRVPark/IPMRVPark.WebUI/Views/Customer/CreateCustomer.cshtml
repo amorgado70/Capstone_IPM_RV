@@ -1,0 +1,184 @@
+﻿@model IPMRVPark.Models.customer_view
+
+@{
+    ViewBag.Title = "Customer Registration";
+    ViewBag.PageTitle = "New Customer";
+}
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Customer Registration
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("New Customer", "Customer", "PrototypeUI")
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+<div class="container-fluid">
+    <fieldset>
+        <legend></legend>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>First Name :</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="enter first name here ..." />
+                    @*@Html.EditorFor(model => model.firstName)*@
+                    @Html.ValidationMessageFor(model => model.firstName)
+                </div>
+
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Last Name :</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="enter last name here ..." />
+                    @Html.ValidationMessageFor(model => model.lastName)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Email :</label>
+                </div>
+                <div class="col-sm-10 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="email" name="email" placeholder="enter email address here ..." />
+                    @Html.ValidationMessageFor(model => model.email)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Main Phone :</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="mainPhone" name="mainPhone" placeholder="(555) 333-4444" />
+                    @Html.ValidationMessageFor(model => model.mainPhone)
+                </div>
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Cell Phone :</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="cellPhone" name="cellPhone" placeholder="(555) 333-4444" />
+                    @Html.ValidationMessageFor(model => model.cellPhone)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Home Phone :</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="homePhone" name="homePhone" placeholder="(555) 333-4444" />
+                    @Html.ValidationMessageFor(model => model.homePhone)
+                </div>
+
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Fax Number :</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="faxNumber" name="faxNumber" placeholder="(555) 333-4444" />
+                    @Html.ValidationMessageFor(model => model.faxNumber)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Street :</label>
+                </div>
+                <div class="col-sm-10 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="street" name="street" placeholder="enter street here ..." />
+                    @Html.ValidationMessageFor(model => model.street)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>City :</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="city" name="city" placeholder="enter city here ..." />
+                    @Html.ValidationMessageFor(model => model.city)
+                </div>
+
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Postal Code :</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="format - [A6B 3C5] ..." />
+                    @Html.ValidationMessageFor(model => model.postalCode)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Province :</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    @Html.DropDownListFor(model => model.provinceCode,
+                        new SelectList(ViewBag.Province, "code", "name"),
+                        "Select Province",
+                        new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.provinceCode, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Country :</label>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    @Html.DropDownListFor(model => model.countryCode,
+                        new SelectList(ViewBag.Country, "code", "name"),
+                        "Select Country",
+                        new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.countryCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Comments :</label>
+                </div>
+                <div class="col-sm-10 col-xs-12 form-top-margin">
+                    <textarea class="form-control" id="comments" name="comments" rows="2"></textarea>
+                    @Html.ValidationMessageFor(model => model.comments)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <label>Receipt by Email :</label>
+                </div>
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <input checked="checked"
+                           id="isEmailReceipt"
+                           name="isEmailReceipt"
+                           type="checkbox"
+                           value="true" />
+                    @Html.ValidationMessageFor(model => model.isEmailReceipt)
+                </div>
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <label>Party Member :</label>
+                </div>
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <input checked="checked"
+                           id="isPartyMember"
+                           name="isPartyMember"
+                           type="checkbox"
+                           value="true" />
+                    @Html.ValidationMessageFor(model => model.isPartyMember)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
+                <button type="submit" class="btn btn-block btn-default">
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                    <span class="col-xs-9">Confirm Customer Registration</span>
+                </button>
+            </div>
+        </div>
+    </fieldset>
+</div>
+    
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

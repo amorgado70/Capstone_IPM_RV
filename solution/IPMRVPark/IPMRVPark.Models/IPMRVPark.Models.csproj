@@ -92,6 +92,9 @@
     <Compile Include="partymember.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="partymember_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="paydoctype.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -114,6 +117,9 @@
     <Compile Include="provincecode.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="province_view.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="reasonforpayment.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -121,9 +127,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="reservationitem_partymember.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="reservation_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="rvsite_available_view.cs">
@@ -144,13 +147,7 @@
     <Compile Include="session.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="sitedescription_by_sitetype_view.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="siterate.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="siterate_by_sitetype_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="sitesize.cs">
@@ -171,22 +168,7 @@
     <Compile Include="styleurl.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="total_per_customer_view.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="total_per_payment_view.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="total_per_reservationitem_view.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="total_per_selecteditem_view.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="total_per_session_view.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="View\SelectionOption.cs" />
+    <Compile Include="ViewModels\ViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />

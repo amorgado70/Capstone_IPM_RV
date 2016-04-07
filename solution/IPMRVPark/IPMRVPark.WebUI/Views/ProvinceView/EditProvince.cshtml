@@ -1,0 +1,74 @@
+﻿@model IPMRVPark.Models.province_view
+
+@{
+    ViewBag.Title = "EditProvince";
+    ViewBag.PageTitle = "Update Province";
+}
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Maintenance
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Update Province", "EditProvince", "ProvinceView")
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+<div class="container-fluid">
+    <fieldset>
+        <legend></legend>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Province Code :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.provinceCode)
+                    @Html.ValidationMessageFor(model => model.provinceCode)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Province Name :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.provinceName)
+                    @Html.ValidationMessageFor(model => model.provinceName)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Country :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DropDownListFor(model => model.countryCode,
+                        new SelectList(ViewBag.Country, "code", "name"),
+                        "Select Country",
+                        new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.countryCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="editor-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
+                    <button type="submit" class="btn btn-block btn-default">
+                        <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                        <span class="col-xs-9">Confirm Province Update</span>
+                    </button>
+                </div>
+                <div class="editor-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
+                    <a href="@Url.Action("Index", "ProvinceView")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span>Back to List</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

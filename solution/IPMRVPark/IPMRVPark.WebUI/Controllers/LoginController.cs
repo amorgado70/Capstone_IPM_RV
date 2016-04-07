@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using IPMRVPark.Models;
-using IPMRVPark.Models.View;
 using IPMRVPark.Contracts.Repositories;
 using IPMRVPark.Services;
 using System.Collections.Generic;
@@ -11,50 +10,97 @@ namespace IPMRVPark.WebUI.Controllers
 {
     public class LoginController : Controller
     {
+        IRepositoryBase<staff> users;
+        IRepositoryBase<customer_view> customers;
         IRepositoryBase<ipmevent> ipmevents;
         IRepositoryBase<session> sessions;
-        IRepositoryBase<customer_view> customers;
+        IRepositoryBase<placeinmap> placesinmap;
         IRepositoryBase<selecteditem> selecteditems;
-        IRepositoryBase<staff> users;
+        IRepositoryBase<reservationitem> reservationitems;
+        IRepositoryBase<payment> payments;
+        IRepositoryBase<paymentreservationitem> paymentsreservationitems;
+        IRepositoryBase<rvsite_available_view> rvsites_available;
+        IRepositoryBase<site_description_rate_view> sites_description_rate;
         SessionService sessionService;
+        PaymentService paymentService;
 
         public LoginController(
-            IRepositoryBase<ipmevent> ipmevents,
-            IRepositoryBase<session> sessions,
+            IRepositoryBase<staff> users,
             IRepositoryBase<customer_view> customers,
-                    IRepositoryBase<selecteditem> selecteditems,
-        IRepositoryBase<staff> users)
+            IRepositoryBase<ipmevent> ipmevents,
+            IRepositoryBase<placeinmap> placesinmap,
+            IRepositoryBase<rvsite_available_view> rvsites_available,
+            IRepositoryBase<selecteditem> selecteditems,
+            IRepositoryBase<reservationitem> reservationitems,
+            IRepositoryBase<payment> payments,
+            IRepositoryBase<paymentreservationitem> paymentsreservationitems,
+            IRepositoryBase<session> sessions,
+            IRepositoryBase<site_description_rate_view> sites_description_rate
+            )
         {
-            this.ipmevents = ipmevents;
-            this.sessions = sessions;
-            this.customers = customers;
-            this.selecteditems = selecteditems;
             this.users = users;
-            sessionService = new SessionService(this.sessions);
+            this.customers = customers;
+            this.ipmevents = ipmevents;
+            this.payments = payments;
+            this.paymentsreservationitems = paymentsreservationitems;
+            this.placesinmap = placesinmap;
+            this.selecteditems = selecteditems;
+            this.reservationitems = reservationitems;
+            this.rvsites_available = rvsites_available;
+            this.sites_description_rate = sites_description_rate;
+            this.sessions = sessions;
+            sessionService = new SessionService(
+                this.sessions,
+                this.customers
+                );
+            paymentService = new PaymentService(
+                this.selecteditems,
+                this.reservationitems,
+                this.payments,
+                this.paymentsreservationitems
+                );
         }//end Constructor
+
+        const long IDnotFound = -1;
 
         public ActionResult Home()
         {
-            return View();
+            return RedirectToAction("Login");
         }
 
         public ActionResult Menu()
         {
+            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+
+            return View();
+        }
+
+        public ActionResult Logout()
+        {
+            // Clean selected items
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            paymentService.CleanAllSelectedItems(sessionID);
             return View();
         }
 
         public ActionResult Login()
         {
+            
             List<SelectListItem> items = new List<SelectListItem>();
             var _ipmevents = ipmevents.GetAll();
-            var _session = sessionService.GetSession(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+
+            // Clean selected items
+            paymentService.CleanAllSelectedItems(sessionID);
+
             foreach (ipmevent _ipmevent in _ipmevents)
             {
                 SelectListItem i = new SelectListItem();
                 i.Value = _ipmevent.ID.ToString();
                 i.Text = _ipmevent.year.ToString();
                 items.Add(i);
-                if (_ipmevent.ID == _session.idIPMEvent)
+                if (_ipmevent.ID == IPMEventID)
                 {
                     i.Selected = true;
                 }
@@ -66,7 +112,7 @@ namespace IPMRVPark.WebUI.Controllers
         [HttpPost]
         public ActionResult GetSessionEmail()
         {
-            SelectionOptionID user = new SelectionOptionID(-1, "");
+            SelectionOptionID user = new SelectionOptionID(IDnotFound, "");
             var _session = sessionService.GetSession(this.HttpContext);
             if (_session.idStaff != null)
             {
@@ -90,20 +136,25 @@ namespace IPMRVPark.WebUI.Controllers
         [HttpPost]
         public ActionResult SelectUser(string userEmail)
         {
-            long idUser = -1;
+            SelectionOptionID user = new SelectionOptionID(IDnotFound, "");
             if (userEmail != null)
             {
+                var _session = sessionService.GetSession(this.HttpContext);
                 var _users = users.GetAll().Where(q => q.person.email == userEmail);
                 if (_users.Count() > 0)
                 {
-                    idUser = users.GetAll().Where(q => q.person.email == userEmail).First().ID;
-                    var _session = sessionService.GetSession(this.HttpContext);
-                    _session.idStaff = idUser;
-                    sessions.Update(sessions.GetById(_session.ID));
-                    sessions.Commit();
+                    user.ID = users.GetAll().Where(q => q.person.email == userEmail).First().ID;
+                    user.Label = userEmail;
+                    _session.idStaff = user.ID;
                 }
+                else
+                {
+                    _session.idStaff = null;
+                }
+                sessions.Update(sessions.GetById(_session.ID));
+                sessions.Commit();
             }
-            return Json(idUser);
+            return Json(user);
         }
 
         [HttpPost]

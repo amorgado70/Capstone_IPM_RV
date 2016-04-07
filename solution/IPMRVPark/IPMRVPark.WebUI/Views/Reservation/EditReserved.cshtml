@@ -1,0 +1,35 @@
+@{
+    ViewBag.Title = "Site Reservation";
+    ViewBag.PageTitle = "Edit Reserved";
+}
+
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Site Reservation
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Edit Reserved", "Reservation", "PrototypeUI")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Load partial view - Select Site
+        $('#reserved-item').load('../Reservation/CRUDReservedItem?SelectedID=@ViewBag.SelectedID', function () {
+        });
+    });
+</script>
+
+<!-- Edit Reservation-->
+<div class="container-fluid">
+
+    @if (ViewBag.UserID == null)
+            {
+        <div class="row">
+            <div class="col-sm-6 col-sm-push-6 col-xs-12  form-top-margin">
+                <div class="form-control reservationWarning">NO USER LOGGED IN</div>
+            </div>
+        </div>
+    }
+
+    <!-- RV Site Selection -->
+    <div id="reserved-item"></div>
+        
+</div>

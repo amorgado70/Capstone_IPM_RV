@@ -1,0 +1,44 @@
+﻿@model IEnumerable<IPMRVPark.Models.reservationitem>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#waitMsg").hide();// Hide wait message
+    });
+</script>
+
+<!-- List of selected sites -->
+<div class="row form-top-margin">
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Site</th>
+                    <th>Type</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th style="text-align:right;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.site)</td>
+                        <td>@Html.DisplayFor(modelItem => item.siteType)</td>
+                        <td>@item.checkInDate.ToString("ddd"), @item.checkInDate.ToString("dd") @item.checkInDate.ToString("MMM")</td>
+                        <td>@item.checkOutDate.ToString("ddd"), @item.checkOutDate.ToString("dd") @item.checkOutDate.ToString("MMM")</td>
+                        <td style="text-align:right;">@Html.DisplayFor(modelItem => item.total)</td>
+                    </tr>
+                }
+                <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align:right;">@ViewBag.totalAmount</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

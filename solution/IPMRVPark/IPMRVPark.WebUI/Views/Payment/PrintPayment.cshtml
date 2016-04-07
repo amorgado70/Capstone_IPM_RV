@@ -1,21 +1,20 @@
-﻿@model IEnumerable<IPMRVPark.Models.total_per_reservationitem_view>
+﻿@model IEnumerable<IPMRVPark.Models.reservationitem>
 
 @{
     ViewBag.Title = "Print Payment";
     ViewBag.PageTitle = "Print Payment";
 }
 
-@Html.ActionLink("Home", "Menu", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Payments & Refunds
 <span class="glyphicon glyphicon-chevron-right"></span>
 @Html.ActionLink("Print Payment", "Payment", "PrototypeUI")
 
-
-
-
 <script type="text/javascript">
     $(document).ready(function () {
+        // ***** Load partial view Payments For Customer
+        //$('#account-details').load('/Payment/ShowPaymentPerCustomer/@ViewBag.Payment.idCustomer');
         $("#waitMsg").hide();// Show wait message
         $("#btnPrint").click(function () {
             window.print();
@@ -30,7 +29,7 @@ Payments & Refunds
             <label>Payment #</label>
         </div>
         <div class="col-sm-3 col-xs-6 form-top-margin">
-            <div disabled class="form-control">@ViewBag.PaymentID</div>
+            <div disabled class="form-control">@ViewBag.Payment.ID</div>
         </div>
         <div class="col-sm-3 col-sm-push-1 col-xs-6 form-top-margin">
             <label>Date</label>
@@ -50,7 +49,7 @@ Payments & Refunds
             <label>Paid Amount</label>
         </div>
         <div class="col-sm-3 col-sm-push-1 col-xs-6 form-top-margin">
-            <div style="text-align:right;" disabled class="form-control">@ViewBag.PaymentAmount</div>
+            <div style="text-align:right;" disabled class="form-control">@ViewBag.Payment.amount</div>
         </div>
     </div>
     <!-- Reservation Info -->
@@ -73,14 +72,16 @@ Payments & Refunds
                             <td>@Html.DisplayFor(modelItem => item.site)</td>
                             <td>@item.checkInDate.ToString("ddd"), @item.checkInDate.ToString("dd") @item.checkInDate.ToString("MMM")</td>
                             <td>@item.checkOutDate.ToString("ddd"), @item.checkOutDate.ToString("dd") @item.checkOutDate.ToString("MMM")</td>
-                            <td style="text-align:right;">@Html.DisplayFor(modelItem => item.amount)</td>
+                            <td style="text-align:right;">@Html.DisplayFor(modelItem => item.total)</td>
                         </tr>
                     }
                     <tr>
-                        <td>Total</td>
-                        <td></td>
-                        <td></td>
-                        <td style="text-align:right;">@ViewBag.ReservationTotal</td>
+                        <td colspan="3" style="text-align:right;">Without Tax</td>
+                        <td id="withoutTax" style="text-align:right;">@ViewBag.Payment.withoutTax</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align:right;">Tax HST/QST/PST (@ViewBag.ProvinceTax%)</td>
+                        <td id="tax" style="text-align:right;">@ViewBag.Payment.tax</td>
                     </tr>
                 </tbody>
             </table>
@@ -92,17 +93,103 @@ Payments & Refunds
             <label>Customer</label>
         </div>
         <div class="col-sm-6 col-xs-12 form-top-margin">
-            <div disabled class="form-control">@Model.First().fullName , Phone: @Model.First().mainPhone</div>
+            <div disabled class="form-control">@ViewBag.CustomerName</div>
         </div>
-        <div class="col-sm-2 col-xs-12 form-top-margin">
-            <label>Due Amount</label>
-        </div>
-        <div class="col-sm-2 col-xs-12 form-top-margin">
-            @{ string DueAmount = (ViewBag.CustomerBalance * -1).ToString("0.00"); }
-            <div style="text-align:right;" disabled class="form-control">@DueAmount</div>
-        </div>
-
+        @{decimal due = ViewBag.Payment.balance * -1;}
+        @if (@ViewBag.Payment.balance < 0)
+        {
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>Due Amount</label>
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <div style="text-align:right;" disabled class="form-control">@due.ToString("N2")</div>
+            </div>
+        }
+        @{decimal refund = ViewBag.Payment.balance * 1;}
+        @if (@ViewBag.Payment.balance >= 0)
+        {
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>Credit</label>
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <div style="text-align:right;" disabled class="form-control">@refund.ToString("N2")</div>
+            </div>
+        }
     </div>
+    <div class="row">
+        <!-- Calculation Details -->
+        <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
+            <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#calculation-details">
+                <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
+                <span class="col-xs-9">Calc Details &nbsp;<span class="caret"></span></span>
+            </button>
+        </div>
+    </div>
+    <div id="calculation-details" class="collapse">
+        <div class="row top-margin">
+            <div class="col-xs-12">
+                <table class="table">
+                    <tr>
+                        <th>
+                            + Previous Balance ( > 0 : Credit , < 0 : Due )
+                        </th>
+                        <td style="text-align:right;">@ViewBag.PreviousBalance</td>
+                    </tr>
+                    <tr>
+                        <th>
+                            + Primary Reservation Total
+                        </th>
+                        <td style="text-align:right;">
+                            @ViewBag.Payment.primaryTotal
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            - New Reservation Total
+                        </th>
+                        <td style="text-align:right;">
+                            @ViewBag.Payment.selectionTotal
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            - Cancellation Fee
+                        </th>
+                        <td style="text-align:right;">
+                            @ViewBag.Payment.cancellationFee
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            + Amount Paid ( > 0 : Payment , < 0 : Refund )
+                        </th>
+                        <td style="text-align:right;">
+                            @ViewBag.Payment.amount
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            = Final Balance ( > 0 : Credit , < 0 : Due )
+                        </th>
+                        <td style="text-align:right;">
+                            @ViewBag.Payment.balance
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    @*<div class="row">*@
+    <!-- Customer Account History -->
+    @*<div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
+                <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#account-details">
+                    <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
+                    <span class="col-xs-9">Account History &nbsp;<span class="caret"></span></span>
+                </button>
+            </div>
+        </div>
+        <div id="account-details" class="collapse">
+        </div>*@
     <!-- Print Payment Info-->
     <div class="row top-margin">
         <div class="col-sm-3 col-xs-12 form-top-margin">

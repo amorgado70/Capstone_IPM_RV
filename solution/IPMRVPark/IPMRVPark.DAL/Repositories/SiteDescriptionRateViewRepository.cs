@@ -1,9 +1,6 @@
-﻿using IPMRVPark.Contracts.Data;
+﻿using System;
 using IPMRVPark.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using IPMRVPark.Contracts.Data;
 
 namespace IPMRVPark.Contracts.Repositories
 {
@@ -12,5 +9,6 @@ namespace IPMRVPark.Contracts.Repositories
         public SiteDescriptionRateViewRepository(DataContext context)
             : base(context)
         { if (context == null) throw new ArgumentNullException(); }
-    }//end CountryRepository
+    }
+
 }

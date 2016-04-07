@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Linq.Dynamic;
 
 namespace IPMRVPark.Contracts.Repositories
 {
@@ -20,6 +21,11 @@ namespace IPMRVPark.Contracts.Repositories
         public virtual TEntity GetById(object id)
         {
             return dbSet.Find(id);
+        }
+        public virtual TEntity GetByKey(string keyName, object keyValue)
+        {
+            string whereCondition = keyName + " == " + keyValue;
+            return dbSet.Where(whereCondition).FirstOrDefault();
         }
         public virtual IQueryable<TEntity> GetQueryable()
         {

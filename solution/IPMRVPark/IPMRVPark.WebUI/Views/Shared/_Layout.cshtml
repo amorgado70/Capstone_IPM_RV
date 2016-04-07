@@ -11,19 +11,62 @@
     @Scripts.Render("~/bundles/jquery-ui")
     <meta name="description" content="International Plow Match RV Park Reservation System" />
 </head>
-<body>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Resolve root path
+        var origin = window.location.origin;
+        if (origin == 'http://www.alvm.com.br') {
+            var root = 'http://www.alvm.com.br/ipmrvpark/';
+        }
+        else {
+            var root = '/';
+        }
+        // ***** IPM Event Year
+        var postpath = root + 'Login/GetSessionYear';
+        $.ajax({
+            url: postpath,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                $('#sessionYear').text(data);
+            },
+            error: function () {
+                alert('21 Some error occured.');
+            }
+        });
+        var postpath = root + 'Login/GetSessionGUID';
+        $.ajax({
+            url: postpath,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                $('#sessionGUID').text(data);
+            },
+            error: function () {
+                alert('32 Some error occured.');
+            }
+        });
+
+        $(document).ajaxStop(function () {
+            $('.waitAjax').toggleClass('waitAjax');
+        });
+    });
+</script>
+
+<body class="waitAjax">
     <header>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xs-6 col-sm-3" style="display:block; margin-top:0.5em;margin-bottom:0.5em;" pagination-centered" data-toggle="tooltip" title="Go Back To Main Menu">
                     <a href="@Url.Action("Menu", "Login")" class="btn btn-default btn-block btn-mylink col-xs-10">
                         <span class="glyphicon glyphicon-home"></span>
-                        <span style="height:2em;">Home</span>                        
+                        <span style="height:2em;">Home</span>
                     </a>
                 </div>
                 <div class="col-xs-1"></div>
                 <div class="col-xs-7 col-sm-8" style="margin-top:0.8em; margin-bottom:0.5em; margin-left:0; font-size:1.2em; font-weight: bold;">
-                    @ViewBag.PageTitle
+                    @ViewBag.PageTitle - Event <span id="sessionYear"></span>
                 </div>
             </div>
         </div>
@@ -43,7 +86,7 @@
                 </a>
             </div>
             <div class="col-sm-3 col-sm-push-6 col-xs-5 col-xs-push-1">
-                <a href="@Url.Action("Home", "Login")" class="btn btn-default btn-block btn-mylink">
+                <a href="@Url.Action("Logout", "Login")" class="btn btn-default btn-block btn-mylink">
                     <span class="glyphicon glyphicon-log-out"></span>
                     <span style="height:2em;">Log Out</span>
                 </a>
@@ -51,19 +94,6 @@
         </div>
     </div>
     <p>
-        <script type="text/javascript">
-                            $(document).ready(function () {
-                                $.ajax({
-                                    url: '/Login/GetSessionGUID',
-                                    type: "POST",
-                                    dataType: "json",
-                                    success: function (data) {
-                                        $("#sessionGUID").text(data);},
-                                    error: function () {
-                                        alert("Some error occured.");}
-                                });
-                            });
-        </script>
         <span id="sessionGUID"></span>
     </p>
     <h1>

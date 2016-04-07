@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using IPMRVPark.Contracts.Data;
 
 namespace IPMRVPark.WebUI.Controllers
 {
@@ -13,108 +14,98 @@ namespace IPMRVPark.WebUI.Controllers
     {
         IRepositoryBase<payment> payments;
         IRepositoryBase<customer_view> customers;
-        IRepositoryBase<total_per_session_view> totals_per_session;
-        IRepositoryBase<reasonforpayment> reasonforpayments;
+        IRepositoryBase<reasonforpayment> reasonsforpayment;
         IRepositoryBase<paymentmethod> paymentmethods;
         IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<reservationitem> reservationitems;
-        IRepositoryBase<total_per_selecteditem_view> totals_per_selecteditem;
-        IRepositoryBase<total_per_reservationitem_view> totals_per_reservationitem;
-        IRepositoryBase<total_per_payment_view> totals_per_payment;
         IRepositoryBase<paymentreservationitem> paymentsreservationitems;
         IRepositoryBase<session> sessions;
         SessionService sessionService;
+        PaymentService paymentService;
 
         public PaymentController(IRepositoryBase<payment> payments,
             IRepositoryBase<customer_view> customers,
-            IRepositoryBase<total_per_session_view> totals_per_session,
-            IRepositoryBase<reasonforpayment> reasonforpayments,
+            IRepositoryBase<reasonforpayment> reasonsforpayment,
             IRepositoryBase<paymentmethod> paymentmethods,
             IRepositoryBase<selecteditem> selecteditems,
             IRepositoryBase<reservationitem> reservationitems,
-            IRepositoryBase<total_per_selecteditem_view> totals_per_selecteditem,
-            IRepositoryBase<total_per_reservationitem_view> totals_per_reservationitem,
-            IRepositoryBase<total_per_payment_view> totals_per_payment,
             IRepositoryBase<paymentreservationitem> paymentsreservationitems,
-            IRepositoryBase<session> sessions)
+            IRepositoryBase<session> sessions
+            )
         {
             this.sessions = sessions;
             this.payments = payments;
             this.customers = customers;
-            this.totals_per_session = totals_per_session;
-            this.reasonforpayments = reasonforpayments;
+            this.reasonsforpayment = reasonsforpayment;
             this.paymentmethods = paymentmethods;
             this.selecteditems = selecteditems;
-            this.reservationitems = reservationitems;            
-            this.totals_per_selecteditem = totals_per_selecteditem;
-            this.totals_per_reservationitem = totals_per_reservationitem;
-            this.totals_per_payment = totals_per_payment;           
+            this.reservationitems = reservationitems;
             this.paymentsreservationitems = paymentsreservationitems;
-            sessionService = new SessionService(this.sessions);
+            sessionService = new SessionService(
+                this.sessions,
+                this.customers
+                );
+            paymentService = new PaymentService(
+                this.selecteditems,
+                this.reservationitems,
+                this.payments,
+                this.paymentsreservationitems
+                );
         }//end Constructor
 
-        // GET: /Create
-        public ActionResult NewReservation()
+        #region Common        
+        const long IDnotFound = -1;
+
+        private class reasonForPayment
         {
-            session _session = sessionService.GetSession(this.HttpContext);
-
-            // Read customer from session
-            customer_view _customer = new customer_view();
-            bool tryResult = false;
-            try //checks if customer is in database
+            public enum E
             {
-                _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).FirstOrDefault();
-                tryResult = !(_customer.Equals(default(customer_view)));
+                NewReservation = 1,
+                ExtendReservation = 2,
+                ShortenReservation = 3
             }
-            catch (Exception e)
+        }
+        private void updateReasonForPayment()
+        {
+            foreach (reasonForPayment.E e in Enum.GetValues(typeof(reasonForPayment.E)))
             {
-                Console.WriteLine("An error occurred: '{0}'", e);
+                var r = reasonsforpayment.GetByKey("ID", (long)e);
+                if (r == null)
+                {
+                    reasonforpayment new_r = new reasonforpayment();
+                    new_r.ID = (long)e;
+                    new_r.description = e.ToString();
+                    reasonsforpayment.Insert(new_r);
+                }
+                else
+                {
+                    r.description = e.ToString();
+                    reasonsforpayment.Update(r);
+                }
             }
+            reasonsforpayment.Commit();
+        }
 
-            if (tryResult)//customer found in database
-            {
-                ViewBag.CustomerID = _customer.id;
-                ViewBag.CustomerName = _customer.fullName + ", " + _customer.mainPhone;
-                ViewBag.CustomerBalance = CustomerAccountFinalBalance(_customer.id);
-            };
-
-            // Read total for session
-            total_per_session_view _total_per_session = new total_per_session_view();
-            tryResult = false;
-            try //checks if total is in database
-            {
-                _total_per_session = totals_per_session.GetAll().Where(c => c.idSession == _session.ID).FirstOrDefault();
-                tryResult = !(_total_per_session.Equals(default(session)));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("An error occurred: '{0}'", e);
-            }
-
-            if (tryResult)//customer found in database
-            {
-                ViewBag.Total = _total_per_session.total_amount;
-            };
-
-            // Tax Percentage
-            ViewBag.ProvinceTax = 13.00;
-
-            // Configure dropdown list items
-            var reasonforpayment = reasonforpayments.GetAll().OrderBy(s => s.description);
-            List<SelectListItem> selectReasonForPayment = new List<SelectListItem>();
-            foreach (var item in reasonforpayment)
-            {
-                SelectListItem selectListItem = new SelectListItem();
-                selectListItem.Value = item.ID.ToString();
-                selectListItem.Text = item.description;
-                string selectedText = "New Reservation";
-                selectListItem.Selected =
-                 (selectListItem.Text == selectedText);
-                selectReasonForPayment.Add(selectListItem);
-            }
-            ViewBag.ReasonForPayment = selectReasonForPayment;
-
-            // Configure dropdown list items
+        // Configure dropdown list items
+        private void reasonsForPayment(string defaultReason)
+        {
+            //var reasonforpayment = reasonsforpayment.GetAll().OrderBy(s => s.description);
+            //List<SelectListItem> selectReasonForPayment = new List<SelectListItem>();
+            //foreach (var item in reasonforpayment)
+            //{
+            //    SelectListItem selectListItem = new SelectListItem();
+            //    selectListItem.Value = item.ID.ToString();
+            //    selectListItem.Text = item.description;
+            //    string selectedText = defaultReason;
+            //    selectListItem.Selected =
+            //             (selectListItem.Text == selectedText);
+            //    selectReasonForPayment.Add(selectListItem);
+            //}
+            //ViewBag.ReasonForPayment = selectReasonForPayment;
+        }
+        // Configure dropdown list items
+        private void paymentMethods(string defaultMethod)
+        {
             var paymentmethod = paymentmethods.GetAll().OrderBy(s => s.description);
             List<SelectListItem> selectPaymentMethod = new List<SelectListItem>();
             List<SelectListItem> selectPayDocType = new List<SelectListItem>();
@@ -123,7 +114,7 @@ namespace IPMRVPark.WebUI.Controllers
                 SelectListItem selectList1Item = new SelectListItem();
                 selectList1Item.Value = item.ID.ToString();
                 selectList1Item.Text = item.description;
-                string selectedText = "VISA";
+                string selectedText = defaultMethod;
                 selectList1Item.Selected =
                  (selectList1Item.Text.Contains(selectedText));
                 selectPaymentMethod.Add(selectList1Item);
@@ -134,136 +125,248 @@ namespace IPMRVPark.WebUI.Controllers
             }
             ViewBag.PaymentMethod = selectPaymentMethod;
             ViewBag.PayDocType = selectPayDocType;
-
-            var payment = new payment();
-            return View(payment);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult NewReservation(payment _payment)
-        {
-            // Identify session
-            session _session = sessionService.GetSession(this.HttpContext);
-            long sessionID = _session.ID;
-
-            // Create and insert payment
-            _payment.idSession = sessionID;
-            _payment.isCredit = true;
-            _payment.idReasonForPayment = 2; // New Reservation
-            _payment.createDate = DateTime.Now;
-            _payment.lastUpdate = DateTime.Now;
-            payments.Insert(_payment);
-            payments.Commit();
-            long ID = _payment.ID;
-
-            var _selecteditems = totals_per_selecteditem.GetAll().Where(s => s.idSession == sessionID);
-            foreach (total_per_selecteditem_view item in _selecteditems)
-            {
-                // Create and insert reservation items
-                var _reservationitem = new reservationitem();
-                _reservationitem.idRVSite = item.idRVSite.Value;
-                _reservationitem.idCustomer = item.idCustomer.Value;
-                _reservationitem.idStaff = item.idStaff.Value;
-                _reservationitem.checkInDate = item.checkInDate;
-                _reservationitem.checkOutDate = item.checkOutDate;
-                _reservationitem.totalAmount = item.amount;
-                _reservationitem.createDate = DateTime.Now;
-                _reservationitem.lastUpdate = DateTime.Now;
-                reservationitems.Insert(_reservationitem);
-                reservationitems.Commit();
-                // Create link between payment and reservation
-                // *****_reservationitem.idPayment
-                var _paymentreservationitem = new paymentreservationitem();
-                _paymentreservationitem.idPayment = _payment.ID;
-                _paymentreservationitem.idReservationItem = _reservationitem.ID;
-                _paymentreservationitem.createDate = DateTime.Now;
-                _paymentreservationitem.lastUpdate = DateTime.Now;
-                paymentsreservationitems.Insert(_paymentreservationitem);
-                paymentsreservationitems.Commit();
-                // Remove items from selected table
-                selecteditems.Delete(selecteditems.GetById(item.idSelected));
-                selecteditems.Commit();
-            }
-
-            // Reset customer
-            _session.idCustomer = null;
-            sessions.Update(_session);
-            sessions.Commit();
-
-            return RedirectToAction("PrintPayment", new { id = ID });
         }
 
         // For Partial View : Show Payments Per Customer
-        public ActionResult ShowPaymentPerCustomer(long id = -1)
+        public ActionResult ShowPaymentPerCustomer(long id = IDnotFound)
         {
-         
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            //long customerID = sessionService.GetSessionCustomerID(sessionID);
+            long customerID = id;
+            ViewBag.CustomerID = customerID;
+            ViewBag.CustomerName = sessionService.GetSessionCustomerNamePhone(sessionID);
 
-            customer_view _customer = new customer_view();
-            bool tryResult = false;
-            try //checks if customer is in database
+            if (customerID != IDnotFound)
             {
-                _customer = customers.GetAll().Where(c => c.id == id).FirstOrDefault();
-                tryResult = !(_customer.Equals(default(customer_view)));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("An error occurred: '{0}'", e);
-            }
+                decimal finalBalance = paymentService.CustomerAccountBalance(customerID);
+                ViewBag.CustomerBalance = finalBalance;
+                var _payments = payments.GetAll().
+                    Where(s => s.idCustomer == customerID);
+                // Populate reason for payment
+                foreach (var _payment in _payments)
+                {
+                    _payment.reasonforpayment = reasonsforpayment.GetById(_payment.idReasonForPayment);
+                }
 
-            if (tryResult)//customer found in database
-            {
-                ViewBag.CustomerID = _customer.id;
-                ViewBag.CustomerName = _customer.fullName + ", " + _customer.mainPhone;
-
-                var _payments = CustomerAccountBalance(_customer.id);
-
-                ViewBag.CustomerBalance = CustomerAccountFinalBalance(_customer.id);
-                
                 return PartialView("PaymentPerCustomer", _payments);
             };
 
             return PartialView("../Login/EmptyPartial");
         }
 
-        private IQueryable<total_per_payment_view> CustomerAccountBalance(long idCustomer)
-        {
-            var _payments = totals_per_payment.GetAll();
-            _payments = _payments.Where(p => p.idCustomer == idCustomer).OrderBy(p => p.idPayment);
-
-            // Calculate balance
-            decimal balance = 0;
-            foreach (var _payment in _payments)
-            {
-                balance = balance + (_payment.paymentAmount.Value - _payment.reservationitem_total.Value);
-                _payment.balance = balance;
-            }
-            return _payments;
-        }
-        private decimal CustomerAccountFinalBalance(long idCustomer)
-        {
-            var _payments = CustomerAccountBalance(idCustomer).ToList();
-            var _last = _payments.LastOrDefault();
-            decimal result = (_last != null)? _last.balance : 0;
-            return result;
-        }
-
         public ActionResult PrintPayment(long id)
         {
+
+            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+
+            // Find all reservation items related to this payment
             var _payment = payments.GetById(id);
-            var _reservationitems = totals_per_reservationitem.GetAll().
-                Where(q => q.idPayment == _payment.ID);
+            ViewBag.Payment = _payment;
 
-            ViewBag.ReservationTotal = _reservationitems.Sum(q => q.amount);
+            var _paymentreservationitems = paymentsreservationitems.GetAll().
+                Where(p => p.idPayment == id);
+            var _reservationitems = new List<reservationitem>();
+            foreach (var item in _paymentreservationitems)
+            {
+                reservationitem _reservationitem = new reservationitem();
+                _reservationitem = reservationitems.GetById(item.idReservationItem);
+                _reservationitems.Add(_reservationitem);
+            }
 
-            ViewBag.PaymentID = _payment.ID;
-            ViewBag.PaymentAmount = _payment.amount;
-            ViewBag.PaymentDate = _payment.createDate.Value.ToString("R").Substring(0,16);
+            if (_payment.createDate != null)
+            {
+                ViewBag.PaymentDate = _payment.createDate.Value.ToString("R").Substring(0, 16);
+            }
             ViewBag.PaymentMethod = paymentmethods.GetById(_payment.idPaymentMethod).description;
 
-            ViewBag.CustomerBalance = CustomerAccountFinalBalance(_payment.idCustomer);
+            var _customer = customers.GetByKey("id", _payment.idCustomer);
+
+            ViewBag.CustomerName = (_customer.fullName + ", " + _customer.mainPhone);
+            
+            decimal previousBalance = paymentService.CustomerPreviousBalance(_payment.idCustomer, _payment.ID);
+            ViewBag.PreviousBalance = previousBalance;
+            decimal finalBalance = paymentService.CustomerAccountBalance(_payment.idCustomer);
+            ViewBag.FinalBalance = finalBalance;
+
+            // Tax Percentage
+            ViewBag.ProvinceTax = paymentService.GetProvinceTax(
+                sessionService.GetSessionID(this.HttpContext)
+                );
 
             return View(_reservationitems);
         }
+        #endregion
+        #region Payment or Refund
+        public ActionResult PaymentOrRefund(bool isCredit = true)
+        {
+            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long customerID = sessionService.GetSessionCustomerID(sessionID);
+            string customerName = sessionService.GetSessionCustomerNamePhone(sessionID);
+
+            // Check customer's account balance
+            decimal customerBalance = paymentService.CustomerAccountBalance(customerID);
+
+            // Retrieve totals for selected items in this session and transfer them to payment
+            payment _payment = new payment();
+            _payment = paymentService.CalculateEditSelectedTotal(sessionID, customerID);
+
+            decimal owedAmount = _payment.selectionTotal
+                + _payment.cancellationFee
+                - customerBalance
+                - _payment.primaryTotal;
+
+            long reasonID = (long)reasonForPayment.E.NewReservation;
+            string pageTitle = "Payment Or Refund";
+            string owedText = "(a) Owed Amount";
+            string balanceText = "(u) Account Balance";
+            string primaryText = string.Empty;
+            string feeText = string.Empty;
+            string selectionText = string.Empty;
+            string amountText = "(b) Customer Paid";
+            string dueText = "(c) Due Amount |(b)-(a)|";
+
+            // Payment for a New Reservation
+            if (owedAmount > 0 && _payment.primaryTotal == 0)
+            {
+                isCredit = true;
+                reasonID = (long)reasonForPayment.E.NewReservation;
+                pageTitle = "Payment For New Reservation";
+                owedText = "(a) Owed Amount (u)-(y)";
+                balanceText = "(u) Account Balance";
+                primaryText = string.Empty;
+                feeText = string.Empty;
+                selectionText = "(y) New Reservation Total";
+                amountText = "(b) Customer Paid";
+                dueText = "(c) Due Amount |(b)-(a)|";
+            }
+            // Payment for a Edit Reservation
+            if (owedAmount > 0 && _payment.primaryTotal > 0)
+            {
+                isCredit = true;
+                reasonID = (long)reasonForPayment.E.ExtendReservation;
+                pageTitle = "Payment For Extend Reservation";
+                owedText = "(a) Owed Amount (u)+(v)-(y)";
+                balanceText = "(u) Account Balance";
+                primaryText = "(v) Primary Reservation Total";
+                feeText = string.Empty;
+                selectionText = "(y) New Reservation Total";
+                amountText = "(b) Customer Paid";
+                dueText = "(c) Due Amount |(b)-(a)|";
+            }
+            // Refund for a Edit Reservation
+            if (owedAmount < 0 && _payment.primaryTotal > 0)
+            {
+                isCredit = false;
+                reasonID = (long)reasonForPayment.E.ShortenReservation;
+                pageTitle = "Refund For Shorten Reservation";
+                owedText = "(a) Refund Amount (u)+(v)-(x)-(y)";
+                balanceText = "(u) Account Balance";
+                primaryText = "(v) Primary Reservation Total";
+                feeText = "(x) Cancellation Fee";
+                selectionText = "(y) New Reservation Total";
+                amountText = "(b) Customer Received";
+                dueText = "(c) Credit Amount (b)-(a)";
+            }
+
+            // Set reason for payment
+            updateReasonForPayment();            
+
+            // Texts for payment page
+            ViewBag.IsCredit = isCredit;
+            ViewBag.ReasonForPayment = reasonID;
+            ViewBag.PageTitle = pageTitle;
+            ViewBag.OwedText = owedText;
+            ViewBag.BalanceText = balanceText;
+            ViewBag.PrimaryText = primaryText;
+            ViewBag.FeeText = feeText;
+            ViewBag.SelectionText = selectionText;
+            ViewBag.AmountText = amountText;
+            ViewBag.DueText = dueText;
+            // Tax Percentage
+            ViewBag.ProvinceTax = paymentService.GetProvinceTax(sessionID);
+            // Payment summary info
+            ViewBag.OwedAmount = owedAmount;
+            ViewBag.CustomerBalance = customerBalance;
+            ViewBag.CustomerID = customerID;
+            ViewBag.CustomerName = customerName;
+
+            // Create ViewBag for Dropdownlist            
+            reasonsForPayment(pageTitle);
+            // Create ViewBag for Dropdownlist
+            paymentMethods("VISA");
+
+            return View(_payment);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PaymentOrRefund(payment _payment)
+        {
+            // Identify session
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+
+            // Create and insert payment
+            _payment.idSession = sessionID;
+            _payment.createDate = DateTime.Now;
+            _payment.lastUpdate = DateTime.Now;
+
+            payments.Insert(_payment);
+            payments.Commit();
+            long ID = _payment.ID;
+
+            var _selecteditems = selecteditems.GetAll().Where(s => s.idSession == sessionID);
+            foreach (selecteditem item in _selecteditems)
+            {
+                if (item.isSiteChecked)
+                {
+                    // Update existing reservation item - For edit mode
+                    if (item.idReservationItem != null &&
+                        item.idReservationItem != IDnotFound)
+                    {
+                        var old_reservationitem = reservationitems.GetById(item.idReservationItem);
+                        old_reservationitem.isCancelled = true;
+                        old_reservationitem.total = 0;
+                        reservationitems.Update(old_reservationitem);
+                    }
+                    // Create and insert reservation items
+                    var _reservationitem = new reservationitem();
+                    _reservationitem.idRVSite = item.idRVSite.Value;
+                    _reservationitem.idCustomer = item.idCustomer.Value;
+                    _reservationitem.idStaff = item.idStaff.Value;
+                    _reservationitem.checkInDate = item.checkInDate;
+                    _reservationitem.checkOutDate = item.checkOutDate;
+                    _reservationitem.site = item.site;
+                    _reservationitem.siteType = item.siteType;
+                    _reservationitem.weeks = item.weeks;
+                    _reservationitem.weeklyRate = item.weeklyRate;
+                    _reservationitem.days = item.days;
+                    _reservationitem.dailyRate = item.dailyRate;
+                    _reservationitem.total = item.total;
+                    _reservationitem.createDate = DateTime.Now;
+                    _reservationitem.lastUpdate = DateTime.Now;
+                    reservationitems.Insert(_reservationitem);
+                    reservationitems.Commit();
+                    // Create link between payment and reservation
+                    // *****_reservationitem.idPayment
+                    var _paymentreservationitem = new paymentreservationitem();
+                    _paymentreservationitem.idPayment = _payment.ID;
+                    _paymentreservationitem.idReservationItem = _reservationitem.ID;
+                    _paymentreservationitem.createDate = DateTime.Now;
+                    _paymentreservationitem.lastUpdate = DateTime.Now;
+                    paymentsreservationitems.Insert(_paymentreservationitem);
+                    paymentsreservationitems.Commit();
+                }
+            }
+
+            // Clean selected items
+            paymentService.CleanAllSelectedItems(sessionID);
+            // 
+            sessionService.ResetSessionCustomer(sessionID);
+
+            return RedirectToAction("PrintPayment", new { id = ID });
+        }
+        #endregion
     }
 }

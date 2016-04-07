@@ -1,0 +1,39 @@
+@{
+    ViewBag.Title = "Site Reservation";
+    ViewBag.PageTitle = "Edit Selected";
+}
+
+@Html.ActionLink("Home", "Menu", "Reservation")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Site Reservation
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Edit Selected", "Reservation", "Reservation")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Load partial view - Select Site
+        $('#selected-item').load('../Reservation/CRUDSelectedItem?SelectedID=@ViewBag.SelectedID', function () {
+            // When post is successfully concluded, focus change to customerName
+            $('#customerName').focus(function () {
+                updateSelectedList(); // Update seleted item list
+            });
+        });
+    });
+</script>
+
+<!-- Edit Reservation-->
+<div class="container-fluid">
+
+    @if (ViewBag.UserID == null)
+            {
+        <div class="row">
+            <div class="col-sm-6 col-sm-push-6 col-xs-12  form-top-margin">
+                <div class="form-control reservationWarning">NO USER LOGGED IN</div>
+            </div>
+        </div>
+    }
+
+    <!-- RV Site Selection -->
+    <div id="selected-item"></div>
+        
+</div>

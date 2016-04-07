@@ -5,7 +5,6 @@ using IPMRVPark.Models;
 using IPMRVPark.Contracts.Repositories;
 using IPMRVPark.Services;
 using System.Collections.Generic;
-using IPMRVPark.Models.View;
 using System.Text.RegularExpressions;
 
 namespace IPMRVPark.WebUI.Controllers
@@ -15,6 +14,7 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<customer_view> customers;
         IRepositoryBase<ipmevent> ipmevents;
         IRepositoryBase<session> sessions;
+        IRepositoryBase<payment> payments;
         IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<rvsite_available_view> rvsites_available;
         SessionService sessionService;
@@ -22,16 +22,20 @@ namespace IPMRVPark.WebUI.Controllers
         public SearchController(
             IRepositoryBase<customer_view> customers,
             IRepositoryBase<ipmevent> ipmevents,
-            IRepositoryBase<rvsite_available_view> rvsites_available,
-            IRepositoryBase<selecteditem> selecteditems,
+            IRepositoryBase<payment> payments,
+            IRepositoryBase<rvsite_available_view> rvsites_available,            
             IRepositoryBase<session> sessions)
+
         {
             this.customers = customers;
             this.ipmevents = ipmevents;
-            this.selecteditems = selecteditems;
             this.sessions = sessions;
+            this.payments = payments;
             this.rvsites_available = rvsites_available;
-            sessionService = new SessionService(this.sessions);
+            sessionService = new SessionService(
+                this.sessions,
+                this.customers
+                );
         }//end Constructor
 
         // Search results for customer autocomplete dropdown list
@@ -99,6 +103,9 @@ namespace IPMRVPark.WebUI.Controllers
 
         private List<SelectionOptionID> SearchSiteByName(string searchString)
         {
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+
             //Return value
             List<SelectionOptionID> results = new List<SelectionOptionID>();
 
@@ -106,7 +113,8 @@ namespace IPMRVPark.WebUI.Controllers
             Regex rgx = new Regex("[^a-zA-Z0-9]");
 
             //Read RVSite available
-            var allRVSites = rvsites_available.GetAll();
+            var allRVSites = rvsites_available.GetAll().
+                Where(s => s.idIPMEvent == IPMEventID);
 
             //Remove characters from search string
             searchString = rgx.Replace(searchString, "").ToUpper();
@@ -116,10 +124,10 @@ namespace IPMRVPark.WebUI.Controllers
                 //Filter by RV Site
                 foreach (rvsite_available_view rvsite in allRVSites)
                 {
-                    string rvsiteShort = rgx.Replace(rvsite.site, "").ToUpper();
+                    string rvsiteShort = rgx.Replace(rvsite.RVSite, "").ToUpper();
                     if (rvsiteShort.Contains(searchString))
                     {
-                        results.Add(new SelectionOptionID(rvsite.id, rvsite.site));
+                        results.Add(new SelectionOptionID(rvsite.id, rvsite.RVSite));
                     }
                     if (results.Count() > 25)
                     {

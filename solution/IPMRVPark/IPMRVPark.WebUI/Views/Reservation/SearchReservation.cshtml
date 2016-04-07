@@ -1,0 +1,152 @@
+@{
+    ViewBag.Title = "Site Reservation";
+    ViewBag.PageTitle = "Search Reservation";
+}
+
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Site Reservation
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Search Reservation", "Reservation", "PrototypeUI")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Resolve root path
+        var origin = window.location.origin;
+        if (origin == 'http://www.alvm.com.br') {
+            var root = 'http://www.alvm.com.br/ipmrvpark/';
+        }
+        else {
+            var root = '../';
+        }
+        // ***** Load Reserved List
+        updateReservedList();
+        function updateReservedList() {
+            var idCustomer = $('#idCustomer').val();
+            var siteID = 0;
+            $('#reserved-list').load('../Reservation/UpdateReservedList'); // load partial view
+        };
+        $('#reserved-list').ready(function () {
+            $('.hiddenElement').toggleClass('hiddenElement');
+            $('#waitMsg').hide();
+        });
+        // ***** Customer Search
+        $('#customerName').click(function () {
+            $('#customerName').val('');
+            $('#btnSearchCustomer').prop('disabled', true);
+        });
+        var postpath = root + 'Login/GetSessionCustomer';
+        $.ajax({
+            url: postpath,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                var customerID = data.ID;
+                var customerLabel = data.Label;
+                $('#idCustomer').val(customerID);
+                $('#customerName').val(customerLabel);
+            },
+            error: function () {
+                alert('3 Some error occured.');
+            }
+        });
+        $('#customerName').autocomplete({
+            source: function (request, response) {
+                // define a function to call the action (assuming UserController)
+                var postpath = root + 'Search/SearchCustomerByNameOrPhoneResult';
+                $.ajax({
+                    url: postpath,
+                    type: 'POST',
+                    dataType: 'json',
+                    // query will be the param used by the action method
+                    data: { query: request.term },
+                    success: response
+                });
+            },
+            minLength: 1, // require at least one character from the user
+            select: function (event, ui) {
+                $('#idCustomer').val(ui.item.ID); // name of form input field: CustomerID, ProductID
+                selectCustomer();
+            }
+        });
+        // ***** Customer Selection
+        function selectCustomer() {
+            $('#waitMsg').show();// Show wait message
+            var postpath = root + 'Login/SelectCustomer';
+            $.ajax(
+            {                
+                url: postpath, // Controller/View
+                type: 'POST', //HTTP POST Method
+                dataType: 'json',
+                data: { //Passing data
+                    idCustomer: $('#idCustomer').val()
+                },
+                success: function (result) {
+                    updateReservedList();
+                    $('#btnEditReservation').focus();
+                },
+                error: function (result) {
+                    alert('7 Some error occured.');
+                }
+            });
+        };
+        // ***** Edit Reservation
+        $('#btnEditReservation').click(function () {
+            $('#waitMsg').show();// Show wait message
+        });
+    });
+</script>
+
+<!-- New Reservation-->
+<div class="container-fluid">
+
+    @if (ViewBag.UserID == null)
+            {
+        <div class="row">
+            <div class="col-sm-6 col-sm-push-6 col-xs-12  form-top-margin">
+                <div class="form-control reservationWarning">NO USER LOGGED IN</div>
+            </div>
+        </div>
+    }
+
+    <!-- Customer Selection -->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <label>
+                    <span class="col-xs-2 glyphicon glyphicon-search"></span>
+                    <span class="col-xs-10">Search By Customer</span>
+                </label>
+            </div>
+            <div class="col-sm-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
+                <input type="text" class="form-control" id="customerName" placeholder="Type name or phone and then select from the list" />
+                <input class="text-box single-line" id="idCustomer" name="idCustomer" type="hidden" value="-1" />
+            </div>
+        </div>
+    </div>
+
+    <!-- ********** Dynamic Table -->
+    <div class="row top-margin" data-toggle="tooltip" title="List of Reserved Sites">
+        <div class="col-sm-4 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
+            <span class="col-xs-1 glyphicon glyphicon-list"></span>
+            <span class="col-xs-9">Reserved Sites</span>
+        </div>
+    </div>
+
+    <div id="reserved-list">
+    </div>
+    <!-- ********** -->
+    <!-- Proceed To Edit Reservation -->
+    <div class="hiddenElement">
+        <div class="row form-top-margin">
+            <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                <a id="btnEditReservation" href="@Url.Action("GoToEditReservation", "Reservation")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <span>Edit Reservation</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,288 @@
+﻿@model IPMRVPark.Models.payment
+
+@{
+    ViewBag.Title = "Payments & Refunds";
+}
+
+@Html.ActionLink("Home", "Menu", "Login")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Payments & Refunds
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("New Payment", "ExtendReservation", "Payment")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Resolve root path
+        var origin = window.location.origin;
+        if (origin == 'http://www.alvm.com.br') {
+            var root = 'http://www.alvm.com.br/ipmrvpark/';
+        }
+        else {
+            var root = '../';
+        }
+        // **** Handle form submit
+        var formSubmit = false;
+        $("form").submit(function() {
+            return formSubmit;
+        });
+        $( "#btnSave" ).click(function() {
+            $("#waitMsg").show();// Show wait message
+            formSubmit = true;
+        });
+        // ***** Load partial view Payments For Customer
+        $('#account-details').load('../Payment/ShowPaymentPerCustomer/@ViewBag.CustomerID');
+        // ***** Load partial view Reservations For Customer
+        $('#reservation-summary').load('../Reservation/EditReservationSummary');
+        $('#ReasonForPayment').change(function () {
+            updateReasonForPayment()
+        });
+        $('#PaymentMethod').change(function () {
+            updatePaymentMethod()
+        });
+        updateReasonForPayment();
+        function updateReasonForPayment() {
+            var id = $('#ReasonForPayment').val();
+            $('#idReasonForPayment').val(id);
+        }
+        updatePaymentMethod();
+        function updatePaymentMethod() {
+            var id = $('#PaymentMethod').val();
+            $('#idPaymentMethod').val(id);
+            var array = @Html.Raw(Json.Encode(@ViewBag.PayDocType));
+            // Sort by ID
+            array = array.sort(function(a, b){
+                return a.Value-b.Value
+            });
+            //var text = "";
+            //for (i = 0; i < array.length; i++) {
+            //    text += array[i].Value + " " + array[i].Text + "<br>";
+            //}
+            //alert(text);
+            //alert(array[id-1].Value + " " + array[id-1].Text);
+            $('#docNumber').prop('placeholder', "Type here: " + array[id-1].Text);
+        }
+        // ***** Total Calculation
+        showTotal();
+        function showTotal(){
+            var customerBalance = parseFloat(@ViewBag.CustomerBalance);
+            var reservationTotal = parseFloat(@ViewBag.Total);
+            var provinceTax = parseFloat(@ViewBag.ProvinceTax);
+            var i = (reservationTotal * 100 / (100 + provinceTax)).toFixed(2);
+            var ii = reservationTotal - i;
+            var tempBalance = customerBalance - reservationTotal;
+            var amount = tempBalance * -1;
+            var finalBalance = (amount + tempBalance)*-1;
+            $('#customerBalance').text(customerBalance.toFixed(2));
+            $('#reservationTotal').text(reservationTotal.toFixed(2));
+            $('#provinceTax').text(provinceTax.toFixed(2));
+            $('#i').text(i);
+            $('#ii').text(ii.toFixed(2));
+            $('#tempBalance').text(tempBalance.toFixed(2));
+            $('#amount').val(parseFloat(amount).toFixed(2));
+            $('#finalBalance').text(finalBalance.toFixed(2));
+            $('#PaymentMethod').focus();
+        }
+        $('#amount').click(function(){
+            $('#amount').val("");
+        });
+        $('#amount').change(function(){
+            updateTotal();
+            $('#PaymentMethod').focus();
+        });
+        function updateTotal(){
+            var amount = $('#amount').val();
+            var amount = parseFloat(amount).toFixed(2)
+            $('#amount').val(amount);
+            var tempBalance = parseFloat($('#tempBalance').text());
+            var finalBalance = (parseFloat(amount) + tempBalance)*-1;
+            var finalBalance = parseFloat(finalBalance).toFixed(2)
+            $('#finalBalance').text(finalBalance);
+        }
+        // Create Date
+        $("#paymentDate").datepicker({
+            dateFormat: 'D, dd M',
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            onSelect: function () {
+                var createDate = $("#paymentDate").datepicker('getDate');
+                $("#createDate").val(createDate.toISOString().substring(0, 10));
+            }
+        });
+        $("#paymentDate").datepicker( "setDate", "0" );
+        var createDate = $("#paymentDate").datepicker('getDate');
+        $("#createDate").val(createDate.toISOString().substring(0, 10));
+    });
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="container-fluid">
+
+        <div class="row top-margin">
+            <!-- Customer Details -->
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>Customer</label>
+            </div>
+            <div class="col-sm-6 col-xs-10 form-top-margin">
+                @if (ViewBag.CustomerName == null)
+                {
+                    <div class="form-control reservationWarning">NO CUSTOMER SELECTED YET</div>
+                }
+                else
+                {
+                    <div disabled class="form-control">@ViewBag.CustomerName</div>
+                    <input class="form-control" type="hidden" id="idCustomer" name="idCustomer" value="@ViewBag.CustomerID" />
+                }
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                <a href="@Url.Action("EditReservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-tag"></span>
+                    <span>&nbsp; Back To Edit</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Customer Account Details -->
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <label>(a) Account Balance</label>
+            </div>
+            <div class="col-sm-4 col-xs-10 form-top-margin">
+                <div disabled class="form-control payment-output" type="text" id="customerBalance" name="customerBalance"></div>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
+                <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#account-details">
+                    <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
+                    <span class="col-xs-9">Account Details &nbsp;<span class="caret"></span></span>
+                </button>
+            </div>
+        </div>
+        <div id="account-details" class="collapse">
+        </div>
+        <div class="row">
+
+        </div>
+        <div class="row">
+            <!-- New Reservation Details -->
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <label>(b) Extend Reservation Total</label>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                @if (ViewBag.Total == null)
+                {
+                    <div class="form-control reservationWarning">NO SITE SELECTED YET</div>
+                }
+                else
+                {
+                    <div id="reservationTotal" disabled class="form-control payment-output"></div>
+                }
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
+                <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#reservation-summary">
+                    <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
+                    <span class="col-xs-9">Edit Details &nbsp;<span class="caret"></span></span>
+                </button>
+            </div>
+        </div>
+        <div id="reservation-summary" class="collapse">
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#tax-calculation">
+                    <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
+                    <span class="col-xs-9">Tax Breakdown &nbsp;<span class="caret"></span></span>
+                </button>
+            </div>
+        </div>
+        <div id="tax-calculation" class="collapse">
+            <div class="row form-top-margin">
+                <div class="col-sm-4 col-sm-push-1 col-xs-12">
+                    <label>(i) Amount Without Tax</label>
+                </div>
+                <div class="col-sm-4 col-xs-12">
+                    <output disabled name="i" id="i" step="0.01" class="form-control payment-output" for="a"></output>
+                </div>
+            </div>
+            <div class="row form-top-margin">
+                <div class="col-sm-4 col-sm-push-1 col-xs-12">
+                    <label>(ii) Tax HST/QST/PST (@ViewBag.ProvinceTax%)</label>
+                </div>
+                <div class="col-sm-4 col-xs-12">
+                    <output disabled name="ii" id="ii" step="0.01" class="form-control payment-output" for="a"></output>
+                </div>
+            </div>
+        </div>
+        <div class="row form-top-margin">
+            <!-- Receive Total -->
+            <div class="col-sm-4 col-xs-12">
+                <label>(c) Temp Balance (a)-(b)</label>
+            </div>
+            <div class="col-sm-4 col-xs-12 ">
+                <div id="tempBalance" disabled class="form-control payment-output"></div>
+            </div>
+        </div>
+
+        <div class="row top-margin">
+            <!-- Receive Total -->
+            <div class="col-sm-4 col-xs-12">
+                <label>(d) Receive Amount</label>
+            </div>
+            <div class="col-sm-4 col-xs-12">
+                <input type="number" name="amount" id="amount" min="0.00" step="0.01" class="form-control payment-input">
+            </div>
+            <div class="col-sm-1 col-xs-12">
+                <label>Date</label>
+            </div>
+            <div class="col-sm-3 col-xs-12">
+                <input type="text" id="paymentDate" class="form-control" />
+                <input style="display: none" type="date" id="createDate" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Receive Total -->
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <label>(e) Due Amount (d)-(c)</label>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <div id="finalBalance" disabled class="form-control payment-output">0.01</div>
+            </div>
+        </div>
+
+        <div class="row form-top-margin">
+            <div class="col-sm-2 col-xs-12">
+                <label>Pay With</label>
+            </div>
+            <div class="col-sm-3 col-xs-12">
+                @Html.DropDownList("PaymentMethod", null, null, new { @class = "form-control" })
+                <input class="text-box single-line" id="idPaymentMethod" name="idPaymentMethod" type="hidden" />
+            </div>
+            <div class="col-sm-7 col-xs-12">
+                <input type="text" class="form-control" name="docNumber" id="docNumber">
+                @Html.ValidationMessageFor(model => model.docNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row form-top-margin">
+            <div class="col-sm-6 col-xs-12">
+                <label>Special Notes</label>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+                <textarea class="form-control" name="comments" id="comments" rows="2"></textarea>
+                @Html.ValidationMessageFor(model => model.comments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row form-top-margin">
+            <div class="col-sm-4 col-sm-push-8 col-xs-12">
+                <button id="btnSave" class="btn btn-block btn-default" type="submit">
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                    <span class="col-xs-9">Confirm</span>
+                </button>
+            </div>
+        </div>
+    </div>
+}

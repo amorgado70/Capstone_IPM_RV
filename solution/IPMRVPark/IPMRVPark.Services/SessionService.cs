@@ -12,12 +12,17 @@ namespace IPMRVPark.Services
     public class SessionService
     {
         IRepositoryBase<session> sessions;
+        IRepositoryBase<customer_view> customers;
 
         public const string SessionName = "IPMRVPark";
 
-        public SessionService(IRepositoryBase<session> sessions)
+        public SessionService(
+            IRepositoryBase<session> sessions,
+            IRepositoryBase<customer_view> customers
+            )
         {
             this.sessions = sessions;
+            this.customers = customers;
         }
 
         private session createNewSession(HttpContextBase httpContext)
@@ -89,6 +94,89 @@ namespace IPMRVPark.Services
             result = createNewSession(httpContext);
 
             return result;
+        }
+
+        const long IDnotFound = -1;
+
+        public long GetSessionID(HttpContextBase httpContext)
+        {
+            session _session = GetSession(httpContext);
+            return _session.ID;
+        }
+
+        public long GetSessionUserID(HttpContextBase httpContext)
+        {
+            session _session = GetSession(httpContext);
+            if (_session.idStaff == null)
+            {
+                //return IDnotFound;
+                var _Url = httpContext.Request.Url;
+                string pathToLogin = _Url.Scheme + "://" + _Url.Authority +
+                    "/Login/Login";
+                httpContext.Response.Redirect(pathToLogin, false);
+                return IDnotFound;
+            }
+            else
+            {
+                return _session.idStaff.Value;
+            }
+        }
+
+        private bool GetSessionCustomer(ref customer_view customer, long sessionID)
+        {
+            // Read customer from session
+            session _session = sessions.GetById(sessionID);
+            bool customerFound = false;
+            try //checks if customer is in database
+            {
+                customer = customers.GetAll().Where(c => c.id == _session.idCustomer).FirstOrDefault();
+                customerFound = !(customer.Equals(default(session)));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred: '{0}'", e);
+            }
+            // Customer found in database
+            return customerFound;
+        }
+
+        public long GetSessionCustomerID(long sessionID)
+        {
+            customer_view _customer = new customer_view();
+            if (GetSessionCustomer(ref _customer, sessionID))
+            {
+                return (_customer.id);
+            }
+            else
+            {
+                return IDnotFound;
+            }
+        }
+        public string GetSessionCustomerNamePhone(long sessionID)
+        {
+            customer_view _customer = new customer_view();
+            if (GetSessionCustomer(ref _customer, sessionID))
+            {
+                return (_customer.fullName + ", " + _customer.mainPhone);
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+        // Reset session customer
+        public void ResetSessionCustomer(long sessionID)
+        {
+            session _session = sessions.GetById(sessionID);
+            _session.idCustomer = null;
+            sessions.Update(_session);
+            sessions.Commit();
+        }
+
+        public long GetSessionIPMEventID(long sessionID)
+        {
+            session _session = sessions.GetById(sessionID);
+            return _session.idIPMEvent;
         }
     }
 }

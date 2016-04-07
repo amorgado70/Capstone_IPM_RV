@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using IPMRVPark.Models;
-using IPMRVPark.Models.View;
 using IPMRVPark.Contracts.Data;
 using IPMRVPark.Contracts.Repositories;
 

@@ -27,7 +27,11 @@ namespace IPMRVPark.Models
         public string street { get; set; }
         public string city { get; set; }
         public string postalCode { get; set; }
-        public string Province { get; set; }
-        public string Country { get; set; }
+        public string countryCode { get; set; }
+        public string countryName { get; set; }
+        public string provinceCode { get; set; }
+        public string provinceName { get; set; }
+        public Nullable<bool> isEmailReceipt { get; set; }
+        public Nullable<bool> isPartyMember { get; set; }
     }
 }

@@ -1,0 +1,171 @@
+﻿@model IPMRVPark.Models.customer_view
+
+@{
+    ViewBag.Title = "EditCustomer";
+    ViewBag.PageTitle = "Edit Customer Info";
+}
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Maintenance
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Edit Customer", "EditCustomer", "Customer")
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="container-fluid">
+        <fieldset>
+            <legend></legend>
+            @Html.HiddenFor(model => model.id)
+            <div class="row top-margin">
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <Label>First Name</Label>
+                </div>
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.firstName)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Last Name:
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.lastName)
+                    @Html.ValidationMessageFor(model => model.lastName)
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    E-mail :
+                </div>
+                <div class="editor-field col-sm-9 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.email)
+                    @Html.ValidationMessageFor(model => model.email)
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Main Phone :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.mainPhone)
+                    @Html.ValidationMessageFor(model => model.mainPhone)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Cell Phone :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.cellPhone)
+                    @Html.ValidationMessageFor(model => model.cellPhone)
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Home Phone :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.homePhone)
+                    @Html.ValidationMessageFor(model => model.homePhone)
+                </div>
+
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Fax Number :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.faxNumber)
+                    @Html.ValidationMessageFor(model => model.faxNumber)
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Comments :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.comments)
+                    @Html.ValidationMessageFor(model => model.comments)
+                </div>
+
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Street :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.street)
+                    @Html.ValidationMessageFor(model => model.street)
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    City :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.city)
+                    @Html.ValidationMessageFor(model => model.city)
+                </div>
+
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Postal Code :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.postalCode)
+                    @Html.ValidationMessageFor(model => model.postalCode)
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Province :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DropDownListFor(model => model.provinceCode,
+                        new SelectList(ViewBag.Province, "code", "name"),
+                        "Select Province",
+                        new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.provinceCode, "", new { @class = "text-danger" })
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Country :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DropDownListFor(model => model.countryCode,
+                        new SelectList(ViewBag.Country, "code", "name"),
+                        "Select Country",
+                        new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.countryCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Receipt By E-mail :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.isEmailReceipt)
+                    @Html.ValidationMessageFor(model => model.isEmailReceipt)
+                </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    Party Member :
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.isPartyMember)
+                    @Html.ValidationMessageFor(model => model.isPartyMember)
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="editor-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
+                    <button type="submit" class="btn btn-block btn-default">
+                        <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                        <span class="col-xs-9">Confirm Customer Update</span>
+                    </button>
+                </div>
+                <div class="editor-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
+                    <a href="@Url.Action("Index", "CustomerView")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span>Back to List</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

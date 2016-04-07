@@ -15,11 +15,7 @@ namespace IPMRVPark.Models
     public partial class rvsite_available_view
     {
         public long id { get; set; }
-        public string site { get; set; }
-        public Nullable<long> idIPMEvent { get; set; }
-        public long idSiteType { get; set; }
-        public string description { get; set; }
-        public Nullable<decimal> weeklyRate { get; set; }
-        public Nullable<decimal> dailyRate { get; set; }
+        public string RVSite { get; set; }
+        public long idIPMEvent { get; set; }
     }
 }

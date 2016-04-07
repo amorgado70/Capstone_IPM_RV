@@ -50,6 +50,10 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.5840.25917, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.6\lib\net40\System.Linq.Dynamic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,18 +63,20 @@
   <ItemGroup>
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\PartyMemberRepository.cs" />
+    <Compile Include="Repositories\PartyMemberViewRepository.cs" />
+    <Compile Include="Repositories\PayDocTypeRepository.cs" />
     <Compile Include="Repositories\PlaceInMapRepository.cs" />
     <Compile Include="Repositories\PaymentMethodRepository.cs" />
     <Compile Include="Repositories\PaymentRepository.cs" />
     <Compile Include="Repositories\ReasonForPaymentRepository.cs" />
     <Compile Include="Repositories\PaymentReservationItemRepository.cs" />
-    <Compile Include="Repositories\ReservationItemRepository.cs" />
-    <Compile Include="Repositories\StaffRepository.cs" />
+    <Compile Include="Repositories\ServiceRepository.cs" />
     <Compile Include="Repositories\SiteDescriptionRateViewRepository.cs" />
-    <Compile Include="Repositories\TotalPerPaymentView.cs" />
-    <Compile Include="Repositories\TotalPerReservationItemView.cs" />
-    <Compile Include="Repositories\TotalPerSessionViewRepository.cs" />
-    <Compile Include="Repositories\TotalPerSelectedItemViewRepository.cs" />
+    <Compile Include="Repositories\ReservationItemRepository.cs" />
+    <Compile Include="Repositories\PersonRepository.cs" />
+    <Compile Include="Repositories\SiteSizeRepository.cs" />
+    <Compile Include="Repositories\StaffRepository.cs" />
     <Compile Include="Repositories\SelectedItemRepository.cs" />
     <Compile Include="Repositories\RVSiteAvailableViewRepository.cs" />
     <Compile Include="Repositories\IPMEventRepository.cs" />
@@ -78,7 +84,6 @@
     <Compile Include="Repositories\ProvinceRepository.cs" />
     <Compile Include="Repositories\CountryRepository.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
-    <Compile Include="Repositories\ReservationViewRepository.cs" />
     <Compile Include="Repositories\CustomerViewRepository.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
   </ItemGroup>

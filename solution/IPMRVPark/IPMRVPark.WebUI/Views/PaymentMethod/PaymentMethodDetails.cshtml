@@ -1,0 +1,58 @@
+﻿@model IPMRVPark.Models.paymentmethod
+
+@{
+    ViewBag.Title = "Payment Method Details";
+    ViewBag.PageTitle = "Payment Method Details";
+}
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Maintenance
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Payment Method Details", "PaymentMethodDetails", "PaymentMethod")
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+<div class="container-fluid">
+    <fieldset>
+        <legend></legend>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Method Description :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.description)
+                </div>
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Document Type :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.doctype)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
+                    <a href="@Url.Action("EditPaymentMethod", "PaymentMethod", new { id = Model.ID })" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span>Update Payment Method</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+                <div class="display-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
+                    <a href="@Url.Action("Index", "PaymentMethod")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span>Back to List</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

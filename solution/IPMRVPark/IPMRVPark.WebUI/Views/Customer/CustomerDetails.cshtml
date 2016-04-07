@@ -1,0 +1,189 @@
+﻿@model IPMRVPark.Models.customer_view
+
+@{
+    ViewBag.Title = "Customer Details";
+    ViewBag.PageTitle = "Details Customer";
+}
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Maintenance
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Customer Details", "CustomerDetails", "CustomerView")
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+<div class="container-fluid">
+    <fieldset>
+        <legend></legend>
+        @Html.HiddenFor(model => model.id)
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    First Name :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @*<input type="text" class="form-control" id="firstName" name="firstName" value="<%= Model.Value %>" />*@
+                    @Html.DisplayFor(model => model.firstName)
+                </div>
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Last Name:
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.lastName)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    E-mail :
+                </div>
+                <div class="display-field col-sm-9 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.email)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Main Phone :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.mainPhone)
+                </div>
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Cell Phone :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.cellPhone)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Home Phone :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.homePhone)
+                </div>
+
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Fax Number :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.faxNumber)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Comments :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.comments)
+                </div>
+
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Street :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.street)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    City :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.city)
+                </div>
+
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Postal Code :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.postalCode)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Country Code :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.countryCode)
+                </div>
+
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Country Name :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.countryName)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Province Code :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.provinceCode)
+                </div>
+
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Province Name :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.provinceName)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Receipt By E-mail :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.isEmailReceipt)
+                </div>
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
+                    Party Member :
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.isPartyMember)
+                </div>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="form-group">
+                <div class="display-label col-sm-6 col-xs-12 form-top-margin">
+                    @*@Html.ActionLink("Edit", "EditCustomer", new { id = Model.id }, new { @class = "btn btn-success" })*@
+                    <a href="@Url.Action("EditCustomer", "Customer", new { id = Model.id })" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        <span>Edit Customer Info</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+                <div class="display-label col-sm-6 colxs-12 form-top-margin">
+                    <a href="@Url.Action("NewReservation", "Reservation")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span>Go To New Reservation</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

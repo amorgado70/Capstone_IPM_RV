@@ -54,7 +54,7 @@
                     <span>New Reservation</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
-                <a href="@Url.Action("ReservationSearch", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
+                <a href="@Url.Action("SearchReservation", "Reservation")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-search"></span>
                     <span>Search Reservation</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
@@ -73,7 +73,7 @@
         </div>
         <div id="menuCustomerRegistration" class="col-xs-12 collapse">
             <div class="col-xs-10 col-xs-push-2 col-sm-6 col-sm-push-4">
-                <a href="@Url.Action("Customer", "PrototypeUI")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
+                <a href="@Url.Action("CreateCustomer", "Customer")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-plus-sign"></span>
                     <span>New Customer</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
@@ -98,17 +98,12 @@
         </div>
         <div id="menuPaymentRefund" class="col-xs-12 collapse">
             <div class="col-xs-10 col-xs-push-2 col-sm-6 col-sm-push-4">
-                <a href="@Url.Action("NewReservation", "Payment")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
+                <a href="@Url.Action("PaymentOrRefund", "Payment")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-plus-sign"></span>
-                    <span>New Reservation Payment</span>
+                    <span>New Payment</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
-                <a href="@Url.Action("Refund", "PrototypeUI")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To" style="background-color:#FFFFDD;">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
-                    <span>New Refund</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a href="@Url.Action("PaymentSearch", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
+                <a href="@Url.Action("PaymentSearch", "Payment")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-search"></span>
                     <span>Search Payment</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>

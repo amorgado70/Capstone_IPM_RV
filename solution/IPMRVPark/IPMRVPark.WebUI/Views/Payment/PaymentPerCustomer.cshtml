@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IPMRVPark.Models.total_per_payment_view>
+﻿@model IEnumerable<IPMRVPark.Models.payment>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -38,19 +38,29 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => item.idPayment)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ID)</td>
                         <td>@item.createDate.Value.ToString("MMM") @item.createDate.Value.ToString("dd") @item.createDate.Value.ToString("yyyy") </td>
-                        <td>@Html.DisplayFor(modelItem => item.reasonForPayment)</td>
-                        <td style="text-align:right;">@Html.DisplayFor(modelItem => item.reservationitem_total)</td>
-                        <td style="text-align:right;">@Html.DisplayFor(modelItem => item.paymentAmount)</td>
+                        <td>@Html.DisplayFor(modelItem => item.reasonforpayment.description)</td>
+                        <td style="text-align:right;">@Html.DisplayFor(modelItem => item.selectionTotal)</td>
+                        <td style="text-align:right;">@Html.DisplayFor(modelItem => item.amount)</td>
                         <td style="text-align:right;">@Html.DisplayFor(modelItem => item.balance)</td>
                     </tr>
                 }
-                <tr>
-                    <td>Final Balance</td>
-                    <td colspan="4"></td>
-                    <td style="text-align:right;">@ViewBag.CustomerBalance.ToString("C")</td>
-                </tr>
+                @{ decimal dueAmount = ViewBag.CustomerBalance * -1; }
+                @if (ViewBag.CustomerBalance <= 0)
+                {
+                    <tr>
+                        <td colspan="5" style="text-align:right;">Due Amount</td>
+                        <td style="text-align:right;">@dueAmount.ToString("N2")</td>
+                    </tr>
+                }
+                else
+                { 
+                    <tr>
+                        <td colspan="5" style="text-align:right;">Credit Amount</td>
+                        <td style="text-align:right;">@ViewBag.CustomerBalance.ToString("N2")</td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
