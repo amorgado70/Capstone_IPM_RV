@@ -4,6 +4,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using IPMRVPark.Models;
+using System.Data.Objects;
+using System.Data.Entity.Infrastructure;
 
 namespace IPMRVPark.Contracts.Data
 {
@@ -47,6 +49,25 @@ namespace IPMRVPark.Contracts.Data
         public DbSet<rvsite_coord_view> rvsite_coord_view { get; set; }
         public DbSet<rvsite_status_view> rvsite_status_view { get; set; }
         public DbSet<site_description_rate_view> site_description_rate_view { get; set; }
+        public DbSet<sitetype_service_rate_view> sitetype_service_rate_view { get; set; }
         public DbSet<staff_view> staff_view { get; set; }
+
+        public virtual ObjectResult<sp_delete_sitetype_dependants_Result> sp_delete_sitetype_dependants(Nullable<long> typeID, ObjectParameter success, ObjectParameter errMsg)
+        {
+            var typeIDParameter = typeID.HasValue ?
+                new ObjectParameter("typeID", typeID) :
+                new ObjectParameter("typeID", typeof(long));
+
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_delete_sitetype_dependants_Result>("sp_delete_sitetype_dependants", typeIDParameter, success, errMsg);
+        }
+
+        public virtual ObjectResult<sp_reset_event_derivatives_Result> sp_reset_event_derivatives(Nullable<long> eventID, ObjectParameter success, ObjectParameter errMsg)
+        {
+            var eventIDParameter = eventID.HasValue ?
+                new ObjectParameter("eventID", eventID) :
+                new ObjectParameter("eventID", typeof(long));
+
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_reset_event_derivatives_Result>("sp_reset_event_derivatives", eventIDParameter, success, errMsg);
+        }
     }
 }

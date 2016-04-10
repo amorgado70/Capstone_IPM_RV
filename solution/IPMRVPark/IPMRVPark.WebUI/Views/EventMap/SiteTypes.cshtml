@@ -1,0 +1,259 @@
+﻿@model IEnumerable<IPMRVPark.Models.sitetype_service_rate_view>
+
+    @{
+        ViewBag.Title = "IPM Event Info & Rates";
+        ViewBag.PageTitle = "IPM Event Info & Rates";
+    }
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+
+    // Ajax request for save typeRate  //long eventId, long serviceId, long sizeId, decimal week, decimal day
+    function AddTypeRate(eventId) {
+        var serviceId = document.getElementById("newtype_service").value;
+        var sizeId = document.getElementById("newtype_size").value;
+        $.getJSON("../EventMap/AddTypeRate", {
+            eventId: eventId, serviceId: document.getElementById("newtype_service").value,
+            service: GetSelectedText("newtype_service"),
+            sizeId: document.getElementById("newtype_size").value,
+            size: GetSelectedText("newtype_size"),
+            week: document.getElementById("newtype_week").value,
+            day: document.getElementById("newtype_day").value
+        },
+                function (data) {
+					if( data.success == false )
+					{
+						alert( data.msg );
+						return;
+					}
+
+                }).done(function (data) {
+					if( data.success == true ){
+						AddToTable(eventId, sizeId, serviceId);
+					}
+                }).fail(function (d, textStatus, error) {
+                    console.error("getJSON failed, status: " + textStatus + ", error: " + error)
+                });
+    }
+
+    function DeleteTypeRate(eventId, btnId) {
+
+        // make controller's DeleteTypeRate parameter
+        var arr = btnId.split(',');
+        var sizeId = parseInt(arr[0],10);
+        var serviceId = parseInt(arr[1],10);
+
+        $.getJSON("../EventMap/DeleteTypeRate", {
+            eventId: eventId, 
+            sizeId: sizeId,
+            serviceId: serviceId
+        },
+                function (data) {
+                    if( data.success == false )
+                    {
+                        alert( data.msg );
+                        return;
+                    }
+
+                }).done(function (data) {
+                    if( data.success == true ){
+                        location.reload();
+                    }
+                }).fail(function (d, textStatus, error) {
+                    console.error("getJSON failed, status: " + textStatus + ", error: " + error)
+                });
+    }
+
+    function GetSelectedText( selectedId ) {
+        var select = document.getElementById(selectedId);
+        return select.options[select.selectedIndex].text;
+    }
+
+    function AddToTable(eventId, sizeId, serviceId) {
+        // add to new row to table
+
+        var container = document.getElementById("type_item_table");
+
+        var tr = container.appendChild(document.createElement("tr"));
+        var td = tr.appendChild(document.createElement("td"));
+        var select = document.getElementById("newtype_size");
+        var t = document.createTextNode(select.options[select.selectedIndex].text);
+        td.appendChild(t);
+
+        var td2 = tr.appendChild(document.createElement("td"));
+        var select2 = document.getElementById("newtype_service");
+        var t2 = document.createTextNode(select2.options[select2.selectedIndex].text);
+        td2.appendChild(t2);
+
+        var td3 = tr.appendChild(document.createElement("td"));
+        td3.style.textAlign = "right";
+        var t3 = document.createTextNode(document.getElementById("newtype_week").value);
+        td3.appendChild(t3);
+
+        var td4 = tr.appendChild(document.createElement("td"));
+        td4.style.textAlign = "right";
+        var t4 = document.createTextNode(document.getElementById("newtype_day").value);
+        td4.appendChild(t4);
+
+        td = container.appendChild(document.createElement("td"));
+        td.colSpan = "4";
+        td.style = "border-top:none";
+
+        var div = td.appendChild(document.createElement("div"));
+        div.className = "dropdown pull-right";
+        var btn = div.appendChild(document.createElement("button"));
+        btn.className = "btn btn-default btn-block form-top-margin";
+        btn.id = sizeId.toString() + "," + serviceId.toString();
+        btn.type = "button";
+        //btn.onclick = "DeleteTypeRate(" + eventId.toString() + "," + btn.id + ")";
+        btn.onclick = function () { DeleteTypeRate(eventId, btn.id); }
+        btn.appendChild(document.createTextNode("Delete"));
+        var span = btn.appendChild(document.createElement("span"));
+        span.className = "caret";
+
+        // reset values in input form
+
+        // and collapse ?
+
+
+    }
+</script>
+
+
+    <div class="row top-margin">
+        <div class="col-sm-8 col-xs-12 form-top-margin">
+            <span class="col-xs-1 glyphicon glyphicon-list"></span>
+            <b>List of Site Types & Rates</b>
+        </div>
+    </div>
+                      <div class="row top-margin">
+                          <div id="typerateList" class="col-xs-12">
+                              <table class="table" >
+                                  <thead>
+                                      <tr>
+                                          <th>
+                                              Site Type <br />
+                                              Size
+                                          </th>
+                                          <th>Service</th>
+                                          <th style="text-align:right;">
+                                              Site Rate<br />
+                                              Weekly
+                                          </th>
+                                          <th style="text-align:right;">Daily</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody id="type_item_table">
+                                      <tr>
+                                          <td colspan="4">
+                                              <div class="pull-right" data-toggle="tooltip" title="Click To Expand/Collapse">
+                                                @{
+                                                    if (@ViewBag.eventStarted)
+                                                    {
+                                                        <button class="btn btn-info" disabled  title="Disabled due to event status:started" data-toggle="collapse" data-target="#newTypeRate">
+                                                            Add &nbsp; &nbsp;
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button class="btn btn-info" data-toggle="collapse" data-target="#newTypeRate">
+                                                            Add &nbsp; &nbsp;
+                                                            <span class="caret"></span>
+                                                        </button>
+    
+                                                     }
+                                                }
+                                              </div>
+                                          </td>
+                                      </tr>
+                                      <tr id="newTypeRate" class="collapse">
+                                          <td>
+                                              <select id="newtype_size" class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                                                  @{
+                                                      foreach (var i in ViewBag.sizes)
+                                                      {
+                                                          <option value="@i.ID">@i.description</option>
+                                                      }
+                                                  }
+
+                                              </select>
+                                          </td>
+                                          <td>
+                                              <select id="newtype_service" class="form-control" data-toggle="tooltip" title="Filter, search and select">
+                                                  @{
+                                                      foreach (var i in ViewBag.services)
+                                                      {
+                                                          <option value="@i.ID">@i.description</option>
+                                                      }
+                                                  }
+                                              </select>
+                                          </td>
+                                          <td>
+                                              <input id="newtype_week" type="number" min="0.00" step="any" class="form-control" placeholder="0.00" value="0.00" style="text-align:right">
+                                          </td>
+                                          <td>
+                                              <input id="newtype_day" type="number" min="0.00" step="any" class="form-control" placeholder="0.00" alue="0.00" style="text-align:right">
+                                              <button class="btn btn-default btn-block form-top-margin"  onclick="AddTypeRate(@ViewBag.eventId)">
+                                                <span class="glyphicon glyphicon-ok"></span>
+                                                <span>&nbsp; Add</span>
+                                              </button>
+                                          </td>
+                                      </tr>
+
+                                          @{
+                                              foreach (var item in Model)
+                                              {
+                                                  var btn_id = item.sizeId.ToString() + "," + item.serviceId.ToString();
+                                                  <tr>
+                                                      <td>@item.size</td>
+                                                      <td>@item.service</td>
+                                                      <td style="text-align:right;">@item.week</td>
+                                                      <td style="text-align:right;">@item.day</td>
+                                                  </tr>
+                                                    <td colspan="4" style="border-top:none">
+                                                        <div class="dropdown pull-right">
+                                                            @{
+                                                                if (ViewBag.eventStarted)
+                                                                {
+                                                                    <button id='@btn_id' class="btn btn-default btn-block form-top-margin" disabled title="Disabled due to event status:started" type="button" onclick="DeleteTypeRate(@ViewBag.eventId, '@btn_id')">
+                                                                        Delete
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <button id='@btn_id' class="btn btn-default btn-block form-top-margin" type="button" onclick="DeleteTypeRate(@ViewBag.eventId, '@btn_id')">
+                                                                        Delete
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                }
+                                                            }
+                                                            
+                                                        </div>
+                                                    </td>
+
+                                                  @*<div class="dropdown pull-right">
+                <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                    Action
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp; Edit</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-erase"></span>&nbsp; Delete</a></li>
+                </ul>
+            </div>*@
+
+                                              }
+
+
+                                          }
+                    </tbody>
+                    </table>
+                </div>
+    </div>

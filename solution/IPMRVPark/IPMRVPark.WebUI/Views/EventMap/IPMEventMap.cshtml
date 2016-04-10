@@ -1,0 +1,306 @@
+﻿@Model IPMRVPark.Services.Polygons
+
+@{
+    ViewBag.Title = "IPM Event Map";
+    ViewBag.PageTitle = "IPM Event Map";
+}
+
+<script src="https://maps.googleapis.com/maps/api/js?callback=initMap&signed_in=true&key=AIzaSyAVhsjvoHi3xwEUsAqGd3WTzcO591PRzf4&callback" async defer>
+</script>
+
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("IPM Event Map", "IPMEventMap", "EventMap")
+
+<style>
+    body {
+        min-width: 1280px;
+    }
+</style>
+
+<script type="text/javascript">
+
+    var map;
+    var lastRotate = 0;
+    var zIndex =0;
+    var sites = [];
+    var polys = [];
+    var bSiteInit = false;
+    var lastRotate = 0;
+    var lastUpdate;
+    var lastUpdateString;
+    var infoWindow;
+
+    window.onload = function () {
+        initialize(@ViewBag.Lat, @ViewBag.Lng);
+    }
+
+    function initialize( Lat, Lng) {
+        //var myLatlng = new google.maps.LatLng( 43.66993556555664,-81.31638443760211);
+        var myLatlng = new google.maps.LatLng( Lat,Lng);
+
+        var myConfig = {
+            zoom: 17,
+              center: myLatlng,
+            mapTypeControl: false,
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.LEFT_CENTER
+            },
+            scaleControl: true,
+            streetViewControl: false,
+            fullscreenControl: true
+        }
+        // create google map object
+        map = new google.maps.Map(document.getElementById("map"), myConfig);
+
+        // create polygons for sites
+        createPolygons();
+
+        var styles = [
+        {
+            stylers: [
+              { hue: "#00ffe6" },
+              { saturation: -20 }
+            ]
+        },{
+            featureType: "all",
+            stylers: [
+              { visibility: "off" }
+            ]
+        },{
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [
+              { lightness: 100 },
+              { visibility: "off" }
+            ]
+        },{
+            featureType: "road",
+            elementType: "labels",
+            stylers: [
+              { visibility: "off" }
+            ]
+        }
+        ];
+        // set void background
+        map.setOptions({styles: styles});
+
+        // set infoWindow
+        this.infoWindow = new google.maps.InfoWindow();
+
+        // start to refresh
+        startRefresh();
+    }
+
+    function setInit(){
+        bSiteInit = true;
+    }
+
+    // create polygon
+    function setSites( id, name, service, tag, color, isSite, coords ){
+        var site = {
+            id : id,
+            name : name,
+            service : service,
+            tag : tag,
+            color : color,
+            isSite : isSite,
+            coords : coords
+        };
+        sites.push( site );
+    }
+
+    function createPolygons(){
+        for (i = 0; i < sites.length; i++){
+            createPolygonObject( sites[i].id, sites[i].name, sites[i].service, sites[i].tag, sites[i].color, sites[i].isSite, sites[i].coords);
+        }
+    }
+
+    function createPolygonObject( id, name, service, tag, color, isSite, coords ){
+        var bounds = new google.maps.LatLngBounds();
+        var latlng, path, coord;
+        path = [];
+
+        for (j = 0; j < coords.length; j++){
+            coord = coords[j];
+            latlng = new google.maps.LatLng(coord.X, coord.Y);
+            path.push(latlng);
+            bounds.extend(latlng);
+        }
+
+        var point = bounds.getCenter();
+
+        //var content= '<div><h3>' + name + '</h3><div>' + tag + '</div></div>';
+        var content= '<div><h3>' + name + '</h3><div>' + service + '</div><div>' + tag + '</div></div>';
+        //rgb = this.getRGBColorTransparency(placemark.style.color);
+        //rgbForLine = this.getRGBColorTransparency(placemark.style.Linecolor);
+
+        //var clickable = isSite;
+        //if( placemark.folderId != "0-0" )
+         //   clickable = false;
+
+        var polyOptions = { map:  this.map,
+            paths: path,
+            title: name,
+            position: point,
+            strokeColor: "#000000",
+            strokeWeight: 0.5,
+            strokeOpacity: 1,
+            fillColor: "#" + color.substring(2),
+            fillOpacity: isSite ? 1 : 0.1,
+            description: content,
+            folderId:   1,
+            zIndex: this.zindex++,
+            clickable: isSite
+        };
+
+        var poly = new google.maps.Polygon(polyOptions);
+
+        poly.bounds = bounds;
+        poly.id = id;
+        poly.docId = 1;
+        poly.name = name;
+
+
+        var that = this;
+        google.maps.event.addListener(poly, 'click', function() {
+            that.openBubble(poly);
+        });
+
+
+        this.polys.push(poly);
+        //placemark.areas.push(poly);
+        //placemark.mapObject = poly;
+        poly.setMap(this.map);
+    }
+
+    function openBubble(poly){
+        if (this.infoWindow){
+            if (poly.description !== undefined){
+                //this.infoWindow.setContent(object.description);
+                this.infoWindow.setContent("<a href='#'" +  poly.description );  // modified by Kangryong
+            }
+            if (poly.position !== undefined){
+                this.infoWindow.setPosition(poly.position);
+            }
+            this.infoWindow.open(this.map, poly);
+        }
+    }
+
+    function getPoly( key )
+    {
+        for(i=0; i<polys.length; i++){
+            if( key == polys[i].id )
+                return polys[i];
+        }
+        return null;
+    }
+
+    // update site !! need optimization with binary search or indexed contents
+    function updateSite( update ){
+        var key = update.id;
+        var poly = getPoly(key);
+
+        poly.setOptions({ fillColor:"#" + update.fillColor.substring(2)});
+
+        lastUpdateString = update.lastUpdate;
+    }
+
+    function siteUpdate(updates){
+        for (j = 0; j < updates.length; j++){
+            updateSite( updates[j]);
+        }
+    }
+
+    // Ajax request for site update
+    function startRefresh(){
+        $.getJSON( "../EventMap/GetSiteUpdate", {lastUpdate:lastUpdateString},
+                function(data){
+                    siteUpdate(data);
+                }).done( function(){
+                    setTimeout(startRefresh, 5000);
+                }).fail( function(jqxhr, textStatus, error) {
+                    console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+                    //alert( jqxhr.responseText );
+                    alert( "Site information Refresh failed.");
+                });
+    }
+
+    //rotate a polygon
+    function rotatePolygons(angle){
+        // get angle change for rotate adjustment
+        var angleChange = angle - lastRotate;
+        // get all shapes from this parser
+
+        for( k=0; k<polys.length; k++)
+            rotatePolygon(polys[k], angleChange );
+
+        // reset last rotate
+        lastRotate = angle;
+    }
+
+    function rotatePolygon(polygon, angle){
+        var prj = map.getProjection();
+        var origin = prj.fromLatLngToPoint(map.getCenter());
+        var coords = polygon.getPath().getArray().map(function(latLng){
+            var point = prj.fromLatLngToPoint(latLng);
+            var rotatedLatLng =  prj.fromPointToLatLng(rotatePoint(point,origin,angle));
+            return {lat: rotatedLatLng.lat(), lng: rotatedLatLng.lng()};
+        });
+
+        // recalculate bounds of polygon
+        var bounds = new google.maps.LatLngBounds();
+        for (j = 0; j < coords.length; j++){
+            coord = coords[j];
+            latlng = new google.maps.LatLng(coord.lat, coord.lng);
+            bounds.extend(latlng);
+        }
+        // reassign center position for openBubble window
+        var center = bounds.getCenter();
+        polygon.setOptions({ position:center});
+
+        // reassign coordinates
+        polygon.setPaths(coords);
+    }
+
+    function rotatePoint(point, origin, angle){
+        var angleRad = angle * Math.PI / 180.0;
+        return {
+            x: Math.cos(angleRad) * (point.x - origin.x) - Math.sin(angleRad) * (point.y - origin.y) + origin.x,
+            y: Math.sin(angleRad) * (point.x - origin.x) + Math.cos(angleRad) * (point.y - origin.y) + origin.y
+        };
+    }
+
+</script>
+
+@{
+    var itemModel = Model.Sites;
+}
+<div class="container-fluid">
+    <div class="row text-center">
+        @*<div class="col-xs-12 col-xs-push-1 top-margin">*@
+        <div class="col-xs-12 top-margin">
+            <!--<img src="~/Images/IPMEventMap.png" class="img-responsive img-rounded" alt="IPM Evnent Map" style="min-height:500px; width:100%;" />-->
+
+            <div id="map" style="min-height:800px; width:100%;"></div>
+            <div>
+                @{
+                    foreach (var item in @itemModel)
+                    {
+                        <script>
+                            setSites(@item.id,  '@Html.Raw(@item.name)', '@item.service.description', '@item.size.description', '@item.poly_color',
+                                            '@item.isSite'=='True'?1:0, @Html.Raw(@item.json_coord))
+                        </script>
+                    }
+                    <script>setInit()</script>
+                }
+            </div>
+
+            <input class="rotateSlider" type="range" min="-180" max="180" value="0" step="1" onchange="rotatePolygons(this.value)" />
+
+            <p id="refresh"></p>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,178 @@
+﻿@model IEnumerable<IPMRVPark.Models.ipmevent>
+
+@{
+    ViewBag.Title = "IPM Event Info & Rates";
+    ViewBag.PageTitle = "IPM Event Info & Rates";
+}
+
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("IPM Event Info & Rates", "IPMEventInfo", "EventMap")
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+        // get eventInfo
+       var year = document.getElementById("event_year").value;
+       getEventInfo(year);
+
+    });
+
+    // Ajax request for event information
+    function getEventInfo(year) {
+        $.getJSON("../EventMap/GetEventInfo", { year: year },
+        function (data) {
+            $("#event_city").val(data.city);
+            $('#event_province').val(data.province);
+            $('#event_street').val(data.street);
+            $('#event_startdate').val(data.startdate);
+            $('#event_enddate').val(data.enddate);
+            $('#event_lastDateRefund').val(data.lastDateRefund);
+
+            // Load partial view
+            $('#site_types').load("../EventMap/SiteTypes", { year: year, eventId: data.id }); // load partial view
+
+        }).done(function () {
+        }).fail(function (d, textStatus, error) {
+            console.error("getJSON failed, status: " + textStatus + ", error: " + error)
+        });
+    }
+
+    // upload event information and trigger verification of event and types information
+    function verifyAndSaveTypes() {
+        $.getJSON("../EventMap/VerifyAndSaveTypes", {  
+            year: getSelectedText("event_year"),
+            city: document.getElementById("event_city").value,
+            province: getSelectedText("event_province"),
+            street: document.getElementById("event_street").value,
+            startDate: document.getElementById("event_startdate").value,
+            endDate: document.getElementById("event_enddate").value,
+            lastDateRefund: document.getElementById("event_lastDateRefund").value
+        },
+        function (data) {
+		
+			if( data.success == false )
+			{
+				alert( data.msg );
+				return;
+			}
+			// go to DigitizeMap
+			window.location.replace("../EventMap/DigitizeMap");
+        }).done(function () {
+        }).fail(function (d, textStatus, error) {
+            console.error("getJSON failed, status: " + textStatus + ", error: " + error)
+        });
+    }
+
+    function getSelectedText(selectedId) {
+        var select = document.getElementById(selectedId);
+        return select.options[select.selectedIndex].text;
+    }
+</script>
+
+
+<!--IPM Event Info & Rates-->
+<div class="container-fluid">
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-1 col-xs-12 form-top-margin">
+                <label>Year</label>
+            </div>
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select id="event_year" class="form-control" data-toggle="tooltip" title="Select" onchange="getEventInfo(this.value)">
+                    @{
+                        var year = (long)0;
+                        var lastIndex = Model.ToList().Count - 1;
+                        var j = 0;
+                        foreach (var item in Model)
+                        {
+                            year = item.year;
+
+                            if (lastIndex == j++)
+                            {
+                                <option selected>@year</option>
+                            }
+                            else
+                            {
+                                <option>@year</option>
+                            }
+                        }
+
+                        // add 3 more year to create new event
+                        for (int i = 1; i <= 3; i++)
+                        {
+                            <option>@(year+i)</option>
+                        }
+
+                    }
+
+                </select>
+            </div>
+            <div class="col-sm-1 col-xs-12 form-top-margin">
+                <label>City</label>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-top-margin">
+                <input id="event_city" type="text" class="form-control" placeholder="City Name" />
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <label>Province</label>
+            </div>
+            <div class="col-sm-2 col-xs-12 form-top-margin">
+                <select id="event_province" class="form-control">
+                    <option>AB</option>
+                    <option>BC</option>
+                    <option>QC</option>
+                    <option>ON</option>
+                </select>
+            </div>
+            <div class="col-sm-1 col-xs-12 form-top-margin">
+                <label>Street</label>
+            </div>
+            <div class="col-sm-11 col-xs-12 form-top-margin">
+                <input id="event_street" type="text" class="form-control" placeholder="Address" />
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Start Date</label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input id="event_startdate" type="date" class="form-control">
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>End Date</label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input id="event_enddate" type="date" class="form-control">
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>Last Refund</label>
+            </div>
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <input id="event_lastDateRefund" type="date" class="form-control">
+            </div>
+        </div>
+    </div>
+
+    <div id="site_types"></div>
+
+    <!--Link to Digitize IPM Event Map-->
+    <div class="row">
+        <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+            @*<a href="@Url.Action("DigitizeMap", "EventMap")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-open-file"></span>
+                <span>Digitize IPM Event Map</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>*@
+            <button class="btn btn-block btn-default btn-mylink pagination-centered" onclick="verifyAndSaveTypes(this.vaule)">
+                <span class="glyphicon glyphicon-open-file"></span>
+                <span>Digitize IPM Event Map</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+
+</div>
+
+
+

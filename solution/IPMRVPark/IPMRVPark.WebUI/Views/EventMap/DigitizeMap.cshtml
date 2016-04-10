@@ -1,0 +1,116 @@
+﻿@model IEnumerable<IPMRVPark.Models.ipmevent>
+
+@{
+    ViewBag.Title = "Digitize Map";
+    ViewBag.PageTitle = "Digitize IPM Event Map";
+}
+
+@Html.ActionLink("Home", "Menu", "PrototypeUI")
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Digitize IPM Event Map", "DigitizeMap", "PrototypeUI")
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var eventId = document.getElementById("event_select").value;
+
+        getEventSiteUrl(eventId);
+        // get eventInfo
+       //var year = document.getElementById("event_year").value;
+       //getEventInfo(year);
+
+    });
+
+    function getEventSiteUrl(eventId) {
+        $('#site_url').load("../EventMap/SiteUrl", { eventId: eventId }); // load partial view
+    }
+
+    function getSelectedText(selectedId) {
+        var select = document.getElementById(selectedId);
+        return select.options[select.selectedIndex].text;
+    }
+</script>
+  
+
+<div class="container-fluid">
+    <!-- IPM Event-->
+    <div class="row top-margin">
+        <div class="form-group">
+            <div class="col-sm-3 col-xs-12 form-top-margin">
+                <label>IPM Event Year</label>
+            </div>
+            <div class="col-sm-2 col-xs-6 form-top-margin">
+                <select id="event_select" class="form-control" data-toggle="tooltip" title="Select" onchange="getEventSiteUrl(this.value)">
+                    @{
+                        var year = (long)0;
+                        foreach (var item in Model)
+                        {
+                            year = item.year;
+
+                            if (year == ViewBag.year)
+                            {
+                                <option value="@item.ID" selected >@year</option>
+                            }
+                            else
+                            {
+                                <option value="@item.ID">@year</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-sm-5 col-sm-push-2 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+               
+                <a href="@Url.Action("IPMEventInfo", "EventMap")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-map-marker"></span>
+                    <span>IPM Event Info & Rates</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Select File -->
+    
+        @using (Html.BeginForm("DigitizeMap",
+                                "EventMap",
+                                    new { eventId = ViewBag.eventId },
+                                    FormMethod.Post,
+                                    new { enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+                <div class="col-sm-6 col-xs-12 top-margin">
+                    <div class="col-xs-6 top-margin">
+                        <input type="file"  outline ="#00FF00" min-width = "200%" text-align="right"  name="file" id="file" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-sm-push-6 col-xs-12 top-margin">
+                    <input type="submit" class="form-control" value="Upload file" />
+                </div>
+            </div>
+        }
+
+    <div id="site_url"></div>
+
+    
+           
+
+        @*<div class="row">
+            <div class="col-sm-6 col-xs-12 top-margin">
+                <button class="btn btn-block btn-default">
+                    <span class="col-xs-1"></span>
+                    <span class="col-xs-9">Select KML File</span>
+                </button>
+            </div>
+            <div class="col-xs-6 top-margin">
+                <input type="text" class="form-control" placeholder="F:\MapRev2.KML (Selected File)" disable />
+            </div>
+        </div>*@
+       
+
+
