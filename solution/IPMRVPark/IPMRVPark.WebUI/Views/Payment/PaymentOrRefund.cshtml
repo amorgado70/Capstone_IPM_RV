@@ -101,7 +101,6 @@ Payments & Refunds
             var amount = $('#amount').val();
             var amount = parseFloat(amount).toFixed(2);
             $('#amount').val(amount);
-            alert(amount);
             // Balance after payment: due or refund amount
             var owedAmount = @ViewBag.OwedAmount;
             var balance = (parseFloat(amount) - owedAmount);

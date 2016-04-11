@@ -112,7 +112,9 @@ namespace IPMRVPark.WebUI.Controllers
             customers.Commit();
 
             session _session = sessions.GetById(sessionService.GetSession(this.HttpContext).ID);
-            _session.idCustomer = _customer.ID;                ;
+            _session.idCustomer = _customer.ID;
+            sessions.Update(_session);
+            sessions.Commit();
 
             return RedirectToAction("CustomerDetails", new { id = _customer.ID});
         }

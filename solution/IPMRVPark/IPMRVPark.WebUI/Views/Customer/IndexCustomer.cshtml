@@ -1,0 +1,99 @@
+﻿@model  IEnumerable<IPMRVPark.Models.customer_view>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Customer Registration", "CreateCustomer", null, new { @class = "btn btn-success" })
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.fullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mainPhone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cellPhone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.homePhone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.faxNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.comments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.street)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.city)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.postalCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.provinceCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.countryCode)
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelitem => item.fullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.mainPhone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.homePhone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.faxNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.comments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.street)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.city)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.postalCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.provinceCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.countryCode)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditCustomer", new { id = item.id }, new { @class = "btn btn-success" })
+            @Html.ActionLink("Details", "CustomerDetails", new { id = item.id }, new { @class = "btn btn-success" })
+            @Html.ActionLink("Delete", "DeleteCustomer", new { id = item.id }, new { @class = "btn btn-success" })
+        </td>
+    </tr>
+}
+
+</table>

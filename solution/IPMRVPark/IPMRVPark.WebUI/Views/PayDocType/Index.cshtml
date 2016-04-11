@@ -1,0 +1,58 @@
+﻿@model IEnumerable<IPMRVPark.Models.paydoctype>
+
+@{
+    ViewBag.Title = "Payment Document Type Index";
+    ViewBag.PageTitle = "Payment Document Type List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="top-margin">
+    <p>
+        <a href="@Url.Action("CreatePayDocType", "PayDocType")" class="btn btn-default margin-top-10" style="margin-left:10px">
+            Add Payment Document Type
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+        </a>
+    </p>
+</div>
+    <div class="container-fluid">
+        <div class="row top-margin" style="margin-left:5px">
+            <table>
+                <tr>
+                    <th>
+                        <label style="margin-left:5px">ID</label>
+                    </th>
+                    <th>
+                        <label style="margin-left:5px">Description</label>
+                    </th>
+                    <th>
+                        <label style="margin-left:5px">Actions</label>
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID, new { style = "margin: 10px;" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.description, new { style = "margin: 10px;" })
+                        </td>
+                        <td>
+                            <a href="@Url.Action("PayDocTypeDetails", "PayDocType", new { id = item.ID })" class="btn btn-default margin-top-10">
+                                Details
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            </a>
+                            <a href="@Url.Action("EditPayDocType", "PayDocType", new { id = item.ID })" class="btn btn-default margin-top-10">
+                                Edit&nbsp;
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            </a>
+                            <a href="@Url.Action("DeletePayDocType", "PayDocType", new { id = item.ID })" class="btn btn-default margin-top-10">
+                                Remove
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>

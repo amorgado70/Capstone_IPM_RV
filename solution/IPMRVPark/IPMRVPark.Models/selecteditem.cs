@@ -42,6 +42,7 @@ namespace IPMRVPark.Models
         public decimal reservationAdditionalServAmount { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
+        public string timeStamp { get; set; }
     
         public virtual customer customer { get; set; }
         public virtual ipmevent ipmevent { get; set; }

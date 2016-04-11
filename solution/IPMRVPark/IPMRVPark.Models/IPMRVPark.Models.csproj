@@ -71,6 +71,8 @@
     <Compile Include="ipmevent.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="MapModels\sp_delete_sitetype_dependants_Result.cs" />
+    <Compile Include="MapModels\sp_reset_event_derivatives_Result.cs" />
     <Compile Include="Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -160,12 +162,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="site_description_rate_view.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sp_delete_sitetype_dependants_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sp_reset_event_derivatives_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="staff.cs">

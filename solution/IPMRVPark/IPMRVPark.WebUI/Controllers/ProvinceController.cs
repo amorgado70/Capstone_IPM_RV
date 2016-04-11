@@ -7,13 +7,13 @@ using System.Collections.Generic;
 
 namespace IPMRVPark.WebUI.Controllers
 {
-    public class ProvinceViewController : Controller
+    public class ProvinceController : Controller
     {
         IRepositoryBase<province_view> provinces_view;
         IRepositoryBase<provincecode> provincecodes;
         IRepositoryBase<countrycode> countrycodes;
 
-        public ProvinceViewController(IRepositoryBase<province_view> provinces_view,
+        public ProvinceController(IRepositoryBase<province_view> provinces_view,
                 IRepositoryBase<provincecode> provincecodes,
                 IRepositoryBase<countrycode> countrycodes)
         {

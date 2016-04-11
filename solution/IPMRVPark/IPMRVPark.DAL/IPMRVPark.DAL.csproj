@@ -70,6 +70,7 @@
     <Compile Include="Repositories\PlaceInMapRepository.cs" />
     <Compile Include="Repositories\PaymentMethodRepository.cs" />
     <Compile Include="Repositories\PaymentRepository.cs" />
+    <Compile Include="Repositories\ProvinceViewRepository.cs" />
     <Compile Include="Repositories\ReasonForPaymentRepository.cs" />
     <Compile Include="Repositories\PaymentReservationItemRepository.cs" />
     <Compile Include="Repositories\RvSiteStatusRepository.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Repositories\CustomerRepository.cs" />
     <Compile Include="Repositories\CustomerViewRepository.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
+    <Compile Include="Repositories\StaffViewRepository.cs" />
     <Compile Include="Repositories\StyleurlRepository.cs" />
   </ItemGroup>
   <ItemGroup>

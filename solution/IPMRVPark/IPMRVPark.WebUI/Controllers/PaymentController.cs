@@ -346,6 +346,7 @@ namespace IPMRVPark.WebUI.Controllers
                     _reservationitem.total = item.total;
                     _reservationitem.createDate = DateTime.Now;
                     _reservationitem.lastUpdate = DateTime.Now;
+                    _reservationitem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
                     reservationitems.Insert(_reservationitem);
                     reservationitems.Commit();
                     // Create link between payment and reservation

@@ -27,11 +27,13 @@ namespace IPMRVPark.WebUI
             container.RegisterType<IRepositoryBase<customer>, CustomerRepository>();
             container.RegisterType<IRepositoryBase<customer_view>, CustomerViewRepository>();
             container.RegisterType<IRepositoryBase<provincecode>, ProvinceRepository>();
+            container.RegisterType<IRepositoryBase<province_view>, ProvinceViewRepository>();
             container.RegisterType<IRepositoryBase<countrycode>, CountryRepository>();
             container.RegisterType<IRepositoryBase<ipmevent>, IPMEventRepository>();
             container.RegisterType<IRepositoryBase<session>, SessionRepository>();
             container.RegisterType<IRepositoryBase<selecteditem>, SelectedItemRepository>();
             container.RegisterType<IRepositoryBase<staff>, StaffRepository>();
+            container.RegisterType<IRepositoryBase<staff_view>, StaffViewRepository>();
             container.RegisterType<IRepositoryBase<person>, PersonRepository>();
             container.RegisterType<IRepositoryBase<partymember>, PartyMemberRepository>();
             container.RegisterType<IRepositoryBase<rvsite_available_view>, RVSiteAvailableViewRepository>();

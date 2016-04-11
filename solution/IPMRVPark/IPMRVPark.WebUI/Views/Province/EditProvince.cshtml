@@ -1,14 +1,14 @@
 ﻿@model IPMRVPark.Models.province_view
 
 @{
-    ViewBag.Title = "EditProvince";
-    ViewBag.PageTitle = "Update Province";
+    ViewBag.Title = "Edit Province";
+    ViewBag.PageTitle = "Edit Province";
 }
-@Html.ActionLink("Home", "Menu", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Maintenance
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("Update Province", "EditProvince", "ProvinceView")
+@Html.ActionLink("Edit Province", "EditProvince", "Province")
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -17,54 +17,47 @@ Maintenance
     <fieldset>
         <legend></legend>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
-                    Province Code :
+                <div class="editor-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Province Code</label>
                 </div>
-                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="editor-field col-sm-4 col-xs-12 form-top-margin">
                     @Html.EditorFor(model => model.provinceCode)
                     @Html.ValidationMessageFor(model => model.provinceCode)
                 </div>
-                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
-                    Province Name :
+                <div class="editor-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Province Name</label>
                 </div>
-                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="editor-field col-sm-4 col-xs-12 form-top-margin">
                     @Html.EditorFor(model => model.provinceName)
                     @Html.ValidationMessageFor(model => model.provinceName)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
-                    Country :
+                <div class="editor-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Country</label>
                 </div>
-                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="editor-field col-sm-10 col-xs-12 form-top-margin">
                     @Html.DropDownListFor(model => model.countryCode,
                         new SelectList(ViewBag.Country, "code", "name"),
                         "Select Country",
                         new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.countryCode, "", new { @class = "text-danger" })
                 </div>
-            </div>
         </div>
 
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="editor-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
                     <button type="submit" class="btn btn-block btn-default">
                         <span class="col-xs-1 glyphicon glyphicon-ok"></span>
-                        <span class="col-xs-9">Confirm Province Update</span>
+                        <span class="col-xs-9">Confirm Province Edit</span>
                     </button>
                 </div>
                 <div class="editor-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
-                    <a href="@Url.Action("Index", "ProvinceView")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                        <span class="glyphicon glyphicon-map-marker"></span>
+                    <a href="@Url.Action("Index", "Province")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
                         <span>Back to List</span>
-                        <span class="glyphicon glyphicon-chevron-right"></span>
                     </a>
                 </div>
-            </div>
         </div>
     </fieldset>
 </div>

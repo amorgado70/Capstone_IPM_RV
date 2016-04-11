@@ -4,10 +4,10 @@
     ViewBag.Title = "Add Province";
     ViewBag.PageTitle = "Add Province";
 }
-@Html.ActionLink("Home", "Menu", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Maintenance<span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("Add Province", "CreateProvince", "ProvinceView")
+@Html.ActionLink("Add Province", "CreateProvince", "Province")
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -16,54 +16,47 @@ Maintenance<span class="glyphicon glyphicon-chevron-right"></span>
     <fieldset>
         <legend></legend>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="col-sm-3 col-xs-12 form-top-margin">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
                     <label>Province Code :</label>
                 </div>
-                <div class="col-sm-3 col-xs-12 form-top-margin">
+                <div class="col-sm-4 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="provinceCode" name="provinceCode" placeholder="enter 2 digits code ..." />
                     @Html.ValidationMessageFor(model => model.provinceCode)
                 </div>
 
-                <div class="col-sm-3 col-xs-12 form-top-margin">
+                <div class="col-sm-2 col-xs-12 form-top-margin">
                     <label>Province Name :</label>
                 </div>
-                <div class="col-sm-3 col-xs-12 form-top-margin">
+                <div class="col-sm-4 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="provinceName" name="provinceName" placeholder="enter province name here ..." />
                     @Html.ValidationMessageFor(model => model.provinceName)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="col-sm-3 col-xs-12 form-top-margin">
+                 <div class="col-sm-2 col-xs-12 form-top-margin">
                     <label>Country :</label>
                 </div>
-                <div class="col-sm-9 col-xs-12 form-top-margin">
+                <div class="col-sm-10 col-xs-12 form-top-margin">
                     @Html.DropDownListFor(model => model.countryCode,
                         new SelectList(ViewBag.Country, "code", "name"),
                         "Select Country",
                         new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.countryCode, "", new { @class = "text-danger" })
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
                     <button type="submit" class="btn btn-block btn-default">
                         <span class="col-xs-1 glyphicon glyphicon-ok"></span>
                         <span class="col-xs-9">Confirm Province</span>
                     </button>
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
             <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
-                <a href="@Url.Action("Index", "ProvinceView")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                    <span class="glyphicon glyphicon-map-marker"></span>
+                <a href="@Url.Action("Index", "Province")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                     <span>Back to List</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
             </div>
         </div>

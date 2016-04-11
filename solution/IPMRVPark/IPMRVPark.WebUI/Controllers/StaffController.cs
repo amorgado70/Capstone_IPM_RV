@@ -7,13 +7,13 @@ using System.Collections.Generic;
 
 namespace IPMRVPark.WebUI.Controllers
 {
-    public class StaffViewController : Controller
+    public class StaffController : Controller
     {
         IRepositoryBase<staff_view> staffs_view;
         IRepositoryBase<staff> staffs;
         IRepositoryBase<person> persons;
 
-        public StaffViewController(IRepositoryBase<staff_view> staffs_view, 
+        public StaffController(IRepositoryBase<staff_view> staffs_view, 
                 IRepositoryBase<staff> staffs,
                 IRepositoryBase<person> persons)
         {

@@ -4,12 +4,12 @@
     ViewBag.Title = "Add Country";
     ViewBag.PageTitle = "Add Country";
 }
-@Html.ActionLink("Home", "Menu", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Maintenance<span class="glyphicon glyphicon-chevron-right"></span>
 @Html.ActionLink("Add Country", "CreateCountry", "Country")
 
-@using (Html.BeginForm()) {
+    @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 <div class="container-fluid">
@@ -17,19 +17,19 @@ Maintenance<span class="glyphicon glyphicon-chevron-right"></span>
         <legend></legend>
         <div class="row top-margin">
             <div class="form-group">
-                <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <label>Country Code :</label>
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Country Code</label>
                 </div>
-                <div class="col-sm-9 col-xs-12 form-top-margin">
-                    <input type="text" class="form-control" id="code" name="code" placeholder="enter 3 characters code ..." />
+                <div class="col-sm-10 col-xs-12 form-top-margin">
+                    @Html.TextBoxFor(model => model.code, new { placeholder = "enter 3 characters code ...", @class = "form-control"})
                     @Html.ValidationMessageFor(model => model.code)
                 </div>
 
-                <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <label>Country Name :</label>
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Country Name</label>
                 </div>
-                <div class="col-sm-9 col-xs-12 form-top-margin">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="enter country name here ..." />
+                <div class="col-sm-10 col-xs-12 form-top-margin">
+                    @Html.TextBoxFor(model => model.name, new { placeholder = "enter country name here ...", @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.name)
                 </div>
             </div>
@@ -47,9 +47,8 @@ Maintenance<span class="glyphicon glyphicon-chevron-right"></span>
         <div class="row top-margin">
             <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
                 <a href="@Url.Action("Index", "Country")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                    <span class="glyphicon glyphicon-map-marker"></span>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                     <span>Back to List</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
             </div>
         </div>

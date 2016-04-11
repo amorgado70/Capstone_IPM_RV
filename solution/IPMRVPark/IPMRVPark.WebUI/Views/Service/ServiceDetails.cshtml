@@ -4,7 +4,7 @@
     ViewBag.Title = "Service Details";
     ViewBag.PageTitle = "Service Details";
 }
-@Html.ActionLink("Home", "Menu", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Maintenance
 <span class="glyphicon glyphicon-chevron-right"></span>
@@ -17,38 +17,32 @@ Maintenance
     <fieldset>
         <legend></legend>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    ID :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>ID</label>
                 </div>
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.ID)
                 </div>
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Description :
-                </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
-                    @Html.DisplayFor(model => model.description)
-                </div>
+            <div class="display-label col-sm-2 col-sm-push-1 col-xs-12 form-top-margin">
+                <label>Description</label>
+            </div>
+            <div class="display-field col-sm-3 col-sm-push-1 col-xs-12 form-top-margin">
+                @Html.DisplayFor(model => model.description)
             </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="display-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
                     <a href="@Url.Action("EditService", "Service", new { id = Model.ID })" class="btn btn-block btn-default btn-mylink pagination-centered">
-                        <span class="glyphicon glyphicon-map-marker"></span>
-                        <span>Update Service</span>
-                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        <span class="glyphicon glyphicon-edit"></span>
+                        <span>Edit Service</span>
                     </a>
                 </div>
                 <div class="display-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
                     <a href="@Url.Action("Index", "Service")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span class="glyphicon glyphicon-chevron-left"></span>
                         <span>Back to List</span>
-                        <span class="glyphicon glyphicon-chevron-right"></span>
                     </a>
                 </div>
-            </div>
         </div>
     </fieldset>
 </div>

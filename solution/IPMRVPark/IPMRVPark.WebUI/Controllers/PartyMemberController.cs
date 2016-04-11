@@ -7,13 +7,13 @@ using System.Collections.Generic;
 
 namespace IPMRVPark.WebUI.Controllers
 {
-    public class PartyMemberViewController : Controller
+    public class PartyMemberController : Controller
     {
         IRepositoryBase<partymember_view> partymembers_view;
         IRepositoryBase<partymember> partymembers;
         IRepositoryBase<person> persons1;
 
-        public PartyMemberViewController(IRepositoryBase<partymember_view> partymembers_view, 
+        public PartyMemberController(IRepositoryBase<partymember_view> partymembers_view, 
                 IRepositoryBase<person> persons,
                 IRepositoryBase<partymember> partymembers)
         {

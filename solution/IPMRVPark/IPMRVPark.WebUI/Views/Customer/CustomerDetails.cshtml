@@ -2,9 +2,9 @@
 
 @{
     ViewBag.Title = "Customer Details";
-    ViewBag.PageTitle = "Details Customer";
+    ViewBag.PageTitle = "Customer Details ";
 }
-@Html.ActionLink("Home", "Menu", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Maintenance
 <span class="glyphicon glyphicon-chevron-right"></span>
@@ -18,149 +18,131 @@ Maintenance
         <legend></legend>
         @Html.HiddenFor(model => model.id)
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    First Name :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>First Name</label>
                 </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
                     @*<input type="text" class="form-control" id="firstName" name="firstName" value="<%= Model.Value %>" />*@
                     @Html.DisplayFor(model => model.firstName)
                 </div>
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Last Name:
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Last Name</label>
                 </div>
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.lastName)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    E-mail :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>E-mail</label>
                 </div>
                 <div class="display-field col-sm-9 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.email)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Main Phone :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Main Phone</label>
                 </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.mainPhone)
                 </div>
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Cell Phone :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Cell Phone</label>
                 </div>
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.cellPhone)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Home Phone :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Home Phone</label>
                 </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.homePhone)
                 </div>
 
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Fax Number :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Fax Number</label>
                 </div>
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.faxNumber)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Comments :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Comments</label>
                 </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.comments)
                 </div>
 
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Street :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Street</label>
                 </div>
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.street)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    City :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>City</label>
                 </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.city)
                 </div>
 
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Postal Code :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Postal Code</label>
                 </div>
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.postalCode)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Country Code :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Country Code</label>
                 </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.countryCode)
                 </div>
 
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Country Name :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Country Name</label>
                 </div>
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.countryName)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
-
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Province Code :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Province Code</label>
                 </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.provinceCode)
                 </div>
 
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Province Name :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Province Name</label>
                 </div>
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.provinceName)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Receipt By E-mail :
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Receipt By E-mail</label>
                 </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.isEmailReceipt)
                 </div>
-                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
-                    Party Member :
+
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Party Member</label>
                 </div>
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.isPartyMember)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
             <div class="form-group">

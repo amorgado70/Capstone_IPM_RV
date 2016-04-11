@@ -1,0 +1,66 @@
+﻿@model IPMRVPark.Models.province_view
+
+@{
+    ViewBag.Title = "Province Details";
+    ViewBag.PageTitle = "Province Details";
+}
+@Html.ActionLink("Home", "Menu", "Login")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Maintenance
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Province Details", "ProvinceDetails", "Province")
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+<div class="container-fluid">
+    <fieldset>
+        <legend></legend>
+        <div class="row top-margin">
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Province Code</label>
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.provinceCode)
+                </div>
+                <div class="display-label col-sm-2 col-sm-push-1 col-xs-12 form-top-margin">
+                    <label>Province Name</label>
+                </div>
+            <div class="display-field col-sm-3 col-sm-push-1 col-xs-12 form-top-margin">
+                @Html.DisplayFor(model => model.provinceName)
+            </div>
+        </div>
+        <div class="row top-margin">
+                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>Country Code</label>
+                </div>
+                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DisplayFor(model => model.countryCode)
+                </div>
+            <div class="display-label col-sm-2 col-sm-push-1 col-xs-12 form-top-margin">
+                <label>Country Name</label>
+            </div>
+            <div class="display-field col-sm-3 col-sm-push-1 col-xs-12 form-top-margin">
+                @Html.DisplayFor(model => model.countryName)
+            </div>
+        </div>
+        <div class="row top-margin">
+                <div class="display-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
+                    <a href="@Url.Action("EditProvince", "Province", new { id = Model.provinceCode })" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-edit"></span>
+                        <span>Edit Province</span>
+                    </a>
+                </div>
+                <div class="display-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
+                    <a href="@Url.Action("Index", "Province")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <span>Back to List</span>
+                    </a>
+                </div>
+        </div>
+    </fieldset>
+</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

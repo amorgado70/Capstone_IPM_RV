@@ -4,7 +4,7 @@
     ViewBag.Title = "Add Service";
     ViewBag.PageTitle = "Add Service";
 }
-@Html.ActionLink("Home", "Menu", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Maintenance<span class="glyphicon glyphicon-chevron-right"></span>
 @Html.ActionLink("Add Service", "CreateService", "Service")
@@ -16,32 +16,27 @@ Maintenance<span class="glyphicon glyphicon-chevron-right"></span>
     <fieldset>
         <legend></legend>
         <div class="row top-margin">
-            <div class="form-group">
-                <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <label>Description :</label>
+                <div class="col-sm-2 col-xs-12 form-top-margin">
+                    <label>Description</label>
                 </div>
-                <div class="col-sm-9 col-xs-12 form-top-margin">
+                <div class="col-sm-10 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="description" name="description" placeholder="enter service description here ..." />
                     @Html.ValidationMessageFor(model => model.description)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
                     <button type="submit" class="btn btn-block btn-default">
                         <span class="col-xs-1 glyphicon glyphicon-ok"></span>
                         <span class="col-xs-9">Confirm Service</span>
                     </button>
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
             <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
                 <a href="@Url.Action("Index", "Service")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                    <span class="glyphicon glyphicon-map-marker"></span>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                     <span>Back to List</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
             </div>
         </div>

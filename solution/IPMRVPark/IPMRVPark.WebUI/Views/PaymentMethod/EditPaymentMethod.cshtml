@@ -2,13 +2,13 @@
 
 @{
     ViewBag.Title = "Edit Payment Method";
-    ViewBag.PageTitle = "Update Payment Method";
+    ViewBag.PageTitle = "Edit Payment Method";
 }
-@Html.ActionLink("Home", "Menu", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Maintenance
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("Update Payment Method", "EditPaymentMethod", "PaymentMethod")
+@Html.ActionLink("Edit Payment Method", "EditPaymentMethod", "PaymentMethod")
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -17,40 +17,35 @@ Maintenance
     <fieldset>
         <legend></legend>
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
-                    Method Description :
+                    <label>Method Description</label>
                 </div>
-                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="editor-field col-sm-8 col-xs-12 form-top-margin">
                     @Html.EditorFor(model => model.description)
                     @Html.ValidationMessageFor(model => model.description)
                 </div>
                 <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
-                    Document Type :
+                    <label>Document Type</label>
                 </div>
-                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="editor-field col-sm-8 col-xs-12 form-top-margin">
                     @Html.EditorFor(model => model.doctype)
                     @Html.ValidationMessageFor(model => model.doctype)
                 </div>
-            </div>
         </div>
 
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="editor-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
                     <button type="submit" class="btn btn-block btn-default">
                         <span class="col-xs-1 glyphicon glyphicon-ok"></span>
-                        <span class="col-xs-9">Confirm Payment Method Update</span>
+                        <span class="col-xs-9">Confirm Payment Method Edit</span>
                     </button>
                 </div>
                 <div class="editor-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
                     <a href="@Url.Action("Index", "PaymentMethod")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span class="glyphicon glyphicon-chevron-left"></span>
                         <span>Back to List</span>
-                        <span class="glyphicon glyphicon-chevron-right"></span>
                     </a>
                 </div>
-            </div>
         </div>
     </fieldset>
 </div>

@@ -1,0 +1,97 @@
+﻿@model IPMRVPark.Models.partymember_view
+
+@{
+    ViewBag.Title = "Edit Party Member";
+    ViewBag.PageTitle = "Edit Party Member";
+}
+@Html.ActionLink("Home", "Menu", "Login")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Maintenance
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Edit Party Member", "EditPartyMember", "PartyMemberView")
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+<div class="container-fluid">
+    <fieldset>
+        <legend></legend>
+        @Html.HiddenFor(model => model.id)
+        <div class="row top-margin">
+                <div class="editor-label col-sm-2 col-xs-12 form-top-margin">
+                    <label>First Name</label>
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.firstName)
+                    @Html.ValidationMessageFor(model => model.firstName)
+                </div>
+                <div class="editor-label col-sm-2 col-sm-push-1 col-xs-12 form-top-margin">
+                   <Label>Last Name</Label>
+                </div>
+            <div class="editor-field col-sm-3 col-sm-push-1 col-xs-12 form-top-margin">
+                @Html.EditorFor(model => model.lastName)
+                @Html.ValidationMessageFor(model => model.lastName)
+            </div>
+        </div>
+        <div class="row top-margin">
+                <div class="editor-label col-sm-2 col-xs-12 form-top-margin">
+                    <Label>E-mail</Label>
+                </div>
+            <div class="editor-field col-sm-9 col-xs-12 form-top-margin">
+                @Html.EditorFor(model => model.email)
+                @Html.ValidationMessageFor(model => model.email)
+            </div>
+        </div>
+        <div class="row top-margin">
+                <div class="editor-label col-sm-2 col-xs-12 form-top-margin">
+                    <Label>Main Phone</Label>
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.mainPhone)
+                    @Html.ValidationMessageFor(model => model.mainPhone)
+                </div>
+            <div class="editor-label col-sm-2 col-sm-push-1 col-xs-12 form-top-margin">
+                <label>Cell Phone</label>
+            </div>
+            <div class="editor-field col-sm-3 col-sm-push-1 col-xs-12 form-top-margin">
+                @Html.EditorFor(model => model.cellPhone)
+                @Html.ValidationMessageFor(model => model.cellPhone)
+            </div>
+        </div>
+        <div class="row top-margin">
+                <div class="editor-label col-sm-2 col-xs-12 form-top-margin">
+                    <Label>Pet Info.</Label>
+                </div>
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.petDescription)
+                    @Html.ValidationMessageFor(model => model.petDescription)
+                </div>
+
+            <div class="editor-label col-sm-2 col-sm-push-1 col-xs-12 form-top-margin">
+                <label>Comments</label>
+            </div>
+            <div class="editor-field col-sm-3 col-sm-push-1 col-xs-12 form-top-margin">
+                @Html.EditorFor(model => model.comments)
+                @Html.ValidationMessageFor(model => model.comments)
+            </div>
+        </div>
+        <div class="row top-margin">
+                <div class="editor-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
+                    <button type="submit" class="btn btn-block btn-default">
+                        <span class="col-xs-1 glyphicon glyphicon-edit"></span>
+                        <span class="col-xs-9">Confirm Party Member Edit</span>
+                    </button>
+                </div>
+                <div class="editor-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
+                    <a href="@Url.Action("Index", "PartyMemberView")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <span>Back to List</span>
+                    </a>
+                </div>
+        </div>
+    </fieldset>
+</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

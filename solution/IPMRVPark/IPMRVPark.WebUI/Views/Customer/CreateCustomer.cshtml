@@ -4,11 +4,11 @@
     ViewBag.Title = "Customer Registration";
     ViewBag.PageTitle = "New Customer";
 }
-@Html.ActionLink("Home", "Menu", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Customer Registration
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("New Customer", "Customer", "PrototypeUI")
+@Html.ActionLink("New Customer", "CreateCustomer", "Customer")
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -17,54 +17,46 @@ Customer Registration
     <fieldset>
         <legend></legend>
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>First Name :</label>
+                    <label>First Name </label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="firstName" name="firstName" placeholder="enter first name here ..." />
-                    @*@Html.EditorFor(model => model.firstName)*@
                     @Html.ValidationMessageFor(model => model.firstName)
                 </div>
 
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Last Name :</label>
+                    <label>Last Name </label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="lastName" name="lastName" placeholder="enter last name here ..." />
                     @Html.ValidationMessageFor(model => model.lastName)
                 </div>
-            </div>
-            <div class="form-group">
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Email :</label>
+                    <label>Email </label>
                 </div>
                 <div class="col-sm-10 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="email" name="email" placeholder="enter email address here ..." />
                     @Html.ValidationMessageFor(model => model.email)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Main Phone :</label>
+                    <label>Main Phone </label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="mainPhone" name="mainPhone" placeholder="(555) 333-4444" />
                     @Html.ValidationMessageFor(model => model.mainPhone)
                 </div>
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Cell Phone :</label>
+                    <label>Cell Phone </label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="cellPhone" name="cellPhone" placeholder="(555) 333-4444" />
                     @Html.ValidationMessageFor(model => model.cellPhone)
                 </div>
-            </div>
-            <div class="form-group">
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Home Phone :</label>
+                    <label>Home Phone </label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="homePhone" name="homePhone" placeholder="(555) 333-4444" />
@@ -72,27 +64,23 @@ Customer Registration
                 </div>
 
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Fax Number :</label>
+                    <label>Fax Number </label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="faxNumber" name="faxNumber" placeholder="(555) 333-4444" />
                     @Html.ValidationMessageFor(model => model.faxNumber)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Street :</label>
+                    <label>Street </label>
                 </div>
                 <div class="col-sm-10 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="street" name="street" placeholder="enter street here ..." />
                     @Html.ValidationMessageFor(model => model.street)
                 </div>
-            </div>
-            <div class="form-group">
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>City :</label>
+                    <label>City </label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="city" name="city" placeholder="enter city here ..." />
@@ -100,16 +88,14 @@ Customer Registration
                 </div>
 
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Postal Code :</label>
+                    <label>Postal Code </label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="format - [A6B 3C5] ..." />
                     @Html.ValidationMessageFor(model => model.postalCode)
                 </div>
-            </div>
-            <div class="form-group">
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Province :</label>
+                    <label>Province </label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     @Html.DropDownListFor(model => model.provinceCode,
@@ -119,7 +105,7 @@ Customer Registration
                     @Html.ValidationMessageFor(model => model.provinceCode, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Country :</label>
+                    <label>Country </label>
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin">
                     @Html.DropDownListFor(model => model.countryCode,
@@ -128,25 +114,25 @@ Customer Registration
                         new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.countryCode, "", new { @class = "text-danger" })
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Comments :</label>
+                    <label>Comments </label>
                 </div>
                 <div class="col-sm-10 col-xs-12 form-top-margin">
                     <textarea class="form-control" id="comments" name="comments" rows="2"></textarea>
                     @Html.ValidationMessageFor(model => model.comments)
                 </div>
-            </div>
         </div>
         <div class="row top-margin">
-            <div class="form-group">
                 <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <label>Receipt by Email :</label>
+                    <label>Receipt by Email </label>
                 </div>
                 <div class="col-sm-3 col-xs-12 form-top-margin">
+                    @*<select class="form-control" data-toggle="tooltip" title="Select one" id="isEmailReceipt" name="isEmailReceipt">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>*@
                     <input checked="checked"
                            id="isEmailReceipt"
                            name="isEmailReceipt"
@@ -155,7 +141,7 @@ Customer Registration
                     @Html.ValidationMessageFor(model => model.isEmailReceipt)
                 </div>
                 <div class="col-sm-3 col-xs-12 form-top-margin">
-                    <label>Party Member :</label>
+                    <label>Party Member </label>
                 </div>
                 <div class="col-sm-3 col-xs-12 form-top-margin">
                     <input checked="checked"
@@ -165,14 +151,19 @@ Customer Registration
                            value="true" />
                     @Html.ValidationMessageFor(model => model.isPartyMember)
                 </div>
-            </div>
         </div>
         <div class="row">
-            <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
+            <div class="col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
                 <button type="submit" class="btn btn-block btn-default">
                     <span class="col-xs-1 glyphicon glyphicon-ok"></span>
                     <span class="col-xs-9">Confirm Customer Registration</span>
                 </button>
+            </div>
+            <div class="col-sm-5 col-sm-push-1 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+                <a href="@Url.Action("Index", "CustomerView")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span>Back to List</span>
+                </a>
             </div>
         </div>
     </fieldset>

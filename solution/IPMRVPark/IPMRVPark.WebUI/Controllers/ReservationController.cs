@@ -215,6 +215,7 @@ namespace IPMRVPark.WebUI.Controllers
             _selecteditem.total = calcResults.total;
             _selecteditem.createDate = DateTime.Now;
             _selecteditem.lastUpdate = DateTime.Now;
+            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
 
             selecteditems.Insert(_selecteditem);
             selecteditems.Commit();
@@ -367,6 +368,7 @@ namespace IPMRVPark.WebUI.Controllers
             _selecteditem.amount = calcResults.amount;
             _selecteditem.total = calcResults.total;
             _selecteditem.lastUpdate = DateTime.Now;
+            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
 
             selecteditems.Update(_selecteditem);
             selecteditems.Commit();
@@ -423,6 +425,7 @@ namespace IPMRVPark.WebUI.Controllers
             _selecteditem.amount = calcResults.amount;
             _selecteditem.total = calcResults.total;
             _selecteditem.lastUpdate = DateTime.Now;
+            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
 
             selecteditems.Update(_selecteditem);
             selecteditems.Commit();
@@ -446,6 +449,7 @@ namespace IPMRVPark.WebUI.Controllers
             _selecteditem.total = item.total;
             _selecteditem.isSiteChecked = true;
             _selecteditem.lastUpdate = DateTime.Now;
+            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
             selecteditems.Update(selecteditems.GetById(id));
 
             selecteditems.Commit();
@@ -611,6 +615,7 @@ namespace IPMRVPark.WebUI.Controllers
                     _selecteditem.total = calcResults.total;
                     _selecteditem.createDate = DateTime.Now;
                     _selecteditem.lastUpdate = DateTime.Now;
+                    _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
                     _selecteditem.idReservationItem = item.ID;
                     _selecteditem.reservationCheckInDate = item.checkInDate;
                     _selecteditem.reservationCheckOutDate = item.checkOutDate;

@@ -3,11 +3,11 @@
     ViewBag.PageTitle = "New Reservation";
 }
 
-@Html.ActionLink("Home", "Menu", "PrototypeUI")
+@Html.ActionLink("Home", "Menu", "Login")
 <span class="glyphicon glyphicon-chevron-right"></span>
 Site Reservation
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("New Reservation", "Reservation", "PrototypeUI")
+@Html.ActionLink("New Reservation", "NewReservation", "Reservation")
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -171,7 +171,7 @@ Site Reservation
     </div>
     <div class="row top-margin">
         <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
-            <a href="@Url.Action("Customer", "PrototypeUI")" class="btn btn-block btn-default btn-mylink pagination-centered">
+            <a href="@Url.Action("CreateCustomer", "Customer")" class="btn btn-block btn-default btn-mylink pagination-centered">
                 <span class="glyphicon glyphicon-user"></span>
                 <span>New Customer</span>
                 <span class="glyphicon glyphicon-chevron-right"></span>
