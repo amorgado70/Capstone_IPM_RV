@@ -31,7 +31,7 @@
         });
         // ***** Dates Selection
         $('#checkInDate').datepicker({
-            dateFormat: 'D, dd M',
+            dateFormat: 'D, dd M yy',
             minDate: @ViewBag.minDate,
             maxDate: @ViewBag.maxDate,
             showOtherMonths: true,
@@ -63,7 +63,7 @@
             });
         });
         $('#checkOutDate').datepicker({
-            dateFormat: 'D, dd M',
+            dateFormat: 'D, dd M yy',
             showOtherMonths: true,
             selectOtherMonths: true,
             dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -82,20 +82,23 @@
                 left    :   dim.left - 0
             });
         });
-        function selectCheckInOutDates() {
+        function selectCheckInOutDates() {            
             var postpath = root + 'Reservation/SelectCheckInOutDates';
+            var checkInDate = $('#checkInDate').val().toString('dd/mm/yy');
+            var checkOutDate = $('#checkOutDate').val().toString('dd/mm/yy');
+            //alert(checkInDate + " " + checkOutDate);
             $.ajax({
                 url: postpath,
                 type: 'POST',
                 dataType: 'json',
                 data: { //Passing data
-                    checkInDate: $('#checkInDate').val(), //Reading text box values using jQuery
-                    checkOutDate: $('#checkOutDate').val() //Reading text box values using jQuery
+                    checkInDate: checkInDate, //Reading text box values using jQuery
+                    checkOutDate: checkOutDate //Reading text box values using jQuery
                 },
                 success: function (result) {
                 },
                 error: function (result) {
-                    alert('25 Some error occured.');
+                    alert('27 Some error occured.');
                 }
             });
         };

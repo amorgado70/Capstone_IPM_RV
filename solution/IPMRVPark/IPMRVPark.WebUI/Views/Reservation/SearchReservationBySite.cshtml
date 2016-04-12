@@ -1,0 +1,66 @@
+﻿@model IEnumerable<IPMRVPark.Models.reservationitem>
+
+@{
+    ViewBag.Title = "Site Reservation";
+    ViewBag.PageTitle = "Search Reservation";
+}
+
+@Html.ActionLink("Home", "Menu", "Login")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Site Reservation
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Search Reservation by Site", "SearchReservationBySite", "Reservation")
+
+<div class="container-fluid">
+    <div class="row top-margin">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-md-9 col-xs-8 margin-top-10">
+                @Html.TextBox("SearchBySite", null, new { id = "searchBySite", @class = "form-control", placeholder = "Search by site name" })
+            </div>
+            <div class="col-md-1 col-xs-2 margin-top-10">
+                <button type="submit" class="btn btn-default glyphicon glyphicon-search" />
+            </div>
+            <div class="col-md-1 col-xs-2 margin-top-10">
+                <a href="@Url.Action("SearchReservationBySite", "Reservation")" class="btn btn-default glyphicon glyphicon-remove"></a>
+            </div>
+        }
+    </div>
+    <!-- List of selected sites -->
+    <div class="row form-top-margin">
+        <div class="col-xs-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Site</th>
+                        <th>Type</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th style="text-align:right;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+            {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.site)</td>
+                            <td>@Html.DisplayFor(modelItem => item.siteType)</td>
+                            <td>@item.checkInDate.ToString("ddd"), @item.checkInDate.ToString("dd") @item.checkInDate.ToString("MMM")</td>
+                            <td>@item.checkOutDate.ToString("ddd"), @item.checkOutDate.ToString("dd") @item.checkOutDate.ToString("MMM")</td>
+                            <td style="text-align:right;">@Html.DisplayFor(modelItem => item.total)</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align:right;">@ViewBag.totalAmount</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

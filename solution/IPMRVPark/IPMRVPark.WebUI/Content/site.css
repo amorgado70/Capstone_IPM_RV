@@ -186,3 +186,8 @@ a, .btn, .btn-mylink, label, b, .glyphicon, th {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+.collapsible::after{
+    content: "+";
+    font-weight: bold;
+}

@@ -420,7 +420,6 @@
     <Content Include="Views\PayDocType\Index.cshtml" />
     <Content Include="Views\PayDocType\PayDocTypeDetails.cshtml" />
     <Content Include="Views\Payment\ExtendReservation.cshtml" />
-    <Content Include="Views\Payment\NewReservation - Copy.cshtml" />
     <Content Include="Views\Payment\PaymentOrRefund.cshtml" />
     <Content Include="Views\Payment\PaymentPerCustomer.cshtml" />
     <Content Include="Views\Payment\PrintPayment.cshtml" />
@@ -472,6 +471,7 @@
     <Content Include="Views\Customer\ErrorMessage.cshtml" />
     <Content Include="Views\Customer\SearchCustomer.cshtml" />
     <Content Include="Views\Country\ErrorMessage.cshtml" />
+    <Content Include="Views\Reservation\SearchReservationBySite.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IPMRVPark.Models.payment>
+﻿@model IEnumerable<IPMRVPark.Models.payment_view>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -28,7 +28,8 @@
                 <tr>
                     <th>Payment #</th>
                     <th>Date</th>
-                    <th>Reason For Payment</th>
+                    <th>Sites<br />
+                    Reason For Payment</th>
                     <th style="text-align:right;">Reservation Item</th>
                     <th style="text-align:right;">Paid Amount</th>
                     <th style="text-align:right;">Balance</th>
@@ -38,9 +39,11 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                        <td>@Html.DisplayFor(modelItem => item.id)</td>
                         <td>@item.createDate.Value.ToString("MMM") @item.createDate.Value.ToString("dd") @item.createDate.Value.ToString("yyyy") </td>
-                        <td>@Html.DisplayFor(modelItem => item.reasonforpayment.description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.sites) <br />
+                            @Html.DisplayFor(modelItem => item.reasonforpayment)                            
+                        </td>
                         <td style="text-align:right;">@Html.DisplayFor(modelItem => item.selectionTotal)</td>
                         <td style="text-align:right;">@Html.DisplayFor(modelItem => item.amount)</td>
                         <td style="text-align:right;">@Html.DisplayFor(modelItem => item.balance)</td>

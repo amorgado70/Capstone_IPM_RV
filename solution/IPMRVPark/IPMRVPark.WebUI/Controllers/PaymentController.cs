@@ -144,13 +144,8 @@ namespace IPMRVPark.WebUI.Controllers
             {
                 decimal finalBalance = paymentService.CustomerAccountBalance(customerID);
                 ViewBag.CustomerBalance = finalBalance;
-                var _payments = payments.GetAll().
+                var _payments = payments_view.GetAll().
                     Where(s => s.idCustomer == customerID);
-                // Populate reason for payment
-                foreach (var _payment in _payments)
-                {
-                    _payment.reasonforpayment = reasonsforpayment.GetById(_payment.idReasonForPayment);
-                }
 
                 return PartialView("PaymentPerCustomer", _payments);
             };

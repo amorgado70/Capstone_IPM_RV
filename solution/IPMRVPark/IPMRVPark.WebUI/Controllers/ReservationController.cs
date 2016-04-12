@@ -5,6 +5,7 @@ using IPMRVPark.Models;
 using IPMRVPark.Contracts.Repositories;
 using IPMRVPark.Services;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace IPMRVPark.WebUI.Controllers
 {
@@ -330,7 +331,19 @@ namespace IPMRVPark.WebUI.Controllers
         {
             long sessionID = sessionService.GetSessionID(this.HttpContext);
             var _selecteditems = selecteditems.GetAll().
-                Where(q => q.idSession == sessionID).OrderByDescending(o => o.ID);
+                Where(q => q.idSession == sessionID);
+
+            // Discard selected items from other years
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+            foreach (var _selecteditem in _selecteditems)
+            {
+                var _site = placesinmap.GetById(_selecteditem.idRVSite);
+                if (_site.idIPMEvent != IPMEventID)
+                {
+                    _selecteditems = _selecteditems.Where(r => r.idRVSite != _site.ID);
+                }
+            }
+            _selecteditems = _selecteditems.OrderByDescending(o => o.ID);
 
             CreateViewBagForSelectedTotal(sessionID);
 
@@ -591,13 +604,66 @@ namespace IPMRVPark.WebUI.Controllers
             return View();
         }
 
+        public ActionResult SearchReservationBySite(string searchBySite)
+        {
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            var _reservationitems = reservationitems.GetAll();
+
+            // Discard reserved items from other years
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+            foreach (var _reservationitem in _reservationitems)
+            {
+                var _site = placesinmap.GetById(_reservationitem.idRVSite);
+                if (_site.idIPMEvent != IPMEventID)
+                {
+                    _reservationitems = _reservationitems.Where(r => r.idRVSite != _site.ID);
+                }
+            }
+
+            _reservationitems = _reservationitems.OrderByDescending(o => o.ID);
+
+            if (searchBySite != null)
+            {
+                //Regex for site name
+                Regex rgx = new Regex("[^a-zA-Z0-9]");
+
+                //Remove characters from search string
+                searchBySite = rgx.Replace(searchBySite, "").ToUpper();
+
+                //Filter list
+                foreach (var _reservationitem in _reservationitems)
+                {
+                    if (!(rgx.Replace(_reservationitem.site, "").ToUpper().Contains(searchBySite)))
+                    {
+                        _reservationitems = _reservationitems.Where(p => p.ID != _reservationitem.ID);
+                    }
+
+                }
+            }
+
+            return View(_reservationitems);
+        }
+
         // For Partial View : Reserved Site List
         public ActionResult UpdateReservedList()
         {
             long sessionID = sessionService.GetSessionID(this.HttpContext);
-            long customerID = sessionService.GetSessionCustomerID(sessionID);
+            long customerID = sessionService.GetSessionCustomerID(sessionID);            
             var _reserveditems = reservationitems.GetAll().
-                Where(q => q.idCustomer == customerID).OrderByDescending(o => o.ID);
+                Where(q => q.idCustomer == customerID);
+
+            // Discard reserved items from other years
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+            foreach (var _reserveditem in _reserveditems)
+            {
+                var _site = placesinmap.GetById(_reserveditem.idRVSite);
+                if (_site.idIPMEvent != IPMEventID)
+                {
+                    _reserveditems = _reserveditems.Where(r => r.idRVSite != _site.ID);
+                }
+            }
+
+            _reserveditems = _reserveditems.OrderByDescending(o => o.ID);
 
             decimal reservedTotal = paymentService.CalculateReservedTotal(customerID);
 
@@ -632,6 +698,17 @@ namespace IPMRVPark.WebUI.Controllers
             if (sessionCustomerID != IDnotFound)
             {
                 _reserveditems = _reserveditems.Where(q => q.idCustomer == sessionCustomerID).OrderByDescending(o => o.idRVSite);
+            }
+
+            // Discard reserved items from other years
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+            foreach (var _reserveditem in _reserveditems)
+            {
+                var _site = placesinmap.GetById(_reserveditem.idRVSite);
+                if (_site.idIPMEvent != IPMEventID)
+                {
+                    _reserveditems = _reserveditems.Where(r => r.idRVSite != _site.ID);
+                }
             }
 
             foreach (var item in _reserveditems)
@@ -691,24 +768,6 @@ namespace IPMRVPark.WebUI.Controllers
 
             var _selecteditems = selecteditems.GetAll().
                 Where(s => s.idSession == sessionID && s.idCustomer == sessionCustomerID);
-
-            //payment _payment = paymentService.CalculateEditSelectedTotal(sessionID, sessionCustomerID);
-
-            //// Value of previous reservation, just before edit reservation mode started
-            //ViewBag.PrimaryTotal = _payment.primaryTotal.ToString("N2");
-            //ViewBag.SelectionTotal = _payment.selectionTotal.ToString("N2");
-            //ViewBag.CancellationFee = _payment.cancellationFee.ToString("N2");
-            //// Suggested value for payment            
-            //if (_payment.amount >= 0)
-            //{
-            //    ViewBag.dueAmount = _payment.amount.ToString("N2");
-            //    ViewBag.refundAmount = "0.00";
-            //}
-            //else
-            //{
-            //    ViewBag.refundAmount = (_payment.amount * -1).ToString("N2");
-            //    ViewBag.dueAmount = "0.00";
-            //}
 
             return View(_selecteditems);
         }
