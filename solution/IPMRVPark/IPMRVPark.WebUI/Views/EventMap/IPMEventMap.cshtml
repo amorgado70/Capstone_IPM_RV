@@ -30,13 +30,13 @@
     var lastUpdate;
     var lastUpdateString;
     var infoWindow;
+    var selectionColor = "#B0C4DE";
 
     window.onload = function () {
         initialize(@ViewBag.Lat, @ViewBag.Lng);
     }
 
     function initialize( Lat, Lng) {
-        //var myLatlng = new google.maps.LatLng( 43.66993556555664,-81.31638443760211);
         var myLatlng = new google.maps.LatLng( Lat,Lng);
 
         var myConfig = {
@@ -89,12 +89,48 @@
         // set infoWindow
         this.infoWindow = new google.maps.InfoWindow();
 
+        // set center control to go to reservation
+        var centerControlDiv = document.createElement('div');
+        var centerControl = new CenterControl(centerControlDiv, map);
+        centerControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
         // start to refresh
         startRefresh();
     }
 
     function setInit(){
         bSiteInit = true;
+    }
+
+    function CenterControl(controlDiv, map) {
+        // Set CSS for the control border.
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Click to go back to Reservation';
+        controlDiv.appendChild(controlUI);
+
+        // Set CSS for the control interior.
+        var controlText = document.createElement('div');
+        controlText.style.color = 'rgb(25,25,25)';
+        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+        controlText.style.fontSize = '12px';
+        controlText.style.lineHeight = '28px';
+        controlText.style.paddingLeft = '3px';
+        controlText.style.paddingRight = '3px';
+        controlText.innerHTML = 'Go to Reservation';
+        controlUI.appendChild(controlText);
+
+        // Setup the click event listeners
+        controlUI.addEventListener('click', function() {
+            alert("pressed center control");
+        });
     }
 
     // create polygon
@@ -132,7 +168,8 @@
         var point = bounds.getCenter();
 
         //var content= '<div><h3>' + name + '</h3><div>' + tag + '</div></div>';
-        var content= '<div><h3>' + name + '</h3><div>' + service + '</div><div>' + tag + '</div></div>';
+        var content= '<div><h3>' + name + '</h3><div>' + service + '</div><div>' + tag + '</div></div>' 
+            + "<div><button onclick='selectSite(" + id.toString() + ")'>select</button></div>";
         //rgb = this.getRGBColorTransparency(placemark.style.color);
         //rgbForLine = this.getRGBColorTransparency(placemark.style.Linecolor);
 
@@ -162,10 +199,12 @@
         poly.docId = 1;
         poly.name = name;
 
+        google.maps.event.addListener(map, 'click', function() {
+            closeBubble();
+        });
 
-        var that = this;
         google.maps.event.addListener(poly, 'click', function() {
-            that.openBubble(poly);
+            openBubble(poly);
         });
 
 
@@ -179,7 +218,7 @@
         if (this.infoWindow){
             if (poly.description !== undefined){
                 //this.infoWindow.setContent(object.description);
-                this.infoWindow.setContent("<a href='#'" +  poly.description );  // modified by Kangryong
+                this.infoWindow.setContent( poly.description );
             }
             if (poly.position !== undefined){
                 this.infoWindow.setPosition(poly.position);
@@ -188,8 +227,26 @@
         }
     }
 
-    function getPoly( key )
-    {
+    function closeBubble() {
+        if (this.infoWindow){
+            this.infoWindow.close();
+        }
+    }
+
+    function selectSite(id){
+        $.getJSON( "../Reservation/SelectSiteOnMap", {id:id},
+                function(data){
+                }).done( function(){
+                    var poly = getPoly(id);
+                    poly.setOptions({ fillColor:selectionColor});
+
+                }).fail( function(jqxhr, textStatus, error) {
+                    console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+                    alert( "Site Selection failed.");
+                });
+    }
+
+    function getPoly( key ){
         for(i=0; i<polys.length; i++){
             if( key == polys[i].id )
                 return polys[i];

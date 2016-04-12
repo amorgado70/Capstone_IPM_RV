@@ -15,7 +15,6 @@ namespace IPMRVPark.WebUI.Controllers
 {
     public class EventMapController : Controller
     {
-        public KMLParser kmlParser;
         IRepositoryBase<ipmevent> events;
         IRepositoryBase<placeinmap> places;
         IRepositoryBase<coordinate> coords;
@@ -27,6 +26,9 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<reservationitem> reservations;
         IRepositoryBase<siterate> rates;
         IRepositoryBase<rvsite_status_view> status;
+        IRepositoryBase<customer_view> customers;
+        IRepositoryBase<session> sessions;
+
 
         public EventMapController(IRepositoryBase<ipmevent> events,
             IRepositoryBase<placeinmap> places,
@@ -38,7 +40,9 @@ namespace IPMRVPark.WebUI.Controllers
             IRepositoryBase<sitetype_service_rate_view> typeRates,
             IRepositoryBase<reservationitem> reservations,
             IRepositoryBase<siterate> rates,
-            IRepositoryBase<rvsite_status_view> status)
+            IRepositoryBase<rvsite_status_view> status,
+            IRepositoryBase<customer_view> customers,
+            IRepositoryBase<session> sessions)
         {
             this.events = events;
             this.places = places;
@@ -51,32 +55,52 @@ namespace IPMRVPark.WebUI.Controllers
             this.reservations = reservations;
             this.rates = rates;
             this.status = status;
+            this.customers = customers;
+            this.sessions = sessions;
         }
 
         public ActionResult IPMEventMap()
         {
-            long eventId = events.GetQueryable().Select(x => x.ID).DefaultIfEmpty().Max();
+            SessionService sessionService = new SessionService(
+               this.sessions,
+               this.customers
+               );
+
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long eventId = sessionService.GetSessionIPMEventID(sessionID);
+
+            //long eventId = events.GetQueryable().Select(x => x.ID).DefaultIfEmpty().Max();
             var year = events.GetQueryable().Where(x => x.ID == eventId).FirstOrDefault<ipmevent>().year;
             Polygons poly = Polygons.GetInstance();
             resetPolygons(poly, eventId, year);
-
-            ViewBag.Lat = (poly._leftTop._x + poly._rightBottom._x) / 2;
-            ViewBag.Lng = (poly._leftTop._y + poly._rightBottom._y) / 2;
+            // in case of no event
+            if( poly._leftTop != null)
+            {
+                ViewBag.Lat = (poly._leftTop._x + poly._rightBottom._x) / 2;
+                ViewBag.Lng = (poly._leftTop._y + poly._rightBottom._y) / 2;
+            }
+            else
+            {
+                ViewBag.Lat = 0;
+                ViewBag.Lng = 0;
+            }
+                
             return View(poly);
         }
         public void resetPolygons(Polygons poly, long eventId, long year)
         {
-            if (!poly.Initialized)
+            if (poly.eventId != eventId || !poly.Initialized)
             {
                 poly.AddSize(sizes.GetAll());
                 poly.AddService(services.GetAll());
                 poly.AddStyle(styles.GetQueryable().Where(x => x.idIPMEvent == eventId).OrderByDescending(x => x.ID).ToList());
                 poly.AddType(types.GetQueryable().Where(x => x.idIPMEvent == eventId).ToList());
                 poly.AddSite(places.GetQueryable().Where(x => x.idIPMEvent == eventId).ToList());
-                //poly.AddSize(sizes.GetAll());
                 poly.AddCoordinates(coords.GetQueryable().Where(x => x.idIPMEvent == eventId).ToList());
                 poly.UpdateSite(status.GetQueryable().Where(x => x.Year == year).ToList());
+                
                 poly.Initialized = true;
+                poly.eventId = eventId;
             }
         }
         public ActionResult IPMEventInfo()
@@ -309,7 +333,7 @@ namespace IPMRVPark.WebUI.Controllers
                 {
                     XmlReader reader = XmlReader.Create(file.InputStream);
                     XDocument xDoc = System.Xml.Linq.XDocument.Load(reader);
-                    kmlParser = new KMLParser();
+                    KMLParser kmlParser = new KMLParser();
                     kmlParser.Parse(xDoc, eventId);
                     ViewBag.Message = "File is uploaded and parsed successfully";
                 }
@@ -447,7 +471,12 @@ namespace IPMRVPark.WebUI.Controllers
 
                 //  -> retrieve coordinate to change init=true
                 poly.AddCoordinates(coords.GetQueryable().Where(x => x.idIPMEvent == eventId).ToList());
+
+                // update placeinmap with isRVSite
+                MySqlBulkInsert.UpdateIsRVSite_PlaceInMap(poly);
+
                 //poly.Initialized = true;
+                //poly.eventId = eventId;
 
                 // reset msg with no error
                 errMsg = "";

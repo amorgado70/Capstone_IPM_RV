@@ -12,8 +12,8 @@ namespace IPMRVPark.Services
     {
         public long id;
         public string fillColor;
-        public string lastUpdate;
-        public DateTime lastUpdateTime;
+        public string lastUpdate;           // UTC time string
+        public DateTime lastUpdateTime;     // UTC DateTime
     }
 
     public class _site
@@ -93,6 +93,10 @@ namespace IPMRVPark.Services
         const string _GrayRGB = "ff808080";
         const string _darkGrayRGB = "ffA9A9A9";
         const string _dimGrayRGB = "ff696969";
+        const string _steelBlueRGB = "ffB0C4DE";
+
+        const string _reserved = _GrayRGB;
+        const string _selected = _steelBlueRGB;
 
         // data from KML Parse, Relation Input from Admin, and Database
         public List<_site> Sites { get; set; }
@@ -117,7 +121,11 @@ namespace IPMRVPark.Services
         private TimeSpan UpdateKeepSpan { get; set; }
         private List<_siteUpdate> Updates { get; set; } // updates for pages
 
+        private DateTime lastUpdateTime;
+
         // for starting fetching 
+        public long eventId;
+
         private bool _Initialized;
         public bool Initialized
         {
@@ -152,6 +160,7 @@ namespace IPMRVPark.Services
             Updates = new List<_siteUpdate>();
 
             UpdateKeepSpan = TimeSpan.FromSeconds(updateKeepSec);
+            lastUpdateTime = DateTime.UtcNow;
         }
 
         static public Polygons GetInstance()
@@ -170,6 +179,9 @@ namespace IPMRVPark.Services
         public void Reset()
         {
             Initialized = false;
+            eventId = 0;
+
+            lastUpdateTime = DateTime.UtcNow;
 
             Sites.Clear();
             Coords.Clear();
@@ -483,7 +495,7 @@ namespace IPMRVPark.Services
 
         private void startFetchUpdate()
         {
-            UpdateFetchThread = new Thread(new ThreadStart(DoFetchUpdate));
+            UpdateFetchThread = new Thread(new ThreadStart(doFetchUpdate));
             UpdateFetchThread.Start();
         }
 
@@ -500,12 +512,69 @@ namespace IPMRVPark.Services
             }
         }
 
-        private void DoFetchUpdate()
+        private void doFetchUpdate()
         {
             while (stopFromParent == false)
             {
-                MySqlReader.GetSiteUpdate(DateTime.Now);
+                // get list of _reserve_selection from database
+                List<_reserve_selection> updates;
+                MySqlReader.GetSiteUpdate(lastUpdateTime, out updates);
 
+                // prepare to remove old _siteUpdate object
+                DateTime now = DateTime.UtcNow;
+
+                // update Updates List with lock & monitor
+                lock (Updates)
+                {
+                    while (locked == true)     // Block this thread Until other thread call pulse
+                        Monitor.Wait(Updates); // Stay as WaitSleepJoin State
+
+                    locked = true;
+
+                    // pop updates after UpdateKeepSpan from tail 
+                    for (int i = 0; i < Updates.Count;)
+                    {
+                        if (now - Updates[0].lastUpdateTime > UpdateKeepSpan)
+                            Updates.RemoveAt(0);
+                        else
+                            break;
+                    }
+
+                    // insert new update
+                    foreach (var u in updates)
+                    {
+                        _site s = getSite(u.id);
+                        string site_color = "";
+                        if (s != null)
+                        {
+                            if (u.removed)
+                                site_color = s.style.poly_color;
+                            else if (u.type == _reserve_selection._type.reservation)
+                                site_color = _reserved;
+                            else
+                                site_color = _selected;
+                            // insert new _siteUpdate 
+                            Updates.Add(new _siteUpdate { id = u.id, fillColor = site_color, lastUpdate = u.lastUpdateString, lastUpdateTime = u.lastUpdate });
+                            // update site poly_color
+                            s.poly_color = site_color;
+                        }
+                        // update last check time
+                        lastUpdateTime = u.lastUpdate;
+                    }
+
+                    // Wake other thread 
+                    locked = false;
+                    Monitor.Pulse(Updates);
+                }
+
+                Thread.Sleep(updateInterval);
+            }
+        }
+
+        private void doFetchUpdate2()
+        {
+            while (stopFromParent == false)
+            {
                 // fetch from database
                 Random rnd = new Random();
                 int id = rnd.Next(firstSiteId, lastSiteId);

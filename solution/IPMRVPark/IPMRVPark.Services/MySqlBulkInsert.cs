@@ -59,6 +59,22 @@ namespace IPMRVPark.Services
             ExecuteQuery(sCommand);
         }
 
+        public static void UpdateIsRVSite_PlaceInMap(Polygons poly)
+        {
+            StringBuilder sCommand = new StringBuilder("Update placeinmap set isRVSite = 0 Where ID in (");
+            List<string> Rows = new List<string>();
+
+            for (int i = 0; i < poly.Sites.Count; i++)
+            {
+                if( !poly.Sites[i].isSite )
+                    Rows.Add(string.Format("{0}",poly.Sites[i].id));
+            }
+
+            sCommand.Append(string.Join(",", Rows));
+            sCommand.Append(");");
+            ExecuteQuery(sCommand);
+        }
+
         public static void InsertCoordinates(Polygons poly)
         {
             StringBuilder sCommand = new StringBuilder("INSERT INTO coordinates ( idIPMEvent, idPlaceInMap, seqCoordinate, longitude, latitude, createDate, lastUpdate ) VALUES ");

@@ -164,6 +164,12 @@
     <Compile Include="site_description_rate_view.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="sp_delete_sitetype_dependants_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_reset_event_derivatives_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="staff.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
