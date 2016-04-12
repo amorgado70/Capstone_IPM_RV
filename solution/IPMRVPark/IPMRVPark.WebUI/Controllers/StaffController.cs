@@ -49,6 +49,11 @@ namespace IPMRVPark.WebUI.Controllers
             return View(staff_view);
         }
 
+        public ActionResult ErrorMessage()
+        {
+            return View();
+        }
+
         // GET: /Create
         public ActionResult CreateStaff()
         {
@@ -59,6 +64,12 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateStaff(staff_view staff_form_page)
         {
+            //validation check
+            var personfirstname = persons.GetAll().Where(s => s.firstName.ToUpper().Contains(staff_form_page.firstName.ToUpper())).ToList();
+            var personlastname = persons.GetAll().Where(s => s.lastName.ToUpper().Contains(staff_form_page.lastName.ToUpper())).ToList();
+            var personmainphone = persons.GetAll().Where(s => s.mainPhone.ToUpper().Contains(staff_form_page.mainPhone.ToUpper())).ToList();
+
+
             var _person = new person();
             _person.firstName = staff_form_page.firstName;
             _person.lastName = staff_form_page.lastName;
@@ -66,6 +77,39 @@ namespace IPMRVPark.WebUI.Controllers
             _person.email = staff_form_page.email;
             _person.createDate = DateTime.Now;
             _person.lastUpdate = DateTime.Now;
+
+            //first, last name and main phone validation
+
+            if (_person.firstName == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.firstName.Trim().Length > 50)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.lastName == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.lastName.Trim().Length > 50)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.mainPhone == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.mainPhone.Trim().Length > 30)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (personfirstname.Count() > 0 && personlastname.Count() > 0 && personmainphone.Count() > 0)
+            //else if (personfirstname.Count() > 0 && personlastname.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+
             persons.Insert(_person);
             persons.Commit();
 

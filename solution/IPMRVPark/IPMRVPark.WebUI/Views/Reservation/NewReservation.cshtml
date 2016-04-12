@@ -26,7 +26,7 @@ Site Reservation
                 updateSelectedList(); // Update seleted item list
             });
         });
-       // ***** Partial View Selected List
+        // ***** Partial View Selected List
         updateSelectedList(); //execute when page is ready
         function updateSelectedList() {
             $('#selected-list').load('../Reservation/UpdateSelectedList'); // load partial view
@@ -80,7 +80,7 @@ Site Reservation
             $('#waitMsg').show();// Show wait message
             $('#btnPayment').focus();
             var postpath = root + 'Login/SelectCustomer';
-            $.ajax({                
+            $.ajax({
                 url: postpath, // Controller/View
                 type: 'POST', //HTTP POST Method
                 dataType: 'json',
@@ -131,7 +131,7 @@ Site Reservation
 
     <!-- RV Site Selection -->
     <div id="selected-item"></div>
-        
+
     <!-- ********** Dynamic Table -->
     <div class="row top-margin" data-toggle="tooltip" title="List of Selected Sites">
         <div class="col-sm-4 col-xs-12" data-toggle="tooltip" title="Click To Expand/Collapse">
@@ -147,6 +147,7 @@ Site Reservation
             <div id="selectionTotal" type="text" class="form-control" style="text-align:right" disabled></div>
         </div>
     </div>
+
 
     <div id="selected-list" class="collapse">
     </div>

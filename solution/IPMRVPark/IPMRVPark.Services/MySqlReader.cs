@@ -30,7 +30,8 @@ namespace IPMRVPark.Services
             sCommand.Append("'");
 
 
-            StringBuilder sCommand2 = new StringBuilder("Select idRVSite, cast( coalesce(isSiteChecked,0,1) as UNSIGNED) as cancel, timeStamp From selecteditem Where timeStamp > '");
+            //StringBuilder sCommand2 = new StringBuilder("Select idRVSite, cast( coalesce(isSiteChecked,0,1) as UNSIGNED) as cancel, timeStamp From selecteditem Where timeStamp > '");
+            StringBuilder sCommand2 = new StringBuilder("Select idRVSite, cast( isSiteChecked as UNSIGNED) as cancel, timeStamp From selecteditem Where timeStamp > '");
             sCommand2.Append(lastUpdate.ToString("yyyy-MM-dd HH:mm:ss"));
             sCommand2.Append("'");
 
@@ -73,10 +74,10 @@ namespace IPMRVPark.Services
 
                             _reserve_selection r = new _reserve_selection();
                             long.TryParse(rdr[0].ToString(), out r.id);
-                            r.type = _reserve_selection._type.reservation;
+                            r.type = _reserve_selection._type.selection;
                             int cancel;
                             int.TryParse(rdr[1].ToString(), out cancel);
-                            r.removed = cancel == 1;
+                            r.removed = cancel == 0;
 
                             r.lastUpdateString = rdr[2].ToString();
                             DateTime.TryParse(r.lastUpdateString, out r.lastUpdate);

@@ -129,7 +129,8 @@
 
         // Setup the click event listeners
         controlUI.addEventListener('click', function() {
-            alert("pressed center control");
+            //alert("pressed center control");
+            window.location.replace("../Reservation/NewReservation");
         });
     }
 
@@ -234,16 +235,35 @@
     }
 
     function selectSite(id){
-        $.getJSON( "../Reservation/SelectSiteOnMap", {id:id},
-                function(data){
-                }).done( function(){
-                    var poly = getPoly(id);
-                    poly.setOptions({ fillColor:selectionColor});
+        //$.getJSON( "../Reservation/SelectSiteOnMap", {id:id},
+        //        function(data){
+        //        }).done( function(){
+        //            var poly = getPoly(id);
+        //            poly.setOptions({ fillColor:selectionColor});
 
-                }).fail( function(jqxhr, textStatus, error) {
-                    console.error("getJSON failed, status: " + textStatus + ", error: "+error)
-                    alert( "Site Selection failed.");
-                });
+        //        }).fail( function(jqxhr, textStatus, error) {
+        //            console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+        //            alert( "Site Selection failed.");
+        //        });
+
+        var postpath = '../Reservation/SelectSiteOnMap';
+        $.ajax({                
+            url: postpath,
+            type: 'POST',
+            dataType: 'json',
+            data: { //Passing data
+                id: id
+            },
+            success: function (result) {
+                var poly = getPoly(id);
+                poly.setOptions({ fillColor:selectionColor});
+                closeBubble();
+                },
+            error: function (result) {
+                //console.error("ajax failed, status: " + textStatus + ", error: "+error)
+                alert( "Site Selection failed.");
+                }
+        });
     }
 
     function getPoly( key ){

@@ -225,6 +225,7 @@ namespace IPMRVPark.WebUI.Controllers
         }
 
         // Select site button, add site to selected table
+        [HttpPost]
         public ActionResult SelectSiteOnMap(long id)
         {
             var _session = sessionService.GetSession(this.HttpContext);

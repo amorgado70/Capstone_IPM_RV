@@ -94,9 +94,10 @@ namespace IPMRVPark.Services
         const string _darkGrayRGB = "ffA9A9A9";
         const string _dimGrayRGB = "ff696969";
         const string _steelBlueRGB = "ffB0C4DE";
+        const string _redRGB = "ffFF0000";
 
         const string _reserved = _GrayRGB;
-        const string _selected = _steelBlueRGB;
+        const string _selected = _redRGB;
 
         // data from KML Parse, Relation Input from Admin, and Database
         public List<_site> Sites { get; set; }
@@ -379,7 +380,13 @@ namespace IPMRVPark.Services
                 //Debug.Assert(site != null);
 
                 if (s.isAvaialable==0)
-                    site.poly_color = _dimGrayRGB;
+                {
+                    if(s.ReservedFrom != null)
+                        site.poly_color = _reserved;
+                    else
+                        site.poly_color = _selected;
+
+                }
 
                 // if you want to expand information coverage of _site, you can add here.
                 //   e.g., reservation info, out of service, etc..
@@ -571,56 +578,56 @@ namespace IPMRVPark.Services
             }
         }
 
-        private void doFetchUpdate2()
-        {
-            while (stopFromParent == false)
-            {
-                // fetch from database
-                Random rnd = new Random();
-                int id = rnd.Next(firstSiteId, lastSiteId);
-                int id2 = rnd.Next(firstSiteId, lastSiteId);
+        //private void doFetchUpdate2()
+        //{
+        //    while (stopFromParent == false)
+        //    {
+        //        // fetch from database
+        //        Random rnd = new Random();
+        //        int id = rnd.Next(firstSiteId, lastSiteId);
+        //        int id2 = rnd.Next(firstSiteId, lastSiteId);
 
-                _site s = getSite(id);
-                _site s2 = getSite(id2);
-                if (s != null && s2 != null)
-                {
-                    s.poly_color = _dimGrayRGB;
-                    s2.poly_color = _dimGrayRGB;
+        //        _site s = getSite(id);
+        //        _site s2 = getSite(id2);
+        //        if (s != null && s2 != null)
+        //        {
+        //            s.poly_color = _dimGrayRGB;
+        //            s2.poly_color = _dimGrayRGB;
 
 
-                    DateTime now = DateTime.Now;
-                    //now = DateTime.Now;
+        //            DateTime now = DateTime.Now;
+        //            //now = DateTime.Now;
 
-                    // update Updates List with lock & monitor
-                    lock (Updates)
-                    {
-                        while (locked == true)     // Block this thread Until other thread call pulse
-                            Monitor.Wait(Updates); // Stay as WaitSleepJoin State
+        //            // update Updates List with lock & monitor
+        //            lock (Updates)
+        //            {
+        //                while (locked == true)     // Block this thread Until other thread call pulse
+        //                    Monitor.Wait(Updates); // Stay as WaitSleepJoin State
 
-                        locked = true;
+        //                locked = true;
 
-                        // pop updates after UpdateKeepSpan from tail 
-                        for (int i = 0; i < Updates.Count;)
-                        {
-                            if (now - Updates[0].lastUpdateTime > UpdateKeepSpan)
-                                Updates.RemoveAt(0);
-                            else
-                                break;
-                        }
+        //                // pop updates after UpdateKeepSpan from tail 
+        //                for (int i = 0; i < Updates.Count;)
+        //                {
+        //                    if (now - Updates[0].lastUpdateTime > UpdateKeepSpan)
+        //                        Updates.RemoveAt(0);
+        //                    else
+        //                        break;
+        //                }
 
-                        // push new updates to head
-                        Updates.Add(new _siteUpdate { id = id, fillColor = s.poly_color, lastUpdate = DateTime.Now.ToString(), lastUpdateTime = DateTime.Now });
-                        Updates.Add(new _siteUpdate { id = id2, fillColor = s2.poly_color, lastUpdate = DateTime.Now.ToString(), lastUpdateTime = DateTime.Now });
+        //                // push new updates to head
+        //                Updates.Add(new _siteUpdate { id = id, fillColor = s.poly_color, lastUpdate = DateTime.Now.ToString(), lastUpdateTime = DateTime.Now });
+        //                Updates.Add(new _siteUpdate { id = id2, fillColor = s2.poly_color, lastUpdate = DateTime.Now.ToString(), lastUpdateTime = DateTime.Now });
 
-                        // Wake other thread 
-                        locked = false;
-                        Monitor.Pulse(Updates);
-                    }
-                }
+        //                // Wake other thread 
+        //                locked = false;
+        //                Monitor.Pulse(Updates);
+        //            }
+        //        }
 
-                Thread.Sleep(updateInterval);
-            }
-        }
+        //        Thread.Sleep(updateInterval);
+        //    }
+        //}
 
         private _style getStyle(Nullable<long> id)
         {
