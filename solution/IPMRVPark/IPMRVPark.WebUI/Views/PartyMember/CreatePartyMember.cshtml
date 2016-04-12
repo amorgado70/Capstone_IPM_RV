@@ -1,4 +1,4 @@
-﻿@model IPMRVPark.Models.partymember_view
+@model IPMRVPark.Models.partymember_view
 
 @{
     ViewBag.Title = "Add Party Member";
@@ -8,7 +8,7 @@
 <span class="glyphicon glyphicon-chevron-right"></span>
 Maintenance
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("Add Party Member", "CreatePartyMember", "PartyMemberView")
+@Html.ActionLink("Add Party Member", "CreatePartyMember", "PartyMember")
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -84,7 +84,7 @@ Maintenance
         </div>
         <div class="row top-margin">
                 <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
-                    <a href="@Url.Action("Index", "PartyMemberView")" class="btn btn-block btn-default">
+                    <a href="@Url.Action("Index", "PartyMember")" class="btn btn-block btn-default">
                         <span class="glyphicon glyphicon-chevron-left"></span>
                         <span>Back to List</span>
                     </a>

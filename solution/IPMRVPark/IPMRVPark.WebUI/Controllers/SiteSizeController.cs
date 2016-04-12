@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -41,6 +41,11 @@ namespace IPMRVPark.WebUI.Controllers
             return View(sitesize);
         }
 
+        public ActionResult ErrorMessage()
+        {
+            return View();
+        }
+
         // GET: /Create
         public ActionResult CreateSiteSize()
         {
@@ -51,10 +56,29 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateSiteSize(sitesize sitesize)
         {
+            //validation check
+            var name1 = sitesizes.GetAll().Where(s => s.description.ToUpper().Contains(sitesize.description.ToUpper())).ToList();
+
             var _sitesize = new sitesize();
             _sitesize.description = sitesize.description;
             _sitesize.createDate = DateTime.Now;
             _sitesize.lastUpdate = DateTime.Now;
+
+            //code and name validation
+
+            if (_sitesize.description == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_sitesize.description.Trim().Length > 20)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (name1.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+
             sitesizes.Insert(_sitesize);
             sitesizes.Commit();
 

@@ -460,6 +460,18 @@
     <Content Include="Views\SiteSize\EditSiteSize.cshtml" />
     <Content Include="Views\SiteSize\Index.cshtml" />
     <Content Include="Views\SiteSize\SiteSizeDetails.cshtml" />
+    <Content Include="Views\Staff\ErrorMessage.cshtml" />
+    <Content Include="Views\SiteSize\ErrorMessage.cshtml" />
+    <Content Include="Views\Service\ErrorMessage.cshtml" />
+    <Content Include="Views\ReasonForPayment\ErrorMessage.cshtml" />
+    <Content Include="Views\Province\ErrorMessage.cshtml" />
+    <Content Include="Views\PaymentMethod\ErrorMessage.cshtml" />
+    <Content Include="Views\Payment\SearchPayment.cshtml" />
+    <Content Include="Views\PayDocType\ErrorMessage.cshtml" />
+    <Content Include="Views\PartyMember\ErrorMessage.cshtml" />
+    <Content Include="Views\Customer\ErrorMessage.cshtml" />
+    <Content Include="Views\Customer\SearchCustomer.cshtml" />
+    <Content Include="Views\Country\ErrorMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

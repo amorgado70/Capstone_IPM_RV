@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -41,6 +41,11 @@ namespace IPMRVPark.WebUI.Controllers
             return View(paymentmethod);
         }
 
+        public ActionResult ErrorMessage()
+        {
+            return View();
+        }
+
         // GET: /Create
         public ActionResult CreatePaymentMethod()
         {
@@ -51,11 +56,30 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreatePaymentMethod(paymentmethod paymentmethod)
         {
+            //validation check
+            var name1 = paymentmethods.GetAll().Where(s => s.description.ToUpper().Contains(paymentmethod.description.ToUpper())).ToList();
+
             var _paymentmethod = new paymentmethod();
             _paymentmethod.description = paymentmethod.description;
             _paymentmethod.doctype = paymentmethod.doctype;
             _paymentmethod.createDate = DateTime.Now;
             _paymentmethod.lastUpdate = DateTime.Now;
+
+            //code and name validation
+
+            if (_paymentmethod.description == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_paymentmethod.description.Trim().Length > 12)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (name1.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+
             paymentmethods.Insert(_paymentmethod);
             paymentmethods.Commit();
 

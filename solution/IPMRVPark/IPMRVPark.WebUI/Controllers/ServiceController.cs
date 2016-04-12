@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -41,6 +41,11 @@ namespace IPMRVPark.WebUI.Controllers
             return View(service);
         }
 
+        public ActionResult ErrorMessage()
+        {
+            return View();
+        }
+
         // GET: /Create
         public ActionResult CreateService()
         {
@@ -51,10 +56,29 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateService(service service)
         {
+            //validation check
+            var name1 = services.GetAll().Where(s => s.description.ToUpper().Contains(service.description.ToUpper())).ToList();
+
             var _service = new service();
             _service.description = service.description;
             _service.createDate = DateTime.Now;
             _service.lastUpdate = DateTime.Now;
+
+            //code and name validation
+
+            if (_service.description == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_service.description.Trim().Length > 20)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (name1.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+
             services.Insert(_service);
             services.Commit();
 

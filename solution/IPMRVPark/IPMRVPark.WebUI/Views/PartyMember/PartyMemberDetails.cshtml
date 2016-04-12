@@ -1,4 +1,4 @@
-﻿@model IPMRVPark.Models.partymember_view
+@model IPMRVPark.Models.partymember_view
 
 @{
     ViewBag.Title = "Party Member Details";
@@ -8,7 +8,7 @@
 <span class="glyphicon glyphicon-chevron-right"></span>
 Maintenance
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("Party Member Details", "PartyMemberDetails", "PartyMemberView")
+@Html.ActionLink("Party Member Details", "PartyMemberDetails", "PartyMember")
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -70,13 +70,13 @@ Maintenance
         </div>
         <div class="row top-margin">
                 <div class="display-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
-                    <a href="@Url.Action("EditPartyMember", "PartyMemberView", new { id = Model.id })" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <a href="@Url.Action("EditPartyMember", "PartyMember", new { id = Model.id })" class="btn btn-block btn-default btn-mylink pagination-centered">
                         <span class="glyphicon glyphicon-edit"></span>
                         <span>Edit Party Member</span>
                     </a>
                 </div>
                 <div class="display-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
-                    <a href="@Url.Action("Index", "PartyMemberView")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <a href="@Url.Action("Index", "PartyMember")" class="btn btn-block btn-default btn-mylink pagination-centered">
                         <span class="glyphicon glyphicon-chevron-left"></span>
                         <span>Back to List</span>
                     </a>

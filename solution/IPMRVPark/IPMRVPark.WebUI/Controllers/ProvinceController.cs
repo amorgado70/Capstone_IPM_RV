@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using IPMRVPark.Models;
@@ -48,6 +48,11 @@ namespace IPMRVPark.WebUI.Controllers
             return View(province_view);
         }
 
+        public ActionResult ErrorMessage()
+        {
+            return View();
+        }
+
         // GET: /Create
         public ActionResult CreateProvince()
         {
@@ -62,12 +67,44 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateProvince(province_view province_form_page)
         {
+            //validation check
+            var code1 = provincecodes.GetAll().Where(s => s.code.ToUpper().Contains(province_form_page.provinceCode.ToUpper())).ToList();
+            var name1 = provincecodes.GetAll().Where(s => s.name.ToUpper().Contains(province_form_page.provinceName.ToUpper())).ToList();
+
             var _province = new provincecode();
             _province.code = province_form_page.provinceCode;
             _province.name = province_form_page.provinceName;
             _province.countryCode = province_form_page.countryCode;
             _province.createDate = DateTime.Now;
             _province.lastUpdate = DateTime.Now;
+
+            //code and name validation
+
+            if (_province.code == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_province.code.Trim().Length > 2)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (code1.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_province.name == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_province.name.Trim().Length > 50)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (name1.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+
             provincecodes.Insert(_province);
             provincecodes.Commit();
 

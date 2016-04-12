@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -41,6 +41,11 @@ namespace IPMRVPark.WebUI.Controllers
             return View(reasonforpayment);
         }
 
+        public ActionResult ErrorMessage()
+        {
+            return View();
+        }
+
         // GET: /Create
         public ActionResult CreateReasonForPayment()
         {
@@ -51,11 +56,30 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateReasonForPayment(reasonforpayment reasonforpayment)
         {
+            //validation check
+            var name1 = reasonforpayments.GetAll().Where(s => s.description.ToUpper().Contains(reasonforpayment.description.ToUpper())).ToList();
+
             var _reasonforpayment = new reasonforpayment();
             _reasonforpayment.ID = reasonforpayment.ID;
             _reasonforpayment.description = reasonforpayment.description;
             _reasonforpayment.createDate = DateTime.Now;
             _reasonforpayment.lastUpdate = DateTime.Now;
+
+            //code and name validation
+
+            if (_reasonforpayment.description == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_reasonforpayment.description.Trim().Length > 45)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (name1.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+
             reasonforpayments.Insert(_reasonforpayment);
             reasonforpayments.Commit();
 

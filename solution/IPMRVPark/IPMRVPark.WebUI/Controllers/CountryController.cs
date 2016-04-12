@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -41,6 +41,11 @@ namespace IPMRVPark.WebUI.Controllers
             return View(countrycode);
         }
 
+        public ActionResult ErrorMessage()
+        {
+            return View();
+        }
+
         // GET: /Create
         public ActionResult CreateCountry()
         {
@@ -51,11 +56,43 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateCountry(countrycode countrycode)
         {
+            //validation check
+            var code1 = countrycodes.GetAll().Where(s => s.code.ToUpper().Contains(countrycode.code.ToUpper())).ToList();
+            var name1 = countrycodes.GetAll().Where(s => s.name.ToUpper().Contains(countrycode.name.ToUpper())).ToList();
+
             var _country = new countrycode();
             _country.code = countrycode.code;
             _country.name = countrycode.name;
             _country.createDate = DateTime.Now;
             _country.lastUpdate = DateTime.Now;
+
+            //code and name validation
+
+            if (_country.code == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_country.code.Trim().Length > 3)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (code1.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_country.name == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_country.name.Trim().Length > 50)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (name1.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+
             countrycodes.Insert(_country);
             countrycodes.Commit();
 

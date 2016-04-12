@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using IPMRVPark.Models;
@@ -48,6 +48,11 @@ namespace IPMRVPark.WebUI.Controllers
             return View(partymember_view);
         }
 
+        public ActionResult ErrorMessage()
+        {
+            return View();
+        }
+
         // GET: /Create
         public ActionResult CreatePartyMember()
         {
@@ -58,6 +63,11 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreatePartyMember(partymember_view partymember_form_page)
         {
+            //validation check
+            var personfirstname = persons1.GetAll().Where(s => s.firstName.ToUpper().Contains(partymember_form_page.firstName.ToUpper())).ToList();
+            var personlastname = persons1.GetAll().Where(s => s.lastName.ToUpper().Contains(partymember_form_page.lastName.ToUpper())).ToList();
+            var personmainphone = persons1.GetAll().Where(s => s.mainPhone.ToUpper().Contains(partymember_form_page.mainPhone.ToUpper())).ToList();
+
             var _person = new person();
             _person.firstName = partymember_form_page.firstName;
             _person.lastName = partymember_form_page.lastName;
@@ -65,6 +75,39 @@ namespace IPMRVPark.WebUI.Controllers
             _person.email = partymember_form_page.email;
             _person.createDate = DateTime.Now;
             _person.lastUpdate = DateTime.Now;
+
+            //first, last name and main phone validation
+
+            if (_person.firstName == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.firstName.Trim().Length > 50)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.lastName == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.lastName.Trim().Length > 50)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.mainPhone == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.mainPhone.Trim().Length > 30)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            //else if (personfirstname.Count() > 0 && personlastname.Count() > 0 && personmainphone.Count() > 0)
+            else if (personfirstname.Count() > 0 && personlastname.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+
             persons1.Insert(_person);
             persons1.Commit();
 

@@ -36,6 +36,7 @@ namespace IPMRVPark.WebUI
             container.RegisterType<IRepositoryBase<staff_view>, StaffViewRepository>();
             container.RegisterType<IRepositoryBase<person>, PersonRepository>();
             container.RegisterType<IRepositoryBase<partymember>, PartyMemberRepository>();
+            container.RegisterType<IRepositoryBase<partymember_view>, PartyMemberViewRepository>();
             container.RegisterType<IRepositoryBase<rvsite_available_view>, RVSiteAvailableViewRepository>();
             container.RegisterType<IRepositoryBase<placeinmap>, PlaceInMapRepository>();
             container.RegisterType<IRepositoryBase<reasonforpayment>, ReasonForPaymentRepository>();

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IPMRVPark.Models.reasonforpayment>
+@model IEnumerable<IPMRVPark.Models.reasonforpayment>
 
 @{
     ViewBag.Title = "Reason for Payment Index";
@@ -16,43 +16,61 @@
     <div class="container-fluid">
         <div class="row top-margin" style="margin-left:5px">
             <table>
-                <tr>
-                    <th>
-                        <label style="margin:10px">ID</label>
-                    </th>
-                    <th>
-                        <label style="margin:10px">Description</label>
-                    </th>
-                    <th>
-                        <label style="margin:10px">Actions</label>
-                    </th>
-                </tr>
-
-                @foreach (var item in Model)
-                {
+                <thead style="border:1px solid green">
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ID, new { style = "margin: 10px;" })
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.description, new { style = "margin: 10px;" })
-                        </td>
-                        <td>
-                            <a href="@Url.Action("ReasonForPaymentDetails", "ReasonForPayment", new { id = item.ID })" class="btn btn-default margin-top-10">
-                                Details
-                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                            </a>
-                            <a href="@Url.Action("EditReasonForPayment", "ReasonForPayment", new { id = item.ID })" class="btn btn-default margin-top-10">
-                                Edit&nbsp;
-                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                            </a>
-                            <a href="@Url.Action("DeleteReasonForPayment", "ReasonForPayment", new { id = item.ID })" class="btn btn-default margin-top-10">
-                                Remove
-                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            </a>
-                        </td>
+                        <th>
+                            <label style="margin:10px">ID</label>
+                        </th>
+                        <th>
+                            <label style="margin:10px">Description</label>
+                        </th>
+                        <th>
+                            <label style="margin:10px">Actions</label>
+                        </th>
                     </tr>
-                }
-            </table>
+                    </thead>
+
+                    @foreach (var item in Model)
+                    {
+                        <tbody style="border:1px dotted green">
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ID, new { style = "margin: 10px;" })
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.description, new { style = "margin: 10px;" })
+                            </td>
+                            <td style="border-top:none">
+                                <div class="dropdown pull-right">
+                                    <button class="btn btn-block dropdown-toggle" aria-expanded="false" type="button" data-toggle="dropdown">
+                                        Action
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="@Url.Action("ReasonForPaymentDetails", "ReasonForPayment", new { id = item.ID }) " class=" btn btn-default margin-top-10">
+                                                Details
+                                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("EditReasonForPayment", "ReasonForPayment", new { id = item.ID }) " class=" btn btn-default margin-top-10">
+                                                Edit&nbsp;
+                                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("DeleteReasonForPayment", "ReasonForPayment", new { id = item.ID })" class=" btn btn-default margin-top-10">
+                                                Remove
+                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                            </tbody>
+                    }
+</table>
         </div>
     </div>

@@ -1,4 +1,4 @@
-﻿@model IPMRVPark.Models.customer_view
+@model IPMRVPark.Models.customer_view
 
 @{
     ViewBag.Title = "Customer Details";
@@ -8,7 +8,7 @@
 <span class="glyphicon glyphicon-chevron-right"></span>
 Maintenance
 <span class="glyphicon glyphicon-chevron-right"></span>
-@Html.ActionLink("Customer Details", "CustomerDetails", "CustomerView")
+@Html.ActionLink("Customer Details", "CustomerDetails", "Customer")
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -170,39 +170,23 @@ Maintenance
             </div>
             <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
-                    <label>Country Code</label>
+                    <label>Province</label>
                 </div>
                 <div class="display-field col-sm-4 col-xs-12 form-top-margin">
-                    @Html.DisplayFor(model => model.countryCode)
+                    @Html.DisplayFor(model => model.provinceName)
                 </div>
-
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
-                    <label>Country Name</label>
+                    <label>Country</label>
                 </div>
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.countryName)
                 </div>
             </div>
             <div class="row top-margin">
-                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
-                    <label>Province Code</label>
-                </div>
-                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
-                    @Html.DisplayFor(model => model.provinceCode)
-                </div>
-
-                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
-                    <label>Province Name</label>
-                </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
-                    @Html.DisplayFor(model => model.provinceName)
-                </div>
-            </div>
-            <div class="row top-margin">
-                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
                     <label>Receipt By E-mail</label>
                 </div>
-                <div class="col-sm-4 col-xs-12 form-top-margin">
+                <div class="col-sm-3 col-xs-12 form-top-margin">
                     @if (Model.isEmailReceipt != null && Model.isEmailReceipt == true)
                     {
                         <input type="checkbox" name="isEmailReceipt" checked disabled>
@@ -213,10 +197,10 @@ Maintenance
                     }
                 </div>
 
-                <div class="display-label col-sm-2 col-xs-12 form-top-margin">
+                <div class="display-label col-sm-3 col-xs-12 form-top-margin">
                     <label>Party Member</label>
                 </div>
-                <div class="col-sm-4 col-xs-12 form-top-margin">
+                <div class="col-sm-3 col-xs-12 form-top-margin">
                     @if (Model.isPartyMember != null && Model.isPartyMember == true)
                 {
                         <input type="checkbox" name="isPartyMember" checked disabled>

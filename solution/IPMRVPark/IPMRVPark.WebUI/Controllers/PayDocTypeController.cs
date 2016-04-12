@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -41,6 +41,11 @@ namespace IPMRVPark.WebUI.Controllers
             return View(paydoctype);
         }
 
+        public ActionResult ErrorMessage()
+        {
+            return View();
+        }
+
         // GET: /Create
         public ActionResult CreatePayDocType()
         {
@@ -51,11 +56,30 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreatePayDocType(paydoctype paydoctype)
         {
+            //validation check
+            var name1 = paydoctypes.GetAll().Where(s => s.description.ToUpper().Contains(paydoctype.description.ToUpper())).ToList();
+
             var _paydoctype = new paydoctype();
             _paydoctype.ID = paydoctype.ID;
             _paydoctype.description = paydoctype.description;
             _paydoctype.createDate = DateTime.Now;
             _paydoctype.lastUpdate = DateTime.Now;
+
+            //code and name validation
+
+            if (_paydoctype.description == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_paydoctype.description.Trim().Length > 45)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (name1.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+
             paydoctypes.Insert(_paydoctype);
             paydoctypes.Commit();
 

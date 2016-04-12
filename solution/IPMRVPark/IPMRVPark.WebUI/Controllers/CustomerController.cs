@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using IPMRVPark.Models;
@@ -38,7 +38,7 @@ namespace IPMRVPark.WebUI.Controllers
         }//end Constructor
 
         // GET: list with filter
-        public ActionResult Index(string searchString)
+        public ActionResult IndexCustomer(string searchString)
         {
             var customer_view = customers_view.GetAll().OrderBy(q => q.fullName);
 
@@ -67,6 +67,11 @@ namespace IPMRVPark.WebUI.Controllers
                 return HttpNotFound();
             }
             return View(customer_view);
+        }
+
+        public ActionResult ErrorMessage()
+        {
+            return View();
         }
 
         // Configure dropdown list items
@@ -119,11 +124,49 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateCustomer(customer_view customer_form_page)
         {
+            //validation check
+            var personfirstname = persons.GetAll().Where(s => s.firstName.ToUpper().Contains(customer_form_page.firstName.ToUpper())).ToList();
+            var personlastname = persons.GetAll().Where(s => s.lastName.ToUpper().Contains(customer_form_page.lastName.ToUpper())).ToList();
+            var personmainphone = persons.GetAll().Where(s => s.mainPhone.ToUpper().Contains(customer_form_page.mainPhone.ToUpper())).ToList();
+
             var _person = new person();
             _person.firstName = customer_form_page.firstName;
             _person.lastName = customer_form_page.lastName;
             _person.mainPhone = customer_form_page.mainPhone;
             _person.email = customer_form_page.email;
+
+            //first, last name and main phone validation
+
+            if (_person.firstName == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.firstName.Trim().Length > 50)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.lastName == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.lastName.Trim().Length > 50)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.mainPhone == null)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            else if (_person.mainPhone.Trim().Length > 30)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+            //else if (personfirstname.Count() > 0 && personlastname.Count() > 0 && personmainphone.Count() > 0)
+            else if (personfirstname.Count() > 0 && personlastname.Count() > 0)
+            {
+                return RedirectToAction("ErrorMessage");
+            }
+
             _person.createDate = DateTime.Now;
             _person.lastUpdate = DateTime.Now;
 
