@@ -55,6 +55,7 @@ namespace IPMRVPark.WebUI
             container.RegisterType<IRepositoryBase<styleurl>, StyleurlRepository>();
             container.RegisterType<IRepositoryBase<sitetype>, SitetypeRepository>();
             container.RegisterType<IRepositoryBase<siterate>, SiterateRepository>();
+			container.RegisterType<IRepositoryBase<payment_view>, PaymentViewRepository>();
 
             return container;
         }

@@ -94,24 +94,18 @@ Customer Registration
                     <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="format - [A6B 3C5] ..." />
                     @Html.ValidationMessageFor(model => model.postalCode)
                 </div>
-                <div class="col-sm-2 col-xs-12 form-top-margin">
+                <div class="col-sm-3 col-xs-12 form-top-margin">
                     <label>Province </label>
                 </div>
-                <div class="col-sm-4 col-xs-12 form-top-margin">
-                    @Html.DropDownListFor(model => model.provinceCode,
-                        new SelectList(ViewBag.Province, "code", "name"),
-                        "Select Province",
-                        new { @class = "form-control" })
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DropDownList("provinceCode", null, null, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.provinceCode, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-sm-2 col-xs-12 form-top-margin">
-                    <label>Country </label>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    <label>Country</label>
                 </div>
-                <div class="col-sm-4 col-xs-12 form-top-margin">
-                    @Html.DropDownListFor(model => model.countryCode,
-                        new SelectList(ViewBag.Country, "code", "name"),
-                        "Select Country",
-                        new { @class = "form-control" })
+                <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
+                    @Html.DropDownList("countryCode", null, null, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.countryCode, "", new { @class = "text-danger" })
                 </div>
         </div>
@@ -129,10 +123,6 @@ Customer Registration
                     <label>Receipt by Email </label>
                 </div>
                 <div class="col-sm-3 col-xs-12 form-top-margin">
-                    @*<select class="form-control" data-toggle="tooltip" title="Select one" id="isEmailReceipt" name="isEmailReceipt">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>*@
                     <input checked="checked"
                            id="isEmailReceipt"
                            name="isEmailReceipt"
@@ -153,17 +143,11 @@ Customer Registration
                 </div>
         </div>
         <div class="row">
-            <div class="col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
+            <div class="col-sm-6 col-sm-push-6 col-xs-12 form-top-margin">
                 <button type="submit" class="btn btn-block btn-default">
                     <span class="col-xs-1 glyphicon glyphicon-ok"></span>
                     <span class="col-xs-9">Confirm Customer Registration</span>
                 </button>
-            </div>
-            <div class="col-sm-5 col-sm-push-1 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
-                <a href="@Url.Action("Index", "CustomerView")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    <span>Back to List</span>
-                </a>
             </div>
         </div>
     </fieldset>

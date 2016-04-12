@@ -1,0 +1,98 @@
+﻿@model  IEnumerable<IPMRVPark.Models.payment_view>
+
+@{
+    ViewBag.Title = "Payments & Refunds";
+    ViewBag.PageTitle = "Search Payment";
+}
+
+@Html.ActionLink("Home", "Menu", "Login")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Payments & Refunds
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Search Payment", "SearchPayment", "Payment")
+
+<div class="container-fluid">
+    <div class="row top-margin">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-md-9 col-xs-8 margin-top-10">
+                @Html.TextBox("SearchByCustomer", null, new { id = "searchByCustomer", @class = "form-control", placeholder = "Search by customer name" })
+            </div>
+            <div class="col-md-1 col-xs-2 margin-top-10">
+                <button type="submit" class="btn btn-default glyphicon glyphicon-search" />
+            </div>
+            <div class="col-md-1 col-xs-2 margin-top-10">
+                <a href="@Url.Action("SearchPayment", "Payment")" class="btn btn-default glyphicon glyphicon-remove"></a>
+            </div>
+        }
+    </div>
+    <div class="row top-margin">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-md-9 col-xs-8 margin-top-10">
+                @Html.TextBox("SearchBySite", null, new { id = "searchBySite", @class = "form-control", placeholder = "Search by site name" })
+            </div>
+            <div class="col-md-1 col-xs-2 margin-top-10">
+                <button type="submit" class="btn btn-default glyphicon glyphicon-search" />
+            </div>
+            <div class="col-md-1 col-xs-2 margin-top-10">
+                <a href="@Url.Action("SearchPayment", "Payment")" class="btn btn-default glyphicon glyphicon-remove"></a>
+            </div>
+        }
+    </div>
+
+    @foreach (var item in Model)
+    {
+        <!-- Payment Summary -->
+        <div class="row top-margin">
+            <div class="col-sm-2 col-xs-6">
+                <label>Payment #</label>
+            </div>
+            <div class="col-sm-4 col-xs-6">
+                <div disabled class="form-control">@Html.DisplayFor(modelItem => item.id)</div>
+            </div>
+            <div class="col-sm-2 col-xs-6">
+                <label>Date</label>
+            </div>
+            <div class="col-sm-4 col-xs-6">
+                @{string createDate = "";}
+                @if (item.createDate != null)
+                {
+                    createDate = item.createDate.Value.ToString("yyyy-MM-dd");
+                }
+                <div disabled class="form-control">@createDate</div>
+            </div>
+        </div>
+                    <div class="row form-top-margin">
+                        <div class="col-sm-2 col-xs-6">
+                            <label>Sites</label>
+                        </div>
+                        <div class="col-sm-4 col-xs-6">
+                            <div disabled class="form-control">@Html.DisplayFor(modelItem => item.sites)</div>
+                        </div>
+                        <div class="col-sm-2 col-xs-6">
+                            <label>Amount</label>
+                        </div>
+                        <div class="col-sm-4 col-xs-6">
+                            <div disabled class="form-control">@Html.DisplayFor(modelItem => item.amount)</div>
+                        </div>
+                    </div>
+                    <div class="row form-top-margin">
+                        <div class="col-sm-2 col-xs-6">
+                            <label>Customer</label>
+                        </div>
+                        <div class="col-sm-7 col-xs-6">
+                            <div disabled class="form-control">@Html.DisplayFor(modelItem => item.fullName), @Html.DisplayFor(modelItem => item.mainPhone)</div>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a href="@Url.Action("PrintPayment", "Payment", new { id = item.id })" class="btn btn-default btn-block margin-top-10">
+                                Print Payment
+                                <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+                            </a>
+                        </div>
+                    </div>
+                    }<!-- end foreach -->
+</div>
+

@@ -77,21 +77,22 @@ Maintenance
                     </div>
             </div>
             <div class="row top-margin">
-                    <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
-                        <label>Comments</label>
-                    </div>
-                    <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
-                        @Html.EditorFor(model => model.comments)
-                        @Html.ValidationMessageFor(model => model.comments)
-                    </div>
-
-                    <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
-                        <label>Street</label>
-                    </div>
-                    <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
-                        @Html.EditorFor(model => model.street)
-                        @Html.ValidationMessageFor(model => model.street)
-                    </div>
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    <label>Comments</label>
+                </div>
+                <div class="editor-field col-sm-9 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.comments)
+                    @Html.ValidationMessageFor(model => model.comments)
+                </div>
+            </div>
+            <div class="row top-margin">
+                <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
+                    <label>Street</label>
+                </div>
+                <div class="editor-field col-sm-9 col-xs-12 form-top-margin">
+                    @Html.EditorFor(model => model.street)
+                    @Html.ValidationMessageFor(model => model.street)
+                </div>
             </div>
             <div class="row top-margin">
                     <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
@@ -115,20 +116,14 @@ Maintenance
                         <label>Province</label>
                     </div>
                     <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
-                        @Html.DropDownListFor(model => model.provinceCode,
-                        new SelectList(ViewBag.Province, "code", "name"),
-                        "Select Province",
-                        new { @class = "form-control" })
+                        @Html.DropDownList("provinceCode", null, null, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.provinceCode, "", new { @class = "text-danger" })
                     </div>
                     <div class="editor-label col-sm-3 col-xs-12 form-top-margin">
                         <label>Country</label>
                     </div>
                     <div class="editor-field col-sm-3 col-xs-12 form-top-margin">
-                        @Html.DropDownListFor(model => model.countryCode,
-                        new SelectList(ViewBag.Country, "code", "name"),
-                        "Select Country",
-                        new { @class = "form-control" })
+                        @Html.DropDownList("countryCode", null, null, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.countryCode, "", new { @class = "text-danger" })
                     </div>
             </div>
@@ -160,18 +155,11 @@ Maintenance
                     </div>
             </div>
             <div class="row top-margin">
-                    <div class="editor-label col-sm-5 col-sm-push-1 col-xs-12 form-top-margin">
+                    <div class="editor-label col-sm-5 col-sm-push-6 col-xs-12 form-top-margin">
                         <button type="submit" class="btn btn-block btn-default">
                             <span class="col-xs-1 glyphicon glyphicon-ok"></span>
                             <span class="col-xs-9">Confirm Edit</span>
                         </button>
-                    </div>
-                    <div class="editor-label col-sm-5 col-sm-push-1 colxs-12 form-top-margin">
-                        <a href="@Url.Action("Index", "CustomerView")" class="btn btn-block btn-default btn-mylink pagination-centered">
-                            <span class="glyphicon glyphicon-chevron-left"></span>
-                            <span>Back to List</span>
-
-                        </a>
                     </div>
             </div>
         </fieldset>

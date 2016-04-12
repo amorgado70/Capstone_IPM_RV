@@ -10,8 +10,15 @@
 namespace IPMRVPark.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class sp_delete_sitetype_dependants_Result
+    public partial class payment_view
     {
+        public long id { get; set; }
+        public decimal amount { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public string sites { get; set; }
+        public string fullName { get; set; }
+        public string mainPhone { get; set; }
     }
 }

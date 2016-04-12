@@ -223,6 +223,63 @@ namespace IPMRVPark.WebUI.Controllers
             return Json(idRVSite);
         }
 
+        // Select site button, add site to selected table
+        public ActionResult SelectSiteOnMap(long id)
+        {
+            var _session = sessionService.GetSession(this.HttpContext);
+            ipmevent _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
+
+            // Read dates from IPM Event
+            DateTime checkInDate = _IPMEvent.startDate.Value;
+            DateTime checkOutDate = checkInDate.AddDays(7);
+            // Read dates from session
+            if (_session.checkInDate != null)
+            {
+                checkInDate = _session.checkInDate.Value;
+            };
+            if (_session.checkOutDate != null)
+            {
+                checkOutDate = _session.checkOutDate.Value;
+            };
+                        
+            // Add selected item to the database
+            var _selecteditem = new selecteditem();
+            var type_rates = sites_description_rate.GetAll().
+                Where(s => s.id == id).FirstOrDefault();
+
+            _selecteditem.checkInDate = checkInDate;
+            _selecteditem.checkOutDate = checkOutDate;
+            _selecteditem.weeklyRate = type_rates.weeklyRate.Value;
+            _selecteditem.dailyRate = type_rates.dailyRate.Value;
+            _selecteditem.idRVSite = id;
+            _selecteditem.idSession = _session.ID;
+            _selecteditem.idIPMEvent = _session.idIPMEvent;
+            _selecteditem.idStaff = _session.idStaff;
+            _selecteditem.idCustomer = _session.idCustomer;
+            _selecteditem.site = type_rates.RVSite;
+            _selecteditem.siteType = type_rates.description;
+            _selecteditem.isSiteChecked = true;
+            CalcSiteTotal calcResults = new CalcSiteTotal(
+                checkInDate,
+                checkOutDate,
+                type_rates.weeklyRate.Value,
+                type_rates.dailyRate.Value,
+                true);
+            _selecteditem.duration = calcResults.duration;
+            _selecteditem.weeks = calcResults.weeks;
+            _selecteditem.days = calcResults.days;
+            _selecteditem.amount = calcResults.amount;
+            _selecteditem.total = calcResults.total;
+            _selecteditem.createDate = DateTime.Now;
+            _selecteditem.lastUpdate = DateTime.Now;
+            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+
+            selecteditems.Insert(_selecteditem);
+            selecteditems.Commit();
+
+            return Json(id);
+        }
+
         // Calculate total for site selected on the dropdown list
         [HttpPost]
         public ActionResult GetSiteData(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
@@ -711,5 +768,19 @@ namespace IPMRVPark.WebUI.Controllers
         }
 
         #endregion
+
+        public ActionResult SiteName(int id)
+        {
+            var _site = sites_description_rate.GetByKey("id", id);
+
+            string siteName = string.Empty;
+
+            if (_site != null)
+            {
+                siteName = _site.RVSite;
+            }
+
+            return Content(siteName);
+        }
     }
 }

@@ -18,11 +18,11 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<session> sessions;
         SessionService sessionService;
 
-        public CustomerController(IRepositoryBase<customer_view> customers_view, 
-                IRepositoryBase<person> persons, 
+        public CustomerController(IRepositoryBase<customer_view> customers_view,
+                IRepositoryBase<person> persons,
                 IRepositoryBase<customer> customers,
                 IRepositoryBase<session> sessions,
-                IRepositoryBase<provincecode> provincecodes, 
+                IRepositoryBase<provincecode> provincecodes,
                 IRepositoryBase<countrycode> countrycodes)
         {
             this.customers_view = customers_view;
@@ -44,15 +44,21 @@ namespace IPMRVPark.WebUI.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                customer_view = customer_view.Where(s => s.fullName.Contains(searchString)).OrderBy(r =>r.fullName);
+                customer_view = customer_view.Where(s => s.fullName.Contains(searchString)).OrderBy(r => r.fullName);
             }
 
             return View(customer_view);
         }
 
+        public ActionResult SearchCustomer()
+        {
+            return View();
+        }
+
         // GET: /Details/5
         public ActionResult CustomerDetails(int? id)
         {
+            ViewBag.CustomerID = id;
             customer_view customer_view = customers_view.GetAll().
                 Where(c => c.id == id).FirstOrDefault();
             //var customer_view = customers_view.GetById(id);
@@ -63,17 +69,48 @@ namespace IPMRVPark.WebUI.Controllers
             return View(customer_view);
         }
 
+        // Configure dropdown list items
+        private void countryCodes(string defaultCountry)
+        {
+            var countries = countrycodes.GetAll().OrderBy(s => s.name);
+            List<SelectListItem> selectCountry = new List<SelectListItem>();
+            foreach (var item in countries)
+            {
+                SelectListItem selectList1Item = new SelectListItem();
+                selectList1Item.Value = item.code.ToString();
+                selectList1Item.Text = item.name;
+                string selectedText = defaultCountry;
+                selectList1Item.Selected =
+                 (selectList1Item.Text.Contains(selectedText));
+                selectCountry.Add(selectList1Item);
+            }
+            ViewBag.countryCode = selectCountry;
+        }
+        private void provinceCodes(string defaultProvince)
+        {
+            var provinces = provincecodes.GetAll().OrderBy(s => s.name);
+            List<SelectListItem> selectProvince = new List<SelectListItem>();
+            foreach (var item in provinces)
+            {
+                SelectListItem selectList1Item = new SelectListItem();
+                selectList1Item.Value = item.code.ToString();
+                selectList1Item.Text = item.name;
+                string selectedText = defaultProvince;
+                selectList1Item.Selected =
+                 (selectList1Item.Text.Contains(selectedText));
+                selectProvince.Add(selectList1Item);
+            }
+            ViewBag.provinceCode = selectProvince;
+        }
+
         // GET: /Create
         public ActionResult CreateCustomer()
         {
             //Dropdown list for country
-            var country = countrycodes.GetAll();
-            ViewBag.Country = country.OrderBy(q => q.name);
+            countryCodes("CANADA");
 
             //Dropdown list for province
-            //ViewBag.Province = provincecodes.GetAll().OrderBy(s => s.name);
-            var province = provincecodes.GetAll();
-            ViewBag.Province = province.OrderBy(s => s.name);
+            provinceCodes("ONTARIO");
 
             var customer_view = new customer_view();
             return View(customer_view);
@@ -106,7 +143,7 @@ namespace IPMRVPark.WebUI.Controllers
             _customer.countryCode = customer_form_page.countryCode;
             _customer.isEmailReceipt = customer_form_page.isEmailReceipt;
             _customer.isPartyMember = customer_form_page.isPartyMember;
-            _customer.createDate = DateTime.Now; 
+            _customer.createDate = DateTime.Now;
             _customer.lastUpdate = DateTime.Now;
             customers.Insert(_customer);
             customers.Commit();
@@ -116,22 +153,21 @@ namespace IPMRVPark.WebUI.Controllers
             sessions.Update(_session);
             sessions.Commit();
 
-            return RedirectToAction("CustomerDetails", new { id = _customer.ID});
+            return RedirectToAction("CustomerDetails", new { id = _customer.ID });
         }
 
         // GET: /Edit/5
         public ActionResult EditCustomer(int id)
         {
-            //Dropdown list for country
-            var country = countrycodes.GetAll();
-            ViewBag.Country = country.OrderBy(q => q.name);
-
-            //Dropdown list for province
-            var province = provincecodes.GetAll();
-            ViewBag.Province = province.OrderBy(s => s.name);
 
             customer_view customer_view = customers_view.GetAll().
                 Where(c => c.id == id).FirstOrDefault();
+
+            //Dropdown list for country
+            countryCodes(customer_view.countryName);
+
+            //Dropdown list for province
+            provinceCodes(customer_view.provinceName);
 
             if (customer_view == null)
             {
@@ -171,7 +207,7 @@ namespace IPMRVPark.WebUI.Controllers
             customers.Update(_customer);
             customers.Commit();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("CustomerDetails", new { id = _customer.ID });
         }
 
 
@@ -192,7 +228,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult DeleteConfirm(int id)
         {
             //customer_view customer_view = customers_view.GetAll().
-                    //Where(c => c.id == id).FirstOrDefault();
+            //Where(c => c.id == id).FirstOrDefault();
             //var _person = persons.GetById(customer_form_page.id);
             //persons.Delete(customers_view.GetAll().
             //        Where(c => c.id == id).FirstOrDefault().id);

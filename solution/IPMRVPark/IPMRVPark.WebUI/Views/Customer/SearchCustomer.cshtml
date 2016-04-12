@@ -1,0 +1,88 @@
+@{
+    ViewBag.Title = "Customer Registration";
+    ViewBag.PageTitle = "Search Customer";
+}
+
+@Html.ActionLink("Home", "Menu", "Login")
+<span class="glyphicon glyphicon-chevron-right"></span>
+Customer Registration
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Search Customer", "SearchCustomer", "Customer")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Resolve root path
+        var origin = window.location.origin;
+        if (origin == 'http://www.alvm.com.br') {
+            var root = 'http://www.alvm.com.br/ipmrvpark/';
+        }
+        else {
+            var root = '../';
+        }
+        // ***** Customer Search
+        $('#customerName').click(function () {
+            $('#customerName').val('');
+            $('#btnSelectCustomer').prop('disabled', true);
+        });
+        $('#customerName').autocomplete({
+            source: function (request, response) {
+                // define a function to call the action (assuming UserController)
+                var postpath = root + 'Search/SearchCustomerByNameOrPhoneResult';
+                $.ajax({
+                    url: postpath,
+                    type: 'POST',
+                    dataType: 'json',
+                    // query will be the param used by the action method
+                    data: { query: request.term },
+                    success: response
+                });
+            },
+            minLength: 1, // require at least one character from the user
+            select: function (event, ui) {
+                $('#idCustomer').val(ui.item.ID); // name of form input field: CustomerID, ProductID
+                $('#btnSelectCustomer').prop('disabled', false);
+                $('#btnSelectCustomer').focus();
+            }
+        });
+        // ***** Customer Selection
+        $('#btnSelectCustomer').prop('disabled', true);
+        //function will be called on button click
+        $('#btnSelectCustomer').click(function () {
+            $('#waitMsg').show();// Show wait message
+            var urlpath = root + 'Customer/CustomerDetails/' + $('#idCustomer').val();
+            window.location.replace(urlpath);
+        });
+    });
+</script>
+
+<!-- Search Customer -->
+<div class="container-fluid">
+
+    <!-- Customer Selection -->
+    <div class="row top-margin">
+        <div class="col-sm-2 col-xs-12 form-top-margin">
+            <label>Customer</label>
+        </div>
+        <div class="col-sm-10 col-xs-12 form-top-margin" data-toggle="tooltip" title="Search and selecte with autocomplete">
+            <input type="text" class="form-control" id="customerName" placeholder="Type name or phone and then select from the list" />
+            <input class="text-box single-line" id="idCustomer" name="idCustomer" type="hidden" />
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+            <button id="btnSelectCustomer" class="btn btn-block btn-default">                
+                <span class="col-xs-9">Customer Details</span>
+                <span class="col-xs-1 glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+            <a href="@Url.Action("CreateCustomer", "Customer")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                <span class="glyphicon glyphicon-user"></span>
+                <span>New Customer</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </div>
+</div>

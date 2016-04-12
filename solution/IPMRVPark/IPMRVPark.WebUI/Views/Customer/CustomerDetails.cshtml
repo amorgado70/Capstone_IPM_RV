@@ -10,14 +10,82 @@ Maintenance
 <span class="glyphicon glyphicon-chevron-right"></span>
 @Html.ActionLink("Customer Details", "CustomerDetails", "CustomerView")
 
-@using (Html.BeginForm()) {
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Resolve root path
+        var origin = window.location.origin;
+        if (origin == 'http://www.alvm.com.br') {
+            var root = 'http://www.alvm.com.br/ipmrvpark/';
+        }
+        else {
+            var root = '../';
+        }
+        // ***** Customer Selection
+        $('#btnNewReservation').prop('disabled', true);
+        //function will be called on button click
+        $('#btnNewReservation').click(function () {
+            $('#waitMsg').show();// Show wait message
+            $('#btnPayment').focus();
+            var postpath = '/Login/SelectCustomer';
+            var customerID = @ViewBag.CustomerID;
+            $.ajax({
+                url: postpath, // Controller/View
+                type: 'POST', //HTTP POST Method
+                dataType: 'json',
+                data: { //Passing data
+                    idCustomer: customerID
+                },
+                success: function (result) {
+                    $('#btnNewReservation').prop('disabled', true);
+                    var urlpath = '/Reservation/NewReservation';
+                    window.location.replace(urlpath);
+                },
+                error: function (result) {
+                    alert('71 Some error occured.');
+                }
+            });
+        });
+        // ***** Customer Selection
+        $('#btnNewPayment').prop('disabled', true);
+        //function will be called on button click
+        $('#btnNewPayment').click(function () {
+            $('#waitMsg').show();// Show wait message
+            $('#btnPayment').focus();
+            var postpath = '/Login/SelectCustomer';
+            var customerID = @ViewBag.CustomerID;
+            $.ajax({
+                url: postpath, // Controller/View
+                type: 'POST', //HTTP POST Method
+                dataType: 'json',
+                data: { //Passing data
+                    idCustomer: customerID
+                },
+                success: function (result) {
+                    $('#btnNewPayment').prop('disabled', true);
+                    var urlpath = '/Payment/PaymentOrRefund';
+                    window.location.replace(urlpath);
+                },
+                error: function (result) {
+                    alert('72 Some error occured.');
+                }
+            });
+        });
+        // ***** Load partial view Payments For Customer
+        $('#account-details').load('/Payment/ShowPaymentPerCustomer/@ViewBag.CustomerID');
+    });
+</script>
+
+
+@using (Html.BeginForm())
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-<div class="container-fluid">
-    <fieldset>
-        <legend></legend>
-        @Html.HiddenFor(model => model.id)
-        <div class="row top-margin">
+
+    <div class="container-fluid">
+        <fieldset>
+            <legend></legend>
+            @Html.HiddenFor(model => model.id)
+            <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>First Name</label>
                 </div>
@@ -31,16 +99,16 @@ Maintenance
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.lastName)
                 </div>
-        </div>
-        <div class="row top-margin">
+            </div>
+            <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>E-mail</label>
                 </div>
                 <div class="display-field col-sm-9 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.email)
                 </div>
-        </div>
-        <div class="row top-margin">
+            </div>
+            <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>Main Phone</label>
                 </div>
@@ -53,8 +121,8 @@ Maintenance
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.cellPhone)
                 </div>
-        </div>
-        <div class="row top-margin">
+            </div>
+            <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>Home Phone</label>
                 </div>
@@ -68,23 +136,24 @@ Maintenance
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.faxNumber)
                 </div>
-        </div>
-        <div class="row top-margin">
+            </div>
+            <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>Comments</label>
                 </div>
-                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
+                <div class="display-field col-sm-9 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.comments)
                 </div>
-
+            </div>
+            <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>Street</label>
                 </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
+                <div class="display-field col-sm-9 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.street)
                 </div>
-        </div>
-        <div class="row top-margin">
+            </div>
+            <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>City</label>
                 </div>
@@ -98,8 +167,8 @@ Maintenance
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.postalCode)
                 </div>
-        </div>
-        <div class="row top-margin">
+            </div>
+            <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>Country Code</label>
                 </div>
@@ -113,8 +182,8 @@ Maintenance
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.countryName)
                 </div>
-        </div>
-        <div class="row top-margin">
+            </div>
+            <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>Province Code</label>
                 </div>
@@ -128,26 +197,44 @@ Maintenance
                 <div class="display-field col-sm-3 col-xs-12 form-top-margin">
                     @Html.DisplayFor(model => model.provinceName)
                 </div>
-        </div>
-        <div class="row top-margin">
+            </div>
+            <div class="row top-margin">
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>Receipt By E-mail</label>
                 </div>
-                <div class="display-field col-sm-4 col-xs-12 form-top-margin">
-                    @Html.DisplayFor(model => model.isEmailReceipt)
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    @if (Model.isEmailReceipt != null && Model.isEmailReceipt == true)
+                    {
+                        <input type="checkbox" name="isEmailReceipt" checked disabled>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="isEmailReceipt" disabled>
+                    }
                 </div>
 
                 <div class="display-label col-sm-2 col-xs-12 form-top-margin">
                     <label>Party Member</label>
                 </div>
-                <div class="display-field col-sm-3 col-xs-12 form-top-margin">
-                    @Html.DisplayFor(model => model.isPartyMember)
+                <div class="col-sm-4 col-xs-12 form-top-margin">
+                    @if (Model.isPartyMember != null && Model.isPartyMember == true)
+                {
+                        <input type="checkbox" name="isPartyMember" checked disabled>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="isPartyMember" disabled>
+                    }
                 </div>
-        </div>
-        <div class="row top-margin">
-            <div class="form-group">
+            </div>
+            <div class="row top-margin">
+                <div class="col-sm-10 col-sm-push-1 col-xs-12">
+                    <div id="account-details">
+                    </div>
+                </div>
+            </div>
+            <div class="row top-margin">
                 <div class="display-label col-sm-6 col-xs-12 form-top-margin">
-                    @*@Html.ActionLink("Edit", "EditCustomer", new { id = Model.id }, new { @class = "btn btn-success" })*@
                     <a href="@Url.Action("EditCustomer", "Customer", new { id = Model.id })" class="btn btn-block btn-default btn-mylink pagination-centered">
                         <span class="glyphicon glyphicon-pencil"></span>
                         <span>Edit Customer Info</span>
@@ -155,16 +242,24 @@ Maintenance
                     </a>
                 </div>
                 <div class="display-label col-sm-6 colxs-12 form-top-margin">
-                    <a href="@Url.Action("NewReservation", "Reservation")" class="btn btn-block btn-default btn-mylink pagination-centered">
+                    <div id="btnNewReservation" class="btn btn-block btn-default btn-mylink pagination-centered">
                         <span class="glyphicon glyphicon-map-marker"></span>
                         <span>Go To New Reservation</span>
                         <span class="glyphicon glyphicon-chevron-right"></span>
-                    </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </fieldset>
-</div>
+            <div class="row form-top-margin">
+                <div class="display-label col-sm-6 col-sm-push-6 colxs-12 form-top-margin">
+                    <div id="btnNewPayment" class="btn btn-block btn-default btn-mylink pagination-centered">
+                        <span class="glyphicon glyphicon-usd"></span>
+                        <span>Go To New Payment</span>
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

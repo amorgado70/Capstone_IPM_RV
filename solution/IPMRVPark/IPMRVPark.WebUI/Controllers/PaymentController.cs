@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using IPMRVPark.Contracts.Data;
+using System.Text.RegularExpressions;
 
 namespace IPMRVPark.WebUI.Controllers
 {
@@ -19,6 +20,7 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<reservationitem> reservationitems;
         IRepositoryBase<paymentreservationitem> paymentsreservationitems;
+        IRepositoryBase<payment_view> payments_view;
         IRepositoryBase<session> sessions;
         SessionService sessionService;
         PaymentService paymentService;
@@ -30,7 +32,8 @@ namespace IPMRVPark.WebUI.Controllers
             IRepositoryBase<selecteditem> selecteditems,
             IRepositoryBase<reservationitem> reservationitems,
             IRepositoryBase<paymentreservationitem> paymentsreservationitems,
-            IRepositoryBase<session> sessions
+            IRepositoryBase<payment_view> payments_view,
+        IRepositoryBase<session> sessions
             )
         {
             this.sessions = sessions;
@@ -41,6 +44,7 @@ namespace IPMRVPark.WebUI.Controllers
             this.selecteditems = selecteditems;
             this.reservationitems = reservationitems;
             this.paymentsreservationitems = paymentsreservationitems;
+            this.payments_view = payments_view;
             sessionService = new SessionService(
                 this.sessions,
                 this.customers
@@ -182,7 +186,7 @@ namespace IPMRVPark.WebUI.Controllers
             var _customer = customers.GetByKey("id", _payment.idCustomer);
 
             ViewBag.CustomerName = (_customer.fullName + ", " + _customer.mainPhone);
-            
+
             decimal previousBalance = paymentService.CustomerPreviousBalance(_payment.idCustomer, _payment.ID);
             ViewBag.PreviousBalance = previousBalance;
             decimal finalBalance = paymentService.CustomerAccountBalance(_payment.idCustomer);
@@ -271,7 +275,7 @@ namespace IPMRVPark.WebUI.Controllers
             }
 
             // Set reason for payment
-            updateReasonForPayment();            
+            updateReasonForPayment();
 
             // Texts for payment page
             ViewBag.IsCredit = isCredit;
@@ -369,5 +373,52 @@ namespace IPMRVPark.WebUI.Controllers
             return RedirectToAction("PrintPayment", new { id = ID });
         }
         #endregion
+
+        public ActionResult SearchPayment(string searchByCustomer, string searchBySite)
+        {
+            var _payments = payments_view.GetAll();
+
+            if (searchBySite != null)
+            {
+                //Regex for site name
+                Regex rgx = new Regex("[^a-zA-Z0-9]");
+
+                //Remove characters from search string
+                searchBySite = rgx.Replace(searchBySite, "").ToUpper();
+
+                //Filter list
+                foreach (var _payment in _payments)
+                {
+                    if (!(rgx.Replace(_payment.sites, "").ToUpper().Contains(searchBySite)))
+                    {
+                        _payments = _payments.Where(p => p.id != _payment.id);
+                    }
+
+                }
+            }
+
+
+            if (searchByCustomer != null)
+            {
+                //Regex for customer name and phone
+                Regex rgx = new Regex("[^a-zA-Z]");
+
+                //Remove characters from search string
+                searchByCustomer = rgx.Replace(searchByCustomer, "").ToUpper();
+
+                //Filter list
+                foreach (var _payment in _payments)
+                {
+                    if (!(rgx.Replace(_payment.fullName, "").ToUpper().Contains(searchByCustomer)))
+                    {
+                        _payments = _payments.Where(p => p.id != _payment.id);
+                    }
+
+                }
+            }
+
+            return View(_payments);
+
+        }
     }
 }

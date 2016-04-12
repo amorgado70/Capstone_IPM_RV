@@ -67,6 +67,7 @@
     <Compile Include="Repositories\PartyMemberRepository.cs" />
     <Compile Include="Repositories\PartyMemberViewRepository.cs" />
     <Compile Include="Repositories\PayDocTypeRepository.cs" />
+    <Compile Include="Repositories\PaymentViewRepository.cs" />
     <Compile Include="Repositories\PlaceInMapRepository.cs" />
     <Compile Include="Repositories\PaymentMethodRepository.cs" />
     <Compile Include="Repositories\PaymentRepository.cs" />
