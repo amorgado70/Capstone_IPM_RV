@@ -71,6 +71,7 @@ namespace IPMRVPark.Services
         public string line_color;
         public string poly_color;
         public int siteCount;
+        public bool isSite;  
     }
 
     public class _size

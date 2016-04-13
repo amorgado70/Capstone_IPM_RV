@@ -74,7 +74,7 @@ namespace IPMRVPark.WebUI.Controllers
             Polygons poly = Polygons.GetInstance();
             resetPolygons(poly, eventId, year);
             // in case of no event
-            if( poly._leftTop != null)
+            if (poly._leftTop != null)
             {
                 ViewBag.Lat = (poly._leftTop._x + poly._rightBottom._x) / 2;
                 ViewBag.Lng = (poly._leftTop._y + poly._rightBottom._y) / 2;
@@ -84,7 +84,7 @@ namespace IPMRVPark.WebUI.Controllers
                 ViewBag.Lat = 0;
                 ViewBag.Lng = 0;
             }
-                
+
             return View(poly);
         }
         public void resetPolygons(Polygons poly, long eventId, long year)
@@ -98,7 +98,7 @@ namespace IPMRVPark.WebUI.Controllers
                 poly.AddSite(places.GetQueryable().Where(x => x.idIPMEvent == eventId).ToList());
                 poly.AddCoordinates(coords.GetQueryable().Where(x => x.idIPMEvent == eventId).ToList());
                 poly.UpdateSite(status.GetQueryable().Where(x => x.Year == year).ToList());
-                
+
                 poly.Initialized = true;
                 poly.eventId = eventId;
             }
@@ -109,7 +109,7 @@ namespace IPMRVPark.WebUI.Controllers
             return View(model);
         }
         // partial view of IPMEventInfo()
-        public ActionResult SiteTypes(long year, long eventId )
+        public ActionResult SiteTypes(long year, long eventId)
         {
             var tRates = typeRates.GetQueryable().Where(x => x.eventId == eventId).ToList();
 
@@ -162,7 +162,7 @@ namespace IPMRVPark.WebUI.Controllers
             if (!poly.DeleteTypeRate(eventId, serviceId, sizeId))
             {
                 var _type = types.GetQueryable().Where(x => x.idIPMEvent == eventId && x.idService == serviceId && x.idSiteSize == sizeId).FirstOrDefault<sitetype>();
-                if (_type == null || !delete_sitetype_dependants(_type.ID )
+                if (_type == null || !delete_sitetype_dependants(_type.ID)
                     )
                 {
                     ret = false;
@@ -204,7 +204,7 @@ namespace IPMRVPark.WebUI.Controllers
             var _event = events.GetQueryable().Where(x => x.year == _year).FirstOrDefault<ipmevent>();
             var _found = _event != null ? true : false;
 
-            if( ret && _found)
+            if (ret && _found)
             {
                 if (isEventStarted(_year))
                 {
@@ -233,7 +233,7 @@ namespace IPMRVPark.WebUI.Controllers
                     events.Update(_event);
                 else
                     events.Insert(_event);
-                
+
                 long eventId = _event.ID;
 
                 // commit events
@@ -290,7 +290,7 @@ namespace IPMRVPark.WebUI.Controllers
         private bool isEventStarted(long year)
         {
             // check this later : some conflict between this view and reservationitem table in terms of 'isAvailable'
-            var site = status.GetQueryable().Where(x => x.Year == year && x.isAvaialable == 0 ).FirstOrDefault<rvsite_status_view>();
+            var site = status.GetQueryable().Where(x => x.Year == year && x.isAvaialable == 0).FirstOrDefault<rvsite_status_view>();
 
             if (site != null)
                 return true;
@@ -313,7 +313,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult SiteUrl(long eventId)
         {
             Polygons poly = Polygons.GetInstance();
-            if( poly.Styles.Count == 0 )
+            if (poly.Styles.Count == 0 || poly.Styles[0].eventId != eventId)
                 poly.AddStyle(styles.GetQueryable().Where(x => x.idIPMEvent == eventId).OrderByDescending(x => x.ID).ToList());
             var _urls = poly.Styles.Where(x => x.eventId == eventId).ToList();
             ViewBag.styleCount = _urls.Count;

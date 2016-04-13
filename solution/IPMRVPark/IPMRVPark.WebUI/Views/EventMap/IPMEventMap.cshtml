@@ -16,6 +16,9 @@
     body {
         min-width: 1280px;
     }
+    a {
+    text-decoration: underline;
+    }
 </style>
 
 <script type="text/javascript">
@@ -31,6 +34,7 @@
     var lastUpdateString;
     var infoWindow;
     var selectionColor = "#B0C4DE";
+    var size_services = [];
 
     window.onload = function () {
         initialize(@ViewBag.Lat, @ViewBag.Lng);
@@ -95,12 +99,109 @@
         centerControlDiv.index = 1;
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
 
+        // set bottom control to show site row
+        var bottomControlDiv = document.createElement('div');
+        var bottomControl = new BottomControl(bottomControlDiv, map);
+        bottomControlDiv.index = 2;
+        map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(bottomControlDiv);
+
+        // set click event hanlder to close info window
+        google.maps.event.addListener(map, 'click', function() {
+            closeBubble();
+        });
+
         // start to refresh
         startRefresh();
     }
 
     function setInit(){
         bSiteInit = true;
+    }
+
+    function BottomControl(bottomDiv, map) {
+
+        bottomDiv.style.clear = 'both';
+        // sort bottom control using last site_name of each control
+        size_services.sort( function(a,b){ return a.site_name > b.site_name;});
+
+        for( i=0; i<size_services.length; i++){
+            // Set CSS for the control border.
+            var controlUI = document.createElement('div');
+            controlUI.id = "controlUI_" + i.toString();
+            controlUI.style.backgroundColor = "#" + size_services[i].orgColor.substring(2);
+            //controlUI.style.width = '10px';
+            controlUI.style.border = '2px solid #fff';
+            controlUI.style.borderRadius = '3px';
+            controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+            controlUI.style.cursor = 'pointer';
+            controlUI.style.marginLeft = '10px';
+            controlUI.style.marginRight = '10px';
+            controlUI.style.marginBottom = '10px';
+            controlUI.style.textAlign = 'center';
+            controlUI.style.float = 'left';
+            controlUI.title = size_services[i].name;
+            bottomDiv.appendChild(controlUI);
+
+            // Set CSS for the control interior.
+            var controlText = document.createElement('div');
+            controlText.style.color = 'rgb(25,25,25)';
+            controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+            controlText.style.fontSize = '12px';
+            controlText.style.lineHeight = '28px';
+            controlText.style.paddingLeft = '3px';
+            controlText.style.paddingRight = '3px';
+            size_services[i].row_name.sort();
+            var _html = '';
+
+            for( j=0; j<size_services[i].row_name.length; j++){
+                _html += '<a>' + size_services[i].row_name[j] + '</a>&nbsp'
+            }
+            _html += '<br>' + size_services[i].name;
+
+            controlText.innerHTML = _html;
+            controlUI.appendChild(controlText);
+
+            // Setup the click event listeners
+            //controlUI.addEventListener('click', function(event) {
+            //    //alert("pressed center control");
+            //    showInfo(event.latLng, controlText.innerHTML);
+            //});
+
+            google.maps.event.addDomListener(controlUI, 'click', function(event) {
+                //alert("pressed center control");
+                //showInfo(event.x, event.y, event.currentTarget.id);
+            });
+
+            //google.maps.event.addListener(poly, 'mouseout', function() {
+            //    closeBubble();
+            //});
+        }
+    }
+
+    function pixelToLatlng(xcoor, ycoor) {
+        var ne = map.getBounds().getNorthEast();
+        var sw = map.getBounds().getSouthWest();
+        var projection = map.getProjection();
+        var topRight = projection.fromLatLngToPoint(ne);
+        var bottomLeft = projection.fromLatLngToPoint(sw);
+        var scale = 1 << map.getZoom();
+        var newLatlng = projection.fromPointToLatLng(new google.maps.Point(xcoor / scale + bottomLeft.x, ycoor / scale + topRight.y));
+        return newLatlng;
+    }
+
+    function showInfo(x,y, content){
+        var latLng = pixelToLatlng(x, y-110);
+
+
+        if (this.infoWindow){
+            if (content !== undefined){
+                this.infoWindow.setContent( content );
+            }
+            if (latLng !== undefined){
+                this.infoWindow.setPosition(latLng);
+            }
+            this.infoWindow.open(this.map);
+        }
     }
 
     function CenterControl(controlDiv, map) {
@@ -111,6 +212,7 @@
         controlUI.style.borderRadius = '3px';
         controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
         controlUI.style.cursor = 'pointer';
+        controlUI.style.marginTop = '22px';
         controlUI.style.marginBottom = '22px';
         controlUI.style.textAlign = 'center';
         controlUI.title = 'Click to go back to Reservation';
@@ -129,13 +231,38 @@
 
         // Setup the click event listeners
         controlUI.addEventListener('click', function() {
-            //alert("pressed center control");
             window.location.replace("../Reservation/NewReservation");
         });
     }
 
+    function find_size_service( size_service_name, site_name ){
+        for( i=0; i<size_services.length; i++ )
+        {
+            if( size_services[i].name == size_service_name )
+            {
+                size_services[i].site_name = site_name;
+                var _row_name = site_name.split('-');
+
+                var found = false;
+                for( j=0; j<size_services[i].row_name.length; j++ )
+                {
+                    if( size_services[i].row_name[j] == _row_name[0].trimRight() )
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if( !found )
+                    size_services[i].row_name.push(_row_name[0].trimRight());
+
+                return true;
+            }
+        }
+        return false;
+    }
+
     // create polygon
-    function setSites( id, name, service, tag, color, isSite, coords ){
+    function setSites( id, name, service, tag, color, orgColor, isSite, coords ){
         var site = {
             id : id,
             name : name,
@@ -146,11 +273,27 @@
             coords : coords
         };
         sites.push( site );
+
+        var size_service_name = service + ' / ' + tag;
+
+        if( isSite && !find_size_service( size_service_name, name ))
+        {
+            var size_service = {
+                site_name : name,
+                row_name : [],
+                name : size_service_name,
+                orgColor : orgColor
+            };
+            var _row_name = name.split('-');
+            size_service.row_name.push(_row_name[0].trimRight());
+            size_services.push(size_service);
+        }
     }
 
     function createPolygons(){
         for (i = 0; i < sites.length; i++){
-            createPolygonObject( sites[i].id, sites[i].name, sites[i].service, sites[i].tag, sites[i].color, sites[i].isSite, sites[i].coords);
+            createPolygonObject( sites[i].id, sites[i].name, sites[i].service, sites[i].tag, 
+                sites[i].color, sites[i].isSite, sites[i].coords);
         }
     }
 
@@ -168,15 +311,8 @@
 
         var point = bounds.getCenter();
 
-        //var content= '<div><h3>' + name + '</h3><div>' + tag + '</div></div>';
         var content= '<div><h3>' + name + '</h3><div>' + service + '</div><div>' + tag + '</div></div>' 
             + "<div><button onclick='selectSite(" + id.toString() + ")'>select</button></div>";
-        //rgb = this.getRGBColorTransparency(placemark.style.color);
-        //rgbForLine = this.getRGBColorTransparency(placemark.style.Linecolor);
-
-        //var clickable = isSite;
-        //if( placemark.folderId != "0-0" )
-         //   clickable = false;
 
         var polyOptions = { map:  this.map,
             paths: path,
@@ -200,19 +336,37 @@
         poly.docId = 1;
         poly.name = name;
 
-        google.maps.event.addListener(map, 'click', function() {
-            closeBubble();
-        });
-
         google.maps.event.addListener(poly, 'click', function() {
             openBubble(poly);
         });
+
+        //google.maps.event.addListener(poly, 'mouseover', function() {
+        //    showSiteName(poly);
+        //});
+
+        //google.maps.event.addListener(poly, 'mouseout', function() {
+        //    closeBubble();
+        //});
+
 
 
         this.polys.push(poly);
         //placemark.areas.push(poly);
         //placemark.mapObject = poly;
         poly.setMap(this.map);
+    }
+
+    function showSiteName(poly){
+        if (this.infoWindow){
+            if (poly.name !== undefined){
+                //this.infoWindow.setContent(object.description);
+                this.infoWindow.setContent( poly.name );
+            }
+            if (poly.position !== undefined){
+                this.infoWindow.setPosition(poly.position);
+            }
+            this.infoWindow.open(this.map, poly);
+        }
     }
 
     function openBubble(poly){
@@ -235,17 +389,6 @@
     }
 
     function selectSite(id){
-        //$.getJSON( "../Reservation/SelectSiteOnMap", {id:id},
-        //        function(data){
-        //        }).done( function(){
-        //            var poly = getPoly(id);
-        //            poly.setOptions({ fillColor:selectionColor});
-
-        //        }).fail( function(jqxhr, textStatus, error) {
-        //            console.error("getJSON failed, status: " + textStatus + ", error: "+error)
-        //            alert( "Site Selection failed.");
-        //        });
-
         var postpath = '../Reservation/SelectSiteOnMap';
         $.ajax({                
             url: postpath,
@@ -342,7 +485,8 @@
     }
 
     function rotatePoint(point, origin, angle){
-        var angleRad = angle * Math.PI / 180.0;
+
+        var angleRad = (angle/10.0) * Math.PI / 180.0;
         return {
             x: Math.cos(angleRad) * (point.x - origin.x) - Math.sin(angleRad) * (point.y - origin.y) + origin.x,
             y: Math.sin(angleRad) * (point.x - origin.x) + Math.cos(angleRad) * (point.y - origin.y) + origin.y
@@ -367,14 +511,14 @@
                     {
                         <script>
                             setSites(@item.id,  '@Html.Raw(@item.name)', '@item.service.description', '@item.size.description', '@item.poly_color',
-                                            '@item.isSite'=='True'?1:0, @Html.Raw(@item.json_coord))
+                                            '@item.style.poly_color', '@item.isSite'=='True'?1:0, @Html.Raw(@item.json_coord))
                         </script>
                     }
                     <script>setInit()</script>
                 }
             </div>
 
-            <input class="rotateSlider" type="range" min="-180" max="180" value="0" step="1" onchange="rotatePolygons(this.value)" />
+            <input class="rotateSlider" type="range" min="-1800" max="1800" value="0" step="1" onchange="rotatePolygons(this.value)" />
 
             <p id="refresh"></p>
         </div>
