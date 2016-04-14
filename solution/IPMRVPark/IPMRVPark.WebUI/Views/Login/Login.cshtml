@@ -57,7 +57,8 @@
                 type: 'POST',
                 dataType: 'json',
                 data: { //Passing data
-                    userEmail: $('#userEmail').val()
+                    userEmail: $('#userEmail').val(),
+                    userPassword: $('#userPassword').val()
                 },
                 success: function (data) {
                     var userID = data.ID;
@@ -134,6 +135,19 @@
                     <div id="unauthorizedUser" style="color: red; font-weight: bold;">
                         non authorized user
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Email -->
+    <div class="row">
+        <div class="form-group">
+            <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
+                <div class="col-sm-3 col-xs-12 form-top-margin">
+                    <label>Password</label>
+                </div>
+                <div class="col-sm-9 col-xs-12 form-top-margin">
+                    <input type="password" class="form-control" id="userPassword" name="userPassword" placeholder="Type your password" />
                 </div>
             </div>
         </div>

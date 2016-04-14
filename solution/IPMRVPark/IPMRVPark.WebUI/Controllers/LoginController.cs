@@ -18,6 +18,7 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<reservationitem> reservationitems;
         IRepositoryBase<payment> payments;
+        IRepositoryBase<person> persons;
         IRepositoryBase<paymentreservationitem> paymentsreservationitems;
         IRepositoryBase<rvsite_available_view> rvsites_available;
         IRepositoryBase<site_description_rate_view> sites_description_rate;
@@ -33,6 +34,7 @@ namespace IPMRVPark.WebUI.Controllers
             IRepositoryBase<selecteditem> selecteditems,
             IRepositoryBase<reservationitem> reservationitems,
             IRepositoryBase<payment> payments,
+            IRepositoryBase<person> persons,
             IRepositoryBase<paymentreservationitem> paymentsreservationitems,
             IRepositoryBase<session> sessions,
             IRepositoryBase<site_description_rate_view> sites_description_rate
@@ -42,6 +44,7 @@ namespace IPMRVPark.WebUI.Controllers
             this.customers = customers;
             this.ipmevents = ipmevents;
             this.payments = payments;
+            this.persons = persons;
             this.paymentsreservationitems = paymentsreservationitems;
             this.placesinmap = placesinmap;
             this.selecteditems = selecteditems;
@@ -87,7 +90,7 @@ namespace IPMRVPark.WebUI.Controllers
         {
             
             List<SelectListItem> items = new List<SelectListItem>();
-            var _ipmevents = ipmevents.GetAll();
+            var _ipmevents = ipmevents.GetAll().OrderBy(y => y.year);
             long sessionID = sessionService.GetSessionID(this.HttpContext);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
 
@@ -134,22 +137,36 @@ namespace IPMRVPark.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult SelectUser(string userEmail)
+        public ActionResult SelectUser(string userEmail, string userPassword)
         {
             SelectionOptionID user = new SelectionOptionID(IDnotFound, "");
-            if (userEmail != null)
+            if (userEmail != null && userPassword != null)
             {
                 var _session = sessionService.GetSession(this.HttpContext);
-                var _users = users.GetAll().Where(q => q.person.email == userEmail);
-                if (_users.Count() > 0)
+
+
+                bool personFound = false;
+                try //checks if person is in database
                 {
-                    user.ID = users.GetAll().Where(q => q.person.email == userEmail).First().ID;
+                    var _person = persons.GetAll().Where(u => u.email == userEmail && u.password == userPassword).
+                        FirstOrDefault();
+                    personFound = !(_person.Equals(default(person)));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("An error occurred: '{0}'", e);
+                }
+                // Person found in database
+                if (personFound)
+                {
+                    user.ID = persons.GetAll().Where(q => q.email == userEmail && q.password == userPassword).First().ID;
                     user.Label = userEmail;
                     _session.idStaff = user.ID;
                 }
                 else
                 {
                     _session.idStaff = null;
+
                 }
                 sessions.Update(sessions.GetById(_session.ID));
                 sessions.Commit();

@@ -16,10 +16,10 @@ namespace IPMRVPark.Models
     using System.Data.Objects.DataClasses;
     using System.Linq;
     
-    public partial class rvparkEntities : DbContext
+    public partial class rvparkEntities1 : DbContext
     {
-        public rvparkEntities()
-            : base("name=rvparkEntities")
+        public rvparkEntities1()
+            : base("name=rvparkEntities1")
         {
         }
     

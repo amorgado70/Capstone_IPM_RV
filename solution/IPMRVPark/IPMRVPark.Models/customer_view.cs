@@ -20,6 +20,7 @@ namespace IPMRVPark.Models
         public string fullName { get; set; }
         public string mainPhone { get; set; }
         public string email { get; set; }
+        public string password { get; set; }
         public string cellPhone { get; set; }
         public string homePhone { get; set; }
         public string faxNumber { get; set; }

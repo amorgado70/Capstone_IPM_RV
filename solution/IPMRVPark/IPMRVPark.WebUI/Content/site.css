@@ -191,3 +191,10 @@ a, .btn, .btn-mylink, label, b, .glyphicon, th {
     content: "+";
     font-weight: bold;
 }
+
+.ui-autocomplete{
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 20px;
+}

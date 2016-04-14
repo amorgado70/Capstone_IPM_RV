@@ -19,6 +19,7 @@ namespace IPMRVPark.Models
         public string lastName { get; set; }
         public string mainPhone { get; set; }
         public string email { get; set; }
+        public string password { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
