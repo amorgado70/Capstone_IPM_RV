@@ -579,57 +579,6 @@ namespace IPMRVPark.Services
             }
         }
 
-        //private void doFetchUpdate2()
-        //{
-        //    while (stopFromParent == false)
-        //    {
-        //        // fetch from database
-        //        Random rnd = new Random();
-        //        int id = rnd.Next(firstSiteId, lastSiteId);
-        //        int id2 = rnd.Next(firstSiteId, lastSiteId);
-
-        //        _site s = getSite(id);
-        //        _site s2 = getSite(id2);
-        //        if (s != null && s2 != null)
-        //        {
-        //            s.poly_color = _dimGrayRGB;
-        //            s2.poly_color = _dimGrayRGB;
-
-
-        //            DateTime now = DateTime.Now;
-        //            //now = DateTime.Now;
-
-        //            // update Updates List with lock & monitor
-        //            lock (Updates)
-        //            {
-        //                while (locked == true)     // Block this thread Until other thread call pulse
-        //                    Monitor.Wait(Updates); // Stay as WaitSleepJoin State
-
-        //                locked = true;
-
-        //                // pop updates after UpdateKeepSpan from tail 
-        //                for (int i = 0; i < Updates.Count;)
-        //                {
-        //                    if (now - Updates[0].lastUpdateTime > UpdateKeepSpan)
-        //                        Updates.RemoveAt(0);
-        //                    else
-        //                        break;
-        //                }
-
-        //                // push new updates to head
-        //                Updates.Add(new _siteUpdate { id = id, fillColor = s.poly_color, lastUpdate = DateTime.Now.ToString(), lastUpdateTime = DateTime.Now });
-        //                Updates.Add(new _siteUpdate { id = id2, fillColor = s2.poly_color, lastUpdate = DateTime.Now.ToString(), lastUpdateTime = DateTime.Now });
-
-        //                // Wake other thread 
-        //                locked = false;
-        //                Monitor.Pulse(Updates);
-        //            }
-        //        }
-
-        //        Thread.Sleep(updateInterval);
-        //    }
-        //}
-
         private _style getStyle(Nullable<long> id)
         {
             foreach (var i in Styles)
