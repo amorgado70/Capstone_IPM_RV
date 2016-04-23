@@ -19,5 +19,6 @@ namespace IPMRVPark.Contracts.Repositories
         System.Linq.IQueryable<TEntity> GetPaged(int top = 20, int skip = 0, object orderBy = null, object filter = null); 
         void Insert(TEntity entity);
         void Update(TEntity entity);
+        void BulkDelete(string tableName, string ColumnName, long WhereID);
     }
 }

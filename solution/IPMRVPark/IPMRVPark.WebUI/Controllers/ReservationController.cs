@@ -450,7 +450,32 @@ namespace IPMRVPark.WebUI.Controllers
         // Delete on selected site
         public ActionResult RemoveSelected(int id)
         {
-            selecteditems.Delete(selecteditems.GetById(id));
+            long userID = sessionService.GetSessionUserID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            
+            var _selecteditem = selecteditems.GetById(id);
+            //_selecteditem.checkInDate = checkInDate;
+            //_selecteditem.checkOutDate = checkOutDate;
+            //_selecteditem.weeklyRate = type_rates.weeklyRate.Value;
+            //_selecteditem.dailyRate = type_rates.dailyRate.Value;
+            //_selecteditem.idRVSite = idRVSite;
+            _selecteditem.idSession = sessionID;
+            //_selecteditem.idIPMEvent = _session.idIPMEvent;
+            _selecteditem.idStaff = userID;
+            _selecteditem.idCustomer = IDnotFound;
+            //_selecteditem.site = type_rates.RVSite;
+            //_selecteditem.siteType = type_rates.description;
+            _selecteditem.isSiteChecked = false;
+            _selecteditem.duration = 0;
+            _selecteditem.weeks = 0;
+            _selecteditem.days = 0;
+            _selecteditem.amount = 0;
+            _selecteditem.total = 0;
+            //_selecteditem.createDate = DateTime.Now;
+            _selecteditem.lastUpdate = DateTime.Now;
+            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+
+            selecteditems.Update(_selecteditem);
             selecteditems.Commit();
             return RedirectToAction("NewReservation");
         }

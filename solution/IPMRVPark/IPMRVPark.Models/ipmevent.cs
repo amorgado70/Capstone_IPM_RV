@@ -18,6 +18,9 @@ namespace IPMRVPark.Models
         {
             this.coordinates = new HashSet<coordinate>();
             this.fees = new HashSet<fee>();
+            this.reservationitems = new HashSet<reservationitem>();
+            this.payments = new HashSet<payment>();
+            this.paymentreservationitems = new HashSet<paymentreservationitem>();
             this.placeinmaps = new HashSet<placeinmap>();
             this.selecteditems = new HashSet<selecteditem>();
             this.sessions = new HashSet<session>();
@@ -42,6 +45,9 @@ namespace IPMRVPark.Models
     
         public virtual ICollection<coordinate> coordinates { get; set; }
         public virtual ICollection<fee> fees { get; set; }
+        public virtual ICollection<reservationitem> reservationitems { get; set; }
+        public virtual ICollection<payment> payments { get; set; }
+        public virtual ICollection<paymentreservationitem> paymentreservationitems { get; set; }
         public virtual ICollection<placeinmap> placeinmaps { get; set; }
         public virtual ICollection<selecteditem> selecteditems { get; set; }
         public virtual ICollection<session> sessions { get; set; }

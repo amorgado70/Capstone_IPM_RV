@@ -15,6 +15,10 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<ipmevent> ipmevents;
         IRepositoryBase<session> sessions;
         IRepositoryBase<placeinmap> placesinmap;
+        IRepositoryBase<coordinate> coordinates;
+        IRepositoryBase<sitetype> sitetypes;
+        IRepositoryBase<siterate> siterates;
+        IRepositoryBase<styleurl> stylesurl;        
         IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<reservationitem> reservationitems;
         IRepositoryBase<payment> payments;
@@ -30,6 +34,10 @@ namespace IPMRVPark.WebUI.Controllers
             IRepositoryBase<customer_view> customers,
             IRepositoryBase<ipmevent> ipmevents,
             IRepositoryBase<placeinmap> placesinmap,
+            IRepositoryBase<coordinate> coordinates,
+            IRepositoryBase<sitetype> sitetypes,
+            IRepositoryBase<siterate> siterates,
+            IRepositoryBase<styleurl> stylesurl,
             IRepositoryBase<rvsite_available_view> rvsites_available,
             IRepositoryBase<selecteditem> selecteditems,
             IRepositoryBase<reservationitem> reservationitems,
@@ -47,6 +55,10 @@ namespace IPMRVPark.WebUI.Controllers
             this.persons = persons;
             this.paymentsreservationitems = paymentsreservationitems;
             this.placesinmap = placesinmap;
+            this.coordinates = coordinates;
+            this.sitetypes = sitetypes;
+            this.siterates = siterates;
+            this.stylesurl = stylesurl;
             this.selecteditems = selecteditems;
             this.reservationitems = reservationitems;
             this.rvsites_available = rvsites_available;
@@ -230,6 +242,127 @@ namespace IPMRVPark.WebUI.Controllers
             sessions.Commit();
             return Json(idCustomer);
         }
+
+        public ActionResult CleanIPMEventData()
+        {
+            long UserID = sessionService.GetSessionUserID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+            ViewBag.IPMEventYear = ipmevents.GetById(IPMEventID).year;
+            return View();
+        }
+        [HttpPost, ActionName("CleanIPMEventData")]
+        [ValidateAntiForgeryToken]
+        public ActionResult CleanIPMEventDataConfirm()
+        {
+            long UserID = sessionService.GetSessionUserID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+
+            // Payment Reservation Coordination
+            //var _paymentreservationitems = paymentsreservationitems.GetAll().Where(pri => pri.idIPMEvent == IPMEventID).ToList();
+            //foreach (var _paymentreservationitem in _paymentreservationitems)
+            //{
+            //    paymentsreservationitems.Delete(_paymentreservationitem.ID);
+            //}
+            //paymentsreservationitems.Commit();
+
+            paymentsreservationitems.BulkDelete("paymentreservationitem","idIPMEvent", IPMEventID);
+
+            //// Selected Item
+            //var _selecteditems = selecteditems.GetAll().Where(si => si.idIPMEvent == IPMEventID).ToList();
+            //foreach (var _selecteditem in _selecteditems)
+            //{
+            //    selecteditems.Delete(_selecteditem.ID);
+            //}
+            //selecteditems.Commit();
+
+            selecteditems.BulkDelete("selecteditem", "idIPMEvent", IPMEventID);
+
+            //// Reservation Item
+            //var _reservationitems = reservationitems.GetAll().Where(ri => ri.idIPMEvent == IPMEventID).ToList();
+            //foreach (var _reservationitem in _reservationitems)
+            //{
+            //    reservationitems.Delete(_reservationitem.ID);
+            //}
+            //reservationitems.Commit();
+
+            reservationitems.BulkDelete("reservationitem", "idIPMEvent", IPMEventID);
+
+            // Place In Map or RV Site
+            //var _placesinmap = placesinmap.GetAll().Where(pim => pim.idIPMEvent == IPMEventID).ToList();
+            //foreach (var _placeinmap in _placesinmap)
+            //{
+            // Coordinates
+            //var _coordinates = coordinates.GetAll().Where(c => c.idPlaceInMap == _placeinmap.ID).ToList();
+            //if (_coordinates != null)
+            //{
+            //foreach(var _coordinate in _coordinates)
+            //{
+            //    coordinates.Delete(_coordinate.ID);
+            //}
+            //}
+            //placesinmap.Delete(_placeinmap.ID);
+            //}
+            //coordinates.Commit();
+            //placesinmap.Commit();
+
+            coordinates.BulkDelete("coordinates", "idIPMEvent", IPMEventID);
+            placesinmap.BulkDelete("placeinmap", "idIPMEvent", IPMEventID);
+
+            // Site Rates
+            //var _siterates = siterates.GetAll().Where(sr => sr.idIPMEvent == IPMEventID).ToList();
+            //if (_siterates != null)
+            //{
+            //    foreach (var _siterate in _siterates)
+            //    {
+            //        siterates.Delete(_siterate.ID);
+            //    }
+            //    siterates.Commit();
+            //}
+            siterates.BulkDelete("siterate", "idIPMEvent", IPMEventID);
+
+            // Site Types
+            //var _sitetypes = sitetypes.GetAll().Where(st => st.idIPMEvent == IPMEventID).ToList();
+            //if (_sitetypes != null)
+            //{
+            //    foreach (var _sitetype in _sitetypes)
+            //    {
+            //        sitetypes.Delete(_sitetype.ID);
+            //    }
+            //    sitetypes.Commit();
+            //}
+            sitetypes.BulkDelete("sitetype", "idIPMEvent", IPMEventID);
+
+            // Style Url
+            //var _stylesurl = stylesurl.GetAll().Where(su => su.idIPMEvent == IPMEventID).ToList();
+            //if (_stylesurl != null)
+            //{
+            //    foreach (var _styleurl in _stylesurl)
+            //    {
+            //        stylesurl.Delete(_styleurl.ID);
+            //    }
+            //    stylesurl.Commit();
+            //}
+            stylesurl.BulkDelete("styleurl", "idIPMEvent", IPMEventID);
+
+            var _ipmevent = ipmevents.GetById(IPMEventID);
+            _ipmevent.startDate = DateTime.MinValue;
+            _ipmevent.lastDateRefund = DateTime.MaxValue;
+            _ipmevent.endDate = DateTime.MaxValue;
+            _ipmevent.lastUpdate = DateTime.Now;
+            _ipmevent.mapFileUrl = null;
+            _ipmevent.description = null;
+            _ipmevent.local = null;
+            _ipmevent.street = null;
+            _ipmevent.city = null;
+            _ipmevent.provinceCode = null;
+            ipmevents.Update(_ipmevent);
+            ipmevents.Commit();            
+
+            return RedirectToAction("Home","Login");
+        }
+
     }
 
 }

@@ -86,7 +86,8 @@
                         var year = (long)0;
                         var lastIndex = Model.ToList().Count - 1;
                         var j = 0;
-                        foreach (var item in Model)
+
+                        foreach (var item in Model.OrderBy(s => s.year))
                         {
                             year = item.year;
 

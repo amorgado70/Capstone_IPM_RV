@@ -298,15 +298,20 @@ namespace IPMRVPark.WebUI.Controllers
         }
 
         // view for mapping between type and styleurl
-        public ActionResult DigitizeMap()
+        public ActionResult DigitizeMap(long eventId = -1)
         {
             Polygons poly = Polygons.GetInstance();
             poly.Reset();
 
             var model = events.GetAll();
-            var year = model.Max(x => x.year);
+            if (eventId == -1)
+            {
+                eventId = model.Where(x => x.year == (DateTime.Now.Year+1)).First<ipmevent>().ID;
+            }
+            ViewBag.eventId = eventId;
+            var year = model.Where(m => m.ID == eventId).First<ipmevent>().year;
             ViewBag.year = year;
-            ViewBag.eventId = model.Where(x => x.year == year).First<ipmevent>().ID;
+
             return View(model);
         }
         // partial view of DigitizeMap()
@@ -348,12 +353,18 @@ namespace IPMRVPark.WebUI.Controllers
             }
 
             var model = events.GetAll();
-            ViewBag.year = model.Max(x => x.year);
+            if (eventId == -1)
+            {
+                eventId = model.Where(x => x.year == (DateTime.Now.Year + 1)).First<ipmevent>().ID;
+            }
             ViewBag.eventId = eventId;
+            var year = model.Where(m => m.ID == eventId).First<ipmevent>().year;
+            ViewBag.year = year;
+
             return View(model);
         }
         // syleInfo string -> comma separated parameter (styleUrl, idService, idSize ), e.g., "#ffffffff,1,2"
-        private bool verifyTypeAndStyle(List<string> styleInfo, out string errMsg )
+        private bool verifyTypeAndStyle(List<string> styleInfo, out string errMsg)
         {
             errMsg = "";
 
@@ -366,12 +377,12 @@ namespace IPMRVPark.WebUI.Controllers
                 return false;
             }
             // no matching check
-            if ( styleInfo == null )
+            if (styleInfo == null)
             {
                 errMsg = "Insert all matching information";
                 return false;
             }
-           
+
             // duplication check & 0 id
             List<string> dupcheck = new List<string>();
 
@@ -431,15 +442,15 @@ namespace IPMRVPark.WebUI.Controllers
         }
         // Post Method to save object from KML Parser 
         [HttpPost]
-        public ActionResult SaveParsedObjects(int eventId, List<string> styleInfo )
+        public ActionResult SaveParsedObjects(int eventId, List<string> styleInfo)
         {
             string errMsg = "Please check input information";
             bool ret = styleInfo == null ? false :
-                        styleInfo.Count == 0 ? false:
+                        styleInfo.Count == 0 ? false :
                         verifyTypeAndStyle(styleInfo, out errMsg);
 
             // if succed deletion, process insertion.
-            if ( ret && DeleteEventObjects(eventId))
+            if (ret && DeleteEventObjects(eventId))
             {
                 Polygons poly = Polygons.GetInstance();
                 // save styleUrl
@@ -588,11 +599,12 @@ namespace IPMRVPark.WebUI.Controllers
         {
             var obj = events.GetQueryable().Where(x => x.year == year).FirstOrDefault<ipmevent>();
 
-            if( obj == null )
+            if (obj == null)
             {
                 return Json(new
-                {   id = 0,
-                    city ="",
+                {
+                    id = 0,
+                    city = "",
                     province = "",
                     street = "",
                     startdate = "yyyy-MM-dd",
@@ -601,7 +613,13 @@ namespace IPMRVPark.WebUI.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            return Json( new{ id=obj.ID, city=obj.city, province = obj.provinceCode, street=obj.street, startdate= String.Format("{0:yyyy-MM-dd}", obj.startDate),
+            return Json(new
+            {
+                id = obj.ID,
+                city = obj.city,
+                province = obj.provinceCode,
+                street = obj.street,
+                startdate = String.Format("{0:yyyy-MM-dd}", obj.startDate),
                 enddate = String.Format("{0:yyyy-MM-dd}", obj.endDate),
                 lastDateRefund = String.Format("{0:yyyy-MM-dd}", obj.lastDateRefund)
             }, JsonRequestBehavior.AllowGet);

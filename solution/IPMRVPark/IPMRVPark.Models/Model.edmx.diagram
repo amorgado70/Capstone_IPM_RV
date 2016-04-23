@@ -4,34 +4,34 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d86a92e678c14fc888318fb5e8d41929" Name="Diagram1">
-        <EntityTypeShape EntityType="rvparkModel.checkinout" Width="1.5" PointX="11.25" PointY="26.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.coordinate" Width="1.5" PointX="3" PointY="24.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.countrycode" Width="1.5" PointX="1.5" PointY="14" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.customer" Width="1.5" PointX="3.75" PointY="16" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.customeraccount" Width="1.5" PointX="16.5" PointY="24.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.fee" Width="1.5" PointX="3" PointY="29" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.ipmevent" Width="1.5" PointX="0.75" PointY="25.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.outofserviceitem" Width="1.5" PointX="8.25" PointY="30.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.partymember" Width="1.5" PointX="14.25" PointY="33" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.paydoctype" Width="1.5" PointX="6" PointY="18.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.payment" Width="1.5" PointX="8.25" PointY="20.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.paymentmethod" Width="1.5" PointX="6" PointY="15.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.paymentreservationitem" Width="1.5" PointX="19.5" PointY="24.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.person" Width="1.5" PointX="1.5" PointY="17" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.placeinmap" Width="1.5" PointX="6" PointY="26.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.provincecode" Width="1.5" PointX="1.5" PointY="20.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.reasonforpayment" Width="1.5" PointX="6" PointY="12.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.reservationitem" Width="1.5" PointX="14.25" PointY="24.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.reservationitem_partymember" Width="1.5" PointX="16.5" PointY="29" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.selecteditem" Width="1.5" PointX="19.5" PointY="28.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.service" Width="1.5" PointX="3" PointY="36.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.session" Width="1.5" PointX="6" PointY="21.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.siterate" Width="1.5" PointX="6" PointY="31.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.sitesize" Width="1.5" PointX="3" PointY="39.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.sitetype" Width="1.5" PointX="5.25" PointY="37.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.staff" Width="1.5" PointX="3.75" PointY="33" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.styleurl" Width="1.5" PointX="3" PointY="49.375" IsExpanded="true" />
+      <Diagram DiagramId="005487b2a4be4a2caa019363cb928702" Name="Diagram1">
+        <EntityTypeShape EntityType="rvparkModel.checkinout" Width="1.5" PointX="10.5" PointY="34.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.coordinate" Width="1.5" PointX="3" PointY="28.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.countrycode" Width="1.5" PointX="1.5" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.customer" Width="1.5" PointX="3.75" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.customeraccount" Width="1.5" PointX="10.5" PointY="28.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.fee" Width="1.5" PointX="3" PointY="32.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.ipmevent" Width="1.5" PointX="0.75" PointY="29.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.outofserviceitem" Width="1.5" PointX="5.25" PointY="36.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.partymember" Width="1.5" PointX="11.25" PointY="38.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.paydoctype" Width="1.5" PointX="3.75" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.payment" Width="1.5" PointX="6" PointY="29" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.paymentmethod" Width="1.5" PointX="3.75" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.paymentreservationitem" Width="1.5" PointX="13.5" PointY="32.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.person" Width="1.5" PointX="1.5" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.placeinmap" Width="1.5" PointX="3" PointY="36.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.provincecode" Width="1.5" PointX="1.5" PointY="20.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.reasonforpayment" Width="1.5" PointX="3.75" PointY="21.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.reservationitem" Width="1.5" PointX="8.25" PointY="31" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.reservationitem_partymember" Width="1.5" PointX="13.5" PointY="36.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.selecteditem" Width="1.5" PointX="13.5" PointY="23.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.service" Width="1.5" PointX="3" PointY="47.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.session" Width="1.5" PointX="6" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.siterate" Width="1.5" PointX="3" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.sitesize" Width="1.5" PointX="3" PointY="50.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.sitetype" Width="1.5" PointX="5.25" PointY="48.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.staff" Width="1.5" PointX="3.75" PointY="41.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.styleurl" Width="1.5" PointX="3" PointY="68.375" IsExpanded="true" />
         <EntityTypeShape EntityType="rvparkModel.customer_view" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="rvparkModel.partymember_view" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="rvparkModel.payment_view" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
@@ -40,8 +40,8 @@
         <EntityTypeShape EntityType="rvparkModel.rvsite_coord_view" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="rvparkModel.rvsite_status_view" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="rvparkModel.site_description_rate_view" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.sitetype_service_rate_view" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.staff_view" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.sitetype_service_rate_view" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.staff_view" Width="1.5" PointX="8.75" PointY="4.75" IsExpanded="true" />
         <AssociationConnector Association="rvparkModel.CheckInOut_PlaceInMap_FK" ManuallyRouted="false" />
         <AssociationConnector Association="rvparkModel.CheckInOut_ReservationItem_FK" ManuallyRouted="false" />
         <AssociationConnector Association="rvparkModel.Coordinates_idIPMEvent_FK" ManuallyRouted="false" />
@@ -58,6 +58,9 @@
         <AssociationConnector Association="rvparkModel.idPayment_Payment_FK" ManuallyRouted="false" />
         <AssociationConnector Association="rvparkModel.idReservationItem_ReservationItem_FK" ManuallyRouted="false" />
         <AssociationConnector Association="rvparkModel.Fees_IPMEvent_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="rvparkModel.idIPMEvent_IPMEvent_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="rvparkModel.Payment_IPMEvent_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="rvparkModel.paymentReservationItem_IPMEvent_FK" ManuallyRouted="false" />
         <AssociationConnector Association="rvparkModel.PlaceInMap_IPMEvent_FK" ManuallyRouted="false" />
         <AssociationConnector Association="rvparkModel.SelectedItem_IPMEvent_FK" ManuallyRouted="false" />
         <AssociationConnector Association="rvparkModel.Session_IPMEvent_FK" ManuallyRouted="false" />

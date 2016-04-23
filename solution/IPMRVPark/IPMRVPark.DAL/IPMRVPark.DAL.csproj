@@ -81,7 +81,7 @@
     <Compile Include="Repositories\PersonRepository.cs" />
     <Compile Include="Repositories\SiterateRepository.cs" />
     <Compile Include="Repositories\SiteSizeRepository.cs" />
-    <Compile Include="Repositories\SitetypeRepository.cs" />
+    <Compile Include="Repositories\SiteTypeRepository.cs" />
     <Compile Include="Repositories\SiteType_Rate_Repository.cs" />
     <Compile Include="Repositories\StaffRepository.cs" />
     <Compile Include="Repositories\SelectedItemRepository.cs" />
@@ -94,7 +94,7 @@
     <Compile Include="Repositories\CustomerViewRepository.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
     <Compile Include="Repositories\StaffViewRepository.cs" />
-    <Compile Include="Repositories\StyleurlRepository.cs" />
+    <Compile Include="Repositories\StyleUrlRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

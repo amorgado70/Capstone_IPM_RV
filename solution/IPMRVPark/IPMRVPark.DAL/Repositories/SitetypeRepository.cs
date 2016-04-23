@@ -5,9 +5,9 @@ using System;
 
 namespace IPMRVPark.Contracts.Repositories
 {
-    public class SitetypeRepository : RepositoryBase<sitetype>
+    public class SiteTypeRepository : RepositoryBase<sitetype>
     {
-        public SitetypeRepository(DataContext context)
+        public SiteTypeRepository(DataContext context)
             : base(context)
         { if (context == null) throw new ArgumentNullException(); }
     }

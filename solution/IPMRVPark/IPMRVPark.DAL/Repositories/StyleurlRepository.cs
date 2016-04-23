@@ -5,9 +5,9 @@ using System;
 
 namespace IPMRVPark.Contracts.Repositories
 {
-    public class StyleurlRepository : RepositoryBase<styleurl>
+    public class StyleUrlRepository : RepositoryBase<styleurl>
     {
-        public StyleurlRepository(DataContext context)
+        public StyleUrlRepository(DataContext context)
             : base(context)
         { if (context == null) throw new ArgumentNullException(); }
     }

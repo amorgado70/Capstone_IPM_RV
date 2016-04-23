@@ -15,11 +15,13 @@ namespace IPMRVPark.Models
     public partial class paymentreservationitem
     {
         public long ID { get; set; }
-        public Nullable<long> idPayment { get; set; }
-        public Nullable<long> idReservationItem { get; set; }
+        public long idIPMEvent { get; set; }
+        public long idPayment { get; set; }
+        public long idReservationItem { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }
     
+        public virtual ipmevent ipmevent { get; set; }
         public virtual payment payment { get; set; }
         public virtual reservationitem reservationitem { get; set; }
     }

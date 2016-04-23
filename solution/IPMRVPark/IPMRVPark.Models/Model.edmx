@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="rvparkModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+      <Schema Namespace="rvparkModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="checkinout">
           <Key>
             <PropertyRef Name="ID" />
@@ -140,6 +140,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idIPMEvent" Type="bigint" Nullable="false" />
           <Property Name="idPaymentMethod" Type="bigint" Nullable="false" />
           <Property Name="idCustomer" Type="bigint" Nullable="false" />
           <Property Name="idReasonForPayment" Type="bigint" />
@@ -173,8 +174,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="idPayment" Type="bigint" />
-          <Property Name="idReservationItem" Type="bigint" />
+          <Property Name="idIPMEvent" Type="bigint" Nullable="false" />
+          <Property Name="idPayment" Type="bigint" Nullable="false" />
+          <Property Name="idReservationItem" Type="bigint" Nullable="false" />
           <Property Name="createDate" Type="date" />
           <Property Name="lastUpdate" Type="date" />
         </EntityType>
@@ -228,6 +230,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idIPMEvent" Type="bigint" Nullable="false" />
           <Property Name="idRVSite" Type="bigint" Nullable="false" />
           <Property Name="idCustomer" Type="bigint" Nullable="false" />
           <Property Name="idStaff" Type="bigint" Nullable="false" />
@@ -432,7 +435,6 @@ warning 6002: The table/view 'def.rvpark.payment_view' does not have a primary k
             <PropertyRef Name="selectionTotal" />
             <PropertyRef Name="amount" />
             <PropertyRef Name="balance" />
-            <PropertyRef Name="idCustomer" />
           </Key>
           <Property Name="id" Type="bigint" Nullable="false" />
           <Property Name="selectionTotal" Type="decimal" Precision="12" Scale="2" Nullable="false" />
@@ -441,7 +443,7 @@ warning 6002: The table/view 'def.rvpark.payment_view' does not have a primary k
           <Property Name="createDate" Type="date" />
           <Property Name="reasonforpayment" Type="varchar" MaxLength="45" />
           <Property Name="sites" Type="text" />
-          <Property Name="idCustomer" Type="bigint" Nullable="false" />
+          <Property Name="idCustomer" Type="bigint" />
           <Property Name="fullName" Type="varchar" MaxLength="101" />
           <Property Name="mainPhone" Type="varchar" MaxLength="30" />
         </EntityType>
@@ -689,6 +691,18 @@ warning 6002: The table/view 'def.rvpark.staff_view' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="idIPMEvent_IPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ipmevent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reservationitem">
+              <PropertyRef Name="idIPMEvent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="idPayment_Payment_FK">
           <End Role="payment" Type="Self.payment" Multiplicity="0..1" />
           <End Role="customeraccount" Type="Self.customeraccount" Multiplicity="*" />
@@ -785,6 +799,18 @@ warning 6002: The table/view 'def.rvpark.staff_view' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Payment_IPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
+          <End Role="payment" Type="Self.payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ipmevent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="payment">
+              <PropertyRef Name="idIPMEvent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Payment_PayDocType_FK">
           <End Role="paydoctype" Type="Self.paydoctype" Multiplicity="0..1" />
           <End Role="payment" Type="Self.payment" Multiplicity="*" />
@@ -833,8 +859,20 @@ warning 6002: The table/view 'def.rvpark.staff_view' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="paymentReservationItem_IPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
+          <End Role="paymentreservationitem" Type="Self.paymentreservationitem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ipmevent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="paymentreservationitem">
+              <PropertyRef Name="idIPMEvent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="paymentReservationItem_Payment_FK">
-          <End Role="payment" Type="Self.payment" Multiplicity="0..1" />
+          <End Role="payment" Type="Self.payment" Multiplicity="1" />
           <End Role="paymentreservationitem" Type="Self.paymentreservationitem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="payment">
@@ -846,7 +884,7 @@ warning 6002: The table/view 'def.rvpark.staff_view' does not have a primary key
           </ReferentialConstraint>
         </Association>
         <Association Name="paymentReservationItem_ReservationItem_FK">
-          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="0..1" />
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="1" />
           <End Role="paymentreservationitem" Type="Self.paymentreservationitem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="reservationitem">
@@ -1316,6 +1354,10 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <End Role="customer" EntitySet="customer" />
             <End Role="customeraccount" EntitySet="customeraccount" />
           </AssociationSet>
+          <AssociationSet Name="idIPMEvent_IPMEvent_FK" Association="Self.idIPMEvent_IPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevent" />
+            <End Role="reservationitem" EntitySet="reservationitem" />
+          </AssociationSet>
           <AssociationSet Name="idPayment_Payment_FK" Association="Self.idPayment_Payment_FK">
             <End Role="payment" EntitySet="payment" />
             <End Role="customeraccount" EntitySet="customeraccount" />
@@ -1348,6 +1390,10 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <End Role="customer" EntitySet="customer" />
             <End Role="payment" EntitySet="payment" />
           </AssociationSet>
+          <AssociationSet Name="Payment_IPMEvent_FK" Association="Self.Payment_IPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevent" />
+            <End Role="payment" EntitySet="payment" />
+          </AssociationSet>
           <AssociationSet Name="Payment_PayDocType_FK" Association="Self.Payment_PayDocType_FK">
             <End Role="paydoctype" EntitySet="paydoctype" />
             <End Role="payment" EntitySet="payment" />
@@ -1363,6 +1409,10 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <AssociationSet Name="Payment_Session_FK" Association="Self.Payment_Session_FK">
             <End Role="session" EntitySet="session" />
             <End Role="payment" EntitySet="payment" />
+          </AssociationSet>
+          <AssociationSet Name="paymentReservationItem_IPMEvent_FK" Association="Self.paymentReservationItem_IPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevent" />
+            <End Role="paymentreservationitem" EntitySet="paymentreservationitem" />
           </AssociationSet>
           <AssociationSet Name="paymentReservationItem_Payment_FK" Association="Self.paymentReservationItem_Payment_FK">
             <End Role="payment" EntitySet="payment" />
@@ -1484,8 +1534,8 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
           <Property Name="idPlaceInMap" Type="Int64" Nullable="false" />
           <Property Name="seqCoordinate" Type="Int32" Nullable="false" />
-          <Property Name="longitude" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="latitude" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="longitude" Type="String" Nullable="false" />
+          <Property Name="latitude" Type="String" Nullable="false" />
           <Property Name="createDate" Type="DateTime" Nullable="false" />
           <Property Name="lastUpdate" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="ipmevent" Relationship="Self.Coordinates_idIPMEvent_FK" FromRole="coordinates" ToRole="ipmevent" />
@@ -1495,8 +1545,8 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Key>
             <PropertyRef Name="code" />
           </Key>
-          <Property Name="code" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="code" Type="String" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="customers" Relationship="Self.Customer_countryCode_FK" FromRole="countrycode" ToRole="customer" />
@@ -1507,15 +1557,15 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="cellPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="homePhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="faxNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="street" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="provinceCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="postalCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="countryCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="comments" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="cellPhone" Type="String" />
+          <Property Name="homePhone" Type="String" />
+          <Property Name="faxNumber" Type="String" />
+          <Property Name="street" Type="String" />
+          <Property Name="city" Type="String" />
+          <Property Name="provinceCode" Type="String" />
+          <Property Name="postalCode" Type="String" />
+          <Property Name="countryCode" Type="String" />
+          <Property Name="comments" Type="String" />
           <Property Name="isEmailReceipt" Type="Boolean" />
           <Property Name="isPartyMember" Type="Boolean" />
           <Property Name="createDate" Type="DateTime" />
@@ -1540,7 +1590,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Property Name="balanceAmount" Type="Decimal" />
           <Property Name="idPayment" Type="Int64" />
           <Property Name="idReservationItem" Type="Int64" />
-          <Property Name="comments" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="comments" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <Property Name="idCustomer" Type="Int64" Nullable="false" />
@@ -1554,8 +1604,8 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="idIPMEvent" Type="Int64" />
-          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="unit" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" />
+          <Property Name="unit" Type="String" />
           <Property Name="rate" Type="Decimal" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
@@ -1567,12 +1617,12 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="year" Type="Int64" Nullable="false" />
-          <Property Name="local" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="mapFileUrl" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="street" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="provinceCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="local" Type="String" />
+          <Property Name="description" Type="String" />
+          <Property Name="mapFileUrl" Type="String" />
+          <Property Name="street" Type="String" />
+          <Property Name="city" Type="String" />
+          <Property Name="provinceCode" Type="String" />
           <Property Name="startDate" Type="DateTime" />
           <Property Name="endDate" Type="DateTime" />
           <Property Name="createDate" Type="DateTime" />
@@ -1580,6 +1630,9 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Property Name="lastDateRefund" Type="DateTime" />
           <NavigationProperty Name="coordinates" Relationship="Self.Coordinates_idIPMEvent_FK" FromRole="ipmevent" ToRole="coordinates" />
           <NavigationProperty Name="fees" Relationship="Self.Fees_IPMEvent_FK" FromRole="ipmevent" ToRole="fees" />
+          <NavigationProperty Name="reservationitems" Relationship="Self.idIPMEvent_IPMEvent_FK" FromRole="ipmevent" ToRole="reservationitem" />
+          <NavigationProperty Name="payments" Relationship="Self.Payment_IPMEvent_FK" FromRole="ipmevent" ToRole="payment" />
+          <NavigationProperty Name="paymentreservationitems" Relationship="Self.paymentReservationItem_IPMEvent_FK" FromRole="ipmevent" ToRole="paymentreservationitem" />
           <NavigationProperty Name="placeinmaps" Relationship="Self.PlaceInMap_IPMEvent_FK" FromRole="ipmevent" ToRole="placeinmap" />
           <NavigationProperty Name="selecteditems" Relationship="Self.SelectedItem_IPMEvent_FK" FromRole="ipmevent" ToRole="selecteditem" />
           <NavigationProperty Name="sessions" Relationship="Self.Session_IPMEvent_FK" FromRole="ipmevent" ToRole="session" />
@@ -1604,9 +1657,9 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="cellPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="petDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="comments" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="cellPhone" Type="String" />
+          <Property Name="petDescription" Type="String" />
+          <Property Name="comments" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="person" Relationship="Self.Member_Person_FK" FromRole="partymember" ToRole="person" />
@@ -1617,7 +1670,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="payments" Relationship="Self.Payment_PayDocType_FK" FromRole="paydoctype" ToRole="payment" />
@@ -1627,25 +1680,27 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
           <Property Name="idPaymentMethod" Type="Int64" Nullable="false" />
           <Property Name="idCustomer" Type="Int64" Nullable="false" />
           <Property Name="idReasonForPayment" Type="Int64" />
           <Property Name="idSession" Type="Int64" />
           <Property Name="isCredit" Type="Boolean" />
           <Property Name="payDocType" Type="Int64" />
-          <Property Name="docNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="docNumber" Type="String" />
           <Property Name="primaryTotal" Type="Decimal" Nullable="false" />
           <Property Name="selectionTotal" Type="Decimal" Nullable="false" />
           <Property Name="amount" Type="Decimal" Nullable="false" />
           <Property Name="withoutTax" Type="Decimal" Nullable="false" />
           <Property Name="tax" Type="Decimal" Nullable="false" />
           <Property Name="balance" Type="Decimal" Nullable="false" />
-          <Property Name="comments" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="comments" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <Property Name="cancellationFee" Type="Decimal" Nullable="false" />
           <NavigationProperty Name="customer" Relationship="Self.Payment_Customer_FK" FromRole="payment" ToRole="customer" />
           <NavigationProperty Name="customeraccounts" Relationship="Self.idPayment_Payment_FK" FromRole="payment" ToRole="customeraccount" />
+          <NavigationProperty Name="ipmevent" Relationship="Self.Payment_IPMEvent_FK" FromRole="payment" ToRole="ipmevent" />
           <NavigationProperty Name="paydoctype1" Relationship="Self.Payment_PayDocType_FK" FromRole="payment" ToRole="paydoctype" />
           <NavigationProperty Name="paymentmethod" Relationship="Self.Payment_PaymentMethod_FK" FromRole="payment" ToRole="paymentmethod" />
           <NavigationProperty Name="reasonforpayment" Relationship="Self.Payment_ReasonForPayment_FK" FromRole="payment" ToRole="reasonforpayment" />
@@ -1657,8 +1712,8 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="description" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="doctype" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" />
+          <Property Name="doctype" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="payments" Relationship="Self.Payment_PaymentMethod_FK" FromRole="paymentmethod" ToRole="payment" />
@@ -1668,10 +1723,12 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="idPayment" Type="Int64" />
-          <Property Name="idReservationItem" Type="Int64" />
+          <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
+          <Property Name="idPayment" Type="Int64" Nullable="false" />
+          <Property Name="idReservationItem" Type="Int64" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
+          <NavigationProperty Name="ipmevent" Relationship="Self.paymentReservationItem_IPMEvent_FK" FromRole="paymentreservationitem" ToRole="ipmevent" />
           <NavigationProperty Name="payment" Relationship="Self.paymentReservationItem_Payment_FK" FromRole="paymentreservationitem" ToRole="payment" />
           <NavigationProperty Name="reservationitem" Relationship="Self.paymentReservationItem_ReservationItem_FK" FromRole="paymentreservationitem" ToRole="reservationitem" />
         </EntityType>
@@ -1680,11 +1737,11 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="mainPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="firstName" Type="String" Nullable="false" />
+          <Property Name="lastName" Type="String" Nullable="false" />
+          <Property Name="mainPhone" Type="String" />
+          <Property Name="email" Type="String" />
+          <Property Name="password" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="customer" Relationship="Self.Customer_Person_FK" FromRole="person" ToRole="customer" />
@@ -1697,8 +1754,8 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
-          <Property Name="tag" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="site" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tag" Type="String" Nullable="false" />
+          <Property Name="site" Type="String" Nullable="false" />
           <Property Name="idSiteType" Type="Int64" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
@@ -1715,9 +1772,9 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Key>
             <PropertyRef Name="code" />
           </Key>
-          <Property Name="code" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="countryCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="code" Type="String" Nullable="false" />
+          <Property Name="countryCode" Type="String" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="countrycode1" Relationship="Self.provinceCode_countryCode_FK" FromRole="provincecode" ToRole="countrycode" />
@@ -1728,7 +1785,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="payments" Relationship="Self.Payment_ReasonForPayment_FK" FromRole="reasonforpayment" ToRole="payment" />
@@ -1738,31 +1795,33 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
           <Property Name="idRVSite" Type="Int64" Nullable="false" />
           <Property Name="idCustomer" Type="Int64" Nullable="false" />
           <Property Name="idStaff" Type="Int64" Nullable="false" />
           <Property Name="checkInDate" Type="DateTime" Nullable="false" />
           <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
-          <Property Name="site" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="siteType" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="site" Type="String" Nullable="false" />
+          <Property Name="siteType" Type="String" Nullable="false" />
           <Property Name="duration" Type="Int32" Nullable="false" />
           <Property Name="weeks" Type="Int32" Nullable="false" />
           <Property Name="days" Type="Int32" Nullable="false" />
           <Property Name="weeklyRate" Type="Decimal" Nullable="false" />
           <Property Name="dailyRate" Type="Decimal" Nullable="false" />
           <Property Name="amount" Type="Decimal" Nullable="false" />
-          <Property Name="additionalServicesDescription" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="additionalServicesDescription" Type="String" />
           <Property Name="additionalServicesAmount" Type="Decimal" Nullable="false" />
           <Property Name="total" Type="Decimal" Nullable="false" />
           <Property Name="numberMemberInParty" Type="Int32" Nullable="false" />
           <Property Name="isCancelled" Type="Boolean" />
-          <Property Name="comments" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="comments" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
-          <Property Name="timeStamp" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="timeStamp" Type="String" />
           <NavigationProperty Name="checkinouts" Relationship="Self.CheckInOut_ReservationItem_FK" FromRole="reservationitem" ToRole="checkinout" />
           <NavigationProperty Name="customer" Relationship="Self.idCustomer_Customer_FK" FromRole="reservationitem" ToRole="customer" />
           <NavigationProperty Name="customeraccounts" Relationship="Self.idReservationItem_ReservationItem_FK" FromRole="reservationitem" ToRole="customeraccount" />
+          <NavigationProperty Name="ipmevent" Relationship="Self.idIPMEvent_IPMEvent_FK" FromRole="reservationitem" ToRole="ipmevent" />
           <NavigationProperty Name="paymentreservationitems" Relationship="Self.paymentReservationItem_ReservationItem_FK" FromRole="reservationitem" ToRole="paymentreservationitem" />
           <NavigationProperty Name="placeinmap" Relationship="Self.ReservationItem_PlaceInMap_FK" FromRole="reservationitem" ToRole="placeinmap" />
           <NavigationProperty Name="staff" Relationship="Self.idStaff_Staff_FK" FromRole="reservationitem" ToRole="staff" />
@@ -1776,7 +1835,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="idReservationItem" Type="Int64" Nullable="false" />
           <Property Name="idPartyMember" Type="Int64" Nullable="false" />
-          <Property Name="comments" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="comments" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="partymember" Relationship="Self.Party2_PartyMember_FK" FromRole="reservationitem_partymember" ToRole="partymember" />
@@ -1795,26 +1854,26 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Property Name="isSiteChecked" Type="Boolean" Nullable="false" />
           <Property Name="checkInDate" Type="DateTime" Nullable="false" />
           <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
-          <Property Name="site" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="siteType" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="site" Type="String" Nullable="false" />
+          <Property Name="siteType" Type="String" />
           <Property Name="duration" Type="Int32" Nullable="false" />
           <Property Name="weeks" Type="Int32" Nullable="false" />
           <Property Name="days" Type="Int32" Nullable="false" />
           <Property Name="weeklyRate" Type="Decimal" Nullable="false" />
           <Property Name="dailyRate" Type="Decimal" Nullable="false" />
           <Property Name="amount" Type="Decimal" Nullable="false" />
-          <Property Name="additionalServicesDescription" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="additionalServicesDescription" Type="String" />
           <Property Name="additionalServicesAmount" Type="Decimal" Nullable="false" />
           <Property Name="total" Type="Decimal" Nullable="false" />
           <Property Name="idReservationItem" Type="Int64" />
           <Property Name="reservationCheckInDate" Type="DateTime" Nullable="false" />
           <Property Name="reservationCheckOutDate" Type="DateTime" Nullable="false" />
           <Property Name="reservationAmount" Type="Decimal" Nullable="false" />
-          <Property Name="reservationAdditionalServDescr" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="reservationAdditionalServDescr" Type="String" />
           <Property Name="reservationAdditionalServAmount" Type="Decimal" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
-          <Property Name="timeStamp" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="timeStamp" Type="String" />
           <NavigationProperty Name="customer" Relationship="Self.SelectedItem_Customer_FK" FromRole="selecteditem" ToRole="customer" />
           <NavigationProperty Name="ipmevent" Relationship="Self.SelectedItem_IPMEvent_FK" FromRole="selecteditem" ToRole="ipmevent" />
           <NavigationProperty Name="placeinmap" Relationship="Self.SelectedItem_RVSite_FK" FromRole="selecteditem" ToRole="placeinmap" />
@@ -1827,7 +1886,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="description" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="sitetypes" Relationship="Self.SiteType_Service_FK" FromRole="service" ToRole="sitetype" />
@@ -1837,7 +1896,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="sessionGUID" Type="String" MaxLength="38" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="sessionGUID" Type="String" Nullable="false" />
           <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
           <Property Name="idStaff" Type="Int64" />
           <Property Name="isLoggedIn" Type="Boolean" />
@@ -1858,7 +1917,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idSiteType" Type="Int64" Nullable="false" />
-          <Property Name="period" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="period" Type="String" Nullable="false" />
           <Property Name="rate" Type="Decimal" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
@@ -1871,7 +1930,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="description" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="sitetypes" Relationship="Self.SiteType_SiteSize_FK" FromRole="sitesize" ToRole="sitetype" />
@@ -1899,7 +1958,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="role" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="role" Type="String" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
           <NavigationProperty Name="person" Relationship="Self.Person_Staff_FK" FromRole="staff" ToRole="person" />
@@ -1912,8 +1971,8 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="styleUrl1" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
-          <Property Name="backgroundColor" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="styleUrl1" Type="String" />
+          <Property Name="backgroundColor" Type="String" />
           <Property Name="idIPMEvent" Type="Int64" />
           <Property Name="createDate" Type="DateTime" />
           <Property Name="lastUpdate" Type="DateTime" />
@@ -1931,23 +1990,23 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="provinceName" />
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" />
-          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="fullName" Type="String" MaxLength="101" FixedLength="false" Unicode="false" />
-          <Property Name="mainPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="cellPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="homePhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="faxNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="comments" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
-          <Property Name="street" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="postalCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="countryCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="countryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="provinceCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="provinceName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="firstName" Type="String" Nullable="false" />
+          <Property Name="lastName" Type="String" Nullable="false" />
+          <Property Name="fullName" Type="String" />
+          <Property Name="mainPhone" Type="String" />
+          <Property Name="email" Type="String" />
+          <Property Name="password" Type="String" />
+          <Property Name="cellPhone" Type="String" />
+          <Property Name="homePhone" Type="String" />
+          <Property Name="faxNumber" Type="String" />
+          <Property Name="comments" Type="String" />
+          <Property Name="street" Type="String" />
+          <Property Name="city" Type="String" />
+          <Property Name="postalCode" Type="String" />
+          <Property Name="countryCode" Type="String" Nullable="false" />
+          <Property Name="countryName" Type="String" Nullable="false" />
+          <Property Name="provinceCode" Type="String" Nullable="false" />
+          <Property Name="provinceName" Type="String" Nullable="false" />
           <Property Name="isEmailReceipt" Type="Boolean" />
           <Property Name="isPartyMember" Type="Boolean" />
         </EntityType>
@@ -1958,14 +2017,14 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="lastName" />
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" />
-          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="fullName" Type="String" MaxLength="101" FixedLength="false" Unicode="false" />
-          <Property Name="mainPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="cellPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="petDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="comments" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="firstName" Type="String" Nullable="false" />
+          <Property Name="lastName" Type="String" Nullable="false" />
+          <Property Name="fullName" Type="String" />
+          <Property Name="mainPhone" Type="String" />
+          <Property Name="email" Type="String" />
+          <Property Name="cellPhone" Type="String" />
+          <Property Name="petDescription" Type="String" />
+          <Property Name="comments" Type="String" />
         </EntityType>
         <EntityType Name="payment_view">
           <Key>
@@ -1973,18 +2032,17 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="selectionTotal" />
             <PropertyRef Name="amount" />
             <PropertyRef Name="balance" />
-            <PropertyRef Name="idCustomer" />
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" />
           <Property Name="selectionTotal" Type="Decimal" Nullable="false" />
           <Property Name="amount" Type="Decimal" Nullable="false" />
           <Property Name="balance" Type="Decimal" Nullable="false" />
           <Property Name="createDate" Type="DateTime" />
-          <Property Name="reasonforpayment" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="sites" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="idCustomer" Type="Int64" Nullable="false" />
-          <Property Name="fullName" Type="String" MaxLength="101" FixedLength="false" Unicode="false" />
-          <Property Name="mainPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="reasonforpayment" Type="String" />
+          <Property Name="sites" Type="String" />
+          <Property Name="idCustomer" Type="Int64" />
+          <Property Name="fullName" Type="String" />
+          <Property Name="mainPhone" Type="String" />
         </EntityType>
         <EntityType Name="province_view">
           <Key>
@@ -1993,10 +2051,10 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="countryCode" />
             <PropertyRef Name="countryName" />
           </Key>
-          <Property Name="provinceCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="provinceName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="countryCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="countryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="provinceCode" Type="String" Nullable="false" />
+          <Property Name="provinceName" Type="String" Nullable="false" />
+          <Property Name="countryCode" Type="String" Nullable="false" />
+          <Property Name="countryName" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="rvsite_available_view">
           <Key>
@@ -2005,7 +2063,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="idIPMEvent" />
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" />
-          <Property Name="RVSite" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RVSite" Type="String" Nullable="false" />
           <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
         </EntityType>
         <EntityType Name="rvsite_coord_view">
@@ -2020,9 +2078,9 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Property Name="id" Type="Int64" Nullable="false" />
           <Property Name="seq" Type="Int32" Nullable="false" />
           <Property Name="Year" Type="Int64" Nullable="false" />
-          <Property Name="RVSite" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="longitude" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="latitude" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RVSite" Type="String" Nullable="false" />
+          <Property Name="longitude" Type="String" Nullable="false" />
+          <Property Name="latitude" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="rvsite_status_view">
           <Key>
@@ -2035,10 +2093,10 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" />
           <Property Name="Year" Type="Int64" Nullable="false" />
-          <Property Name="RVSite" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="SiteSize" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PowerSupply" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="backgroundColor" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="RVSite" Type="String" Nullable="false" />
+          <Property Name="SiteSize" Type="String" Nullable="false" />
+          <Property Name="PowerSupply" Type="String" Nullable="false" />
+          <Property Name="backgroundColor" Type="String" />
           <Property Name="isAvaialable" Type="Int32" Nullable="false" />
           <Property Name="SelectedFrom" Type="DateTime" />
           <Property Name="SelectedUntil" Type="DateTime" />
@@ -2056,9 +2114,9 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" />
           <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
-          <Property Name="RVSite" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RVSite" Type="String" Nullable="false" />
           <Property Name="idSiteType" Type="Int64" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="41" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" />
           <Property Name="dailyRate" Type="Decimal" />
           <Property Name="weeklyRate" Type="Decimal" />
         </EntityType>
@@ -2076,8 +2134,8 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Property Name="styleId" Type="Int64" />
           <Property Name="sizeId" Type="Int64" Nullable="false" />
           <Property Name="serviceId" Type="Int64" Nullable="false" />
-          <Property Name="size" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="service" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="size" Type="String" Nullable="false" />
+          <Property Name="service" Type="String" Nullable="false" />
           <Property Name="week" Type="Decimal" />
           <Property Name="day" Type="Decimal" />
         </EntityType>
@@ -2088,13 +2146,13 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <PropertyRef Name="lastName" />
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" />
-          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="fullName" Type="String" MaxLength="101" FixedLength="false" Unicode="false" />
-          <Property Name="mainPhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="role" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="firstName" Type="String" Nullable="false" />
+          <Property Name="lastName" Type="String" Nullable="false" />
+          <Property Name="fullName" Type="String" />
+          <Property Name="mainPhone" Type="String" />
+          <Property Name="email" Type="String" />
+          <Property Name="role" Type="String" />
+          <Property Name="password" Type="String" />
         </EntityType>
         <Association Name="CheckInOut_PlaceInMap_FK">
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="1" />
@@ -2288,6 +2346,42 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="idIPMEvent_IPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ipmevent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="reservationitem">
+              <PropertyRef Name="idIPMEvent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Payment_IPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
+          <End Role="payment" Type="Self.payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ipmevent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="payment">
+              <PropertyRef Name="idIPMEvent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="paymentReservationItem_IPMEvent_FK">
+          <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
+          <End Role="paymentreservationitem" Type="Self.paymentreservationitem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ipmevent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="paymentreservationitem">
+              <PropertyRef Name="idIPMEvent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PlaceInMap_IPMEvent_FK">
           <End Role="ipmevent" Type="Self.ipmevent" Multiplicity="1" />
           <End Role="placeinmap" Type="Self.placeinmap" Multiplicity="*" />
@@ -2445,7 +2539,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="paymentReservationItem_Payment_FK">
-          <End Role="payment" Type="Self.payment" Multiplicity="0..1" />
+          <End Role="payment" Type="Self.payment" Multiplicity="1" />
           <End Role="paymentreservationitem" Type="Self.paymentreservationitem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="payment">
@@ -2457,7 +2551,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="paymentReservationItem_ReservationItem_FK">
-          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="0..1" />
+          <End Role="reservationitem" Type="Self.reservationitem" Multiplicity="1" />
           <End Role="paymentreservationitem" Type="Self.paymentreservationitem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="reservationitem">
@@ -2636,7 +2730,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="rvparkEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="rvparkEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="checkinouts" EntityType="Self.checkinout" />
           <EntitySet Name="coordinates" EntityType="Self.coordinate" />
           <EntitySet Name="countrycodes" EntityType="Self.countrycode" />
@@ -2737,6 +2831,18 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <AssociationSet Name="Fees_IPMEvent_FK" Association="Self.Fees_IPMEvent_FK">
             <End Role="ipmevent" EntitySet="ipmevents" />
             <End Role="fees" EntitySet="fees" />
+          </AssociationSet>
+          <AssociationSet Name="idIPMEvent_IPMEvent_FK" Association="Self.idIPMEvent_IPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevents" />
+            <End Role="reservationitem" EntitySet="reservationitems" />
+          </AssociationSet>
+          <AssociationSet Name="Payment_IPMEvent_FK" Association="Self.Payment_IPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevents" />
+            <End Role="payment" EntitySet="payments" />
+          </AssociationSet>
+          <AssociationSet Name="paymentReservationItem_IPMEvent_FK" Association="Self.paymentReservationItem_IPMEvent_FK">
+            <End Role="ipmevent" EntitySet="ipmevents" />
+            <End Role="paymentreservationitem" EntitySet="paymentreservationitems" />
           </AssociationSet>
           <AssociationSet Name="PlaceInMap_IPMEvent_FK" Association="Self.PlaceInMap_IPMEvent_FK">
             <End Role="ipmevent" EntitySet="ipmevents" />
@@ -2872,7 +2978,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="rvparkModelStoreContainer" CdmEntityContainer="rvparkEntities1">
+        <EntityContainerMapping StorageEntityContainer="rvparkModelStoreContainer" CdmEntityContainer="rvparkEntities">
           <EntitySetMapping Name="checkinouts">
             <EntityTypeMapping TypeName="rvparkModel.checkinout">
               <MappingFragment StoreEntitySet="checkinout">
@@ -3017,6 +3123,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <EntityTypeMapping TypeName="rvparkModel.payment">
               <MappingFragment StoreEntitySet="payment">
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
                 <ScalarProperty Name="idPaymentMethod" ColumnName="idPaymentMethod" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
                 <ScalarProperty Name="idReasonForPayment" ColumnName="idReasonForPayment" />
@@ -3052,6 +3159,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <EntityTypeMapping TypeName="rvparkModel.paymentreservationitem">
               <MappingFragment StoreEntitySet="paymentreservationitem">
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
                 <ScalarProperty Name="idPayment" ColumnName="idPayment" />
                 <ScalarProperty Name="idReservationItem" ColumnName="idReservationItem" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
@@ -3112,6 +3220,7 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
             <EntityTypeMapping TypeName="rvparkModel.reservationitem">
               <MappingFragment StoreEntitySet="reservationitem">
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
                 <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
                 <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
                 <ScalarProperty Name="idStaff" ColumnName="idStaff" />

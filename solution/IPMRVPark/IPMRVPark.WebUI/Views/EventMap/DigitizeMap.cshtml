@@ -16,6 +16,13 @@
 
         var eventId = document.getElementById("event_select").value;
 
+        $('#event_select').change(function () {
+            eventId = $(this).val();
+            var urlpath = '../EventMap/DigitizeMap?eventId=' + eventId;
+            window.location.replace(urlpath);
+        });
+
+
         getEventSiteUrl(eventId);
         // get eventInfo
        //var year = document.getElementById("event_year").value;
@@ -45,7 +52,7 @@
                 <select id="event_select" class="form-control" data-toggle="tooltip" title="Select" onchange="getEventSiteUrl(this.value)">
                     @{
                         var year = (long)0;
-                        foreach (var item in Model)
+                        foreach (var item in Model.OrderBy(s => s.year))
                         {
                             year = item.year;
 
@@ -61,6 +68,7 @@
                     }
                 </select>
             </div>
+            <input id="eventId" name="eventId" type="hidden" />
             <div class="col-sm-5 col-sm-push-2 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
                
                 <a href="@Url.Action("IPMEventInfo", "EventMap")" class="btn btn-block btn-default btn-mylink pagination-centered">
@@ -95,22 +103,6 @@
             </div>
         }
 
-    <div id="site_url"></div>
-
-    
-           
-
-        @*<div class="row">
-            <div class="col-sm-6 col-xs-12 top-margin">
-                <button class="btn btn-block btn-default">
-                    <span class="col-xs-1"></span>
-                    <span class="col-xs-9">Select KML File</span>
-                </button>
-            </div>
-            <div class="col-xs-6 top-margin">
-                <input type="text" class="form-control" placeholder="F:\MapRev2.KML (Selected File)" disable />
-            </div>
-        </div>*@
-       
+    <div id="site_url"></div>     
 
 

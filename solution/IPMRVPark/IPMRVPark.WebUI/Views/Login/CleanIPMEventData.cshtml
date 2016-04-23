@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "Clean IPM Event Data";
+    ViewBag.PageTitle = "Clean IPM Event Data";
+}
+
+@Html.ActionLink("Home", "Home", "Login")
+<span class="glyphicon glyphicon-chevron-right"></span>
+@Html.ActionLink("Clean IPM Event Data", "CleanIPMEventData", "Login")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Adjust CSS
+        $('body').css('background-color', 'rgba(255,165,0,0.9)');
+        (function blink() {
+            $('.blink_me').fadeOut(500).fadeIn(500, blink);
+        })();
+        // **** Handle form submit
+        $('#btnSave').hide();
+        var formSubmit = false;
+        $('form').submit(function () {
+            return formSubmit;
+        });
+        $('#btnConfirm').click(function () {
+            $('#btnConfirm').hide();
+            $('#btnSave').prop('disabled', false);
+            $('#btnSave').show();
+            $('#btnSave').focus();
+        });
+        $('#btnSave').click(function () {
+            formSubmit = true;
+            $('form').submit();
+        });
+    });
+</script>
+
+<div class="container-fluid">
+    <!-- IPM Event Year -->
+    <div class="row top-margin">
+        <div class="col-sm-12 col-xs-12 form-top-margin text-center">
+            <h1>
+                Danger !!!
+            </h1>
+            <h2>
+                This operation will erase all
+            </h2>
+            <h1>
+                IPM Event <span class="blink_me">@ViewBag.IPMEventYear</span> 
+            </h1>
+            <h2>
+                data and records
+            </h2>
+        </div>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row form-top-margin">
+            <div class="col-sm-6 col-sm-push-3 col-xs-12">
+                <button id="btnConfirm" class="btn btn-block btn-default" type="button">
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                    <span class="col-xs-9">Confirm</span>
+                </button>
+            </div>
+        </div>
+        <div class="row top-margin"></div>
+        <div class="row top-margin">
+            <div class="col-sm-6 col-sm-push-3 col-xs-12">
+                <button id="btnSave" class="btn btn-block btn-danger" type="button">
+                    <span class="col-xs-1 glyphicon glyphicon-ok"></span>
+                    <span class="col-xs-9">Do Confirm</span>
+                </button>
+            </div>
+        </div>
+    }
+
+</div>

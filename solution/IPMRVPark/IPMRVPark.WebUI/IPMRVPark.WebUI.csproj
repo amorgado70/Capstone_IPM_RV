@@ -230,7 +230,6 @@
     <Compile Include="Controllers\EventMapController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\PartyMemberController.cs" />
     <Compile Include="Controllers\PayDocTypeController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
@@ -406,10 +405,6 @@
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Login\Logout.cshtml" />
     <Content Include="Views\Login\Menu.cshtml" />
-    <Content Include="Views\Maintenance\Province1Create.cshtml" />
-    <Content Include="Views\Maintenance\Province2Create.cshtml" />
-    <Content Include="Views\Maintenance\Province3Create.cshtml" />
-    <Content Include="Views\Maintenance\ProvinceIndex.cshtml" />
     <Content Include="Views\PartyMember\CreatePartyMember.cshtml" />
     <Content Include="Views\PartyMember\EditPartyMember.cshtml" />
     <Content Include="Views\PartyMember\Index.cshtml" />
@@ -472,6 +467,7 @@
     <Content Include="Views\Customer\SearchCustomer.cshtml" />
     <Content Include="Views\Country\ErrorMessage.cshtml" />
     <Content Include="Views\Reservation\SearchReservationBySite.cshtml" />
+    <Content Include="Views\Login\CleanIPMEventData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

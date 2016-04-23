@@ -85,5 +85,12 @@ namespace IPMRVPark.Contracts.Repositories
         {
             context.Dispose();
         }
+
+        public virtual void BulkDelete(string tableName, string columnName, long whereID)
+        {
+            string sqlCommand = "DELETE FROM " + tableName + " WHERE " + columnName + " = {0}";
+            context.Database.ExecuteSqlCommand(sqlCommand, whereID);
+        }
+
     }
 }

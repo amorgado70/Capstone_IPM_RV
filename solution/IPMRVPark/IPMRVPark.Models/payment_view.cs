@@ -21,7 +21,7 @@ namespace IPMRVPark.Models
         public Nullable<System.DateTime> createDate { get; set; }
         public string reasonforpayment { get; set; }
         public string sites { get; set; }
-        public long idCustomer { get; set; }
+        public Nullable<long> idCustomer { get; set; }
         public string fullName { get; set; }
         public string mainPhone { get; set; }
     }

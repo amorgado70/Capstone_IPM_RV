@@ -307,6 +307,7 @@ namespace IPMRVPark.WebUI.Controllers
             long sessionID = sessionService.GetSessionID(this.HttpContext);
 
             // Create and insert payment
+            _payment.idIPMEvent = sessionService.GetSessionIPMEventID(sessionID);
             _payment.idSession = sessionID;
             _payment.createDate = DateTime.Now;
             _payment.lastUpdate = DateTime.Now;
@@ -331,6 +332,7 @@ namespace IPMRVPark.WebUI.Controllers
                     }
                     // Create and insert reservation items
                     var _reservationitem = new reservationitem();
+                    _reservationitem.idIPMEvent = item.idIPMEvent.Value;
                     _reservationitem.idRVSite = item.idRVSite.Value;
                     _reservationitem.idCustomer = item.idCustomer.Value;
                     _reservationitem.idStaff = item.idStaff.Value;
@@ -351,6 +353,7 @@ namespace IPMRVPark.WebUI.Controllers
                     // Create link between payment and reservation
                     // *****_reservationitem.idPayment
                     var _paymentreservationitem = new paymentreservationitem();
+                    _paymentreservationitem.idIPMEvent = item.idIPMEvent.Value;
                     _paymentreservationitem.idPayment = _payment.ID;
                     _paymentreservationitem.idReservationItem = _reservationitem.ID;
                     _paymentreservationitem.createDate = DateTime.Now;
@@ -371,7 +374,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult SearchPayment(string searchByCustomer, string searchBySite)
         {
-            var _payments = payments_view.GetAll();
+            var _payments = payments_view.GetAll();            
 
             if (searchBySite != null)
             {
@@ -391,7 +394,6 @@ namespace IPMRVPark.WebUI.Controllers
 
                 }
             }
-
 
             if (searchByCustomer != null)
             {
