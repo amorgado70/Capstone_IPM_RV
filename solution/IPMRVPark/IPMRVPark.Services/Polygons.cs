@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +28,7 @@ namespace IPMRVPark.Services
         public long typeId;
         public string json_coord;
         public bool isSite;
+        public bool isAvailable;
         public string poly_color;
 
         // references
@@ -96,9 +97,11 @@ namespace IPMRVPark.Services
         const string _dimGrayRGB = "ff696969";
         const string _steelBlueRGB = "ffB0C4DE";
         const string _redRGB = "ffFF0000";
+        const string _blackRGB = "00000000";
+        const string _lightGrayRGB = "E5E5E5E5";
 
-        const string _reserved = _GrayRGB;
-        const string _selected = _redRGB;
+        const string _reserved = _lightGrayRGB;
+        const string _selected = _blackRGB;
 
         // data from KML Parse, Relation Input from Admin, and Database
         public List<_site> Sites { get; set; }
@@ -382,6 +385,7 @@ namespace IPMRVPark.Services
 
                 if (s.isAvaialable==0)
                 {
+                    site.isAvailable = false;
                     if(s.ReservedFrom != null)
                         site.poly_color = _reserved;
                     else

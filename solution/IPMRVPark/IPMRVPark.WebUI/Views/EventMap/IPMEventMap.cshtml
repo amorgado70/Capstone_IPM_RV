@@ -1,4 +1,4 @@
-﻿@Model IPMRVPark.Services.Polygons
+@Model IPMRVPark.Services.Polygons
 
 @{
     ViewBag.Title = "IPM Event Map";
@@ -262,7 +262,7 @@
     }
 
     // create polygon
-    function setSites( id, name, service, tag, color, orgColor, isSite, coords ){
+    function setSites( id, name, service, tag, color, orgColor, isSite, isAvailable, coords ){
         var site = {
             id : id,
             name : name,
@@ -270,6 +270,7 @@
             tag : tag,
             color : color,
             isSite : isSite,
+            isAvailable : isAvailable,
             coords : coords
         };
         sites.push( site );
@@ -293,11 +294,11 @@
     function createPolygons(){
         for (i = 0; i < sites.length; i++){
             createPolygonObject( sites[i].id, sites[i].name, sites[i].service, sites[i].tag, 
-                sites[i].color, sites[i].isSite, sites[i].coords);
+                sites[i].color, sites[i].isSite, sites[i].isAvailable, sites[i].coords);
         }
     }
 
-    function createPolygonObject( id, name, service, tag, color, isSite, coords ){
+    function createPolygonObject( id, name, service, tag, color, isSite, isAvailable, coords ){
         var bounds = new google.maps.LatLngBounds();
         var latlng, path, coord;
         path = [];
@@ -311,8 +312,12 @@
 
         var point = bounds.getCenter();
 
-        var content= '<div><h3>' + name + '</h3><div>' + service + '</div><div>' + tag + '</div></div>' 
-            + "<div><button onclick='selectSite(" + id.toString() + ")'>select</button></div>";
+        var content= '<div><h3>' + name + '</h3><div>' + service + '</div><div>' + tag + '</div></div>';
+
+        // If site is available add button to select site
+        if (color != "00000000" && color != "E5E5E5E5"){
+            content = content + "<div><button onclick='selectSite(" + id.toString() + ")'>select</button></div>";
+        }
 
         var polyOptions = { map:  this.map,
             paths: path,
@@ -511,7 +516,7 @@
                     {
                         <script>
                             setSites(@item.id,  '@Html.Raw(@item.name)', '@item.service.description', '@item.size.description', '@item.poly_color',
-                                            '@item.style.poly_color', '@item.isSite'=='True'?1:0, @Html.Raw(@item.json_coord))
+                                            '@item.style.poly_color', '@item.isSite'=='True'?1:0, -1, @Html.Raw(@item.json_coord))
                         </script>
                     }
                     <script>setInit()</script>
