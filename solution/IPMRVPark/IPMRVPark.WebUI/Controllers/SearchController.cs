@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using IPMRVPark.Models;
@@ -12,6 +12,7 @@ namespace IPMRVPark.WebUI.Controllers
     public class SearchController : Controller
     {
         IRepositoryBase<customer_view> customers;
+        IRepositoryBase<staff_view> users;
         IRepositoryBase<ipmevent> ipmevents;
         IRepositoryBase<session> sessions;
         IRepositoryBase<payment> payments;
@@ -21,6 +22,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public SearchController(
             IRepositoryBase<customer_view> customers,
+            IRepositoryBase<staff_view> users,
             IRepositoryBase<ipmevent> ipmevents,
             IRepositoryBase<payment> payments,
             IRepositoryBase<rvsite_available_view> rvsites_available,            
@@ -28,13 +30,15 @@ namespace IPMRVPark.WebUI.Controllers
 
         {
             this.customers = customers;
+            this.users = users;
             this.ipmevents = ipmevents;
             this.sessions = sessions;
             this.payments = payments;
             this.rvsites_available = rvsites_available;
             sessionService = new SessionService(
                 this.sessions,
-                this.customers
+                this.customers,
+                this.users
                 );
         }//end Constructor
 
@@ -103,7 +107,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         private List<SelectionOptionID> SearchSiteByName(string searchString)
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
 
             //Return value

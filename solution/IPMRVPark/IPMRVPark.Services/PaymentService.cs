@@ -1,4 +1,4 @@
-﻿using IPMRVPark.Contracts.Repositories;
+using IPMRVPark.Contracts.Repositories;
 using IPMRVPark.Models;
 using System;
 using System.Collections.Generic;
@@ -36,46 +36,57 @@ namespace IPMRVPark.Services
         const int cleanNew = 2;
         const int cleanEdit = 3;
 
-        public void CleanAllSelectedItems(long sessionID)
+        public void CleanAllSelectedItems(long sessionID, long userID)
         {
-            CleanSelectedItemList(sessionID, cleanAll);
+            CleanSelectedItemList(sessionID, userID, cleanAll);
         }
-        public void CleanNewSelectedItems(long sessionID)
+        public void CleanNewSelectedItems(long sessionID, long userID)
         {
-            CleanSelectedItemList(sessionID, cleanNew);
+            CleanSelectedItemList(sessionID, userID, cleanNew);
         }
-        public void CleanEditSelectedItems(long sessionID)
+        public void CleanEditSelectedItems(long sessionID, long userID)
         {
-            CleanSelectedItemList(sessionID, cleanEdit);
+            CleanSelectedItemList(sessionID, userID, cleanEdit);
+        }
+        public void CleanSelectedItem(long sessionID, long userID, long selectedID)
+        {
+            removeSelected(sessionID, userID, selectedID);
+        }
+        private void removeSelected(long sessionID, long userID, long selectedID)
+        {
+
+            var _selecteditem = selecteditems.GetById(selectedID);
+            _selecteditem.idSession = sessionID;
+            if (userID != IDnotFound)
+            {
+                _selecteditem.idStaff = userID;
+            }
+            _selecteditem.isSiteChecked = false;
+            _selecteditem.duration = 0;
+            _selecteditem.weeks = 0;
+            _selecteditem.days = 0;
+            _selecteditem.amount = 0;
+            _selecteditem.total = 0;
+            _selecteditem.lastUpdate = DateTime.Now;
+            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+
+            selecteditems.Update(_selecteditem);
+            selecteditems.Commit();
         }
 
-        private void CleanSelectedItemList(long sessionID, int cleanCode)
+        private void CleanSelectedItemList(long sessionID, long userID, int cleanCode)
         {
             // Clean edit items that are in selected table
             var _olditems_to_be_removed = selecteditems.GetAll().
-                Where(c => c.idSession == sessionID);
-            bool tryResult = false;
-            try
+                Where(c => c.idSession == sessionID).ToList();
+            foreach (var _olditem in _olditems_to_be_removed)
             {
-                var _oldselecteditem = _olditems_to_be_removed.FirstOrDefault();
-                tryResult = !(_oldselecteditem.Equals(default(session)));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("An error occurred: '{0}'", e);
-            }
-            if (tryResult)// Items found in database, remove them
-            {
-                foreach (var _olditem in _olditems_to_be_removed)
+                if (cleanCode == cleanAll ||
+                    (cleanCode == cleanNew && _olditem.reservationAmount == 0) ||
+                    (cleanCode == cleanEdit && _olditem.reservationAmount != 0))
                 {
-                    if (cleanCode == cleanAll ||
-                        (cleanCode == cleanNew && _olditem.reservationAmount == 0) ||
-                        (cleanCode == cleanEdit && _olditem.reservationAmount != 0))
-                    {
-                        selecteditems.Delete(_olditem.ID);
-                    }
+                    removeSelected(sessionID, userID, _olditem.ID);
                 }
-                selecteditems.Commit();
             }
         }
         #endregion
@@ -92,8 +103,9 @@ namespace IPMRVPark.Services
         // Sum and Count for Selected Items
         public decimal CalculateNewSelectedTotal(long sessionID, out int count)
         {
-            var _selecteditem = selecteditems.GetAll();
-            _selecteditem = _selecteditem.Where(q => q.idSession == sessionID).OrderByDescending(o => o.ID);
+            var _selecteditem = selecteditems.GetAll().
+                Where(q => q.idSession == sessionID && q.isSiteChecked == true).
+                OrderByDescending(o => o.ID);
 
             count = 0;
             decimal sum = 0;
@@ -206,7 +218,7 @@ namespace IPMRVPark.Services
             };
 
             var _payments = payments.GetAll().
-                Where(p => p.idCustomer == customerID && p.ID < paymentID ).OrderByDescending(p => p.ID);
+                Where(p => p.idCustomer == customerID && p.ID < paymentID).OrderByDescending(p => p.ID);
             var _p = _payments.ToList();
 
             if (_p.Count() < 1)
@@ -216,7 +228,7 @@ namespace IPMRVPark.Services
             else
             {
                 return _p.First().balance;
-            };              
+            };
         }
 
 

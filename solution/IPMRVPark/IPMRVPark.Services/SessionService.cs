@@ -1,4 +1,4 @@
-﻿using IPMRVPark.Contracts.Repositories;
+using IPMRVPark.Contracts.Repositories;
 using IPMRVPark.Models;
 using System;
 using System.Collections.Generic;
@@ -13,16 +13,19 @@ namespace IPMRVPark.Services
     {
         IRepositoryBase<session> sessions;
         IRepositoryBase<customer_view> customers;
+        IRepositoryBase<staff_view> users;
 
         public const string SessionName = "IPMRVPark";
 
         public SessionService(
             IRepositoryBase<session> sessions,
-            IRepositoryBase<customer_view> customers
+            IRepositoryBase<customer_view> customers,
+            IRepositoryBase<staff_view> users
             )
         {
             this.sessions = sessions;
             this.customers = customers;
+            this.users = users;
         }
 
         private session createNewSession(HttpContextBase httpContext)
@@ -55,7 +58,7 @@ namespace IPMRVPark.Services
             return _session;
         }
 
-        public session GetSession(HttpContextBase httpContext)
+        public session GetSession(HttpContextBase httpContext, bool redirectUserLogin)
         {
             HttpCookie cookie = httpContext.Request.Cookies.Get(SessionName);
             session result;
@@ -84,6 +87,11 @@ namespace IPMRVPark.Services
 
                         if (tryResult)//session found in database
                         {
+                            //Redirect to login page if user is not authorized
+                            if (redirectUserLogin)
+                            {
+                                RedirectUserLogin(_session, httpContext);
+                            }
                             cookie.Expires = DateTime.Now.AddDays(7);//update cookie expiry date
                             return _session;
                         };
@@ -98,22 +106,31 @@ namespace IPMRVPark.Services
 
         const long IDnotFound = -1;
 
-        public long GetSessionID(HttpContextBase httpContext)
+        public long GetSessionID(HttpContextBase httpContext, bool redirectUserLogin)
         {
-            session _session = GetSession(httpContext);
+            session _session = GetSession(httpContext, redirectUserLogin);
             return _session.ID;
         }
 
-        public long GetSessionUserID(HttpContextBase httpContext)
+        private void RedirectUserLogin(session _session, HttpContextBase httpContext)
         {
-            session _session = GetSession(httpContext);
             if (_session.idStaff == null)
             {
-                //return IDnotFound;
+                //Redirect to login page if user is not authorized
                 var _Url = httpContext.Request.Url;
                 string pathToLogin = _Url.Scheme + "://" + _Url.Authority +
                     "/Login/Login";
                 httpContext.Response.Redirect(pathToLogin, false);
+            }
+        }
+
+        public long GetSessionUserID(HttpContextBase httpContext, bool redirectUserLogin)
+        {
+            session _session = GetSession(httpContext, redirectUserLogin);
+
+            if (_session.idStaff == null)
+            {
+                //return IDnotFound;
                 return IDnotFound;
             }
             else
@@ -177,6 +194,11 @@ namespace IPMRVPark.Services
         {
             session _session = sessions.GetById(sessionID);
             return _session.idIPMEvent;
+        }
+
+        public void AdminRole(HttpContextBase httpContext)
+        {
+            long userID = GetSessionUserID(httpContext, true);
         }
     }
 }

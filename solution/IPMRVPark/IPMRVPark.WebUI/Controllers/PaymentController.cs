@@ -1,4 +1,4 @@
-﻿using IPMRVPark.Contracts.Repositories;
+using IPMRVPark.Contracts.Repositories;
 using IPMRVPark.Models;
 using IPMRVPark.Services;
 using System;
@@ -15,6 +15,7 @@ namespace IPMRVPark.WebUI.Controllers
     {
         IRepositoryBase<payment> payments;
         IRepositoryBase<customer_view> customers;
+        IRepositoryBase<staff_view> users;
         IRepositoryBase<reasonforpayment> reasonsforpayment;
         IRepositoryBase<paymentmethod> paymentmethods;
         IRepositoryBase<selecteditem> selecteditems;
@@ -27,6 +28,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public PaymentController(IRepositoryBase<payment> payments,
             IRepositoryBase<customer_view> customers,
+            IRepositoryBase<staff_view> users,
             IRepositoryBase<reasonforpayment> reasonsforpayment,
             IRepositoryBase<paymentmethod> paymentmethods,
             IRepositoryBase<selecteditem> selecteditems,
@@ -39,6 +41,7 @@ namespace IPMRVPark.WebUI.Controllers
             this.sessions = sessions;
             this.payments = payments;
             this.customers = customers;
+            this.users = users;
             this.reasonsforpayment = reasonsforpayment;
             this.paymentmethods = paymentmethods;
             this.selecteditems = selecteditems;
@@ -47,7 +50,8 @@ namespace IPMRVPark.WebUI.Controllers
             this.payments_view = payments_view;
             sessionService = new SessionService(
                 this.sessions,
-                this.customers
+                this.customers,
+                this.users
                 );
             paymentService = new PaymentService(
                 this.selecteditems,
@@ -134,7 +138,7 @@ namespace IPMRVPark.WebUI.Controllers
         // For Partial View : Show Payments Per Customer
         public ActionResult ShowPaymentPerCustomer(long id = IDnotFound)
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             //long customerID = sessionService.GetSessionCustomerID(sessionID);
             long customerID = id;
             ViewBag.CustomerID = customerID;
@@ -156,7 +160,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult PrintPayment(long id)
         {
 
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true);
 
             // Find all reservation items related to this payment
             var _payment = payments.GetById(id);
@@ -189,7 +193,7 @@ namespace IPMRVPark.WebUI.Controllers
 
             // Tax Percentage
             ViewBag.ProvinceTax = paymentService.GetProvinceTax(
-                sessionService.GetSessionID(this.HttpContext)
+                sessionService.GetSessionID(this.HttpContext, false)
                 );
 
             return View(_reservationitems);
@@ -198,9 +202,9 @@ namespace IPMRVPark.WebUI.Controllers
         #region Payment or Refund
         public ActionResult PaymentOrRefund(bool isCredit = true)
         {
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true);
 
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
             long customerID = sessionService.GetSessionCustomerID(sessionID);
             string customerName = sessionService.GetSessionCustomerNamePhone(sessionID);
 
@@ -304,7 +308,8 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult PaymentOrRefund(payment _payment)
         {
             // Identify session
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            long userID = sessionService.GetSessionUserID(this.HttpContext, false);
 
             // Create and insert payment
             _payment.idIPMEvent = sessionService.GetSessionIPMEventID(sessionID);
@@ -327,6 +332,7 @@ namespace IPMRVPark.WebUI.Controllers
                     {
                         var old_reservationitem = reservationitems.GetById(item.idReservationItem);
                         old_reservationitem.isCancelled = true;
+                        old_reservationitem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
                         old_reservationitem.total = 0;
                         reservationitems.Update(old_reservationitem);
                     }
@@ -364,7 +370,7 @@ namespace IPMRVPark.WebUI.Controllers
             }
 
             // Clean selected items
-            paymentService.CleanAllSelectedItems(sessionID);
+            paymentService.CleanAllSelectedItems(sessionID, userID);
             // 
             sessionService.ResetSessionCustomer(sessionID);
 

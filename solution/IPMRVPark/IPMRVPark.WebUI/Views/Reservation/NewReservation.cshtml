@@ -31,7 +31,7 @@ Site Reservation
         function updateSelectedList() {
             $('#selected-list').load('../Reservation/UpdateSelectedList'); // load partial view
             getSelectionTotal(); // Update reservation total
-            showSelectionSummary(); // Update selection summary
+            //showSelectionSummary(); // Update selection summary
         }
         // ***** Customer Search
         $('#customerName').click(function () {
@@ -88,7 +88,7 @@ Site Reservation
                     idCustomer: $('#idCustomer').val()
                 },
                 success: function (result) {
-                    showSelectionSummary();
+                    //showSelectionSummary();
                     $('#btnSelectCustomer').prop('disabled', true);
                     $('#waitMsg').hide();
                 },
@@ -111,9 +111,9 @@ Site Reservation
                 }
             });
         };
-        function showSelectionSummary() {
-            $('#selection-summary').load('../Reservation/ShowSelectionSummary'); // load partial view
-        }
+        //function showSelectionSummary() {
+        //    $('#selection-summary').load('../Reservation/ShowSelectionSummary'); // load partial view
+        //}
     });
 </script>
 

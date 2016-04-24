@@ -1,30 +1,46 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using IPMRVPark.Models;
 using IPMRVPark.Contracts.Repositories;
 using System.Collections.Generic;
+using IPMRVPark.Services;
 
 namespace IPMRVPark.WebUI.Controllers
 {
     public class StaffController : Controller
     {
+        IRepositoryBase<customer_view> customers_view;
         IRepositoryBase<staff_view> staffs_view;
         IRepositoryBase<staff> staffs;
         IRepositoryBase<person> persons;
+        IRepositoryBase<session> sessions;
+        SessionService sessionService;
 
-        public StaffController(IRepositoryBase<staff_view> staffs_view, 
+        public StaffController(
+                IRepositoryBase<customer_view> customers_view,
+                IRepositoryBase<staff_view> staffs_view,
                 IRepositoryBase<staff> staffs,
-                IRepositoryBase<person> persons)
+                IRepositoryBase<person> persons,
+                IRepositoryBase<session> sessions)
         {
+            this.customers_view = customers_view;
             this.staffs_view = staffs_view;
             this.staffs = staffs;
             this.persons = persons;
+            this.sessions = sessions;
+            sessionService = new SessionService(
+                this.sessions,
+                this.customers_view,
+                this.staffs_view
+                );
         }//end Constructor
 
         // GET: list with filter
         public ActionResult Index(string searchString)
         {
+            sessionService.AdminRole(this.HttpContext);
+
             var staff_view = staffs_view.GetAll().OrderBy(q => q.fullName);
 
             if (!String.IsNullOrEmpty(searchString))
@@ -38,6 +54,8 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Details/5
         public ActionResult StaffDetails(int? id)
         {
+            sessionService.AdminRole(this.HttpContext);
+
             staff_view staff_view = staffs_view.GetAll().
                 Where(c => c.id == id).FirstOrDefault();
 
@@ -51,12 +69,16 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult ErrorMessage()
         {
+            sessionService.AdminRole(this.HttpContext);
+
             return View();
         }
 
         // GET: /Create
         public ActionResult CreateStaff()
         {
+            sessionService.AdminRole(this.HttpContext);
+
             var staff_view = new staff_view();
             return View(staff_view);
         }
@@ -64,6 +86,8 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateStaff(staff_view staff_form_page)
         {
+            sessionService.AdminRole(this.HttpContext);
+
             //validation check
             var personfirstname = persons.GetAll().Where(s => s.firstName.ToUpper().Contains(staff_form_page.firstName.ToUpper())).ToList();
             var personlastname = persons.GetAll().Where(s => s.lastName.ToUpper().Contains(staff_form_page.lastName.ToUpper())).ToList();
@@ -128,6 +152,8 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Edit/5
         public ActionResult EditStaff(int id)
         {
+            sessionService.AdminRole(this.HttpContext);
+
             staff_view staff_view = staffs_view.GetAll().
                 Where(c => c.id == id).FirstOrDefault();
  
@@ -142,6 +168,8 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditStaff(staff_view staff_form_page)
         {
+            sessionService.AdminRole(this.HttpContext);
+
             var _person = persons.GetById(staff_form_page.id);
 
             _person.firstName = staff_form_page.firstName;

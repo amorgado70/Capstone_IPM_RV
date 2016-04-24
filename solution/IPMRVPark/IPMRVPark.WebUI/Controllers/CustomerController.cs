@@ -11,6 +11,7 @@ namespace IPMRVPark.WebUI.Controllers
     public class CustomerController : Controller
     {
         IRepositoryBase<customer_view> customers_view;
+        IRepositoryBase<staff_view> users;
         IRepositoryBase<customer> customers;
         IRepositoryBase<person> persons;
         IRepositoryBase<provincecode> provincecodes;
@@ -19,6 +20,7 @@ namespace IPMRVPark.WebUI.Controllers
         SessionService sessionService;
 
         public CustomerController(IRepositoryBase<customer_view> customers_view,
+                IRepositoryBase<staff_view> users,
                 IRepositoryBase<person> persons,
                 IRepositoryBase<customer> customers,
                 IRepositoryBase<session> sessions,
@@ -26,6 +28,7 @@ namespace IPMRVPark.WebUI.Controllers
                 IRepositoryBase<countrycode> countrycodes)
         {
             this.customers_view = customers_view;
+            this.users = users;
             this.customers = customers;
             this.persons = persons;
             this.provincecodes = provincecodes;
@@ -33,13 +36,15 @@ namespace IPMRVPark.WebUI.Controllers
             this.sessions = sessions;
             sessionService = new SessionService(
                 this.sessions,
-                this.customers_view
+                this.customers_view,
+                this.users
                 );
         }//end Constructor
 
         // GET: list with filter
         public ActionResult IndexCustomer(string searchString)
         {
+            var _session = sessionService.GetSession(this.HttpContext, true);
             var customer_view = customers_view.GetAll().OrderBy(q => q.fullName);
 
             if (!String.IsNullOrEmpty(searchString))
@@ -52,16 +57,17 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult SearchCustomer()
         {
+            var _session = sessionService.GetSession(this.HttpContext, true);
             return View();
         }
 
         // GET: /Details/5
-        public ActionResult CustomerDetails(int? id)
+        public ActionResult CustomerDetails(long id)
         {
+            var _session = sessionService.GetSession(this.HttpContext, true);
+
             ViewBag.CustomerID = id;
-            customer_view customer_view = customers_view.GetAll().
-                Where(c => c.id == id).FirstOrDefault();
-            //var customer_view = customers_view.GetById(id);
+            customer_view customer_view = customers_view.GetByKey("id", id);
             if (customer_view == null)
             {
                 return HttpNotFound();
@@ -111,6 +117,8 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Create
         public ActionResult CreateCustomer()
         {
+            var _session = sessionService.GetSession(this.HttpContext, true);
+
             //Dropdown list for country
             countryCodes("CANADA");
 
@@ -124,6 +132,8 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateCustomer(customer_view customer_form_page)
         {
+            var _session = sessionService.GetSession(this.HttpContext, true);
+
             //validation check
             var personfirstname = persons.GetAll().Where(s => s.firstName.ToUpper().Contains(customer_form_page.firstName.ToUpper())).ToList();
             var personlastname = persons.GetAll().Where(s => s.lastName.ToUpper().Contains(customer_form_page.lastName.ToUpper())).ToList();
@@ -191,7 +201,6 @@ namespace IPMRVPark.WebUI.Controllers
             customers.Insert(_customer);
             customers.Commit();
 
-            session _session = sessions.GetById(sessionService.GetSession(this.HttpContext).ID);
             _session.idCustomer = _customer.ID;
             sessions.Update(_session);
             sessions.Commit();
@@ -202,13 +211,14 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Edit/5
         public ActionResult EditCustomer(int id)
         {
+            var _session = sessionService.GetSession(this.HttpContext, true);
 
             customer_view customer_view = customers_view.GetAll().
                 Where(c => c.id == id).FirstOrDefault();
 
             //Dropdown list for country
             countryCodes(customer_view.countryName);
-
+            sessionService.GetSession(this.HttpContext, true);
             //Dropdown list for province
             provinceCodes(customer_view.provinceName);
 
@@ -223,6 +233,8 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditCustomer(customer_view customer_form_page)
         {
+            var _session = sessionService.GetSession(this.HttpContext, true);
+
             var _person = persons.GetById(customer_form_page.id);
 
             _person.firstName = customer_form_page.firstName;
@@ -253,10 +265,11 @@ namespace IPMRVPark.WebUI.Controllers
             return RedirectToAction("CustomerDetails", new { id = _customer.ID });
         }
 
-
         // GET: /Delete/5
         public ActionResult DeleteCustomer(int id)
         {
+            var _session = sessionService.GetSession(this.HttpContext, true);
+
             customer_view customer_view = customers_view.GetAll().
                     Where(c => c.id == id).FirstOrDefault();
             //customer_view customer_view = customers_view.GetById(id);
@@ -270,26 +283,16 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirm(int id)
         {
-            //customer_view customer_view = customers_view.GetAll().
-            //Where(c => c.id == id).FirstOrDefault();
-            //var _person = persons.GetById(customer_form_page.id);
-            //persons.Delete(customers_view.GetAll().
-            //        Where(c => c.id == id).FirstOrDefault().id);
+            var _session = sessionService.GetSession(this.HttpContext, true);
+
             persons.Delete(customers_view.GetById(customers_view.GetAll().
                     Where(c => c.id == id).FirstOrDefault().id));
             persons.Commit();
 
-            //var _customer = customers.GetById(customer_form_page.id);
-            //customers.Delete(customers_view.GetAll().
-            //        Where(c => c.id == id).FirstOrDefault().id);
             customers.Delete(customers_view.GetById(customers_view.GetAll().
                     Where(c => c.id == id).FirstOrDefault().id));
             customers.Commit();
 
-
-
-            //customers_view.Delete(customers_view.GetById(id));
-            //customers_view.Commit();
             return RedirectToAction("Index");
         }
     }

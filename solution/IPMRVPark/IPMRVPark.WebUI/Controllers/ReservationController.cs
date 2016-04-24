@@ -12,6 +12,7 @@ namespace IPMRVPark.WebUI.Controllers
     public class ReservationController : Controller
     {
         IRepositoryBase<customer_view> customers;
+        IRepositoryBase<staff_view> users;
         IRepositoryBase<ipmevent> ipmevents;
         IRepositoryBase<session> sessions;
         IRepositoryBase<placeinmap> placesinmap;
@@ -26,6 +27,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ReservationController(
             IRepositoryBase<customer_view> customers,
+            IRepositoryBase<staff_view> users,
             IRepositoryBase<ipmevent> ipmevents,
             IRepositoryBase<placeinmap> placesinmap,
             IRepositoryBase<rvsite_available_view> rvsites_available,
@@ -38,6 +40,7 @@ namespace IPMRVPark.WebUI.Controllers
             )
         {
             this.customers = customers;
+            this.users = users;
             this.ipmevents = ipmevents;
             this.payments = payments;
             this.paymentsreservationitems = paymentsreservationitems;
@@ -49,7 +52,8 @@ namespace IPMRVPark.WebUI.Controllers
             this.sessions = sessions;
             sessionService = new SessionService(
                 this.sessions,
-                this.customers
+                this.customers,
+                this.users
                 );
             paymentService = new PaymentService(
                 this.selecteditems,
@@ -67,7 +71,7 @@ namespace IPMRVPark.WebUI.Controllers
         // Convert dates in number of days counting from today
         private void CreateViewBagsForDates(long selectedID = newReservationMode)
         {
-            session _session = sessionService.GetSession(this.HttpContext);
+            session _session = sessionService.GetSession(this.HttpContext, false);
             ipmevent _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
 
             // Read and convert the dates to a value than can be used by jQuery Datepicker
@@ -126,7 +130,7 @@ namespace IPMRVPark.WebUI.Controllers
         // Partial View for CRUD of Selected Item 
         public ActionResult CRUDSelectedItem(long selectedID = newReservationMode)
         {
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true);
             CreateViewBagsForDates(selectedID);
 
             // Parameters for Edit Reservation, NOT used for New Reservation
@@ -149,10 +153,12 @@ namespace IPMRVPark.WebUI.Controllers
         // New Reservation Page - Site Selection
         public ActionResult NewReservation()
         {
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+            long userID = sessionService.GetSessionUserID(this.HttpContext, true);
+            ViewBag.UserID = userID;
             // Clean items that are in selected table
             paymentService.CleanEditSelectedItems(
-                sessionService.GetSessionID(this.HttpContext)
+                sessionService.GetSessionID(this.HttpContext, false),
+                userID
                 );
 
             return View();
@@ -162,7 +168,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult EditSelected(long selectedID = newReservationMode)
         {
             ViewBag.SelectedID = selectedID;
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true);
 
             return View();
         }
@@ -171,7 +177,7 @@ namespace IPMRVPark.WebUI.Controllers
         [HttpPost]
         public ActionResult SelectCheckInOutDates(DateTime checkInDate, DateTime checkOutDate)
         {
-            var _session = sessionService.GetSession(this.HttpContext);
+            var _session = sessionService.GetSession(this.HttpContext, true);
             _session.checkInDate = checkInDate;
             _session.checkOutDate = checkOutDate;
             sessions.Update(sessions.GetById(_session.ID));
@@ -184,7 +190,15 @@ namespace IPMRVPark.WebUI.Controllers
         [HttpPost]
         public ActionResult SelectSite(long idRVSite, DateTime checkInDate, DateTime checkOutDate)
         {
-            var _session = sessionService.GetSession(this.HttpContext);
+            var _session = sessionService.GetSession(this.HttpContext, true);
+
+            // Check if site is already in the list (it was previously cancelled)
+            // If it is, remove it
+            var old_selecteditems = selecteditems.GetAll().Where(osi => osi.idRVSite == idRVSite).ToList();
+            foreach (var old_selecteditem in old_selecteditems)
+            {
+                selecteditems.Delete(old_selecteditem.ID);
+            };
 
             // Add selected item to the database
             var _selecteditem = new selecteditem();
@@ -228,7 +242,7 @@ namespace IPMRVPark.WebUI.Controllers
         [HttpPost]
         public ActionResult SelectSiteOnMap(long id)
         {
-            var _session = sessionService.GetSession(this.HttpContext);
+            var _session = sessionService.GetSession(this.HttpContext, true);
             ipmevent _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
 
             // Read dates from IPM Event
@@ -243,7 +257,7 @@ namespace IPMRVPark.WebUI.Controllers
             {
                 checkOutDate = _session.checkOutDate.Value;
             };
-                        
+
             // Add selected item to the database
             var _selecteditem = new selecteditem();
             var type_rates = sites_description_rate.GetAll().
@@ -330,21 +344,14 @@ namespace IPMRVPark.WebUI.Controllers
         // For Partial View : Selected Site List
         public ActionResult UpdateSelectedList()
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
-            var _selecteditems = selecteditems.GetAll().
-                Where(q => q.idSession == sessionID);
-
-            // Discard selected items from other years
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
-            foreach (var _selecteditem in _selecteditems)
-            {
-                var _site = placesinmap.GetById(_selecteditem.idRVSite);
-                if (_site.idIPMEvent != IPMEventID)
-                {
-                    _selecteditems = _selecteditems.Where(r => r.idRVSite != _site.ID);
-                }
-            }
-            _selecteditems = _selecteditems.OrderByDescending(o => o.ID);
+            // Discard selected items from other sessions
+            // Discard selected items from other years
+            // Discard selected items unchecked
+            var _selecteditems = selecteditems.GetAll().
+                Where(q => q.idSession == sessionID && q.idIPMEvent == IPMEventID && q.isSiteChecked == true).
+                OrderByDescending(o => o.ID);
 
             CreateViewBagForSelectedTotal(sessionID);
 
@@ -354,7 +361,7 @@ namespace IPMRVPark.WebUI.Controllers
         // For Partial View : Show Reservation Summary
         public ActionResult ShowSelectionSummary()
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             var _selecteditem = selecteditems.GetAll().
                 Where(q => q.idSession == sessionID).OrderByDescending(o => o.ID);
 
@@ -381,7 +388,7 @@ namespace IPMRVPark.WebUI.Controllers
         // For Partial View : Show Reservation Summary
         public ActionResult ShowReservationSummary()
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             var _selecteditem = selecteditems.GetAll().
                 Where(q => q.idSession == sessionID).OrderByDescending(o => o.ID);
 
@@ -407,7 +414,7 @@ namespace IPMRVPark.WebUI.Controllers
         // Selected sites total
         public ActionResult GetSelectionTotal()
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             int count;
             decimal sum = paymentService.CalculateNewSelectedTotal(sessionID, out count);
 
@@ -423,7 +430,7 @@ namespace IPMRVPark.WebUI.Controllers
         // Update on selected site
         public ActionResult UpdateSelected(int id)
         {
-            var _session = sessionService.GetSession(this.HttpContext);
+            var _session = sessionService.GetSession(this.HttpContext, true);
             var _selecteditem = selecteditems.GetById(id);
             _selecteditem.checkInDate = _session.checkInDate.Value;
             _selecteditem.checkOutDate = _session.checkOutDate.Value;
@@ -448,52 +455,28 @@ namespace IPMRVPark.WebUI.Controllers
         }
 
         // Delete on selected site
-        public ActionResult RemoveSelected(int id)
+        public ActionResult RemoveSelected(long id)
         {
-            long userID = sessionService.GetSessionUserID(this.HttpContext);
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
-            
-            var _selecteditem = selecteditems.GetById(id);
-            //_selecteditem.checkInDate = checkInDate;
-            //_selecteditem.checkOutDate = checkOutDate;
-            //_selecteditem.weeklyRate = type_rates.weeklyRate.Value;
-            //_selecteditem.dailyRate = type_rates.dailyRate.Value;
-            //_selecteditem.idRVSite = idRVSite;
-            _selecteditem.idSession = sessionID;
-            //_selecteditem.idIPMEvent = _session.idIPMEvent;
-            _selecteditem.idStaff = userID;
-            _selecteditem.idCustomer = IDnotFound;
-            //_selecteditem.site = type_rates.RVSite;
-            //_selecteditem.siteType = type_rates.description;
-            _selecteditem.isSiteChecked = false;
-            _selecteditem.duration = 0;
-            _selecteditem.weeks = 0;
-            _selecteditem.days = 0;
-            _selecteditem.amount = 0;
-            _selecteditem.total = 0;
-            //_selecteditem.createDate = DateTime.Now;
-            _selecteditem.lastUpdate = DateTime.Now;
-            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
-
-            selecteditems.Update(_selecteditem);
-            selecteditems.Commit();
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            long userID = sessionService.GetSessionUserID(this.HttpContext, false);
+            paymentService.CleanSelectedItem(sessionID, userID, id);
             return RedirectToAction("NewReservation");
         }
 
         // Delete all selected sites
         public ActionResult RemoveAllSelected()
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            long userID = sessionService.GetSessionUserID(this.HttpContext, false);
             var allSelected = selecteditems.GetAll().
-                Where(q => q.idSession == sessionID).OrderByDescending(o => o.ID);
+                Where(q => q.idSession == sessionID).OrderByDescending(o => o.ID).ToList();
 
             if (allSelected.Count() > 0)
             {
                 foreach (var _selected in allSelected)
                 {
-                    selecteditems.Delete(selecteditems.GetById(_selected.ID));
+                    paymentService.CleanSelectedItem(sessionID, userID, _selected.ID);
                 }
-                selecteditems.Commit();
             }
 
             return RedirectToAction("NewReservation");
@@ -505,7 +488,7 @@ namespace IPMRVPark.WebUI.Controllers
         // Update Reserved Site
         public ActionResult UpdateReserved(int id)
         {
-            var _session = sessionService.GetSession(this.HttpContext);
+            var _session = sessionService.GetSession(this.HttpContext, true);
             var _selecteditem = selecteditems.GetById(id);
             _selecteditem.checkInDate = _session.checkInDate.Value;
             _selecteditem.checkOutDate = _session.checkOutDate.Value;
@@ -532,6 +515,7 @@ namespace IPMRVPark.WebUI.Controllers
         // Reinsert Reserved Site
         public ActionResult ReinsertReserved(int id)
         {
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             var _selecteditem = selecteditems.GetById(id);
             var item = reservationitems.GetById(_selecteditem.idReservationItem);
             _selecteditem.checkInDate = item.checkInDate;
@@ -555,8 +539,10 @@ namespace IPMRVPark.WebUI.Controllers
         // Remove Reserved Site
         public ActionResult RemoveReserved(int id)
         {
+            var _session = sessionService.GetSession(this.HttpContext, true);
             var _selecteditem = selecteditems.GetById(id);
             _selecteditem.isSiteChecked = false;
+            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
             _selecteditem.total = 0;
             selecteditems.Update(selecteditems.GetById(id));
             selecteditems.Commit();
@@ -566,7 +552,7 @@ namespace IPMRVPark.WebUI.Controllers
         // Remove All Reserved Sites
         public ActionResult RemoveAllReserved()
         {
-            var _session = sessionService.GetSession(this.HttpContext);
+            var _session = sessionService.GetSession(this.HttpContext, true);
             var allSelected = selecteditems.GetAll().
                 Where(q => q.idSession == _session.ID).OrderByDescending(o => o.ID);
 
@@ -576,6 +562,7 @@ namespace IPMRVPark.WebUI.Controllers
                 {
                     var _selecteditem = selecteditems.GetById(i.ID);
                     _selecteditem.isSiteChecked = false;
+                    _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
                     _selecteditem.total = 0;
                     selecteditems.Update(_selecteditem);
                 }
@@ -590,7 +577,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult EditReserved(long selectedID = newReservationMode)
         {
             ViewBag.SelectedID = selectedID;
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true);
 
             return View();
         }
@@ -598,7 +585,7 @@ namespace IPMRVPark.WebUI.Controllers
         // Partial View for CRUD of Reserved Site
         public ActionResult CRUDReservedItem(long selectedID = newReservationMode)
         {
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true);
             CreateViewBagsForDates(selectedID);
 
             // Parameters for Edit Reservation, NOT used for New Reservation
@@ -621,10 +608,12 @@ namespace IPMRVPark.WebUI.Controllers
         // Search reservation page
         public ActionResult SearchReservation()
         {
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext);
+            long userID = sessionService.GetSessionUserID(this.HttpContext, true);
+            ViewBag.UserID = userID;
             // Clean items that are in selected table
             paymentService.CleanNewSelectedItems(
-                sessionService.GetSessionID(this.HttpContext)
+                sessionService.GetSessionID(this.HttpContext, false),
+                userID
                 );
 
             return View();
@@ -632,7 +621,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult SearchReservationBySite(string searchBySite)
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             var _reservationitems = reservationitems.GetAll();
 
             // Discard reserved items from other years
@@ -673,8 +662,8 @@ namespace IPMRVPark.WebUI.Controllers
         // For Partial View : Reserved Site List
         public ActionResult UpdateReservedList()
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
-            long customerID = sessionService.GetSessionCustomerID(sessionID);            
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            long customerID = sessionService.GetSessionCustomerID(sessionID);
             var _reserveditems = reservationitems.GetAll().
                 Where(q => q.idCustomer == customerID);
 
@@ -703,18 +692,21 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult GoToEditReservation()
         {
+            long userID = sessionService.GetSessionUserID(this.HttpContext, true);
             // Clean items that are in selected table
             paymentService.CleanNewSelectedItems(
-                sessionService.GetSessionID(this.HttpContext));
+                sessionService.GetSessionID(this.HttpContext, false),
+                userID
+                );
             return RedirectToAction("EditReservation");
         }
 
         public ActionResult EditReservation()
         {
-            long sessionUserID = sessionService.GetSessionUserID(this.HttpContext);
+            long sessionUserID = sessionService.GetSessionUserID(this.HttpContext, true);
             ViewBag.UserID = sessionUserID;
 
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
             long sessionCustomerID = sessionService.GetSessionCustomerID(sessionID);
             ViewBag.Customer = sessionService.GetSessionCustomerNamePhone(sessionID);
 
@@ -781,8 +773,6 @@ namespace IPMRVPark.WebUI.Controllers
                     _selecteditem.reservationCheckOutDate = item.checkOutDate;
                     _selecteditem.reservationAmount = item.total;
 
-
-
                     selecteditems.Insert(_selecteditem);
                 }
             }
@@ -824,7 +814,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult EditReservationSummary()
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             long sessionCustomerID = sessionService.GetSessionCustomerID(sessionID);
 
             // Data to be presented on the view

@@ -1,4 +1,4 @@
-﻿using IPMRVPark.Contracts.Data;
+using IPMRVPark.Contracts.Data;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -22,7 +22,12 @@ namespace IPMRVPark.Contracts.Repositories
         {
             return dbSet.Find(id);
         }
-        public virtual TEntity GetByKey(string keyName, object keyValue)
+        public virtual TEntity GetByKey(string keyName, long keyValue)
+        {
+            string whereCondition = keyName + " == " + keyValue;
+            return dbSet.Where(whereCondition).FirstOrDefault();
+        }
+        public virtual TEntity GetByKey(string keyName, string keyValue)
         {
             string whereCondition = keyName + " == " + keyValue;
             return dbSet.Where(whereCondition).FirstOrDefault();
