@@ -68,7 +68,7 @@ namespace IPMRVPark.Services
             _selecteditem.amount = 0;
             _selecteditem.total = 0;
             _selecteditem.lastUpdate = DateTime.Now;
-            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+            //_selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
 
             selecteditems.Update(_selecteditem);
             selecteditems.Commit();
