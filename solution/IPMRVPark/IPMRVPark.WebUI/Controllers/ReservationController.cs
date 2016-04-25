@@ -736,7 +736,7 @@ namespace IPMRVPark.WebUI.Controllers
             foreach (var item in _reserveditems)
             {
                 // If reserved item is not in the selected item table
-                var _checkitem = selecteditems.GetAll().Where(s => s.idRVSite == item.idRVSite).FirstOrDefault();
+                var _checkitem = selecteditems.GetAll().Where(s => s.idRVSite == item.idRVSite && s.reservationAmount != 0).FirstOrDefault();
                 if (_checkitem == null)
                 {
                     var _site_description_rate = sites_description_rate.GetByKey("id", item.idRVSite);
@@ -787,7 +787,8 @@ namespace IPMRVPark.WebUI.Controllers
             CreatePaymentViewBags(sessionID, IPMEventID, sessionCustomerID);
 
             var _selecteditems = selecteditems.GetAll().
-                Where(s => s.idSession == sessionID && s.idCustomer == sessionCustomerID && s.total != 0);
+                Where(si => si.idSession == sessionID && si.idCustomer == sessionCustomerID && si.reservationAmount != 0).
+                OrderBy(order => order.site);
 
             return View(_selecteditems);
         }

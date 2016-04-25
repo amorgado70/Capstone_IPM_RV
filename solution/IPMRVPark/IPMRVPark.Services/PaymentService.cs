@@ -50,9 +50,9 @@ namespace IPMRVPark.Services
         }
         public void CleanSelectedItem(long sessionID, long userID, long selectedID)
         {
-            removeSelected(sessionID, userID, selectedID);
+            cleanSelected(sessionID, userID, selectedID);
         }
-        private void removeSelected(long sessionID, long userID, long selectedID)
+        private void cleanSelected(long sessionID, long userID, long selectedID)
         {
 
             var _selecteditem = selecteditems.GetById(selectedID);
@@ -69,6 +69,10 @@ namespace IPMRVPark.Services
             _selecteditem.total = 0;
             _selecteditem.lastUpdate = DateTime.Now;
             //_selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+            _selecteditem.reservationCheckInDate = DateTime.MinValue;
+            _selecteditem.reservationCheckOutDate = DateTime.MinValue;
+            _selecteditem.reservationAmount = 0;
+            _selecteditem.reservationAdditionalServAmount = 0;
 
             selecteditems.Update(_selecteditem);
             selecteditems.Commit();
@@ -85,7 +89,7 @@ namespace IPMRVPark.Services
                     (cleanCode == cleanNew && _olditem.reservationAmount == 0) ||
                     (cleanCode == cleanEdit && _olditem.reservationAmount != 0))
                 {
-                    removeSelected(sessionID, userID, _olditem.ID);
+                    cleanSelected(sessionID, userID, _olditem.ID);
                 }
             }
         }
@@ -144,21 +148,23 @@ namespace IPMRVPark.Services
             payment _payment = new payment();
 
             var _selecteditems = selecteditems.GetAll();
-            _selecteditems = _selecteditems.Where(q => q.idSession == sessionID && q.isSiteChecked == true).
+            _selecteditems = _selecteditems.Where(q => q.idSession == sessionID).
                 OrderByDescending(o => o.ID);
             int count = 0;
             decimal selectionTotal = 0; // Thhis selection or edit reservation total
             decimal reservationTotal = 0; // Previous reservation total
             foreach (var _selecteditem in _selecteditems)
             {
-                count = count + 1;
-                selectionTotal = selectionTotal + _selecteditem.total;
+                if (_selecteditem.isSiteChecked == true)
+                {
+                    count = count + 1;
+                    selectionTotal = selectionTotal + _selecteditem.total;
+                }
                 // Check if selected item was a reserved item,
                 // this means the selected item is in edit reservation mode
                 if (_selecteditem.idReservationItem != null && _selecteditem.idReservationItem != IDnotFound)
                 {
-                    var _reservationitem = reservationitems.GetById(_selecteditem.idReservationItem);
-                    reservationTotal = reservationTotal + _reservationitem.total;
+                    reservationTotal = reservationTotal + _selecteditem.reservationAmount;
                 }
             }
 
