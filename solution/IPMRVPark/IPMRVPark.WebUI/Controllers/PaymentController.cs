@@ -159,9 +159,8 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult PrintPayment(long id)
         {
-
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true);
-            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            ViewBag.UserName = sessionService.GetSessionUserName(sessionID);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
 
             // Find all reservation items related to this payment
@@ -198,18 +197,18 @@ namespace IPMRVPark.WebUI.Controllers
                 sessionService.GetSessionID(this.HttpContext, false)
                 );
 
-            return View(_reservationitems);
+            return View(_reservationitems.OrderBy(ri => ri.site));
         }
         #endregion
         #region Payment or Refund
         public ActionResult PaymentOrRefund(bool isCredit = true)
         {
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true);
-
-            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            ViewBag.UserName = sessionService.GetSessionUserName(sessionID);
             long customerID = sessionService.GetSessionCustomerID(sessionID);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
             string customerName = sessionService.GetSessionCustomerNamePhone(sessionID);
+            
 
             // Check customer's account balance
             decimal customerBalance = paymentService.CustomerAccountBalance(IPMEventID, customerID);

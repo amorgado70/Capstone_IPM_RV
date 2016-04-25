@@ -418,15 +418,14 @@
     <Content Include="Views\Reservation\CRUDReservedItem.cshtml" />
     <Content Include="Views\Reservation\CRUDSelectedItem.cshtml" />
     <Content Include="Views\Reservation\EditReservation.cshtml" />
-    <Content Include="Views\Reservation\EditReservationSummary.cshtml" />
+    <Content Include="Views\Reservation\OLD EditReservationSummary.cshtml" />
     <Content Include="Views\Reservation\EditReserved.cshtml" />
     <Content Include="Views\Reservation\EditSelected.cshtml" />
     <Content Include="Views\Reservation\NewReservation.cshtml" />
-    <Content Include="Views\Reservation\ReservationSummary.cshtml" />
+    <Content Include="Views\Reservation\OLD ReservationSummary.cshtml" />
     <Content Include="Views\Reservation\ReservedList.cshtml" />
     <Content Include="Views\Reservation\SearchReservation.cshtml" />
     <Content Include="Views\Reservation\SelectedList.cshtml" />
-    <Content Include="Views\Reservation\SelectionSummary.cshtml" />
     <Content Include="Views\Service\CreateService.cshtml" />
     <Content Include="Views\Service\DeleteService.cshtml" />
     <Content Include="Views\Service\EditService.cshtml" />
@@ -451,6 +450,7 @@
     <Content Include="Views\Country\ErrorMessage.cshtml" />
     <Content Include="Views\Reservation\SearchReservationBySite.cshtml" />
     <Content Include="Views\Login\CleanIPMEventData.cshtml" />
+    <Content Include="Views\Reservation\SelectionSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

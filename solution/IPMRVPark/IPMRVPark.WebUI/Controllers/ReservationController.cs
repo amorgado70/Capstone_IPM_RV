@@ -358,26 +358,26 @@ namespace IPMRVPark.WebUI.Controllers
             return PartialView("SelectedList", _selecteditems);
         }
 
-        // For Partial View : Show Reservation Summary
+        // For Partial View : Show Selection Summary
         public ActionResult ShowSelectionSummary()
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
-            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
-            var _selecteditem = selecteditems.GetAll().
-                Where(q => q.idSession == sessionID).OrderByDescending(o => o.ID);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
+            long sessionCustomerID = sessionService.GetSessionCustomerID(sessionID);
+            long sessionIPMEventID = sessionService.GetSessionIPMEventID(sessionID);
 
-            CreateViewBagForSelectedTotal(sessionID);
+            // Data to be presented on the view
 
-            ViewBag.Customer = sessionService.GetSessionCustomerNamePhone(sessionID);
+            CreatePaymentViewBags(sessionID, sessionIPMEventID, sessionCustomerID);
 
+            var _selecteditems = selecteditems.GetAll().
+                Where(si => si.idSession == sessionID && si.idCustomer == sessionCustomerID &&
+                 (si.reservationAmount != 0 || si.amount != 0 )).
+                OrderBy(order => order.site);
 
-
-
-            if (_selecteditem.Count() > 0)
+            if (_selecteditems.Count() > 0)
             {
-                long sessionCustomerID = sessionService.GetSessionCustomerID(sessionID);
-                CreatePaymentViewBags(sessionID, IPMEventID, sessionCustomerID);
-                return PartialView("SelectionSummary", _selecteditem);
+                CreatePaymentViewBags(sessionID, sessionIPMEventID, sessionCustomerID);
+                return PartialView("SelectionSummary", _selecteditems);
             }
             else
             {
@@ -397,9 +397,6 @@ namespace IPMRVPark.WebUI.Controllers
             CreateViewBagForSelectedTotal(sessionID);
 
             ViewBag.Customer = sessionService.GetSessionCustomerNamePhone(sessionID);
-
-
-
 
             if (_selecteditem.Count() > 0)
             {
@@ -680,7 +677,7 @@ namespace IPMRVPark.WebUI.Controllers
                 }
             }
 
-            _reserveditems = _reserveditems.OrderByDescending(o => o.ID);
+            _reserveditems = _reserveditems.OrderBy(o => o.site);
 
             decimal reservedTotal = paymentService.CalculateReservedTotal(customerID);
 

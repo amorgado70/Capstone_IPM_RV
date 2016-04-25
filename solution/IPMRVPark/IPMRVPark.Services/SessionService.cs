@@ -139,6 +139,22 @@ namespace IPMRVPark.Services
             }
         }
 
+        public string GetSessionUserName(long sessionID)
+        {
+            session _session = sessions.GetById(sessionID);
+
+            if (_session.idStaff == null)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                long userID = _session.idStaff.Value;
+                staff_view _user = users.GetByKey("id",userID);
+                return _user.fullName;
+            }           
+        }
+
         private bool GetSessionCustomer(ref customer_view customer, long sessionID)
         {
             // Read customer from session

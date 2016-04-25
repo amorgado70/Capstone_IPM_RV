@@ -1,66 +1,75 @@
 ﻿@model IEnumerable<IPMRVPark.Models.selecteditem>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#waitMsg").hide();// Show wait message
-    });
-</script>
-<!-- Selection Summary -->
-<div class="row top-margin">
-    <div class="col-sm-6 col-xs-12 form-top-margin">
-        <label>Selection Summary For Customer</label>
-    </div>
-    <div class="col-sm-6 col-xs-10 form-top-margin">
-
-        @if (ViewBag.Customer == null)
-        {
-            <div class="reservationWarning">NO CUSTOMER SELECTED YET</div>
-        }
-        else
-        {
-            <div>@ViewBag.Customer</div>
-        }
-
-    </div>
-    <div class="col-xs-12">
-        <table class="table">
-            <thead>
-                <tr>
-                    @*<th style="text-align:right;">Selected</th>*@
-                    <th>Site</th>
-                    <th>Check In</th>
-                    <th>Check Out</th>
-                    <th style="text-align:right;">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @foreach (var item in Model)
-            {
+<div class="container-fluid">
+    <!-- List of selected sites -->
+    <div class="row form-top-margin">
+        <div class="col-xs-12">
+            <table class="table">
+                <thead>
                     <tr>
-                        @*<td style="text-align:right;">@Html.DisplayFor(modelItem => item.isSiteChecked)<input type="checkbox" checked></td>*@
-                        <td>@Html.DisplayFor(modelItem => item.site)</td>
-                        <td>@item.checkInDate.ToString("ddd"), @item.checkInDate.ToString("dd") @item.checkInDate.ToString("MMM")</td>
-                        <td>@item.checkOutDate.ToString("ddd"), @item.checkOutDate.ToString("dd") @item.checkOutDate.ToString("MMM")</td>
-                        <td style="text-align:right;">@Html.DisplayFor(modelItem => item.total)</td>
+                        <th>Site</th>
+                        <th>Type</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th style="text-align:right;">Total</th>
                     </tr>
-                }
-                <tr>
-                    <td>Total</td>
-                    <td></td>
-                    <td></td>
-                    <td style="text-align:right;">@ViewBag.totalAmount</td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    <td colspan="1">
-                        @if (@ViewBag.totalAmount == null)
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        // This is for New Reservation
+                        if (item.reservationAmount == 0)
                         {
-                            <div class="reservationWarning">NO SITE SELECTED YET</div>
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.site)</td>
+                                <td>@Html.DisplayFor(modelItem => item.siteType)</td>
+                                <td>@item.checkInDate.ToString("ddd"), @item.checkInDate.ToString("dd") @item.checkInDate.ToString("MMM")</td>
+                                <td>@item.checkOutDate.ToString("ddd"), @item.checkOutDate.ToString("dd") @item.checkOutDate.ToString("MMM")</td>
+                                <td style="text-align:right;">@Html.DisplayFor(modelItem => item.amount)</td>
+                            </tr>
                         }
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        // This is for Edit Reservation
+                        else
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.site)</td>
+                                <td>@Html.DisplayFor(modelItem => item.siteType)</td>
+                                <td>@item.reservationCheckInDate.ToString("ddd"), @item.reservationCheckInDate.ToString("dd") @item.reservationCheckInDate.ToString("MMM")</td>
+                                <td>@item.reservationCheckOutDate.ToString("ddd"), @item.reservationCheckOutDate.ToString("dd") @item.reservationCheckOutDate.ToString("MMM")</td>
+                                <td style="text-align:right;">@Html.DisplayFor(modelItem => item.reservationAmount)</td>
+                            </tr>
+                            <!-- Show changed values if there are changes-->
+                            if (item.reservationAmount != item.total && item.isSiteChecked)
+                            {
+                                <tr>
+                                    <td style="border-top:none; padding-top: 0;"></td>
+                                    <td style="border-top:none; padding-top: 0;">Changed to:</td>
+                                    <td style="border-top:none; padding-top: 0;">@item.checkInDate.ToString("ddd"), @item.checkInDate.ToString("dd") @item.checkInDate.ToString("MMM")</td>
+                                    <td style="border-top:none; padding-top: 0;">@item.checkOutDate.ToString("ddd"), @item.checkOutDate.ToString("dd") @item.checkOutDate.ToString("MMM")</td>
+                                    <td style="border-top:none; padding-top: 0; text-align:right;">@Html.DisplayFor(modelItem => item.total)</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr></tr>
+                            }
+                            if (!item.isSiteChecked)
+                            {
+                                <tr>
+                                    <td style="border-top:none; padding-top: 0;"></td>
+                                    <td style="border-top:none; padding-top: 0;">Cancelled:</td>
+                                    <td colspan="3" style="border-top:none; padding-top: 0; text-align:right;">@Html.DisplayFor(modelItem => item.total)</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr></tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

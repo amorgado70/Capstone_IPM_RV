@@ -40,7 +40,7 @@ Payments & Refunds
         // ***** Load partial view Payments For Customer
         $('#account-details').load('../Payment/ShowPaymentPerCustomer/@ViewBag.CustomerID');
         // ***** Load partial view Reservations For Customer
-        $('#reservation-summary').load('../Reservation/ShowSelectionSummary');
+        $('#selection-summary').load('../Reservation/ShowSelectionSummary');
         $('#PaymentMethod').change(function () {
             updatePaymentMethod()
         });
@@ -159,7 +159,7 @@ Payments & Refunds
                 <label>User</label>
             </div>
             <div class="col-sm-6 col-xs-10">
-                    <div disabled class="form-control">@ViewBag.UserID</div>
+                    <div disabled class="form-control">@ViewBag.UserName</div>
             </div>
             <div class="col-sm-1 col-xs-12">
                 <label>Date</label>
@@ -275,13 +275,13 @@ Payments & Refunds
                     }
                 </div>
                 <div class="col-sm-4 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
-                    <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#reservation-summary">
+                    <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#selection-summary">
                         <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
                         <span class="col-xs-9">Reservation Details &nbsp;<span class="collapsible"></span></span>
                     </button>
                 </div>
             </div>
-            <div id="reservation-summary" class="collapse">
+            <div id="selection-summary" class="collapse">
             </div>
             <div id="tax-calculation">
                 <div class="row form-top-margin">
