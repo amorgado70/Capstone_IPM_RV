@@ -125,7 +125,8 @@ namespace IPMRVPark.Services
         public decimal CalculateReservedTotal(long customerID)
         {
             var _reserveditems = reservationitems.GetAll().
-                Where(q => q.idCustomer == customerID).OrderByDescending(o => o.ID);
+                Where(q => q.idCustomer == customerID && q.isCancelled != true).
+                    OrderByDescending(o => o.ID);
 
             int count = 0;
             decimal sum = 0;
@@ -138,12 +139,13 @@ namespace IPMRVPark.Services
             return sum;
         }
 
-        public payment CalculateEditSelectedTotal(long sessionID, long customerID)
+        public payment CalculateEditSelectedTotal(long sessionID, long IPMEventID, long customerID)
         {
             payment _payment = new payment();
 
             var _selecteditems = selecteditems.GetAll();
-            _selecteditems = _selecteditems.Where(q => q.idSession == sessionID).OrderByDescending(o => o.ID);
+            _selecteditems = _selecteditems.Where(q => q.idSession == sessionID && q.isSiteChecked == true).
+                OrderByDescending(o => o.ID);
             int count = 0;
             decimal selectionTotal = 0; // Thhis selection or edit reservation total
             decimal reservationTotal = 0; // Previous reservation total
@@ -187,14 +189,14 @@ namespace IPMRVPark.Services
             _payment.selectionTotal = selectionTotal;
             _payment.cancellationFee = cancelationFee;
             /// Suggested value for payment
-            _payment.amount = dueAmount - refundAmount - CustomerAccountBalance(customerID);
+            _payment.amount = dueAmount - refundAmount - CustomerAccountBalance(IPMEventID, customerID);
             _payment.tax = Math.Round((dueAmount * GetProvinceTax(sessionID) / 100), 2, MidpointRounding.AwayFromZero);
             _payment.withoutTax = dueAmount - _payment.tax;
 
             return _payment;
         }
 
-        public decimal CustomerAccountBalance(long customerID)
+        public decimal CustomerAccountBalance(long IPMEventID,long customerID)
         {
             if (customerID == IDnotFound)
             {
@@ -202,7 +204,7 @@ namespace IPMRVPark.Services
             };
 
             var _payments = payments.GetAll().
-                Where(p => p.idCustomer == customerID).OrderBy(p => p.ID);
+                Where(p => p.idCustomer == customerID && p.idIPMEvent == IPMEventID).OrderBy(p => p.ID);
 
             var _last = _payments.ToList().LastOrDefault();
             decimal finalBalance = (_last != null) ? _last.balance : 0;

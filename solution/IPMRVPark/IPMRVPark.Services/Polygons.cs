@@ -97,11 +97,11 @@ namespace IPMRVPark.Services
         const string _dimGrayRGB = "ff696969";
         const string _steelBlueRGB = "ffB0C4DE";
         const string _redRGB = "ffFF0000";
-        const string _blackRGB = "00000000";
+        const string _blackRGB = "64646464";
         const string _lightGrayRGB = "E5E5E5E5";
 
-        const string _reserved = _lightGrayRGB;
-        const string _selected = _blackRGB;
+        const string _reservedColor = _lightGrayRGB;
+        const string _selectedColor = _blackRGB;
 
         // data from KML Parse, Relation Input from Admin, and Database
         public List<_site> Sites { get; set; }
@@ -387,9 +387,9 @@ namespace IPMRVPark.Services
                 {
                     site.isAvailable = false;
                     if(s.ReservedFrom != null)
-                        site.poly_color = _reserved;
+                        site.poly_color = _reservedColor;
                     else
-                        site.poly_color = _selected;
+                        site.poly_color = _selectedColor;
 
                 }
 
@@ -562,9 +562,9 @@ namespace IPMRVPark.Services
                             if (u.removed)
                                 site_color = s.style.poly_color;
                             else if (u.type == _reserve_selection._type.reservation)
-                                site_color = _reserved;
+                                site_color = _reservedColor;
                             else
-                                site_color = _selected;
+                                site_color = _selectedColor;
                             // insert new _siteUpdate 
                             Updates.Add(new _siteUpdate { id = u.id, fillColor = site_color, lastUpdate = u.lastUpdateString, lastUpdateTime = u.lastUpdate });
                             // update site poly_color

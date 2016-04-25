@@ -362,6 +362,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult ShowSelectionSummary()
         {
             long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
             var _selecteditem = selecteditems.GetAll().
                 Where(q => q.idSession == sessionID).OrderByDescending(o => o.ID);
 
@@ -375,7 +376,7 @@ namespace IPMRVPark.WebUI.Controllers
             if (_selecteditem.Count() > 0)
             {
                 long sessionCustomerID = sessionService.GetSessionCustomerID(sessionID);
-                CreatePaymentViewBags(sessionID, sessionCustomerID);
+                CreatePaymentViewBags(sessionID, IPMEventID, sessionCustomerID);
                 return PartialView("SelectionSummary", _selecteditem);
             }
             else
@@ -389,6 +390,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult ShowReservationSummary()
         {
             long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
             var _selecteditem = selecteditems.GetAll().
                 Where(q => q.idSession == sessionID).OrderByDescending(o => o.ID);
 
@@ -402,7 +404,7 @@ namespace IPMRVPark.WebUI.Controllers
             if (_selecteditem.Count() > 0)
             {
                 long sessionCustomerID = sessionService.GetSessionCustomerID(sessionID);
-                CreatePaymentViewBags(sessionID, sessionCustomerID);
+                CreatePaymentViewBags(sessionID, IPMEventID, sessionCustomerID);
                 return PartialView("ReservationSummary", _selecteditem);
             }
             else
@@ -665,7 +667,7 @@ namespace IPMRVPark.WebUI.Controllers
             long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             long customerID = sessionService.GetSessionCustomerID(sessionID);
             var _reserveditems = reservationitems.GetAll().
-                Where(q => q.idCustomer == customerID);
+                Where(q => q.idCustomer == customerID && q.isCancelled != true );
 
             // Discard reserved items from other years
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
@@ -715,7 +717,9 @@ namespace IPMRVPark.WebUI.Controllers
             var _reserveditems = reservationitems.GetAll();
             if (sessionCustomerID != IDnotFound)
             {
-                _reserveditems = _reserveditems.Where(q => q.idCustomer == sessionCustomerID).OrderByDescending(o => o.idRVSite);
+                _reserveditems = _reserveditems.
+                    Where(q => q.idCustomer == sessionCustomerID && q.total != 0).
+                    OrderByDescending(o => o.idRVSite);
             }
 
             // Discard reserved items from other years
@@ -780,20 +784,20 @@ namespace IPMRVPark.WebUI.Controllers
 
             // Data to be presented on the view
 
-            CreatePaymentViewBags(sessionID, sessionCustomerID);
+            CreatePaymentViewBags(sessionID, IPMEventID, sessionCustomerID);
 
             var _selecteditems = selecteditems.GetAll().
-                Where(s => s.idSession == sessionID && s.idCustomer == sessionCustomerID);
+                Where(s => s.idSession == sessionID && s.idCustomer == sessionCustomerID && s.total != 0);
 
             return View(_selecteditems);
         }
 
         // Data to be presented on the view
-        private void CreatePaymentViewBags(long sessionID, long sessionCustomerID)
+        private void CreatePaymentViewBags(long sessionID, long IPMEventID, long sessionCustomerID)
         {
             // Data to be presented on the view
             payment _payment = new payment();
-            _payment = paymentService.CalculateEditSelectedTotal(sessionID, sessionCustomerID);
+            _payment = paymentService.CalculateEditSelectedTotal(sessionID, IPMEventID, sessionCustomerID);
 
             // Value of previous reservation, just before edit reservation mode started
             ViewBag.PrimaryTotal = _payment.primaryTotal.ToString("N2");
@@ -816,12 +820,13 @@ namespace IPMRVPark.WebUI.Controllers
         {
             long sessionID = sessionService.GetSessionID(this.HttpContext, true);
             long sessionCustomerID = sessionService.GetSessionCustomerID(sessionID);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
 
             // Data to be presented on the view
             var _selecteditems = selecteditems.GetAll().
                 Where(s => s.idSession == sessionID && s.idCustomer == sessionCustomerID);
 
-            payment _payment = paymentService.CalculateEditSelectedTotal(sessionID, sessionCustomerID);
+            payment _payment = paymentService.CalculateEditSelectedTotal(sessionID, IPMEventID, sessionCustomerID);
 
             // Value of previous reservation, just before edit reservation mode started
             ViewBag.PrimaryTotal = _payment.primaryTotal.ToString("N2");

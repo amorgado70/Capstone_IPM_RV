@@ -42,7 +42,7 @@ namespace IPMRVPark.Models
         public decimal additionalServicesAmount { get; set; }
         public decimal total { get; set; }
         public int numberMemberInParty { get; set; }
-        public Nullable<bool> isCancelled { get; set; }
+        public bool isCancelled { get; set; }
         public string comments { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> lastUpdate { get; set; }

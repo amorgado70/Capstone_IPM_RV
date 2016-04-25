@@ -20,7 +20,7 @@ namespace IPMRVPark.Models
         public string SiteSize { get; set; }
         public string PowerSupply { get; set; }
         public string backgroundColor { get; set; }
-        public int isAvaialable { get; set; }
+        public Nullable<int> isAvaialable { get; set; }
         public Nullable<System.DateTime> SelectedFrom { get; set; }
         public Nullable<System.DateTime> SelectedUntil { get; set; }
         public Nullable<System.DateTime> ReservedFrom { get; set; }

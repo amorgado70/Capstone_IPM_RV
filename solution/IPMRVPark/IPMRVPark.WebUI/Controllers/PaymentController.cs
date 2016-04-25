@@ -139,14 +139,14 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult ShowPaymentPerCustomer(long id = IDnotFound)
         {
             long sessionID = sessionService.GetSessionID(this.HttpContext, true);
-            //long customerID = sessionService.GetSessionCustomerID(sessionID);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
             long customerID = id;
             ViewBag.CustomerID = customerID;
             ViewBag.CustomerName = sessionService.GetSessionCustomerNamePhone(sessionID);
 
             if (customerID != IDnotFound)
             {
-                decimal finalBalance = paymentService.CustomerAccountBalance(customerID);
+                decimal finalBalance = paymentService.CustomerAccountBalance(IPMEventID, customerID);
                 ViewBag.CustomerBalance = finalBalance;
                 var _payments = payments_view.GetAll().
                     Where(s => s.idCustomer == customerID);
@@ -161,6 +161,8 @@ namespace IPMRVPark.WebUI.Controllers
         {
 
             ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
 
             // Find all reservation items related to this payment
             var _payment = payments.GetById(id);
@@ -188,7 +190,7 @@ namespace IPMRVPark.WebUI.Controllers
 
             decimal previousBalance = paymentService.CustomerPreviousBalance(_payment.idCustomer, _payment.ID);
             ViewBag.PreviousBalance = previousBalance;
-            decimal finalBalance = paymentService.CustomerAccountBalance(_payment.idCustomer);
+            decimal finalBalance = paymentService.CustomerAccountBalance(IPMEventID, _payment.idCustomer);
             ViewBag.FinalBalance = finalBalance;
 
             // Tax Percentage
@@ -206,14 +208,15 @@ namespace IPMRVPark.WebUI.Controllers
 
             long sessionID = sessionService.GetSessionID(this.HttpContext, false);
             long customerID = sessionService.GetSessionCustomerID(sessionID);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
             string customerName = sessionService.GetSessionCustomerNamePhone(sessionID);
 
             // Check customer's account balance
-            decimal customerBalance = paymentService.CustomerAccountBalance(customerID);
+            decimal customerBalance = paymentService.CustomerAccountBalance(IPMEventID, customerID);
 
             // Retrieve totals for selected items in this session and transfer them to payment
             payment _payment = new payment();
-            _payment = paymentService.CalculateEditSelectedTotal(sessionID, customerID);
+            _payment = paymentService.CalculateEditSelectedTotal(sessionID, IPMEventID, customerID);
 
             decimal owedAmount = _payment.selectionTotal
                 + _payment.cancellationFee
@@ -324,18 +327,19 @@ namespace IPMRVPark.WebUI.Controllers
             var _selecteditems = selecteditems.GetAll().Where(s => s.idSession == sessionID);
             foreach (selecteditem item in _selecteditems)
             {
+                // Update existing reservation item - For edit mode
+                if (item.idReservationItem != null &&
+                    item.idReservationItem != IDnotFound)
+                {
+                    var old_reservationitem = reservationitems.GetById(item.idReservationItem);
+                    old_reservationitem.isCancelled = true;
+                    old_reservationitem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+                    old_reservationitem.total = 0;
+                    reservationitems.Update(old_reservationitem);
+                    reservationitems.Commit();
+                }
                 if (item.isSiteChecked)
                 {
-                    // Update existing reservation item - For edit mode
-                    if (item.idReservationItem != null &&
-                        item.idReservationItem != IDnotFound)
-                    {
-                        var old_reservationitem = reservationitems.GetById(item.idReservationItem);
-                        old_reservationitem.isCancelled = true;
-                        old_reservationitem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
-                        old_reservationitem.total = 0;
-                        reservationitems.Update(old_reservationitem);
-                    }
                     // Create and insert reservation items
                     var _reservationitem = new reservationitem();
                     _reservationitem.idIPMEvent = item.idIPMEvent.Value;
@@ -351,24 +355,24 @@ namespace IPMRVPark.WebUI.Controllers
                     _reservationitem.days = item.days;
                     _reservationitem.dailyRate = item.dailyRate;
                     _reservationitem.total = item.total;
+                    _reservationitem.isCancelled = false;
                     _reservationitem.createDate = DateTime.Now;
                     _reservationitem.lastUpdate = DateTime.Now;
                     _reservationitem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
                     reservationitems.Insert(_reservationitem);
                     reservationitems.Commit();
                     // Create link between payment and reservation
-                    // *****_reservationitem.idPayment
                     var _paymentreservationitem = new paymentreservationitem();
                     _paymentreservationitem.idIPMEvent = item.idIPMEvent.Value;
                     _paymentreservationitem.idPayment = _payment.ID;
-                    _paymentreservationitem.idReservationItem = _reservationitem.ID;
                     _paymentreservationitem.createDate = DateTime.Now;
                     _paymentreservationitem.lastUpdate = DateTime.Now;
+                    _paymentreservationitem.idPayment = ID;
+                    _paymentreservationitem.idReservationItem = _reservationitem.ID;
                     paymentsreservationitems.Insert(_paymentreservationitem);
                     paymentsreservationitems.Commit();
                 }
             }
-
             // Clean selected items
             paymentService.CleanAllSelectedItems(sessionID, userID);
             // 
