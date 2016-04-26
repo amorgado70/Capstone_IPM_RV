@@ -43,6 +43,7 @@
                 //add 7 days to selected date
                 startDate.setDate(startDate.getDate() + 7);
                 var minDate = $(this).datepicker('getDate');
+                minDate.setDate(minDate.getDate() + 1);
                 //minDate of dt2 datepicker = dt1 selected day
                 dt2.datepicker('setDate', startDate);
                 //sets dt2 maxDate
@@ -64,6 +65,8 @@
         });
         $('#checkOutDate').datepicker({
             dateFormat: 'D, dd M yy',
+            minDate: @ViewBag.checkInDate + 1,
+            maxDate: @ViewBag.maxDate,
             showOtherMonths: true,
             selectOtherMonths: true,
             dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -71,7 +74,6 @@
                 selectCheckInOutDates(); // Update session with dates
                 getSiteData(); // Calculate total for selected site
                 $('#siteName').focus();
-                //$('body').scrollTo('#siteName');
             }
         });
         $('#checkOutDate').datepicker('setDate', @ViewBag.checkOutDate);
@@ -82,16 +84,15 @@
                 left    :   dim.left - 0
             });
         });
-        function selectCheckInOutDates() {            
+        function selectCheckInOutDates() {
             var postpath = root + 'Reservation/SelectCheckInOutDates';
             var checkInDate = $('#checkInDate').val().toString('dd/mm/yy');
             var checkOutDate = $('#checkOutDate').val().toString('dd/mm/yy');
-            //alert(checkInDate + " " + checkOutDate);
             $.ajax({
                 url: postpath,
                 type: 'POST',
                 dataType: 'json',
-                data: { //Passing data
+                data: {
                     checkInDate: checkInDate, //Reading text box values using jQuery
                     checkOutDate: checkOutDate //Reading text box values using jQuery
                 },
@@ -158,7 +159,7 @@
         $('#btnSelectSite').click(function () {
             $('#waitMsg').show();// Show wait message
             var postpath = root + 'Reservation/SelectSite';
-            $.ajax({                
+            $.ajax({
                 url: postpath,
                 type: 'POST',
                 dataType: 'json',

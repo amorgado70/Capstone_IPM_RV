@@ -326,9 +326,12 @@ namespace IPMRVPark.WebUI.Controllers
             var _selecteditems = selecteditems.GetAll().Where(s => s.idSession == sessionID);
             foreach (selecteditem item in _selecteditems)
             {
+                bool editMode = item.idReservationItem != null && item.isSiteChecked;
+                bool cancelMode = item.idReservationItem != null && !item.isSiteChecked;
+                bool newMode = !editMode && item.isSiteChecked;
+
                 // Update existing reservation item - For edit mode
-                if (item.idReservationItem != null &&
-                    item.idReservationItem != IDnotFound)
+                if (cancelMode)
                 {
                     var old_reservationitem = reservationitems.GetById(item.idReservationItem);
                     old_reservationitem.isCancelled = true;
@@ -337,7 +340,30 @@ namespace IPMRVPark.WebUI.Controllers
                     reservationitems.Update(old_reservationitem);
                     reservationitems.Commit();
                 }
-                if (item.isSiteChecked)
+                if (editMode)
+                {
+                    // Create and insert reservation items
+                    var _reservationitem = reservationitems.GetById(item.idReservationItem);
+                    _reservationitem.idIPMEvent = item.idIPMEvent.Value;
+                    _reservationitem.idRVSite = item.idRVSite.Value;
+                    _reservationitem.idCustomer = item.idCustomer.Value;
+                    _reservationitem.idStaff = item.idStaff.Value;
+                    _reservationitem.checkInDate = item.checkInDate;
+                    _reservationitem.checkOutDate = item.checkOutDate;
+                    _reservationitem.site = item.site;
+                    _reservationitem.siteType = item.siteType;
+                    _reservationitem.weeks = item.weeks;
+                    _reservationitem.weeklyRate = item.weeklyRate;
+                    _reservationitem.days = item.days;
+                    _reservationitem.dailyRate = item.dailyRate;
+                    _reservationitem.total = item.total;
+                    _reservationitem.isCancelled = false;
+                    _reservationitem.lastUpdate = DateTime.Now;
+                    _reservationitem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+                    reservationitems.Update(_reservationitem);
+                    reservationitems.Commit();
+                }
+                if (newMode)
                 {
                     // Create and insert reservation items
                     var _reservationitem = new reservationitem();

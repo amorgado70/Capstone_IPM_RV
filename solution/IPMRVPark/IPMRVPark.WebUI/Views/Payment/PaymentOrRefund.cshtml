@@ -1,4 +1,4 @@
-﻿@model IPMRVPark.Models.payment
+@model IPMRVPark.Models.payment
 
 @{
     ViewBag.Title = "Payments & Refunds";
@@ -146,6 +146,13 @@ Payments & Refunds
         $('#createDate').val(createDate.toISOString().substring(0, 10));
     });
 </script>
+
+<style>
+    #ui-datepicker-div {
+        position: relative;
+        left: -120px;
+    }
+</style>
 
 @using (Html.BeginForm())
 {

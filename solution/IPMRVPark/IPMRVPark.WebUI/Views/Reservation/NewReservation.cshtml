@@ -31,7 +31,6 @@ Site Reservation
         function updateSelectedList() {
             $('#selected-list').load('../Reservation/UpdateSelectedList'); // load partial view
             getSelectionTotal(); // Update reservation total
-            //showSelectionSummary(); // Update selection summary
         }
         // ***** Customer Search
         $('#customerName').click(function () {
@@ -48,7 +47,10 @@ Site Reservation
                     dataType: 'json',
                     // query will be the param used by the action method
                     data: { query: request.term },
-                    success: response
+                    success: response,
+                    error: function () {
+                        alert('Error in SearchCustomerByNameOrPhoneResult');
+                    }
                 });
             },
             minLength: 1, // require at least one character from the user
@@ -70,7 +72,7 @@ Site Reservation
                 $('#customerName').val(customerLabel);
             },
             error: function () {
-                alert('3 Some error occured.');
+                alert('Error in GetSessionCustomer');
             }
         });
         // ***** Customer Selection
@@ -81,19 +83,18 @@ Site Reservation
             $('#btnPayment').focus();
             var postpath = root + 'Login/SelectCustomer';
             $.ajax({
-                url: postpath, // Controller/View
-                type: 'POST', //HTTP POST Method
+                url: postpath,
+                type: 'POST',
                 dataType: 'json',
-                data: { //Passing data
+                data: {
                     idCustomer: $('#idCustomer').val()
                 },
                 success: function (result) {
-                    //showSelectionSummary();
                     $('#btnSelectCustomer').prop('disabled', true);
                     $('#waitMsg').hide();
                 },
                 error: function (result) {
-                    alert('7 Some error occured.');
+                    alert('Error in SelectCustomer');
                 }
             });
         });
@@ -107,13 +108,10 @@ Site Reservation
                     $('#selectionTotal').text(result);
                 },
                 error: function () {
-                    alert('9 Some error occured.');
+                    alert('Error in GetSelectionTotal');
                 }
             });
         };
-        //function showSelectionSummary() {
-        //    $('#selection-summary').load('../Reservation/ShowSelectionSummary'); // load partial view
-        //}
     });
 </script>
 
@@ -178,9 +176,6 @@ Site Reservation
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
         </div>
-    </div>
-
-    <div id="selection-summary">
     </div>
     <!-- Proceed To Payment -->
     <div class="row form-top-margin">

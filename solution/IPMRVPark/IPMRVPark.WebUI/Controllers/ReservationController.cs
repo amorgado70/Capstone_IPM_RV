@@ -79,14 +79,16 @@ namespace IPMRVPark.WebUI.Controllers
             DateTime end = _IPMEvent.endDate.Value;
             DateTime now = DateTime.Now;
             DateTime checkInDate = DateTime.MinValue;
-            DateTime checkOutDate = DateTime.MinValue;
+            DateTime checkOutDate = DateTime.MinValue.AddDays(1);
 
             // Parameters for Edit Reservation, NOT used for New Reservation
             if (selectedID != newReservationMode)
             {
                 selecteditem _selecteditem = selecteditems.GetById(selectedID);
                 checkInDate = _selecteditem.checkInDate;
+                _session.checkInDate = checkInDate;
                 checkOutDate = _selecteditem.checkOutDate;
+                _session.checkOutDate = checkOutDate;
             }
 
             if (checkInDate == DateTime.MinValue)
@@ -96,7 +98,8 @@ namespace IPMRVPark.WebUI.Controllers
                     checkInDate = _session.checkInDate.Value;
                 };
             };
-            if (checkOutDate == DateTime.MinValue)
+
+            if (checkOutDate == DateTime.MinValue.AddDays(1))
             {
                 if (_session.checkOutDate != null)
                 {
@@ -108,6 +111,7 @@ namespace IPMRVPark.WebUI.Controllers
             {
                 checkInDate = start;
             };
+
             if (!(checkOutDate >= checkInDate && checkOutDate <= end))
             {
                 checkOutDate = end;
@@ -115,8 +119,8 @@ namespace IPMRVPark.WebUI.Controllers
 
             int min = (int)(start - now).TotalDays + 1;
             int max = (int)(end - now).TotalDays + 1;
-            int checkIn = (int)(checkInDate - now).TotalDays - 7;
-            int checkOut = (int)(checkOutDate - now).TotalDays + 1;
+            int checkIn = (int)(checkInDate - now).TotalDays;
+            int checkOut = (int)(checkOutDate - now).TotalDays;
 
             ViewBag.minDate = min;
             ViewBag.maxDate = max;
