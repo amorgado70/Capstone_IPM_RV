@@ -123,6 +123,12 @@ namespace IPMRVPark.WebUI.Controllers
                 }
             }
             ViewBag.IPMEventYear = items;
+
+            // This is used to chek password
+            var _session = sessionService.GetSession(this.HttpContext, false, false);
+            ViewBag.P1 = _session.sessionGUID.Substring(0, 12);
+            ViewBag.P2 = _session.sessionGUID.Substring(11, 12);
+
             return View();
         }
 
@@ -152,38 +158,53 @@ namespace IPMRVPark.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult SelectUser(string userEmail, string userPassword)
+        public ActionResult SelectUser(string userEmail, string userPassword, string P1, string P2)
         {
+
             SelectionOptionID user = new SelectionOptionID(IDnotFound, "");
+            person _person = new person();
+
             if (userEmail != null && userPassword != null)
             {
-                var _session = sessionService.GetSession(this.HttpContext, true, false);
-
-
+                var _session = sessionService.GetSession(this.HttpContext, false, false);
                 bool personFound = false;
-                try //checks if person is in database
+                bool userAuthor = false;
+
+                string xP1 = _session.sessionGUID.Substring(0, 12);
+                string xP2 = _session.sessionGUID.Substring(11, 12);
+
+                if (P1 == xP1 && P2 == xP2)
                 {
-                    var _person = persons.GetAll().Where(u => u.email == userEmail && u.password == userPassword).
-                        FirstOrDefault();
-                    personFound = !(_person.Equals(default(person)));
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("An error occurred: '{0}'", e);
+                    try //checks if person is in database
+                    {
+                        _person = persons.GetAll().Where(u => u.email == userEmail).
+                            FirstOrDefault();
+                        personFound = !(_person.Equals(default(person)));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("An error occurred: '{0}'", e);
+                    }
                 }
                 // Person found in database
                 if (personFound)
                 {
-                    user.ID = persons.GetAll().Where(q => q.email == userEmail && q.password == userPassword).First().ID;
+                    userAuthor = sessionService.VerifyHash(_person.ID, userPassword);
+                }
+                // User is authorized
+                if (userAuthor)
+                {
+                    user.ID = _person.ID;
                     user.Label = userEmail;
                     _session.idStaff = user.ID;
                 }
                 else
                 {
+                    user.ID = IDnotFound;
+                    user.Label = string.Empty;
                     _session.idStaff = null;
-
                 }
-                sessions.Update(sessions.GetById(_session.ID));
+                sessions.Update(_session);
                 sessions.Commit();
             }
             return Json(user);
@@ -202,11 +223,12 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult GetSessionGUID()
         {
-            var _session = sessionService.GetSession(this.HttpContext, true, false);
-            var _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
-            string sessionSummary = "sessionID: " + _session.ID +
-                " sessionGUID: " + _session.sessionGUID +
-                " IPMEvent: " + _IPMEvent.year;
+            //var _session = sessionService.GetSession(this.HttpContext, false, false);
+            //var _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
+            //string sessionSummary = "sessionID: " + _session.ID +
+            //    " sessionGUID: " + _session.sessionGUID +
+            //    " IPMEvent: " + _IPMEvent.year;
+            string sessionSummary = string.Empty;
             return Json(sessionSummary);
         }
 
@@ -294,7 +316,6 @@ namespace IPMRVPark.WebUI.Controllers
 
             return View();
         }
-
     }
 
 }

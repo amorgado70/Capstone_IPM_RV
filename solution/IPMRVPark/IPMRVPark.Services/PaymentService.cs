@@ -82,7 +82,7 @@ namespace IPMRVPark.Services
         {
             // Clean edit items that are in selected table
             var _olditems_to_be_removed = selecteditems.GetAll().
-                Where(c => c.idSession == sessionID).ToList();
+                Where(c => c.idSession == sessionID && c.isSiteChecked == true).ToList();
             foreach (var _olditem in _olditems_to_be_removed)
             {
                 if (cleanCode == cleanAll ||

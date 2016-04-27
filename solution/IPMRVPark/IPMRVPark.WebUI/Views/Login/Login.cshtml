@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "User Login";
     ViewBag.PageTitle = "User Login";
 }
@@ -49,41 +49,53 @@
         });
         //function will be called on button click
         $('#btnSelectUser').click(function () {
-            $('#waitMsg').show();
-            var postpath = root + 'Login/SelectUser';
-            $.ajax(
+            userEmail = $('#userEmail').val();
+            userPassword = $('#userPassword').val();
+            if (isValidEmail(userEmail) &&
+                isValidPassword(userPassword))
             {
-                url: postpath,
-                type: 'POST',
-                dataType: 'json',
-                data: { //Passing data
-                    userEmail: $('#userEmail').val(),
-                    userPassword: $('#userPassword').val()
-                },
-                success: function (data) {
-                    var userID = data.ID;
-                    var userLabel = data.Label;
-                    $('#idUser').val(userID);
-                    //check user ID
-                    if (userID == -1) {
-                        $('#unauthorizedUser').show();
+                $('#waitMsg').show();
+                var postpath = root + 'Login/SelectUser';
+                $.ajax(
+                {
+                    url: postpath,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { //Passing data
+                        userEmail: userEmail,
+                        userPassword: userPassword,
+                        P1: '@ViewBag.P1',
+                        P2: '@ViewBag.P2',
+                    },
+                    success: function (data) {
+                        var userID = data.ID;
+                        var userLabel = data.Label;
+                        $('#idUser').val(userID);
+                        //check user ID
+                        if (userID == -1) {
+                            $('#userEmail').val('');
+                            $('#idUser').val();
+                            $('#unauthorizedUser').show();
+                        }
+                        else {
+                            $('#unauthorizedUser').hide();
+                            var postpath = root + 'Login/Menu';
+                            window.location.href = postpath;
+                        }
+                        $('#waitMsg').hide();
+                    },
+                    error: function (result) {
+                        alert('Error in authorizing user' + result);
                     }
-                    else {
-                        $('#unauthorizedUser').hide();
-                        var postpath = root + 'Login/Menu';
-                        window.location.href = postpath;
-                    }
-                    $('#waitMsg').hide();
-                },
-                error: function(xhr, status, error) {
-                    var acc = []
-                    $.each(xhr, function(index, value) {
-                        acc.push(index + ': ' + value);
-                    });
-                    alert(JSON.stringify(acc));
-                }
-            });
+                });
+            }
         });
+        function isValidEmail(emailAddress) {
+            return (emailAddress.length > 0);
+        }
+        function isValidPassword(password) {
+            return (password.length > 0);
+        }
         //function will be called on dropdownlist selection
         $('#IPMEventYear').change(function () {
             $('#waitMsg').show();
@@ -100,7 +112,7 @@
                     location.reload();
                 },
                 error: function (result) {
-                    alert('7 Some error occured.');
+                    alert('Error in ChangeYear');
                 }
             });
         });
@@ -133,7 +145,7 @@
                     <input type="text" class="form-control" id="userEmail" placeholder="Type your email" />
                     <input class="text-box single-line" id="idUser" name="idUser" type="hidden" />
                     <div id="unauthorizedUser" style="color: red; font-weight: bold;">
-                        non authorized user
+                        Please, check e-mail and password
                     </div>
                 </div>
             </div>
@@ -154,7 +166,7 @@
     </div>
     <div class="row">
         <div class="col-sm-6 col-sm-push-3 col-xs-12 form-top-margin">
-            <div id="btnSelectUser" class="btn btn-block btn-default btn-mylink pagination-centered" ><span class="glyphicon glyphicon-log-in"></span>&nbsp; Confirm Login</div>            
+            <div id="btnSelectUser" class="btn btn-block btn-default btn-mylink pagination-centered"><span class="glyphicon glyphicon-log-in"></span>&nbsp; Confirm Login</div>
         </div>
     </div>
 </div>

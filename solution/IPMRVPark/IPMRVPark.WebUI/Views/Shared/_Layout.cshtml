@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -32,7 +32,7 @@
                 $('#sessionYear').text(data);
             },
             error: function () {
-                alert('21 Some error occured.');
+                alert('Error in GetSessionYear');
             }
         });
         var postpath = root + 'Login/GetSessionGUID';
@@ -44,7 +44,7 @@
                 $('#sessionGUID').text(data);
             },
             error: function () {
-                alert('32 Some error occured.');
+                alert('Error in GetSessionGUID');
             }
         });
 
