@@ -487,5 +487,27 @@ namespace IPMRVPark.WebUI.Controllers
             }
             return View(_customers);
         }
+
+        public ActionResult PaymentReport()
+        {
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+            var _payments = payments.GetAll().
+                Where(p => p.idIPMEvent == IPMEventID).
+                OrderBy(ps => ps.ID).ToList();
+
+            payment total_payments = new payment();
+
+            total_payments.amount = _payments.Sum(a => a.amount);
+            total_payments.withoutTax = _payments.Sum(wt => wt.withoutTax);
+            total_payments.tax = _payments.Sum(t => t.tax);
+            total_payments.primaryTotal = _payments.Sum(pt => pt.primaryTotal);
+            total_payments.selectionTotal = _payments.Sum(st => st.selectionTotal);
+            total_payments.cancellationFee = _payments.Sum(cf => cf.cancellationFee);
+
+            ViewBag.Totals = total_payments;
+
+            return View(_payments);
+        }
     }
 }

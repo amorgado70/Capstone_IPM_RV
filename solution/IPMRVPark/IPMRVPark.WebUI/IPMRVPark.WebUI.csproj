@@ -455,6 +455,8 @@
     <Content Include="Views\Login\Admin.cshtml" />
     <Content Include="Views\Login\ChangePassword.cshtml" />
     <Content Include="Views\Staff\ResetPassword.cshtml" />
+    <Content Include="Views\Payment\PaymentReport.cshtml" />
+    <Content Include="Views\Payment\View1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

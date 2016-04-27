@@ -1,0 +1,117 @@
+@model IEnumerable<IPMRVPark.Models.payment>
+
+@{
+    ViewBag.Title = "Payment Report";
+    ViewBag.PageTitle = "Payment Report";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnPrint").click(function () {
+            window.print();
+        });
+    });
+</script>
+
+<style>
+    body {
+        min-width: 1280px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.primaryTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.selectionTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.withoutTax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.tax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.cancellationFee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.createDate)
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.primaryTotal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.selectionTotal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.withoutTax)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.tax)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cancellationFee)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.createDate)
+                </td>
+            </tr>
+        }
+
+        <tr>
+            <th>
+                Totals
+            </th>
+            <th>
+                @ViewBag.Totals.primaryTotal
+            </th>
+            <th>
+                @ViewBag.Totals.selectionTotal
+            </th>
+            <th>
+                @ViewBag.Totals.amount
+            </th>
+            <th>
+                @ViewBag.Totals.withoutTax
+            </th>
+            <th>
+                @ViewBag.Totals.tax
+            </th>
+            <th>
+                @ViewBag.Totals.cancellationFee
+            </th>
+            <th>
+            </th>
+        </tr>
+    </table>
+
+    <!-- Print Report-->
+    <div class="row top-margin">
+        <div class="col-sm-3 col-xs-12 form-top-margin">
+            <button id="btnPrint" class="btn btn-block btn-default">
+                <span class="col-xs-1 glyphicon glyphicon-print"></span>
+                <span class="col-xs-9">Print</span>
+            </button>
+        </div>
+    </div>
+</div>

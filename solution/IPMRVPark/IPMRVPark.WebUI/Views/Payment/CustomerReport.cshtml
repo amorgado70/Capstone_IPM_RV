@@ -1,9 +1,15 @@
 @model IEnumerable<IPMRVPark.Models.customer_view>
-
 @{
     ViewBag.Title = "Customer Report";
     ViewBag.PageTitle = "Customer Report";
 }
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnPrint").click(function () {
+            window.print();
+        });
+    });
+</script>
 
 <style>
     body {
@@ -11,31 +17,47 @@
     }
 </style>
 
-<table class="table">
-    <tr>
-        <th>
-            Customer Name
-        </th>
-        <th>
-            Customer Phone Number
-        </th>
-        <th>
-            Balance
-        </th>
-    </tr>
+<div class="container-fluid">
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.fullName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.mainPhone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.comments)
-        </td>
-    </tr>
-}
+    <table class="table">
+        <tr>
+            <th>
+                Customer Name
+            </th>
+            <th>
+                Customer Phone Number
+            </th>
+            <th>
+                Balance
+            </th>
+        </tr>
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mainPhone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.comments)
+                </td>
+            </tr>
+        }
+
+    </table>
+
+
+    <!-- Print Report-->
+    <div class="row top-margin">
+        <div class="col-sm-3 col-xs-12 form-top-margin">
+            <button id="btnPrint" class="btn btn-block btn-default">
+                <span class="col-xs-1 glyphicon glyphicon-print"></span>
+                <span class="col-xs-9">Print</span>
+            </button>
+        </div>
+    </div>
+</div>
+
