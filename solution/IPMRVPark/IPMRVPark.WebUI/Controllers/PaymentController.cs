@@ -138,7 +138,7 @@ namespace IPMRVPark.WebUI.Controllers
         // For Partial View : Show Payments Per Customer
         public ActionResult ShowPaymentPerCustomer(long id = IDnotFound)
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
             long customerID = id;
             ViewBag.CustomerID = customerID;
@@ -159,7 +159,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult PrintPayment(long id)
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
             ViewBag.UserName = sessionService.GetSessionUserName(sessionID);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
 
@@ -186,6 +186,11 @@ namespace IPMRVPark.WebUI.Controllers
             var _customer = customers.GetByKey("id", _payment.idCustomer);
 
             ViewBag.CustomerName = (_customer.fullName + ", " + _customer.mainPhone);
+            if (_customer.isEmailReceipt != null)
+                if (_customer.isEmailReceipt.Value)
+                    ViewBag.Email = _customer.email;
+                else ViewBag.DisableEmail = "disabled";
+            else ViewBag.DisableEmail = "disabled";
 
             decimal previousBalance = paymentService.CustomerPreviousBalance(_payment.idCustomer, _payment.ID);
             ViewBag.PreviousBalance = previousBalance;
@@ -194,7 +199,7 @@ namespace IPMRVPark.WebUI.Controllers
 
             // Tax Percentage
             ViewBag.ProvinceTax = paymentService.GetProvinceTax(
-                sessionService.GetSessionID(this.HttpContext, false)
+                sessionService.GetSessionID(this.HttpContext, false, false)
                 );
 
             return View(_reservationitems.OrderBy(ri => ri.site));
@@ -203,7 +208,7 @@ namespace IPMRVPark.WebUI.Controllers
         #region Payment or Refund
         public ActionResult PaymentOrRefund(bool isCredit = true)
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
             ViewBag.UserName = sessionService.GetSessionUserName(sessionID);
             long customerID = sessionService.GetSessionCustomerID(sessionID);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
@@ -310,8 +315,8 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult PaymentOrRefund(payment _payment)
         {
             // Identify session
-            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
-            long userID = sessionService.GetSessionUserID(this.HttpContext, false);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
+            long userID = sessionService.GetSessionUserID(this.HttpContext, false, false);
 
             // Create and insert payment
             _payment.idIPMEvent = sessionService.GetSessionIPMEventID(sessionID);
@@ -451,6 +456,31 @@ namespace IPMRVPark.WebUI.Controllers
 
             return View(_payments);
 
+        }
+
+        public ActionResult ReportCustomer()
+        {
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+            var _customers = customers.GetAll();
+
+            foreach (var _customer in _customers)
+            {
+                long customerID = _customer.id;
+                decimal finalBalance = paymentService.CustomerAccountBalance(IPMEventID, customerID);
+                // Customer has no outstanding balance
+                if (finalBalance == 0)
+                {
+                    // Removes customer from list
+                    _customers = _customers.Where(oc => oc.id != customerID);
+                }
+                else
+                {
+                    _customer.comments = finalBalance.ToString("C");
+                }
+            };
+
+            return View(_customers);
         }
     }
 }

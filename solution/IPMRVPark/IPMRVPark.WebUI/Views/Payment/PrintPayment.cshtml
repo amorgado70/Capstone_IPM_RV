@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IPMRVPark.Models.reservationitem>
+@model IEnumerable<IPMRVPark.Models.reservationitem>
 
 @{
     ViewBag.Title = "Print Payment";
@@ -19,6 +19,36 @@ Payments & Refunds
         $("#btnPrint").click(function () {
             window.print();
         });
+        $("#btnEmail").click(function () {
+            var content = '@ViewBag.Email';
+        });
+        //1. register for Mandrill to get an API key
+        //2. load jQuery
+        //3. use $.ajax to send an email
+        function sendMail() {
+            $.ajax({
+                type: 'POST',
+                url: 'https://mandrillapp.com/api/1.0/messages/send.json',
+                data: {
+                    'key': 'YOUR API KEY HERE',
+                    'message': {
+                        'from_email': 'YOUR@EMAIL.HERE',
+                        'to': [
+                            {
+                                'email': 'RECIPIENT@EMAIL.HERE',
+                                'name': 'RECIPIENT NAME (OPTIONAL)',
+                                'type': 'to'
+                            }
+                        ],
+                        'autotext': 'true',
+                        'subject': 'YOUR SUBJECT HERE!',
+                        'html': 'YOUR EMAIL CONTENT HERE! YOU CAN USE HTML!'
+                    }
+                }
+            }).done(function (response) {
+                console.log(response); // if you're into that sorta thing
+            });
+        }
     });
 </script>
 
@@ -179,17 +209,6 @@ Payments & Refunds
             </div>
         </div>
     </div>
-    @*<div class="row">*@
-    <!-- Customer Account History -->
-    @*<div class="col-sm-4 col-sm-push-8 col-xs-12 form-top-margin" data-toggle="tooltip" title="Click To Expand/Collapse">
-                <button type="button" class="btn btn-block btn-default" data-toggle="collapse" data-target="#account-details">
-                    <span class="col-xs-1 glyphicon glyphicon-info-sign"></span>
-                    <span class="col-xs-9">Account History &nbsp;<span class="collapsible"></span></span>
-                </button>
-            </div>
-        </div>
-        <div id="account-details" class="collapse">
-        </div>*@
     <!-- Print Payment Info-->
     <div class="row top-margin">
         <div class="col-sm-3 col-xs-12 form-top-margin">
@@ -198,7 +217,13 @@ Payments & Refunds
                 <span class="col-xs-9">Print</span>
             </button>
         </div>
-        <div class="col-sm-4 col-sm-push-5 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
+        <div class="col-sm-3 col-xs-12 form-top-margin">
+            <button id="btnEmail" class="btn btn-block btn-default" @ViewBag.DisableEmail>
+                <span class="col-xs-1 glyphicon glyphicon-envelope"></span>
+                <span class="col-xs-9">Send E-mail</span>
+            </button>
+        </div>
+        <div class="col-sm-4 col-sm-push-2 col-xs-12 form-top-margin" data-toggle="tooltip" title="Go To">
             <a href="@Url.Action("NewReservation", "Reservation" )" class="btn btn-block btn-default btn-mylink pagination-centered">
                 <span class="glyphicon glyphicon-tag"></span>
                 <span>&nbsp; New Reservation</span>

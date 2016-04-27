@@ -107,7 +107,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         private List<SelectionOptionID> SearchSiteByName(string searchString)
         {
-            long sessionID = sessionService.GetSessionID(this.HttpContext, true);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
 
             //Return value

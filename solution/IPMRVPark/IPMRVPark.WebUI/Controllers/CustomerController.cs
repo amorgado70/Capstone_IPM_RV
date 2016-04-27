@@ -44,7 +44,7 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: list with filter
         public ActionResult IndexCustomer(string searchString)
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
             var customer_view = customers_view.GetAll().OrderBy(q => q.fullName);
 
             if (!String.IsNullOrEmpty(searchString))
@@ -57,14 +57,14 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult SearchCustomer()
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
             return View();
         }
 
         // GET: /Details/5
         public ActionResult CustomerDetails(long id)
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
 
             ViewBag.CustomerID = id;
             customer_view customer_view = customers_view.GetByKey("id", id);
@@ -117,7 +117,7 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Create
         public ActionResult CreateCustomer()
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
 
             //Dropdown list for country
             countryCodes("CANADA");
@@ -132,7 +132,7 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateCustomer(customer_view customer_form_page)
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
 
             //validation check
             var personfirstname = persons.GetAll().Where(s => s.firstName.ToUpper().Contains(customer_form_page.firstName.ToUpper())).ToList();
@@ -211,14 +211,14 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Edit/5
         public ActionResult EditCustomer(int id)
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
 
             customer_view customer_view = customers_view.GetAll().
                 Where(c => c.id == id).FirstOrDefault();
 
             //Dropdown list for country
             countryCodes(customer_view.countryName);
-            sessionService.GetSession(this.HttpContext, true);
+            sessionService.GetSession(this.HttpContext, true, false);
             //Dropdown list for province
             provinceCodes(customer_view.provinceName);
 
@@ -233,7 +233,7 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditCustomer(customer_view customer_form_page)
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
 
             var _person = persons.GetById(customer_form_page.id);
 
@@ -268,7 +268,7 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Delete/5
         public ActionResult DeleteCustomer(int id)
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
 
             customer_view customer_view = customers_view.GetAll().
                     Where(c => c.id == id).FirstOrDefault();
@@ -283,7 +283,7 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirm(int id)
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
 
             persons.Delete(customers_view.GetById(customers_view.GetAll().
                     Where(c => c.id == id).FirstOrDefault().id));

@@ -58,7 +58,7 @@ namespace IPMRVPark.Services
             return _session;
         }
 
-        public session GetSession(HttpContextBase httpContext, bool redirectUserLogin)
+        public session GetSession(HttpContextBase httpContext, bool checkUser, bool checkAdmin)
         {
             HttpCookie cookie = httpContext.Request.Cookies.Get(SessionName);
             session result;
@@ -88,9 +88,9 @@ namespace IPMRVPark.Services
                         if (tryResult)//session found in database
                         {
                             //Redirect to login page if user is not authorized
-                            if (redirectUserLogin)
+                            if (checkUser || checkAdmin)
                             {
-                                RedirectUserLogin(_session, httpContext);
+                                RedirectUser(_session, httpContext, checkAdmin);
                             }
                             cookie.Expires = DateTime.Now.AddDays(7);//update cookie expiry date
                             return _session;
@@ -106,15 +106,29 @@ namespace IPMRVPark.Services
 
         const long IDnotFound = -1;
 
-        public long GetSessionID(HttpContextBase httpContext, bool redirectUserLogin)
+        public long GetSessionID(HttpContextBase httpContext, bool checkUser, bool checkAdmin)
         {
-            session _session = GetSession(httpContext, redirectUserLogin);
+            session _session = GetSession(httpContext, checkUser, checkAdmin);
             return _session.ID;
         }
 
-        private void RedirectUserLogin(session _session, HttpContextBase httpContext)
+        private void RedirectUser(session _session, HttpContextBase httpContext, bool checkAdmin)
         {
+            bool redirectToLoginPage = false;
+
             if (_session.idStaff == null)
+            {
+                redirectToLoginPage = true;
+            }
+            else if (checkAdmin)
+            {
+                var _user = users.GetByKey("id", _session.idStaff.Value);
+                if (_user.role != "Admin")
+                {
+                    redirectToLoginPage = true;
+                }
+            }
+            if (redirectToLoginPage)
             {
                 //Redirect to login page if user is not authorized
                 var _Url = httpContext.Request.Url;
@@ -124,9 +138,9 @@ namespace IPMRVPark.Services
             }
         }
 
-        public long GetSessionUserID(HttpContextBase httpContext, bool redirectUserLogin)
+        public long GetSessionUserID(HttpContextBase httpContext, bool checkUser, bool checkAdmin)
         {
-            session _session = GetSession(httpContext, redirectUserLogin);
+            session _session = GetSession(httpContext, checkUser, checkAdmin);
 
             if (_session.idStaff == null)
             {
@@ -210,11 +224,6 @@ namespace IPMRVPark.Services
         {
             session _session = sessions.GetById(sessionID);
             return _session.idIPMEvent;
-        }
-
-        public void AdminRole(HttpContextBase httpContext)
-        {
-            long userID = GetSessionUserID(httpContext, true);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: list with filter
         public ActionResult Index(string searchString)
         {
-            sessionService.AdminRole(this.HttpContext);
+            sessionService.GetSessionID(this.HttpContext, true, true);
 
             var staff_view = staffs_view.GetAll().OrderBy(q => q.fullName);
 
@@ -54,7 +54,7 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Details/5
         public ActionResult StaffDetails(int? id)
         {
-            sessionService.AdminRole(this.HttpContext);
+            sessionService.GetSessionID(this.HttpContext, true, true);
 
             staff_view staff_view = staffs_view.GetAll().
                 Where(c => c.id == id).FirstOrDefault();
@@ -69,7 +69,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult ErrorMessage()
         {
-            sessionService.AdminRole(this.HttpContext);
+            sessionService.GetSessionID(this.HttpContext, true, true);
 
             return View();
         }
@@ -77,7 +77,7 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Create
         public ActionResult CreateStaff()
         {
-            sessionService.AdminRole(this.HttpContext);
+            sessionService.GetSessionID(this.HttpContext, true, true);
 
             var staff_view = new staff_view();
             return View(staff_view);
@@ -86,7 +86,7 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateStaff(staff_view staff_form_page)
         {
-            sessionService.AdminRole(this.HttpContext);
+            sessionService.GetSessionID(this.HttpContext, true, true);
 
             //validation check
             var personfirstname = persons.GetAll().Where(s => s.firstName.ToUpper().Contains(staff_form_page.firstName.ToUpper())).ToList();
@@ -152,7 +152,7 @@ namespace IPMRVPark.WebUI.Controllers
         // GET: /Edit/5
         public ActionResult EditStaff(int id)
         {
-            sessionService.AdminRole(this.HttpContext);
+            sessionService.GetSessionID(this.HttpContext, true, true);
 
             staff_view staff_view = staffs_view.GetAll().
                 Where(c => c.id == id).FirstOrDefault();
@@ -168,7 +168,7 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditStaff(staff_view staff_form_page)
         {
-            sessionService.AdminRole(this.HttpContext);
+            sessionService.GetSessionID(this.HttpContext, true, true);
 
             var _person = persons.GetById(staff_form_page.id);
 

@@ -18,7 +18,7 @@ namespace IPMRVPark.WebUI.Controllers
         IRepositoryBase<coordinate> coordinates;
         IRepositoryBase<sitetype> sitetypes;
         IRepositoryBase<siterate> siterates;
-        IRepositoryBase<styleurl> stylesurl;        
+        IRepositoryBase<styleurl> stylesurl;
         IRepositoryBase<selecteditem> selecteditems;
         IRepositoryBase<reservationitem> reservationitems;
         IRepositoryBase<payment> payments;
@@ -86,7 +86,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult Menu()
         {
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true);
+            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true, false);
 
             return View();
         }
@@ -94,18 +94,18 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult Logout()
         {
             // Clean selected items
-            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, false, false);
             paymentService.CleanAllSelectedItems(sessionID, IDnotFound);
             return View();
         }
 
         public ActionResult Login()
         {
-            
+
             List<SelectListItem> items = new List<SelectListItem>();
             var _ipmevents = ipmevents.GetAll().OrderBy(y => y.year);
-            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
-            long userID = sessionService.GetSessionUserID(this.HttpContext, false);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, false, false);
+            long userID = sessionService.GetSessionUserID(this.HttpContext, false, false);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
 
             // Clean selected items
@@ -130,7 +130,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult GetSessionEmail()
         {
             SelectionOptionID user = new SelectionOptionID(IDnotFound, "");
-            var _session = sessionService.GetSession(this.HttpContext, false);
+            var _session = sessionService.GetSession(this.HttpContext, false, false);
             if (_session.idStaff != null)
             {
                 long userID = _session.idStaff.Value;
@@ -147,7 +147,7 @@ namespace IPMRVPark.WebUI.Controllers
         [HttpPost]
         public ActionResult GetSessionYear()
         {
-            string year = ipmevents.GetById(sessionService.GetSession(this.HttpContext,false).idIPMEvent).year.ToString();
+            string year = ipmevents.GetById(sessionService.GetSession(this.HttpContext, false, false).idIPMEvent).year.ToString();
             return Json(year);
         }
 
@@ -157,7 +157,7 @@ namespace IPMRVPark.WebUI.Controllers
             SelectionOptionID user = new SelectionOptionID(IDnotFound, "");
             if (userEmail != null && userPassword != null)
             {
-                var _session = sessionService.GetSession(this.HttpContext, true);
+                var _session = sessionService.GetSession(this.HttpContext, true, false);
 
 
                 bool personFound = false;
@@ -192,7 +192,7 @@ namespace IPMRVPark.WebUI.Controllers
         [HttpPost]
         public ActionResult ChangeYear(string idIPMEvent)
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
             _session.idIPMEvent = long.Parse(idIPMEvent);
             sessions.Update(sessions.GetById(_session.ID));
             sessions.Commit();
@@ -202,7 +202,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult GetSessionGUID()
         {
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
             var _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
             string sessionSummary = "sessionID: " + _session.ID +
                 " sessionGUID: " + _session.sessionGUID +
@@ -213,7 +213,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult GetSessionCustomer()
         {
             SelectionOptionID customer = new SelectionOptionID(-1, "");
-            var _session = sessionService.GetSession(this.HttpContext, true);
+            var _session = sessionService.GetSession(this.HttpContext, true, false);
             if (_session.idCustomer != null)
             {
                 var _customer = customers.GetAll().Where(c => c.id == _session.idCustomer).First();
@@ -229,7 +229,7 @@ namespace IPMRVPark.WebUI.Controllers
         [HttpPost]
         public ActionResult SelectCustomer(long idCustomer)
         {
-            session _session = sessions.GetById(sessionService.GetSession(this.HttpContext, true).ID);
+            session _session = sessions.GetById(sessionService.GetSession(this.HttpContext, true, false).ID);
             _session.idCustomer = idCustomer;
 
             long sessionID = _session.ID;
@@ -248,8 +248,8 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult CleanIPMEventData()
         {
-            long UserID = sessionService.GetSessionUserID(this.HttpContext, true);
-            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
+            long UserID = sessionService.GetSessionUserID(this.HttpContext, true, false);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, false, false);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
             ViewBag.IPMEventYear = ipmevents.GetById(IPMEventID).year;
             return View();
@@ -258,95 +258,17 @@ namespace IPMRVPark.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CleanIPMEventDataConfirm()
         {
-            long UserID = sessionService.GetSessionUserID(this.HttpContext, true);
-            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
+            long UserID = sessionService.GetSessionUserID(this.HttpContext, true, false);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, false, false);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
 
-            // Payment Reservation Coordination
-            //var _paymentreservationitems = paymentsreservationitems.GetAll().Where(pri => pri.idIPMEvent == IPMEventID).ToList();
-            //foreach (var _paymentreservationitem in _paymentreservationitems)
-            //{
-            //    paymentsreservationitems.Delete(_paymentreservationitem.ID);
-            //}
-            //paymentsreservationitems.Commit();
-
-            paymentsreservationitems.BulkDelete("paymentreservationitem","idIPMEvent", IPMEventID);
-
-            //// Selected Item
-            //var _selecteditems = selecteditems.GetAll().Where(si => si.idIPMEvent == IPMEventID).ToList();
-            //foreach (var _selecteditem in _selecteditems)
-            //{
-            //    selecteditems.Delete(_selecteditem.ID);
-            //}
-            //selecteditems.Commit();
-
+            paymentsreservationitems.BulkDelete("paymentreservationitem", "idIPMEvent", IPMEventID);
             selecteditems.BulkDelete("selecteditem", "idIPMEvent", IPMEventID);
-
-            //// Reservation Item
-            //var _reservationitems = reservationitems.GetAll().Where(ri => ri.idIPMEvent == IPMEventID).ToList();
-            //foreach (var _reservationitem in _reservationitems)
-            //{
-            //    reservationitems.Delete(_reservationitem.ID);
-            //}
-            //reservationitems.Commit();
-
             reservationitems.BulkDelete("reservationitem", "idIPMEvent", IPMEventID);
-
-            // Place In Map or RV Site
-            //var _placesinmap = placesinmap.GetAll().Where(pim => pim.idIPMEvent == IPMEventID).ToList();
-            //foreach (var _placeinmap in _placesinmap)
-            //{
-            // Coordinates
-            //var _coordinates = coordinates.GetAll().Where(c => c.idPlaceInMap == _placeinmap.ID).ToList();
-            //if (_coordinates != null)
-            //{
-            //foreach(var _coordinate in _coordinates)
-            //{
-            //    coordinates.Delete(_coordinate.ID);
-            //}
-            //}
-            //placesinmap.Delete(_placeinmap.ID);
-            //}
-            //coordinates.Commit();
-            //placesinmap.Commit();
-
             coordinates.BulkDelete("coordinates", "idIPMEvent", IPMEventID);
             placesinmap.BulkDelete("placeinmap", "idIPMEvent", IPMEventID);
-
-            // Site Rates
-            //var _siterates = siterates.GetAll().Where(sr => sr.idIPMEvent == IPMEventID).ToList();
-            //if (_siterates != null)
-            //{
-            //    foreach (var _siterate in _siterates)
-            //    {
-            //        siterates.Delete(_siterate.ID);
-            //    }
-            //    siterates.Commit();
-            //}
             siterates.BulkDelete("siterate", "idIPMEvent", IPMEventID);
-
-            // Site Types
-            //var _sitetypes = sitetypes.GetAll().Where(st => st.idIPMEvent == IPMEventID).ToList();
-            //if (_sitetypes != null)
-            //{
-            //    foreach (var _sitetype in _sitetypes)
-            //    {
-            //        sitetypes.Delete(_sitetype.ID);
-            //    }
-            //    sitetypes.Commit();
-            //}
             sitetypes.BulkDelete("sitetype", "idIPMEvent", IPMEventID);
-
-            // Style Url
-            //var _stylesurl = stylesurl.GetAll().Where(su => su.idIPMEvent == IPMEventID).ToList();
-            //if (_stylesurl != null)
-            //{
-            //    foreach (var _styleurl in _stylesurl)
-            //    {
-            //        stylesurl.Delete(_styleurl.ID);
-            //    }
-            //    stylesurl.Commit();
-            //}
             stylesurl.BulkDelete("styleurl", "idIPMEvent", IPMEventID);
 
             var _ipmevent = ipmevents.GetById(IPMEventID);
@@ -361,9 +283,16 @@ namespace IPMRVPark.WebUI.Controllers
             _ipmevent.city = null;
             _ipmevent.provinceCode = null;
             ipmevents.Update(_ipmevent);
-            ipmevents.Commit();            
+            ipmevents.Commit();
 
-            return RedirectToAction("Home","Login");
+            return RedirectToAction("Home", "Login");
+        }
+
+        public ActionResult Admin()
+        {
+            sessionService.GetSessionUserID(this.HttpContext, true, true);
+
+            return View();
         }
 
     }

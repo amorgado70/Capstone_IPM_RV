@@ -92,7 +92,6 @@ Payments & Refunds
             updateTotal();
         });
         function updateTotal(){
-
             var primaryTotal = parseFloat(@Model.primaryTotal).toFixed(2);
             $('#primaryTotal').val(primaryTotal);
             var owedAmount = parseFloat(Math.abs(@ViewBag.OwedAmount)).toFixed(2);
@@ -141,18 +140,19 @@ Payments & Refunds
                 $('#createDate').val(createDate.toISOString().substring(0, 10));
             }
         });
+        // Position of datepicker
+        $("#paymentDate").focus(function(event){
+            var dim = $(this).offset();
+            $("#ui-datepicker-div").offset({
+                top     :   dim.top - 10,
+                left    :   dim.left - 10
+            });
+        });
         $('#paymentDate').datepicker( 'setDate', '0' );
         var createDate = $('#paymentDate').datepicker('getDate');
         $('#createDate').val(createDate.toISOString().substring(0, 10));
     });
 </script>
-
-<style>
-    #ui-datepicker-div {
-        position: relative;
-        left: -120px;
-    }
-</style>
 
 @using (Html.BeginForm())
 {

@@ -12,21 +12,11 @@
                 <span class="collapsible"></span>
             </button>
         </div>
-        <div id="menuIPMEvent" class="col-xs-12 collapse">
+        <div id="menuIPMEvent" class="col-xs-12">
             <div class="col-xs-10 col-xs-push-2 col-sm-5 col-sm-push-4">
                 <a href="@Url.Action("IPMEventMap", "EventMap")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-picture"></span>
                     <span>Large Screen Display</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a href="@Url.Action("IPMEventInfo", "EventMap")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span class="glyphicon glyphicon-blackboard"></span>
-                    <span>IPM Event Info & Rates</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a href="@Url.Action("DigitizeMap","EventMap")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span class="glyphicon glyphicon-open-file"></span>
-                    <span>Digitize IPM Event Map</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
                 <a href="@Url.Action("Login", "Login")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
@@ -34,13 +24,9 @@
                     <span>Select IPM Event Year</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
-                <a href="@Url.Action("CleanIPMEventData", "Login")" class="btn btn-block btn-danger btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span class="glyphicon glyphicon-remove"></span>
-                    <span>Clean IPM Event Data</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
             </div>
         </div>
+
     </div>
 
     <div class="row top-margin">
@@ -75,7 +61,7 @@
                 <span class="collapsible"></span>
             </button>
         </div>
-        <div id="menuCustomerRegistration" class="col-xs-12 collapse">
+        <div id="menuCustomerRegistration" class="col-xs-12">
             <div class="col-xs-10 col-xs-push-2 col-sm-5 col-sm-push-4">
                 <a href="@Url.Action("CreateCustomer", "Customer")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-plus-sign"></span>
@@ -100,7 +86,7 @@
                 <span class="collapsible"></span>
             </button>
         </div>
-        <div id="menuPaymentRefund" class="col-xs-12 collapse">
+        <div id="menuPaymentRefund" class="col-xs-12">
             <div class="col-xs-10 col-xs-push-2 col-sm-5 col-sm-push-4">
                 <a href="@Url.Action("PaymentOrRefund", "Payment")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
                     <span class="glyphicon glyphicon-plus-sign"></span>
@@ -116,52 +102,16 @@
         </div>
     </div>
 
-
     <div class="row top-margin">
-        <div class="col-xs-10 col-xs-push-1 col-sm-6 col-sm-push-3" data-toggle="tooltip" title="Click To Expand/Collapse">
-            <button class="btn btn-default btn-block " data-toggle="collapse" data-target="#menuSystemMaintenance">
-                <span class="glyphicon glyphicon-wrench"></span>
-                System Maintenance
-                <span class="collapsible"></span>
-            </button>
-        </div>
-        <div id="menuSystemMaintenance" class="col-xs-12 collapse">
-            <div class="col-xs-10 col-xs-push-2 col-sm-5 col-sm-push-4">
-                <a href="@Url.Action("Index", "SiteSize")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span>Site Size</span>
+        <div class="col-xs-10 col-xs-push-1 col-sm-6 col-sm-push-3">
+                <a href="@Url.Action("Admin", "Login")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
+                    <span class="glyphicon glyphicon-wrench"></span>
+                    <span>System Administration</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
-                <a href="@Url.Action("Index", "Service")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span>Site Service</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a href="@Url.Action("Index", "Staff")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span>Staff Member</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a href="@Url.Action("Index", "Province")" class="btn btn-block btn-default btn-mylink form-top-margin pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span>Province</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a href="@Url.Action("Index", "Country")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span>Country</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a href="@Url.Action("Index", "PaymentMethod")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span>Payment Method</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a href="@Url.Action("Index", "PayDocType")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span>Payment Doc. Type</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a href="@Url.Action("Index", "PartyMember")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
-                    <span>Party Member</span>
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-            </div>
         </div>
     </div>
+
 </div>
 
 

@@ -71,7 +71,7 @@ namespace IPMRVPark.WebUI.Controllers
                this.users
                );
 
-            long sessionID = sessionService.GetSessionID(this.HttpContext, false);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, false, false);
             long eventId = sessionService.GetSessionIPMEventID(sessionID);
 
             //long eventId = events.GetQueryable().Select(x => x.ID).DefaultIfEmpty().Max();
@@ -110,7 +110,7 @@ namespace IPMRVPark.WebUI.Controllers
         }
         public ActionResult IPMEventInfo()
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             var model = events.GetAll();
             return View(model);
@@ -118,7 +118,7 @@ namespace IPMRVPark.WebUI.Controllers
         // partial view of IPMEventInfo()
         public ActionResult SiteTypes(long year, long eventId)
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             var tRates = typeRates.GetQueryable().Where(x => x.eventId == eventId).ToList();
 
@@ -138,7 +138,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult AddTypeRate(long eventId, long serviceId, string service, long sizeId, string size, decimal week,
             decimal day)
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             bool ret = true;
             string errMsg = "";
@@ -166,7 +166,7 @@ namespace IPMRVPark.WebUI.Controllers
         // method for delete type & rate
         public ActionResult DeleteTypeRate(long eventId, long serviceId, string service, long sizeId, string size)
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             bool ret = true;
             string errMsg = "";
@@ -193,7 +193,7 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult VerifyAndSaveTypes(string year, string city, string province, string street,
             DateTime startDate, DateTime endDate, DateTime lastDateRefund)
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             bool ret = true;
             string errMsg = "";
@@ -347,7 +347,7 @@ namespace IPMRVPark.WebUI.Controllers
         [HttpPost]
         public ActionResult DigitizeMap(HttpPostedFileBase file, long eventId)
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             if (file != null && file.ContentLength > 0)
             {
@@ -441,7 +441,7 @@ namespace IPMRVPark.WebUI.Controllers
         // syleInfo string -> comma separated parameter (styleUrl, idService, idSize ), e.g., "#ffffffff,1,2"
         private void updateType_idStyleUrl(int eventId, List<string> styleInfo)
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             foreach (var s in styleInfo)
             {
@@ -463,7 +463,7 @@ namespace IPMRVPark.WebUI.Controllers
         [HttpPost]
         public ActionResult SaveParsedObjects(int eventId, List<string> styleInfo)
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             string errMsg = "Please check input information";
             bool ret = styleInfo == null ? false :
@@ -524,7 +524,7 @@ namespace IPMRVPark.WebUI.Controllers
         // save with Entity Framework : not currently used
         private bool saveCoordinatesWithEF()
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             //coords.SetAutoDetectChange(false);
             Polygons poly = Polygons.GetInstance();
@@ -554,7 +554,7 @@ namespace IPMRVPark.WebUI.Controllers
         // save with EF context procedure : not currently used
         private bool saveCoordinatesWithProcedure()
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             DataContext contextForProcedure = new DataContext();
             contextForProcedure.Configuration.AutoDetectChangesEnabled = false;
@@ -582,7 +582,7 @@ namespace IPMRVPark.WebUI.Controllers
         // delete with EF context stored procedure
         public bool DeleteEventObjects(int eventId)
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             // sp_reset_event_derivatives wll do clear event related tables
             DataContext contextForProcedure = new DataContext();
@@ -601,7 +601,7 @@ namespace IPMRVPark.WebUI.Controllers
         // delete with EF context stored procedure
         private bool delete_sitetype_dependants(long typeId)
         {
-            sessionService.AdminRole(this.HttpContext);
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
 
             // sp_typeId wll do delete type and depandants( rate, place, coord )
             DataContext contextForProcedure = new DataContext();
