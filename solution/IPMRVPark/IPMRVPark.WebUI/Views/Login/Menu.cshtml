@@ -49,6 +49,11 @@
                     <span>Search Reservation</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
+                <a href="@Url.Action("SearchReservation", "Reservation")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
+                    <span class="glyphicon glyphicon-list"></span>
+                    <span>Site Report</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
             </div>
         </div>
     </div>
@@ -73,10 +78,14 @@
                     <span>Search Customer</span>
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
+                <a href="@Url.Action("CustomerReport", "Payment")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
+                    <span class="glyphicon glyphicon-list"></span>
+                    <span>Customer Report</span>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
             </div>
         </div>
     </div>
-
 
     <div class="row top-margin">
         <div class="col-xs-10 col-xs-push-1 col-sm-6 col-sm-push-3" data-toggle="tooltip" title="Click To Expand/Collapse">
@@ -101,7 +110,6 @@
             </div>
         </div>
     </div>
-
     <div class="row top-margin">
         <div class="col-xs-10 col-xs-push-1 col-sm-6 col-sm-push-3">
                 <a href="@Url.Action("Admin", "Login")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
@@ -111,7 +119,15 @@
                 </a>
         </div>
     </div>
-
+    <div class="row top-margin">
+        <div class="col-xs-10 col-xs-push-1 col-sm-6 col-sm-push-3">
+            <a href="@Url.Action("ChangePassword", "Login")" class="btn btn-block btn-default btn-mylink pagination-centered" data-toggle="tooltip" title="Go To">
+                <span class="glyphicon glyphicon-log-in"></span>
+                <span>Change Password</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </div>
 </div>
 
 

@@ -458,7 +458,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         }
 
-        public ActionResult ReportCustomer()
+        public ActionResult CustomerReport()
         {
             long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);

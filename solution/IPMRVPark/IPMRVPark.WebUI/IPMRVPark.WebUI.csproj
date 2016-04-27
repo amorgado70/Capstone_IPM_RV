@@ -451,8 +451,10 @@
     <Content Include="Views\Reservation\SearchReservationBySite.cshtml" />
     <Content Include="Views\Login\CleanIPMEventData.cshtml" />
     <Content Include="Views\Reservation\SelectionSummary.cshtml" />
-    <Content Include="Views\Payment\ReportCustomer.cshtml" />
+    <Content Include="Views\Payment\CustomerReport.cshtml" />
     <Content Include="Views\Login\Admin.cshtml" />
+    <Content Include="Views\Login\ChangePassword.cshtml" />
+    <Content Include="Views\Staff\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

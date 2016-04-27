@@ -101,7 +101,6 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult Login()
         {
-
             List<SelectListItem> items = new List<SelectListItem>();
             var _ipmevents = ipmevents.GetAll().OrderBy(y => y.year);
             long sessionID = sessionService.GetSessionID(this.HttpContext, false, false);
@@ -130,6 +129,93 @@ namespace IPMRVPark.WebUI.Controllers
             ViewBag.P2 = _session.sessionGUID.Substring(11, 12);
 
             return View();
+        }
+
+        public ActionResult ChangePassword()
+        {
+            long userID = sessionService.GetSessionUserID(this.HttpContext, true, false);
+
+            // This is used to chek password
+            var _session = sessionService.GetSession(this.HttpContext, false, false);
+            ViewBag.P1 = _session.sessionGUID.Substring(0, 12);
+            ViewBag.P2 = _session.sessionGUID.Substring(11, 12);
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(string userEmail, string userPassword,
+            string P1, string P2, string enterPassword)
+        {
+            person _person = new person();
+
+            if (userEmail != null && userPassword != null)
+            {
+                var _session = sessionService.GetSession(this.HttpContext, false, false);
+                bool personFound = false;
+                bool userAuthor = false;
+
+                string xP1 = _session.sessionGUID.Substring(0, 12);
+                string xP2 = _session.sessionGUID.Substring(11, 12);
+
+                if (P1 == xP1 && P2 == xP2)
+                {
+                    try //checks if person is in database
+                    {
+                        _person = persons.GetAll().Where(u => u.email == userEmail).
+                            FirstOrDefault();
+                        personFound = !(_person.Equals(default(person)));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("An error occurred: '{0}'", e);
+                    }
+                }
+                // Person found in database
+                if (personFound)
+                {
+                    userAuthor = sessionService.VerifyHash(_person.ID, userPassword);
+                }
+                // User is authorized
+                if (userAuthor)
+                {
+                    _person.password = sessionService.GetHash(enterPassword);
+                    persons.Update(_person);
+                    persons.Commit();
+                    _session.idStaff = null;
+                    sessions.Update(_session);
+                    sessions.Commit();
+                    return Json(new { ID = _person.ID });
+                }
+            }
+            return Json(new { ID = IDnotFound });
+        }
+
+        public ActionResult ResetPassword(long personID)
+        {
+            var sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
+            person _person = new person();
+            bool personFound = false;
+
+            try //checks if person is in database
+            {
+                _person = persons.GetById(personID);
+                personFound = !(_person.Equals(default(person)));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred: '{0}'", e);
+            }
+
+            // Person has been found, reset password
+            if (personFound)
+            {
+                _person.password = sessionService.GetHash("012345");
+                persons.Update(_person);
+                persons.Commit();
+            }
+
+            return RedirectToAction("ResetPassword","Staff");
         }
 
         [HttpPost]
@@ -223,11 +309,6 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult GetSessionGUID()
         {
-            //var _session = sessionService.GetSession(this.HttpContext, false, false);
-            //var _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
-            //string sessionSummary = "sessionID: " + _session.ID +
-            //    " sessionGUID: " + _session.sessionGUID +
-            //    " IPMEvent: " + _IPMEvent.year;
             string sessionSummary = string.Empty;
             return Json(sessionSummary);
         }

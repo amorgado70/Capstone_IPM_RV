@@ -189,5 +189,15 @@ namespace IPMRVPark.WebUI.Controllers
 
             return RedirectToAction("Index");
         }
-   }
+
+        public ActionResult ResetPassword()
+        {
+            sessionService.GetSessionID(this.HttpContext, true, true);
+
+            var staff_view = staffs_view.GetAll().OrderBy(q => q.fullName);
+
+            return View(staff_view);
+        }
+
+    }
 }
