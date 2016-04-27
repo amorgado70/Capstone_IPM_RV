@@ -213,7 +213,7 @@ namespace IPMRVPark.WebUI.Controllers
             long customerID = sessionService.GetSessionCustomerID(sessionID);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
             string customerName = sessionService.GetSessionCustomerNamePhone(sessionID);
-            
+
 
             // Check customer's account balance
             decimal customerBalance = paymentService.CustomerAccountBalance(IPMEventID, customerID);
@@ -414,7 +414,7 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult SearchPayment(string searchByCustomer, string searchBySite)
         {
-            var _payments = payments_view.GetAll();            
+            var _payments = payments_view.GetAll();
 
             if (searchBySite != null)
             {
@@ -462,24 +462,29 @@ namespace IPMRVPark.WebUI.Controllers
         {
             long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
-            var _customers = customers.GetAll();
+            List<customer_view> _customers = new List<customer_view>();
+            var _payments = payments.GetAll().
+                Where(p => p.idIPMEvent == IPMEventID && p.balance != 0).
+                OrderBy(ps => ps.ID).ToList();
 
-            foreach (var _customer in _customers)
+            foreach (var _payment in _payments)
             {
-                long customerID = _customer.id;
-                decimal finalBalance = paymentService.CustomerAccountBalance(IPMEventID, customerID);
-                // Customer has no outstanding balance
-                if (finalBalance == 0)
-                {
-                    // Removes customer from list
-                    _customers = _customers.Where(oc => oc.id != customerID);
-                }
-                else
-                {
-                    _customer.comments = finalBalance.ToString("C");
-                }
-            };
+                long customerID = _payment.idCustomer;
+                decimal finalBalance = 0;
 
+                // A payment has been found for this customer
+                finalBalance = paymentService.CustomerAccountBalance(IPMEventID, customerID);
+                if (finalBalance != 0)
+                {
+                    // Customer is already in the list
+                    if (!(_customers.Exists(e => e.id == customerID)))
+                    {
+                        var _customer = customers.GetByKey("id", customerID);
+                        _customer.comments = finalBalance.ToString("C");
+                        _customers.Add(_customer);
+                    }
+                }
+            }
             return View(_customers);
         }
     }
