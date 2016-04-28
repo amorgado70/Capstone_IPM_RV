@@ -53,7 +53,7 @@ namespace IPMRVPark.Services
 
             //add the session id to a cookie
             cookie.Value = _session.sessionGUID;
-            cookie.Expires = DateTime.Now.AddDays(7);
+            cookie.Expires = DateTime.Now.AddDays(1);
             httpContext.Response.Cookies.Add(cookie);
 
             return _session;
@@ -93,7 +93,7 @@ namespace IPMRVPark.Services
                             {
                                 RedirectUser(_session, httpContext, checkAdmin);
                             }
-                            cookie.Expires = DateTime.Now.AddDays(7);//update cookie expiry date
+                            cookie.Expires = DateTime.Now.AddDays(1);//update cookie expiry date
                             return _session;
                         };
                     }
