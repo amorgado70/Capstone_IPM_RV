@@ -718,8 +718,8 @@ namespace IPMRVPark.WebUI.Controllers
             var _reserveditems = reservationitems.GetAll();
             if (sessionCustomerID != IDnotFound)
             {
-                _reserveditems = _reserveditems.
-                    Where(q => q.idCustomer == sessionCustomerID && q.total != 0).
+                _reserveditems = reservationitems.GetAll().
+                    Where(q => q.idCustomer == sessionCustomerID && q.isCancelled != true).
                     OrderByDescending(o => o.idRVSite);
             }
 

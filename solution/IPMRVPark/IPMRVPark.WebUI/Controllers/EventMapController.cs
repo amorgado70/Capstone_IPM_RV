@@ -61,16 +61,15 @@ namespace IPMRVPark.WebUI.Controllers
             this.customers = customers;
             this.users = users;
             this.sessions = sessions;
+            sessionService = new SessionService(
+                this.sessions,
+                this.customers,
+                 this.users
+                 );
         }
 
         public ActionResult IPMEventMap()
         {
-            SessionService sessionService = new SessionService(
-               this.sessions,
-               this.customers,
-               this.users
-               );
-
             long sessionID = sessionService.GetSessionID(this.HttpContext, false, false);
             long eventId = sessionService.GetSessionIPMEventID(sessionID);
 
@@ -652,6 +651,30 @@ namespace IPMRVPark.WebUI.Controllers
                 enddate = String.Format("{0:yyyy-MM-dd}", obj.endDate),
                 lastDateRefund = String.Format("{0:yyyy-MM-dd}", obj.lastDateRefund)
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SiteReport()
+        {
+            long sessionID = sessionService.GetSessionID(this.HttpContext, false, false);
+            long eventId = sessionService.GetSessionIPMEventID(sessionID);
+
+            //long eventId = events.GetQueryable().Select(x => x.ID).DefaultIfEmpty().Max();
+            var year = events.GetAll().
+                Where(x => x.ID == eventId).FirstOrDefault<ipmevent>().year;
+            var _status = status.GetQueryable().
+                Where(s => s.Year == year).
+                OrderBy(o => o.RVSite);
+
+            return View(_status);
+        }
+
+        public ActionResult RefreshMap()
+        {
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, true);
+            Polygons poly = Polygons.GetInstance();
+            poly.Reset();
+
+            return RedirectToAction("Menu", "Login");
         }
     }
 }

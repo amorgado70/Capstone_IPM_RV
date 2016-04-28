@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="b03a4c3784654312b74cede081ffd6b3" Name="Diagram1">
+      <Diagram DiagramId="0a684f969dc34af6b105e9ab35464c78" Name="Diagram1" ZoomLevel="93">
         <EntityTypeShape EntityType="rvparkModel.checkinout" Width="1.5" PointX="10.5" PointY="34.125" IsExpanded="true" />
         <EntityTypeShape EntityType="rvparkModel.coordinate" Width="1.5" PointX="3" PointY="28.625" IsExpanded="true" />
         <EntityTypeShape EntityType="rvparkModel.countrycode" Width="1.5" PointX="1.5" PointY="13.875" IsExpanded="true" />
@@ -36,12 +36,14 @@
         <EntityTypeShape EntityType="rvparkModel.partymember_view" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="rvparkModel.payment_view" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="rvparkModel.province_view" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.rvsite_available_view" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.rvsite_coord_view" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.rvsite_status_view" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.site_description_rate_view" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.sitetype_service_rate_view" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="rvparkModel.staff_view" Width="1.5" PointX="8.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.reservationitem_final_view" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.rvsite_available_view" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.rvsite_coord_view" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.rvsite_status_view" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.selecteditem_final_view" Width="1.5" PointX="7.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.site_description_rate_view" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.sitetype_service_rate_view" Width="1.5" PointX="9.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="rvparkModel.staff_view" Width="1.5" PointX="9.75" PointY="8.75" IsExpanded="true" />
         <AssociationConnector Association="rvparkModel.CheckInOut_PlaceInMap_FK" ManuallyRouted="false" />
         <AssociationConnector Association="rvparkModel.CheckInOut_ReservationItem_FK" ManuallyRouted="false" />
         <AssociationConnector Association="rvparkModel.Coordinates_idIPMEvent_FK" ManuallyRouted="false" />

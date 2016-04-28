@@ -27,5 +27,7 @@ namespace IPMRVPark.Models
         public Nullable<System.DateTime> ReservedUntil { get; set; }
         public Nullable<System.DateTime> OutOfServiceFrom { get; set; }
         public Nullable<System.DateTime> OutOfServiceUntil { get; set; }
+        public string fullName { get; set; }
+        public string mainPhone { get; set; }
     }
 }

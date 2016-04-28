@@ -68,7 +68,6 @@ namespace IPMRVPark.Services
             _selecteditem.amount = 0;
             _selecteditem.total = 0;
             _selecteditem.lastUpdate = DateTime.Now;
-            //_selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
             _selecteditem.reservationCheckInDate = DateTime.MinValue;
             _selecteditem.reservationCheckOutDate = DateTime.MinValue;
             _selecteditem.reservationAmount = 0;

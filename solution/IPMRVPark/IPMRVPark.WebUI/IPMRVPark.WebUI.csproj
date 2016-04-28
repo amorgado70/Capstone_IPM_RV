@@ -418,11 +418,9 @@
     <Content Include="Views\Reservation\CRUDReservedItem.cshtml" />
     <Content Include="Views\Reservation\CRUDSelectedItem.cshtml" />
     <Content Include="Views\Reservation\EditReservation.cshtml" />
-    <Content Include="Views\Reservation\OLD EditReservationSummary.cshtml" />
     <Content Include="Views\Reservation\EditReserved.cshtml" />
     <Content Include="Views\Reservation\EditSelected.cshtml" />
     <Content Include="Views\Reservation\NewReservation.cshtml" />
-    <Content Include="Views\Reservation\OLD ReservationSummary.cshtml" />
     <Content Include="Views\Reservation\ReservedList.cshtml" />
     <Content Include="Views\Reservation\SearchReservation.cshtml" />
     <Content Include="Views\Reservation\SelectedList.cshtml" />
@@ -456,7 +454,7 @@
     <Content Include="Views\Login\ChangePassword.cshtml" />
     <Content Include="Views\Staff\ResetPassword.cshtml" />
     <Content Include="Views\Payment\PaymentReport.cshtml" />
-    <Content Include="Views\Payment\View1.cshtml" />
+    <Content Include="Views\EventMap\SiteReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

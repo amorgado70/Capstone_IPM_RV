@@ -462,6 +462,60 @@ warning 6002: The table/view 'def.rvpark.province_view' does not have a primary 
           <Property Name="countryName" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'def.rvpark.reservationitem_final_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="reservationitem_final_view">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="idIPMEvent" />
+            <PropertyRef Name="idRVSite" />
+            <PropertyRef Name="idCustomer" />
+            <PropertyRef Name="idStaff" />
+            <PropertyRef Name="checkInDate" />
+            <PropertyRef Name="checkOutDate" />
+            <PropertyRef Name="site" />
+            <PropertyRef Name="siteType" />
+            <PropertyRef Name="duration" />
+            <PropertyRef Name="weeks" />
+            <PropertyRef Name="days" />
+            <PropertyRef Name="weeklyRate" />
+            <PropertyRef Name="dailyRate" />
+            <PropertyRef Name="amount" />
+            <PropertyRef Name="additionalServicesAmount" />
+            <PropertyRef Name="total" />
+            <PropertyRef Name="numberMemberInParty" />
+            <PropertyRef Name="isCancelled" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="idIPMEvent" Type="bigint" Nullable="false" />
+          <Property Name="idRVSite" Type="bigint" Nullable="false" />
+          <Property Name="idCustomer" Type="bigint" Nullable="false" />
+          <Property Name="idStaff" Type="bigint" Nullable="false" />
+          <Property Name="checkInDate" Type="date" Nullable="false" />
+          <Property Name="checkOutDate" Type="date" Nullable="false" />
+          <Property Name="site" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="siteType" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="duration" Type="int" Nullable="false" />
+          <Property Name="weeks" Type="int" Nullable="false" />
+          <Property Name="days" Type="int" Nullable="false" />
+          <Property Name="weeklyRate" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="dailyRate" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="amount" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="additionalServicesDescription" Type="varchar" MaxLength="1024" />
+          <Property Name="additionalServicesAmount" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="total" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="numberMemberInParty" Type="int" Nullable="false" />
+          <Property Name="isCancelled" Type="bit" Nullable="false" />
+          <Property Name="comments" Type="varchar" MaxLength="120" />
+          <Property Name="createDate" Type="date" />
+          <Property Name="lastUpdate" Type="date" />
+          <Property Name="timeStamp" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'def.rvpark.reservationitem_newer_only' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="reservationitem_newer_only">
+          <Property Name="ID" Type="bigint" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'def.rvpark.rvsite_available_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="rvsite_available_view">
           <Key>
@@ -514,7 +568,67 @@ warning 6002: The table/view 'def.rvpark.rvsite_status_view' does not have a pri
           <Property Name="ReservedUntil" Type="date" />
           <Property Name="OutOfServiceFrom" Type="date" />
           <Property Name="OutOfServiceUntil" Type="date" />
+          <Property Name="fullName" Type="varchar" MaxLength="101" />
+          <Property Name="mainPhone" Type="varchar" MaxLength="30" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.rvpark.selecteditem_final_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="selecteditem_final_view">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="idSession" />
+            <PropertyRef Name="isSiteChecked" />
+            <PropertyRef Name="checkInDate" />
+            <PropertyRef Name="checkOutDate" />
+            <PropertyRef Name="site" />
+            <PropertyRef Name="duration" />
+            <PropertyRef Name="weeks" />
+            <PropertyRef Name="days" />
+            <PropertyRef Name="weeklyRate" />
+            <PropertyRef Name="dailyRate" />
+            <PropertyRef Name="amount" />
+            <PropertyRef Name="additionalServicesAmount" />
+            <PropertyRef Name="total" />
+            <PropertyRef Name="reservationCheckInDate" />
+            <PropertyRef Name="reservationCheckOutDate" />
+            <PropertyRef Name="reservationAmount" />
+            <PropertyRef Name="reservationAdditionalServAmount" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="idSession" Type="bigint" Nullable="false" />
+          <Property Name="idIPMEvent" Type="bigint" />
+          <Property Name="idRVSite" Type="bigint" />
+          <Property Name="idCustomer" Type="bigint" />
+          <Property Name="idStaff" Type="bigint" />
+          <Property Name="isSiteChecked" Type="bit" Nullable="false" />
+          <Property Name="checkInDate" Type="date" Nullable="false" />
+          <Property Name="checkOutDate" Type="date" Nullable="false" />
+          <Property Name="site" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="siteType" Type="varchar" MaxLength="40" />
+          <Property Name="duration" Type="int" Nullable="false" />
+          <Property Name="weeks" Type="int" Nullable="false" />
+          <Property Name="days" Type="int" Nullable="false" />
+          <Property Name="weeklyRate" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="dailyRate" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="amount" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="additionalServicesDescription" Type="varchar" MaxLength="1024" />
+          <Property Name="additionalServicesAmount" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="total" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="idReservationItem" Type="bigint" />
+          <Property Name="reservationCheckInDate" Type="date" Nullable="false" />
+          <Property Name="reservationCheckOutDate" Type="date" Nullable="false" />
+          <Property Name="reservationAmount" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="reservationAdditionalServDescr" Type="varchar" MaxLength="1024" />
+          <Property Name="reservationAdditionalServAmount" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="createDate" Type="date" />
+          <Property Name="lastUpdate" Type="date" />
+          <Property Name="timeStamp" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'def.rvpark.selecteditem_newer_only' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="selecteditem_newer_only">
+          <Property Name="ID" Type="bigint" />
+        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.rvpark.site_description_rate_view' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="site_description_rate_view">
@@ -1243,6 +1357,34 @@ FROM `payment_view` AS `payment_view`</DefiningQuery>
 `province_view`.`countryName`
 FROM `province_view` AS `province_view`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="reservationitem_final_view" EntityType="Self.reservationitem_final_view" store:Type="Views" store:Schema="rvpark">
+            <DefiningQuery>SELECT
+`reservationitem_final_view`.`ID`, 
+`reservationitem_final_view`.`idIPMEvent`, 
+`reservationitem_final_view`.`idRVSite`, 
+`reservationitem_final_view`.`idCustomer`, 
+`reservationitem_final_view`.`idStaff`, 
+`reservationitem_final_view`.`checkInDate`, 
+`reservationitem_final_view`.`checkOutDate`, 
+`reservationitem_final_view`.`site`, 
+`reservationitem_final_view`.`siteType`, 
+`reservationitem_final_view`.`duration`, 
+`reservationitem_final_view`.`weeks`, 
+`reservationitem_final_view`.`days`, 
+`reservationitem_final_view`.`weeklyRate`, 
+`reservationitem_final_view`.`dailyRate`, 
+`reservationitem_final_view`.`amount`, 
+`reservationitem_final_view`.`additionalServicesDescription`, 
+`reservationitem_final_view`.`additionalServicesAmount`, 
+`reservationitem_final_view`.`total`, 
+`reservationitem_final_view`.`numberMemberInParty`, 
+`reservationitem_final_view`.`isCancelled`, 
+`reservationitem_final_view`.`comments`, 
+`reservationitem_final_view`.`createDate`, 
+`reservationitem_final_view`.`lastUpdate`, 
+`reservationitem_final_view`.`timeStamp`
+FROM `reservationitem_final_view` AS `reservationitem_final_view`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="rvsite_available_view" EntityType="Self.rvsite_available_view" store:Type="Views" store:Schema="rvpark">
             <DefiningQuery>SELECT
 `rvsite_available_view`.`id`, 
@@ -1274,8 +1416,43 @@ FROM `rvsite_coord_view` AS `rvsite_coord_view`</DefiningQuery>
 `rvsite_status_view`.`ReservedFrom`, 
 `rvsite_status_view`.`ReservedUntil`, 
 `rvsite_status_view`.`OutOfServiceFrom`, 
-`rvsite_status_view`.`OutOfServiceUntil`
+`rvsite_status_view`.`OutOfServiceUntil`, 
+`rvsite_status_view`.`fullName`, 
+`rvsite_status_view`.`mainPhone`
 FROM `rvsite_status_view` AS `rvsite_status_view`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="selecteditem_final_view" EntityType="Self.selecteditem_final_view" store:Type="Views" store:Schema="rvpark">
+            <DefiningQuery>SELECT
+`selecteditem_final_view`.`ID`, 
+`selecteditem_final_view`.`idSession`, 
+`selecteditem_final_view`.`idIPMEvent`, 
+`selecteditem_final_view`.`idRVSite`, 
+`selecteditem_final_view`.`idCustomer`, 
+`selecteditem_final_view`.`idStaff`, 
+`selecteditem_final_view`.`isSiteChecked`, 
+`selecteditem_final_view`.`checkInDate`, 
+`selecteditem_final_view`.`checkOutDate`, 
+`selecteditem_final_view`.`site`, 
+`selecteditem_final_view`.`siteType`, 
+`selecteditem_final_view`.`duration`, 
+`selecteditem_final_view`.`weeks`, 
+`selecteditem_final_view`.`days`, 
+`selecteditem_final_view`.`weeklyRate`, 
+`selecteditem_final_view`.`dailyRate`, 
+`selecteditem_final_view`.`amount`, 
+`selecteditem_final_view`.`additionalServicesDescription`, 
+`selecteditem_final_view`.`additionalServicesAmount`, 
+`selecteditem_final_view`.`total`, 
+`selecteditem_final_view`.`idReservationItem`, 
+`selecteditem_final_view`.`reservationCheckInDate`, 
+`selecteditem_final_view`.`reservationCheckOutDate`, 
+`selecteditem_final_view`.`reservationAmount`, 
+`selecteditem_final_view`.`reservationAdditionalServDescr`, 
+`selecteditem_final_view`.`reservationAdditionalServAmount`, 
+`selecteditem_final_view`.`createDate`, 
+`selecteditem_final_view`.`lastUpdate`, 
+`selecteditem_final_view`.`timeStamp`
+FROM `selecteditem_final_view` AS `selecteditem_final_view`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="site_description_rate_view" EntityType="Self.site_description_rate_view" store:Type="Views" store:Schema="rvpark">
             <DefiningQuery>SELECT
@@ -2055,6 +2232,53 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Property Name="countryCode" Type="String" Nullable="false" />
           <Property Name="countryName" Type="String" Nullable="false" />
         </EntityType>
+        <EntityType Name="reservationitem_final_view">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="idIPMEvent" />
+            <PropertyRef Name="idRVSite" />
+            <PropertyRef Name="idCustomer" />
+            <PropertyRef Name="idStaff" />
+            <PropertyRef Name="checkInDate" />
+            <PropertyRef Name="checkOutDate" />
+            <PropertyRef Name="site" />
+            <PropertyRef Name="siteType" />
+            <PropertyRef Name="duration" />
+            <PropertyRef Name="weeks" />
+            <PropertyRef Name="days" />
+            <PropertyRef Name="weeklyRate" />
+            <PropertyRef Name="dailyRate" />
+            <PropertyRef Name="amount" />
+            <PropertyRef Name="additionalServicesAmount" />
+            <PropertyRef Name="total" />
+            <PropertyRef Name="numberMemberInParty" />
+            <PropertyRef Name="isCancelled" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="idIPMEvent" Type="Int64" Nullable="false" />
+          <Property Name="idRVSite" Type="Int64" Nullable="false" />
+          <Property Name="idCustomer" Type="Int64" Nullable="false" />
+          <Property Name="idStaff" Type="Int64" Nullable="false" />
+          <Property Name="checkInDate" Type="DateTime" Nullable="false" />
+          <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
+          <Property Name="site" Type="String" Nullable="false" />
+          <Property Name="siteType" Type="String" Nullable="false" />
+          <Property Name="duration" Type="Int32" Nullable="false" />
+          <Property Name="weeks" Type="Int32" Nullable="false" />
+          <Property Name="days" Type="Int32" Nullable="false" />
+          <Property Name="weeklyRate" Type="Decimal" Nullable="false" />
+          <Property Name="dailyRate" Type="Decimal" Nullable="false" />
+          <Property Name="amount" Type="Decimal" Nullable="false" />
+          <Property Name="additionalServicesDescription" Type="String" />
+          <Property Name="additionalServicesAmount" Type="Decimal" Nullable="false" />
+          <Property Name="total" Type="Decimal" Nullable="false" />
+          <Property Name="numberMemberInParty" Type="Int32" Nullable="false" />
+          <Property Name="isCancelled" Type="Boolean" Nullable="false" />
+          <Property Name="comments" Type="String" />
+          <Property Name="createDate" Type="DateTime" />
+          <Property Name="lastUpdate" Type="DateTime" />
+          <Property Name="timeStamp" Type="String" />
+        </EntityType>
         <EntityType Name="rvsite_available_view">
           <Key>
             <PropertyRef Name="id" />
@@ -2102,6 +2326,59 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <Property Name="ReservedUntil" Type="DateTime" />
           <Property Name="OutOfServiceFrom" Type="DateTime" />
           <Property Name="OutOfServiceUntil" Type="DateTime" />
+          <Property Name="fullName" Type="String" />
+          <Property Name="mainPhone" Type="String" />
+        </EntityType>
+        <EntityType Name="selecteditem_final_view">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="idSession" />
+            <PropertyRef Name="isSiteChecked" />
+            <PropertyRef Name="checkInDate" />
+            <PropertyRef Name="checkOutDate" />
+            <PropertyRef Name="site" />
+            <PropertyRef Name="duration" />
+            <PropertyRef Name="weeks" />
+            <PropertyRef Name="days" />
+            <PropertyRef Name="weeklyRate" />
+            <PropertyRef Name="dailyRate" />
+            <PropertyRef Name="amount" />
+            <PropertyRef Name="additionalServicesAmount" />
+            <PropertyRef Name="total" />
+            <PropertyRef Name="reservationCheckInDate" />
+            <PropertyRef Name="reservationCheckOutDate" />
+            <PropertyRef Name="reservationAmount" />
+            <PropertyRef Name="reservationAdditionalServAmount" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="idSession" Type="Int64" Nullable="false" />
+          <Property Name="idIPMEvent" Type="Int64" />
+          <Property Name="idRVSite" Type="Int64" />
+          <Property Name="idCustomer" Type="Int64" />
+          <Property Name="idStaff" Type="Int64" />
+          <Property Name="isSiteChecked" Type="Boolean" Nullable="false" />
+          <Property Name="checkInDate" Type="DateTime" Nullable="false" />
+          <Property Name="checkOutDate" Type="DateTime" Nullable="false" />
+          <Property Name="site" Type="String" Nullable="false" />
+          <Property Name="siteType" Type="String" />
+          <Property Name="duration" Type="Int32" Nullable="false" />
+          <Property Name="weeks" Type="Int32" Nullable="false" />
+          <Property Name="days" Type="Int32" Nullable="false" />
+          <Property Name="weeklyRate" Type="Decimal" Nullable="false" />
+          <Property Name="dailyRate" Type="Decimal" Nullable="false" />
+          <Property Name="amount" Type="Decimal" Nullable="false" />
+          <Property Name="additionalServicesDescription" Type="String" />
+          <Property Name="additionalServicesAmount" Type="Decimal" Nullable="false" />
+          <Property Name="total" Type="Decimal" Nullable="false" />
+          <Property Name="idReservationItem" Type="Int64" />
+          <Property Name="reservationCheckInDate" Type="DateTime" Nullable="false" />
+          <Property Name="reservationCheckOutDate" Type="DateTime" Nullable="false" />
+          <Property Name="reservationAmount" Type="Decimal" Nullable="false" />
+          <Property Name="reservationAdditionalServDescr" Type="String" />
+          <Property Name="reservationAdditionalServAmount" Type="Decimal" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" />
+          <Property Name="lastUpdate" Type="DateTime" />
+          <Property Name="timeStamp" Type="String" />
         </EntityType>
         <EntityType Name="site_description_rate_view">
           <Key>
@@ -2760,9 +3037,11 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
           <EntitySet Name="partymember_view" EntityType="Self.partymember_view" />
           <EntitySet Name="payment_view" EntityType="Self.payment_view" />
           <EntitySet Name="province_view" EntityType="Self.province_view" />
+          <EntitySet Name="reservationitem_final_view" EntityType="Self.reservationitem_final_view" />
           <EntitySet Name="rvsite_available_view" EntityType="Self.rvsite_available_view" />
           <EntitySet Name="rvsite_coord_view" EntityType="Self.rvsite_coord_view" />
           <EntitySet Name="rvsite_status_view" EntityType="Self.rvsite_status_view" />
+          <EntitySet Name="selecteditem_final_view" EntityType="Self.selecteditem_final_view" />
           <EntitySet Name="site_description_rate_view" EntityType="Self.site_description_rate_view" />
           <EntitySet Name="sitetype_service_rate_view" EntityType="Self.sitetype_service_rate_view" />
           <EntitySet Name="staff_view" EntityType="Self.staff_view" />
@@ -3442,6 +3721,36 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="reservationitem_final_view">
+            <EntityTypeMapping TypeName="rvparkModel.reservationitem_final_view">
+              <MappingFragment StoreEntitySet="reservationitem_final_view">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
+                <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
+                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="idStaff" ColumnName="idStaff" />
+                <ScalarProperty Name="checkInDate" ColumnName="checkInDate" />
+                <ScalarProperty Name="checkOutDate" ColumnName="checkOutDate" />
+                <ScalarProperty Name="site" ColumnName="site" />
+                <ScalarProperty Name="siteType" ColumnName="siteType" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="weeks" ColumnName="weeks" />
+                <ScalarProperty Name="days" ColumnName="days" />
+                <ScalarProperty Name="weeklyRate" ColumnName="weeklyRate" />
+                <ScalarProperty Name="dailyRate" ColumnName="dailyRate" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="additionalServicesDescription" ColumnName="additionalServicesDescription" />
+                <ScalarProperty Name="additionalServicesAmount" ColumnName="additionalServicesAmount" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="numberMemberInParty" ColumnName="numberMemberInParty" />
+                <ScalarProperty Name="isCancelled" ColumnName="isCancelled" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+                <ScalarProperty Name="timeStamp" ColumnName="timeStamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="rvsite_available_view">
             <EntityTypeMapping TypeName="rvparkModel.rvsite_available_view">
               <MappingFragment StoreEntitySet="rvsite_available_view">
@@ -3479,6 +3788,43 @@ FROM `staff_view` AS `staff_view`</DefiningQuery>
                 <ScalarProperty Name="ReservedUntil" ColumnName="ReservedUntil" />
                 <ScalarProperty Name="OutOfServiceFrom" ColumnName="OutOfServiceFrom" />
                 <ScalarProperty Name="OutOfServiceUntil" ColumnName="OutOfServiceUntil" />
+                <ScalarProperty Name="fullName" ColumnName="fullName" />
+                <ScalarProperty Name="mainPhone" ColumnName="mainPhone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="selecteditem_final_view">
+            <EntityTypeMapping TypeName="rvparkModel.selecteditem_final_view">
+              <MappingFragment StoreEntitySet="selecteditem_final_view">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="idSession" ColumnName="idSession" />
+                <ScalarProperty Name="idIPMEvent" ColumnName="idIPMEvent" />
+                <ScalarProperty Name="idRVSite" ColumnName="idRVSite" />
+                <ScalarProperty Name="idCustomer" ColumnName="idCustomer" />
+                <ScalarProperty Name="idStaff" ColumnName="idStaff" />
+                <ScalarProperty Name="isSiteChecked" ColumnName="isSiteChecked" />
+                <ScalarProperty Name="checkInDate" ColumnName="checkInDate" />
+                <ScalarProperty Name="checkOutDate" ColumnName="checkOutDate" />
+                <ScalarProperty Name="site" ColumnName="site" />
+                <ScalarProperty Name="siteType" ColumnName="siteType" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="weeks" ColumnName="weeks" />
+                <ScalarProperty Name="days" ColumnName="days" />
+                <ScalarProperty Name="weeklyRate" ColumnName="weeklyRate" />
+                <ScalarProperty Name="dailyRate" ColumnName="dailyRate" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="additionalServicesDescription" ColumnName="additionalServicesDescription" />
+                <ScalarProperty Name="additionalServicesAmount" ColumnName="additionalServicesAmount" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="idReservationItem" ColumnName="idReservationItem" />
+                <ScalarProperty Name="reservationCheckInDate" ColumnName="reservationCheckInDate" />
+                <ScalarProperty Name="reservationCheckOutDate" ColumnName="reservationCheckOutDate" />
+                <ScalarProperty Name="reservationAmount" ColumnName="reservationAmount" />
+                <ScalarProperty Name="reservationAdditionalServDescr" ColumnName="reservationAdditionalServDescr" />
+                <ScalarProperty Name="reservationAdditionalServAmount" ColumnName="reservationAdditionalServAmount" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+                <ScalarProperty Name="timeStamp" ColumnName="timeStamp" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

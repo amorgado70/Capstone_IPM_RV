@@ -333,7 +333,7 @@ namespace IPMRVPark.WebUI.Controllers
             {
                 bool editMode = item.idReservationItem != null && item.isSiteChecked;
                 bool cancelMode = item.idReservationItem != null && !item.isSiteChecked;
-                bool newMode = !editMode && item.isSiteChecked;
+                bool newMode = item.idReservationItem == null && item.isSiteChecked;
 
                 // Update existing reservation item - For edit mode
                 if (cancelMode)

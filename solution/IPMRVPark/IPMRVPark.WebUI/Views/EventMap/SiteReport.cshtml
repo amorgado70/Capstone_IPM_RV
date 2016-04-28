@@ -1,0 +1,132 @@
+@model IEnumerable<IPMRVPark.Models.rvsite_status_view>
+
+@{
+    ViewBag.Title = "Site Report";
+    ViewBag.PageTitle = "Site Report";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnPrint").click(function () {
+            window.print();
+        });
+    });
+</script>
+<style>
+    body {
+        min-width: 1280px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RVSite)
+            </th>
+            <th>
+                Site Size and Service
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                From
+            </th>
+            <th>
+                Until
+            </th>
+            <th>
+                Customer Name
+            </th>
+            <th>
+                Main Phone
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RVSite)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SiteSize)
+
+                    @Html.DisplayFor(modelItem => item.PowerSupply)
+                </td>
+
+                @if (item.isAvaialable == 0)
+                {
+                    if (item.ReservedFrom != null)
+                    {
+                        <td>
+                            Reserved
+                        </td>
+                        <td>
+                            @item.ReservedFrom.Value.ToString("ddd"), @item.ReservedFrom.Value.ToString("dd") @item.ReservedFrom.Value.ToString("MMM")
+                        </td>
+                        <td>
+                            @item.ReservedUntil.Value.ToString("ddd"), @item.ReservedUntil.Value.ToString("dd") @item.ReservedUntil.Value.ToString("MMM")
+                        </td>
+                        <td>
+                            @item.fullName
+                        </td>
+                        <td>
+                            @item.mainPhone
+                        </td>
+                    }
+                    else if (item.SelectedFrom != null)
+                    {
+                        <td>
+                            Selected
+                        </td>
+                        <td>
+                            @item.SelectedFrom.Value.ToString("ddd"), @item.SelectedFrom.Value.ToString("dd") @item.SelectedFrom.Value.ToString("MMM")
+                        </td>
+                        <td>
+                            @item.SelectedUntil.Value.ToString("ddd"), @item.SelectedUntil.Value.ToString("dd") @item.SelectedUntil.Value.ToString("MMM")
+                        </td>
+                        <td></td>
+                        <td></td>
+                    }
+                    else if (item.OutOfServiceFrom != null)
+                    {
+                        <td>
+                            Out Of Service
+                        </td>
+                        <td>
+                            @item.OutOfServiceFrom.Value.ToString("ddd"), @item.OutOfServiceFrom.Value.ToString("dd") @item.OutOfServiceFrom.Value.ToString("MMM")
+                        </td>
+                        <td>
+                            @item.OutOfServiceUntil.Value.ToString("ddd"), @item.OutOfServiceUntil.Value.ToString("dd") @item.OutOfServiceUntil.Value.ToString("MMM")
+                        </td>
+                        <td></td>
+                        <td></td>
+                    }
+                }
+                else
+                {
+                    <td>
+                        Available
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                }
+            </tr>
+        }
+
+    </table>
+
+    <!-- Print Report-->
+    <div class="row top-margin">
+        <div class="col-sm-3 col-xs-12 form-top-margin">
+            <button id="btnPrint" class="btn btn-block btn-default">
+                <span class="col-xs-1 glyphicon glyphicon-print"></span>
+                <span class="col-xs-9">Print</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -47,7 +47,7 @@ Site Reservation
                 $('#customerName').val(customerLabel);
             },
             error: function () {
-                alert('3 Some error occured.');
+                alert('Error in GetSessionCustomer');
             }
         });
         $('#customerName').autocomplete({
@@ -86,7 +86,7 @@ Site Reservation
                     $('#btnEditReservation').focus();
                 },
                 error: function (result) {
-                    alert('7 Some error occured.');
+                    alert('Error in SelectCustomer');
                 }
             });
         };
