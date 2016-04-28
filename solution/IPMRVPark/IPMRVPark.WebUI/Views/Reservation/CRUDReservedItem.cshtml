@@ -99,7 +99,7 @@
                 success: function (result) {
                 },
                 error: function (result) {
-                    alert('27 Some error occured.');
+                    alert('Error in SelectCheckInOutDates');
                 }
             });
         };
@@ -149,7 +149,7 @@
                         $('#waitMsg').hide();// Show wait message
                     },
                     error: function () {
-                        alert('51 Some error occured.');}
+                        alert('Error in GetSiteData');}
                 });
             };
         };
@@ -177,7 +177,7 @@
                     //$('body').scrollTo('#customerName');
                 },
                 error: function (result) {
-                    alert('2 Some error occured.' + $('#idRVSite').val() );
+                    alert('Error in SelectSite' + $('#idRVSite').val() );
                 }
             });
         });

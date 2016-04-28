@@ -1,4 +1,4 @@
-﻿@model IPMRVPark.Models.staff_view
+@model IPMRVPark.Models.staff_view
 
 @{
     ViewBag.Title = "Edit Staff";
@@ -54,8 +54,12 @@ Maintenance
                 <label>Role</label>
             </div>
             <div class="editor-field col-sm-3 col-sm-push-1 col-xs-12 form-top-margin">
-                @Html.EditorFor(model => model.role)
-                @Html.ValidationMessageFor(model => model.role)
+                @*@Html.EditorFor(model => model.role)
+                @Html.ValidationMessageFor(model => model.role)*@
+                <select class="form-control" id="role" name="role">
+                    <option selected="selected" value="Staff">Staff</option>
+                    <option value="Admin">Admin</option>
+                </select>
             </div>
         </div>
         <div class="row top-margin">

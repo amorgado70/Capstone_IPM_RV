@@ -99,7 +99,7 @@ namespace IPMRVPark.WebUI.Controllers
             _person.lastName = staff_form_page.lastName;
             _person.mainPhone = staff_form_page.mainPhone;
             _person.email = staff_form_page.email;
-            _person.password = staff_form_page.password;
+            _person.password = sessionService.GetHash("012345");
             _person.createDate = DateTime.Now;
             _person.lastUpdate = DateTime.Now;
 

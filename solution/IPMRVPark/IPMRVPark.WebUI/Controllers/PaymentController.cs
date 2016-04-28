@@ -316,6 +316,7 @@ namespace IPMRVPark.WebUI.Controllers
         {
             // Identify session
             long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
             long userID = sessionService.GetSessionUserID(this.HttpContext, false, false);
 
             // Create and insert payment
@@ -405,8 +406,11 @@ namespace IPMRVPark.WebUI.Controllers
             }
             // Clean selected items
             paymentService.CleanAllSelectedItems(sessionID, userID);
+            paymentService.CleanOldSelectedItem(IPMEventID, userID);
             // 
             sessionService.ResetSessionCustomer(sessionID);
+
+
 
             return RedirectToAction("PrintPayment", new { id = ID });
         }

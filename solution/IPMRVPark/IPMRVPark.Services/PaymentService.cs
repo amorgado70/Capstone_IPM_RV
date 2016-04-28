@@ -54,7 +54,6 @@ namespace IPMRVPark.Services
         }
         private void cleanSelected(long sessionID, long userID, long selectedID)
         {
-
             var _selecteditem = selecteditems.GetById(selectedID);
             _selecteditem.idSession = sessionID;
             if (userID != IDnotFound)
@@ -92,6 +91,46 @@ namespace IPMRVPark.Services
                 }
             }
         }
+
+        public void CleanOldSelectedItem(long IPMEventID, long userID)
+        {
+            DateTime timeStampHigh = DateTime.ParseExact(
+                DateTime.UtcNow.AddMinutes(30).ToString("yyyy-MM-dd HH:mm:ss"),
+                "yyyy-MM-dd HH:mm:ss", null).ToUniversalTime();
+            DateTime timeStampLow = DateTime.ParseExact(
+                DateTime.UtcNow.AddMinutes(-30).ToString("yyyy-MM-dd HH:mm:ss"),
+                "yyyy-MM-dd HH:mm:ss", null).ToUniversalTime();
+
+            // Clean edit items that are in selected table
+            var _olditems_to_be_removed = selecteditems.GetAll().
+                Where(c => c.isSiteChecked == true && c.idIPMEvent == IPMEventID).ToList();
+            foreach (var _selecteditem in _olditems_to_be_removed)
+            {
+                DateTime timeStamp = DateTime.ParseExact(_selecteditem.timeStamp, "yyyy-MM-dd HH:mm:ss", null).ToUniversalTime();
+
+                if (timeStamp > timeStampHigh || timeStamp < timeStampLow)
+                {
+                    _selecteditem.idStaff = userID;
+                    _selecteditem.isSiteChecked = false;
+                    _selecteditem.duration = 0;
+                    _selecteditem.weeks = 0;
+                    _selecteditem.days = 0;
+                    _selecteditem.amount = 0;
+                    _selecteditem.total = 0;
+                    _selecteditem.lastUpdate = DateTime.Now;
+                    _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+                    _selecteditem.reservationCheckInDate = DateTime.MinValue;
+                    _selecteditem.reservationCheckOutDate = DateTime.MinValue;
+                    _selecteditem.reservationAmount = 0;
+                    _selecteditem.reservationAdditionalServAmount = 0;
+
+                    selecteditems.Update(_selecteditem);
+                    selecteditems.Commit();
+                }
+
+            }
+        }
+
         #endregion
         #region Payments & Refunds
         public decimal GetProvinceTax(long sessionID)
@@ -201,7 +240,7 @@ namespace IPMRVPark.Services
             return _payment;
         }
 
-        public decimal CustomerAccountBalance(long IPMEventID,long customerID)
+        public decimal CustomerAccountBalance(long IPMEventID, long customerID)
         {
             if (customerID == IDnotFound)
             {

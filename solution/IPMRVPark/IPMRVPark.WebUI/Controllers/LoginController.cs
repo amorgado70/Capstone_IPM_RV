@@ -86,7 +86,13 @@ namespace IPMRVPark.WebUI.Controllers
 
         public ActionResult Menu()
         {
-            ViewBag.UserID = sessionService.GetSessionUserID(this.HttpContext, true, false);
+            // Identify session
+            long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
+            long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
+            long userID = sessionService.GetSessionUserID(this.HttpContext, false, false);
+
+            ViewBag.UserID = userID;
+            paymentService.CleanOldSelectedItem(IPMEventID, userID);
 
             return View();
         }
