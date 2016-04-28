@@ -379,6 +379,7 @@ namespace IPMRVPark.WebUI.Controllers
             siterates.BulkDelete("siterate", "idIPMEvent", IPMEventID);
             sitetypes.BulkDelete("sitetype", "idIPMEvent", IPMEventID);
             stylesurl.BulkDelete("styleurl", "idIPMEvent", IPMEventID);
+            payments.BulkDelete("payment", "idIPMEvent", IPMEventID);
 
             var _ipmevent = ipmevents.GetById(IPMEventID);
             _ipmevent.startDate = DateTime.MinValue;

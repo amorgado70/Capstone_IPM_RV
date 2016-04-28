@@ -25,8 +25,8 @@ namespace IPMRVPark.Services
             updates = new List<_reserve_selection>();
 
            
-            //StringBuilder sCommand = new StringBuilder("Select idRVSite, cast( coalesce(isCancelled,0,1) as UNSIGNED) as cancel, timeStamp From reservationitem Where timeStamp > '");
-            StringBuilder sCommand = new StringBuilder("Select idRVSite, cast( isCancelled as UNSIGNED) as cancel, timeStamp From reservationitem Where timeStamp > '");
+            StringBuilder sCommand = new StringBuilder("Select idRVSite, cast( coalesce(isCancelled,0,1) as UNSIGNED) as cancel, timeStamp From reservationitem Where timeStamp > '");
+            //StringBuilder sCommand = new StringBuilder("Select idRVSite, cast( isCancelled as UNSIGNED) as cancel, timeStamp From reservationitem Where timeStamp > '");
             sCommand.Append(lastUpdate.ToString("yyyy-MM-dd HH:mm:ss"));
             sCommand.Append("'");
 

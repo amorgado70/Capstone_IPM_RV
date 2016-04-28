@@ -715,7 +715,7 @@ namespace IPMRVPark.Services
                 _site s2 = getSite(id2);
                 s2.poly_color = "ffff0000";
 
-                DateTime now = DateTime.Now;
+                DateTime now = DateTime.UtcNow;
 
                 // pop updates after UpdateKeepSpan from tail 
                 for (int i = 0; i < Updates.Count;)
@@ -727,8 +727,8 @@ namespace IPMRVPark.Services
                 }
 
                 // push new updates to head
-                Updates.Add(new _siteUpdate { id = id, fillColor = s.poly_color, lastUpdate = DateTime.Now.ToString(), lastUpdateTime = now });
-                Updates.Add(new _siteUpdate { id = id2, fillColor = s2.poly_color, lastUpdate = DateTime.Now.ToString(), lastUpdateTime = now });
+                Updates.Add(new _siteUpdate { id = id, fillColor = s.poly_color, lastUpdate = DateTime.UtcNow.ToString(), lastUpdateTime = now });
+                Updates.Add(new _siteUpdate { id = id2, fillColor = s2.poly_color, lastUpdate = DateTime.UtcNow.ToString(), lastUpdateTime = now });
             }
         }
 

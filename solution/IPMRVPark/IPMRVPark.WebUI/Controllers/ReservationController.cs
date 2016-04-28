@@ -196,48 +196,58 @@ namespace IPMRVPark.WebUI.Controllers
         {
             var _session = sessionService.GetSession(this.HttpContext, true, false);
 
-            // Check if site is already in the list (it was previously cancelled)
-            // If it is, remove it
-            var old_selecteditems = selecteditems.GetAll().Where(osi => osi.idRVSite == idRVSite).ToList();
-            foreach (var old_selecteditem in old_selecteditems)
+            // Check if site is really available
+            bool isRVSiteAvailable = rvsites_available.GetAll().
+                Where(s => s.idIPMEvent == _session.idIPMEvent && s.id == idRVSite).
+                ToList().Count() > 0;
+
+            if (isRVSiteAvailable)
             {
-                selecteditems.Delete(old_selecteditem.ID);
-            };
+                // Check if site is already in the list (it was previously cancelled)
+                // If it is, remove it
+                var old_selecteditems = selecteditems.GetAll().Where(osi => osi.idRVSite == idRVSite).ToList();
+                foreach (var old_selecteditem in old_selecteditems)
+                {
+                    //selecteditems.Delete(old_selecteditem.ID);
+                    //selecteditems.Commit();
+                };
 
-            // Add selected item to the database
-            var _selecteditem = new selecteditem();
-            var type_rates = sites_description_rate.GetAll().
-                Where(s => s.id == idRVSite).FirstOrDefault();
+                // Add selected item to the database
+                var _selecteditem = new selecteditem();
+                var type_rates = sites_description_rate.GetAll().
+                    Where(s => s.id == idRVSite).FirstOrDefault();
 
-            _selecteditem.checkInDate = checkInDate;
-            _selecteditem.checkOutDate = checkOutDate;
-            _selecteditem.weeklyRate = type_rates.weeklyRate.Value;
-            _selecteditem.dailyRate = type_rates.dailyRate.Value;
-            _selecteditem.idRVSite = idRVSite;
-            _selecteditem.idSession = _session.ID;
-            _selecteditem.idIPMEvent = _session.idIPMEvent;
-            _selecteditem.idStaff = _session.idStaff;
-            _selecteditem.idCustomer = _session.idCustomer;
-            _selecteditem.site = type_rates.RVSite;
-            _selecteditem.siteType = type_rates.description;
-            _selecteditem.isSiteChecked = true;
-            CalcSiteTotal calcResults = new CalcSiteTotal(
-                checkInDate,
-                checkOutDate,
-                type_rates.weeklyRate.Value,
-                type_rates.dailyRate.Value,
-                true);
-            _selecteditem.duration = calcResults.duration;
-            _selecteditem.weeks = calcResults.weeks;
-            _selecteditem.days = calcResults.days;
-            _selecteditem.amount = calcResults.amount;
-            _selecteditem.total = calcResults.total;
-            _selecteditem.createDate = DateTime.Now;
-            _selecteditem.lastUpdate = DateTime.Now;
-            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+                _selecteditem.checkInDate = checkInDate;
+                _selecteditem.checkOutDate = checkOutDate;
+                _selecteditem.weeklyRate = type_rates.weeklyRate.Value;
+                _selecteditem.dailyRate = type_rates.dailyRate.Value;
+                _selecteditem.idRVSite = idRVSite;
+                _selecteditem.idSession = _session.ID;
+                _selecteditem.idIPMEvent = _session.idIPMEvent;
+                _selecteditem.idStaff = _session.idStaff;
+                _selecteditem.idCustomer = _session.idCustomer;
+                _selecteditem.site = type_rates.RVSite;
+                _selecteditem.siteType = type_rates.description;
+                _selecteditem.isSiteChecked = true;
+                CalcSiteTotal calcResults = new CalcSiteTotal(
+                    checkInDate,
+                    checkOutDate,
+                    type_rates.weeklyRate.Value,
+                    type_rates.dailyRate.Value,
+                    true);
+                _selecteditem.duration = calcResults.duration;
+                _selecteditem.weeks = calcResults.weeks;
+                _selecteditem.days = calcResults.days;
+                _selecteditem.amount = calcResults.amount;
+                _selecteditem.total = calcResults.total;
+                _selecteditem.createDate = DateTime.Now;
+                _selecteditem.lastUpdate = DateTime.Now;
+                _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
 
-            selecteditems.Insert(_selecteditem);
-            selecteditems.Commit();
+                selecteditems.Insert(_selecteditem);
+                selecteditems.Commit();
+
+            }
 
             return Json(idRVSite);
         }
@@ -247,55 +257,64 @@ namespace IPMRVPark.WebUI.Controllers
         public ActionResult SelectSiteOnMap(long id)
         {
             var _session = sessionService.GetSession(this.HttpContext, true, false);
-            ipmevent _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
 
-            // Read dates from IPM Event
-            DateTime checkInDate = _IPMEvent.startDate.Value;
-            DateTime checkOutDate = checkInDate.AddDays(7);
-            // Read dates from session
-            if (_session.checkInDate != null)
+            // Check if site is really available
+            bool isRVSiteAvailable = rvsites_available.GetAll().
+                Where(s => s.idIPMEvent == _session.idIPMEvent && s.id == id).
+                ToList().Count() > 0;
+
+            if (isRVSiteAvailable)
             {
-                checkInDate = _session.checkInDate.Value;
-            };
-            if (_session.checkOutDate != null)
-            {
-                checkOutDate = _session.checkOutDate.Value;
-            };
+                ipmevent _IPMEvent = ipmevents.GetById(_session.idIPMEvent);
 
-            // Add selected item to the database
-            var _selecteditem = new selecteditem();
-            var type_rates = sites_description_rate.GetAll().
-                Where(s => s.id == id).FirstOrDefault();
+                // Read dates from IPM Event
+                DateTime checkInDate = _IPMEvent.startDate.Value;
+                DateTime checkOutDate = checkInDate.AddDays(7);
+                // Read dates from session
+                if (_session.checkInDate != null)
+                {
+                    checkInDate = _session.checkInDate.Value;
+                };
+                if (_session.checkOutDate != null)
+                {
+                    checkOutDate = _session.checkOutDate.Value;
+                };
 
-            _selecteditem.checkInDate = checkInDate;
-            _selecteditem.checkOutDate = checkOutDate;
-            _selecteditem.weeklyRate = type_rates.weeklyRate.Value;
-            _selecteditem.dailyRate = type_rates.dailyRate.Value;
-            _selecteditem.idRVSite = id;
-            _selecteditem.idSession = _session.ID;
-            _selecteditem.idIPMEvent = _session.idIPMEvent;
-            _selecteditem.idStaff = _session.idStaff;
-            _selecteditem.idCustomer = _session.idCustomer;
-            _selecteditem.site = type_rates.RVSite;
-            _selecteditem.siteType = type_rates.description;
-            _selecteditem.isSiteChecked = true;
-            CalcSiteTotal calcResults = new CalcSiteTotal(
-                checkInDate,
-                checkOutDate,
-                type_rates.weeklyRate.Value,
-                type_rates.dailyRate.Value,
-                true);
-            _selecteditem.duration = calcResults.duration;
-            _selecteditem.weeks = calcResults.weeks;
-            _selecteditem.days = calcResults.days;
-            _selecteditem.amount = calcResults.amount;
-            _selecteditem.total = calcResults.total;
-            _selecteditem.createDate = DateTime.Now;
-            _selecteditem.lastUpdate = DateTime.Now;
-            _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+                // Add selected item to the database
+                var _selecteditem = new selecteditem();
+                var type_rates = sites_description_rate.GetAll().
+                    Where(s => s.id == id).FirstOrDefault();
 
-            selecteditems.Insert(_selecteditem);
-            selecteditems.Commit();
+                _selecteditem.checkInDate = checkInDate;
+                _selecteditem.checkOutDate = checkOutDate;
+                _selecteditem.weeklyRate = type_rates.weeklyRate.Value;
+                _selecteditem.dailyRate = type_rates.dailyRate.Value;
+                _selecteditem.idRVSite = id;
+                _selecteditem.idSession = _session.ID;
+                _selecteditem.idIPMEvent = _session.idIPMEvent;
+                _selecteditem.idStaff = _session.idStaff;
+                _selecteditem.idCustomer = _session.idCustomer;
+                _selecteditem.site = type_rates.RVSite;
+                _selecteditem.siteType = type_rates.description;
+                _selecteditem.isSiteChecked = true;
+                CalcSiteTotal calcResults = new CalcSiteTotal(
+                    checkInDate,
+                    checkOutDate,
+                    type_rates.weeklyRate.Value,
+                    type_rates.dailyRate.Value,
+                    true);
+                _selecteditem.duration = calcResults.duration;
+                _selecteditem.weeks = calcResults.weeks;
+                _selecteditem.days = calcResults.days;
+                _selecteditem.amount = calcResults.amount;
+                _selecteditem.total = calcResults.total;
+                _selecteditem.createDate = DateTime.Now;
+                _selecteditem.lastUpdate = DateTime.Now;
+                _selecteditem.timeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+
+                selecteditems.Insert(_selecteditem);
+                selecteditems.Commit();
+            }
 
             return Json(id);
         }
@@ -375,7 +394,7 @@ namespace IPMRVPark.WebUI.Controllers
 
             var _selecteditems = selecteditems.GetAll().
                 Where(si => si.idSession == sessionID && si.idCustomer == sessionCustomerID &&
-                 (si.reservationAmount != 0 || si.amount != 0 )).
+                 (si.reservationAmount != 0 || si.amount != 0)).
                 OrderBy(order => order.site);
 
             if (_selecteditems.Count() > 0)
@@ -668,7 +687,7 @@ namespace IPMRVPark.WebUI.Controllers
             long sessionID = sessionService.GetSessionID(this.HttpContext, true, false);
             long customerID = sessionService.GetSessionCustomerID(sessionID);
             var _reserveditems = reservationitems.GetAll().
-                Where(q => q.idCustomer == customerID && q.isCancelled != true );
+                Where(q => q.idCustomer == customerID && q.isCancelled != true);
 
             // Discard reserved items from other years
             long IPMEventID = sessionService.GetSessionIPMEventID(sessionID);
